@@ -1,0 +1,72 @@
+
+v=`sed -n '4'p .ghe`
+w=${v:13}
+x=${w%:*}
+H=$x
+
+U=admin
+
+I=$U@$H
+
+export U H I
+
+
+function ch() {
+# Start chrome with one the profiles you can list below:
+# ls -l  ~/Library/Application\ Support/Google/Chrome/
+# You will need to work out which profile is wich person
+open -n -a "Google Chrome" --args --profile-directory="Profile 19" "http://$H" 
+}
+
+function chrepo() {
+# Start chrome with one the profiles you can list below:
+# ls -l  ~/Library/Application\ Support/Google/Chrome/
+# You will need to work out which profile is wich person
+. ./.gh-api-examples.conf
+open -n -a "Google Chrome" --args --profile-directory="Profile 19" "http://$H/$org/$repo" 
+}
+
+function chmona() {
+# In this on my mona user has a Profile 20:
+open -n -a "Google Chrome" --args --profile-directory="Profile 20" "http://$H" 
+}
+
+function ffx() {
+open -a "Firefox"  "http://$H" 
+}
+
+function edg() {
+open -a "Microsoft Edge"  "http://$H" 
+}
+
+function ve() {
+    cat .ghe
+}
+
+function pa() {
+  # This runs the ssh command on line 7 of the ghe output
+  # to fetch the password from the ghe server.
+  `sed -n '7'p .ghe`
+}
+
+function st() { 
+    # SSH onto the ghe server
+    >&2 echo ssh to: $I
+    ssh -p122 $I 
+}
+
+function tok() {
+  # fetch the token on line 9 of ghe and put it in the clipboard
+  token=`sed -n '9'p .ghe`
+  echo $token | pbcopy
+}
+
+function generate_config() {
+tok
+
+python3 configure.py --hostname ${H} --token ${token} --webhook-url https://example.com
+}
+
+export PATH="/usr/local/opt/curl/bin:$PATH"
+
+export PS1="$H \[\e[33m\]:\W\[\e[m\]  $ "
