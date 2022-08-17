@@ -1,0 +1,28 @@
+# copy this file to your home directory:
+# cp the-power-dotcom.skeleton  ~/.the-power-dotcom.conf
+# edit it with values appropriate for your dotcom setup
+# Run `dotcom-configure.sh` to set the power up to target 
+# your dotcom environment.
+# Or you can copy it to a file named `ghes.conf`
+# in a `the-power` directory and it will drive
+# a GitHub Enterprise Server instance.
+#
+
+hostname=api.github.com
+enterprise_name=<your enterprise name>
+org=<your org name>
+repo=testrepo
+github_token=<your github token>
+app_id=<your app id>
+installation_id=<your app installation id>
+client_id=< your app client id>
+private_pem_file=Downloads/testapp.YYYY-MM-DD.private-key.pem
+webhook=<your webhook url>
+team_members="<space separated list of github usernames>"
+team_admin="<github username of team admin>"
+default_committer="<github username of your default committer>"
+
+# Used on GHES appliances for org creation.
+number_of_orgs=5
+number_of_repos=3
+team_members=10
