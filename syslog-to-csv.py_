@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+__version__ = "0.1.0"
+
+import sys
+import logging
+import logging.config
+import argparse
+import datetime
+from pathlib import Path
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+def main(args):
+
+    logger = logging.getLogger("syslog-to-csv")
+    logger.setLevel(args.loglevel)
+
+    syslog_fieldnames = [
+        "line_number",
+        "line_length",
+        "extracted_date",
+        "unix_timestamp",
+        "real_date",
+        "hostname",
+        "daemon",
+        "line",
+        "remains_of_line",
+        "wiped_line",
+    ]
+
+    logfile = Path(args.filename)
+    logger.debug(logfile.parent)
+
+    print("Hello GitHub Actions")
+
+
+if __name__ == "__main__":
+    """ This is executed when run from the command line """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("filename", help="a syslog file")
+
+    parser.add_argument(
+        "--csv-file",
+        action="store",
+        dest="csv_file",
+        default="syslog.csv",
+        help="--csv-file  <csv output file name>",
+    )
+    
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
+        default=logging.WARNING,
+        help="debug(-d, --debug, etc)",
+    )
+
+    args = parser.parse_args()
+
+    main(args)

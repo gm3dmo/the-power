@@ -1,0 +1,19 @@
+name: Create and publish a Docker image
+on: workflow_dispatch
+jobs:
+  build-and-push-image:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action
+        with:
+          push: true
+          tags: |
+            docker.pkg.github.com/${{ github.repository }}/octo-image:${{ github.sha }

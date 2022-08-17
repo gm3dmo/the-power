@@ -1,0 +1,35 @@
+{
+  "required_status_checks": {
+    "strict": false,
+    "contexts": [
+    ]
+  },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {
+    "dismissal_restrictions": {
+      "users": [
+        "octocat"
+      ],
+      "teams": [
+        "regular-show"
+      ]
+    },
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": true,
+    "required_approving_review_count": 2
+  },
+  "restrictions": {
+    "users": [
+      "rigby"
+    ],
+    "teams": [
+      "regular-show"
+    ],
+    "apps": [
+      "super-ci"
+    ]
+  },
+  "required_linear_history": true,
+  "allow_force_pushes": true,
+  "allow_deletions": true
+}

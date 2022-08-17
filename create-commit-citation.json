@@ -1,0 +1,7 @@
+{
+  "message": "My new CITATION.cff file",
+  "committer": {
+    "name": "lisa",
+    "email": "noreply+lisa@example.com"
+  },
+  "content": "Y2ZmLXZlcnNpb246IDEuMi4wCm1lc3NhZ2U6ICJJZiB5b3UgdXNlIHRoaXMgc29mdHdhcmUsIHBsZWFzZSBjaXRlIGl0IGFzIGJlbG93LiIKYXV0aG9yczoKLSBmYW1pbHktbmFtZXM6ICJMaXNhIgogIGdpdmVuLW5hbWVzOiAiTW9uYSIKICBvcmNpZDogImh0dHBzOi8vb3JjaWQub3JnLzAwMDAtMDAwMC0wMDAwLTAwMDAiCi0gZmFtaWx5LW5hbWVzOiAiQm90IgogIGdpdmVuLW5hbWVzOiAiSGV3IgogIG9yY2lkOiAiaHR0cHM6Ly9vcmNpZC5vcmcvMDAwMC0wMDAwLTAwMDAtMDAwMCIKdGl0bGU6ICJNeSBSZXNlYXJjaCBTb2Z0d2FyZSIKdmVyc2lvbjogMi4wLjQKZG9pOiAxMC41MjgxL3plbm9kby4xMjM0CmRhdGUtcmVsZWFzZWQ6IDIwMTctMTItMTgKdXJsOiAiaHR0cHM6Ly9naXRodWIuY29tL2dpdGh1Yi9saW5ndWlzdCIK" }
