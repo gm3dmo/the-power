@@ -5,7 +5,7 @@
 
 commit_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/ref/heads/${base_branch}| jq -r '.object.sha')
 
-lorem=$(cat lorem.txt)
+lorem=$(cat test-data/lorem.txt)
 
 json_file=tmp/create-a-commit-comment.json
 rm -f ${json}
