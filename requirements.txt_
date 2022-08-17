@@ -1,0 +1,29 @@
+Click==7.0
+django==1.11.0
+Flask-Cors==3.0.8
+Flask==0.12.3
+Pillow==7.0.0
+Werkzeug==1.0.0
+apache-airflow==1.10.12
+# bleach is commented below to allow for testing/demonstration
+# of the dependabot schedule.
+#bleach.2.1.0
+datasette-graphql==1.0
+datasette-indieauth==1.0
+itsdangerous==1.1.0
+logzero==1.5.0
+lookatme==2.2.0
+lxml==4.6.1
+matrix-synapse==1.19.0
+moin==1.9.10
+nanopb==0.3.0
+oic==1.2.0
+requests-kerberos==0.5
+sopel_plugins.channelmgnt==1.0.0
+tensorflow-cpu==1.15.3
+tensorflow-gpu==1.15.3
+tensorflow==1.15.3
+twisted==14.0.0
+waitress==1.30.1
+aubio==0.4.0
+ansible==2.5.15

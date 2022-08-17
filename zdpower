@@ -1,0 +1,30 @@
+
+# This script can be used to create a dedicated instance
+# of The Power for testing against a helpdesk ticket
+# copy it to your local bin directory.
+
+# Get a ticket number to use as suffix for the repo:
+if [ -z "$1" ]
+  then
+echo -n "Enter ticket number: "
+read ticket_number
+  else
+    ticket_number=$1
+fi
+
+# Optionally override the config file to use different
+# apps and so on.
+if [ ! -z "$2" ];
+then
+      power_config=$2
+  else
+      power_config=~/.the-power-dotcom.conf
+fi
+
+git clone https://ghe.io/gm3dmo/the-power ${ticket_number}
+cd ${ticket_number}
+
+echo ./dotcom-configure.sh ${power_config} repo-${ticket_number}
+./dotcom-configure.sh ${power_config} repo-${ticket_number}
+
+exec zsh

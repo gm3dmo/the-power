@@ -1,0 +1,13 @@
+{
+  "name": "web",
+  "active": true,
+  "events": [
+    "push",
+    "pull_request"
+  ],
+  "config": {
+    "url": "https://localhost/webhook2",
+    "content_type": "json",
+    "insecure_ssl": "0"
+  }
+}

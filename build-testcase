@@ -1,0 +1,19 @@
+# Create the testrepo
+./create-repo-testrepo.sh
+./create-webhook.sh
+./create-commit-readme.sh
+./create-commit-codeowners.sh
+./create-commit-requirements.sh
+./create-commit-test-rst.sh
+./create-commit-test-ipynb.sh
+./add-team-to-repo.sh
+./create-branch-newbranch.sh
+./create-commit-on-newbranch.sh
+./create-repo-issue.sh
+./create-pull-request.sh
+
+./create-branch-protected.sh
+./set-branch-protection.sh
+
+./create-release.sh
+

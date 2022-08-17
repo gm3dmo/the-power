@@ -1,0 +1,12 @@
+# Create the testrepo and add the zipslip example for CodeQL
+./create-repo-testrepo.sh
+./enable-secret-scanning.sh
+./create-webhook.sh
+./create-commit-readme.sh
+./create-commit-codeowners.sh
+./create-commit-javascript-zipslip.sh
+./create-commit-codeql-zipslip.sh
+./add-team-to-repo.sh
+./create-branch-newbranch.sh
+./create-branch-protected.sh
+./set-branch-protection.sh
