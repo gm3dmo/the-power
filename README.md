@@ -3,4 +3,4 @@ The Power is a simple test/learning framework to help you understand the GitHub 
 
 ## Table of Contents
 
-1. [Setup Instructions](#docs/setup)
+1. [Setup Instructions](docs/setup.md)
