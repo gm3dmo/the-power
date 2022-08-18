@@ -6,6 +6,7 @@ The Power is a simple test/learning framework to help you understand the GitHub 
 1. [What is the Power?](#what-is-the-power)
 2. [Setup Instructions](docs/setup.md)
 3. [Contributing to The Power](CONTRIBUTING.md)
+4. [Known Issues/Problems/Solutions](#docs/known-issues.md)
 
 ## What is The Power?
 The Power is a collection of scripts that demonstrate the GitHub APIs to create a usefully configured GitHub organization. The Power adds the following to a blank appliance or organization in <=30 seconds:
