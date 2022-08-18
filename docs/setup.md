@@ -10,7 +10,7 @@
 ### Setup
 
 ### Client side setup
-- Download the [latest release](https://ghe.io/gm3dmo/the-power/releases/latest).
+- Download the [latest release](https://github.com/gm3dmo/the-power/releases/latest).
 - Unzip the release file to a directory of your choice.
 - Change into the the directory and version of the power.
 - Run [`configure.py`](configure.py) to generate the `.gh-api-examples.conf` file. This file feeds variables to the scripts in The Power.:
