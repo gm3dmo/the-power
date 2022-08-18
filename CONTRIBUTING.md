@@ -65,7 +65,7 @@ As its a GET request type, we can remove the json_file and jq lines.
 
 Replace the url:
 
-```
+```bash
 . .gh-api-examples.conf
 
 # https://docs.github.com/en/rest/codespaces/codespaces#list-codespaces-in-a-repository-for-the-authenticated-user
