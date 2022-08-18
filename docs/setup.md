@@ -23,7 +23,7 @@ $ python3 configure.py
 GHE server or enter `api.github.com` if you are using GitHub.com enter `api.github.com` as the hostname.
 
 ```
-Enter GHE Hostname: myserver.ghe-test.ninja
+Enter GHE Hostname: myserver.example.com
 Enter token: ***cc2d128a
 ```
 
@@ -34,7 +34,7 @@ Enter token: ***cc2d128a
 Non-interactive values can be specified on the command line in order to use The Power in a custom automation:
 
 ```
-python3 configure.py --hostname gm3dmo-00000000000000000.ghe-test.net \
+python3 configure.py --hostname myserver.example.com \
                      --token ghp_****************************wh3Ybleu \
                      --webhook-url https://events.hookdeck.com/e/src_1hm2RSyiguMW
 ```
