@@ -22,6 +22,7 @@ The Power is a collection of scripts that demonstrate the GitHub APIs to create 
 * A [Release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
 * GitHub Pages configured for *testrepo*.
 * A GitHub [Gist](https://docs.github.com/en/github/writing-on-github/creating-gists).
+* Mermaid diagrams using [create-commit-mermaid.sh](create-commit-mermaid.sh) that demos some example diagram types on [the mermaid project](https://mermaid-js.github.io/mermaid/#/n00b-gettingStarted).
 
 There are many other features and test-cases you can use or adapt to build scenarios of your own.
 
