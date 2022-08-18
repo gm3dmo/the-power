@@ -24,4 +24,19 @@ The Power is a collection of scripts that demonstrate the GitHub APIs to create 
 
 There are many other features and test-cases you can use or adapt to build scenarios of your own.
 
-The Power is intended for learning and demonstration purposes only and not for use or integration with production workloads.
+### The Power is a tool for learning
+- Designed to be as simple as possible to understand. 
+- Almost exclusively uses only `curl` and `jq` to complete most tasks. Only a few of the more complex scenarios have other dependencies.
+
+### The Power is Vast
+There are hundreds of pre-baked scripts to:
+
+* Create commits, secrets, hooks, issue comments, environments.
+* Bulk up your appliance by creating hundreds or thousands of users/orgs/repos/teams/pull requests.
+* Set up a Tiny GitHub App in less than 1 minute.
+* Demonstrate GitHub Actions Workflows.
+* Demonstrate CodeQL.
+
+### The Power is Configurable
+The Power is driven by it's configuration file `.gh-api.examples.conf`. You can edit this to create new organizations, teams, users to use in test cases.
+
