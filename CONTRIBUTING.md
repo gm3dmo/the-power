@@ -31,7 +31,7 @@ Replace CALL with (this can be found in the API documentation:
 GET /repos/{owner}/{repo}/codespaces
 ```
 
-```
+```bash
 . .gh-api-examples.conf
 
 # URL
