@@ -1,6 +1,6 @@
 . .gh-api-exmples.conf
 
-# https://developer.github.com/v3/actions/workflow-runs/#list-workflow-runs
+# https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-repository
 # GET /repos/:owner/:repo/actions/workflows/:workflow_id/runs
 
 workflow_id=1
