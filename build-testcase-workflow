@@ -1,0 +1,6 @@
+# Create the testrepo
+./create-repo-testrepo.sh
+./create-commit-readme.sh
+./create-commit-syslog-to-csv.sh
+./create-commit-python-app.sh
+./add-team-to-repo.sh

@@ -1,0 +1,16 @@
+. .gh-api-examples.conf
+
+registration_token=$(./create-a-registration-token-for-a-repository.sh | jq -r '.token')
+
+# https://github.com/actions/runner/releases/tag/v2.294.0
+
+rm -rf actions-runner
+
+mkdir actions-runner && cd actions-runner
+
+curl -O -L https://github.com/actions/runner/releases/download/${runner_version}/actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
+
+tar zxf actions-runner-osx-x64-2.294.0.tar.gz
+
+#./config.sh --url https://github.com/${org}/${repo} --token ${registration_token} --unattended --name the-power-example-runner --labels 'the-power' --replace true
+./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name the-power-example-runner --labels 'the-power' --replace true

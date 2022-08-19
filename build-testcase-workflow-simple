@@ -1,0 +1,4 @@
+# Create the testrepo
+./create-repo.sh
+python3 create-workflow-simple-json-file.py
+./create-commit-workflow-simple.sh
