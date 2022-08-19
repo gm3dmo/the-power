@@ -21,7 +21,7 @@ then
       power_config=~/.the-power-dotcom.conf
 fi
 
-git clone https://ghe.io/gm3dmo/the-power ${ticket_number}
+git clone https://github.com/gm3dmo/the-power ${ticket_number}
 cd ${ticket_number}
 
 echo ./dotcom-configure.sh ${power_config} repo-${ticket_number}
