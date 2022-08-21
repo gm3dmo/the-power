@@ -3,7 +3,7 @@
 # https://docs.github.com/en/rest/reference/pulls#create-a-pull-request
 # POST /repos/:owner/:repo/pulls
 
-json_file=/tmp/create-pull-request.json
+json_file=tmp/create-pull-request.json
 rm -f ${json_file}
 
 timestamp=$(date +%s)
