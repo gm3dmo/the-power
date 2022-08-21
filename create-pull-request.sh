@@ -9,12 +9,11 @@ rm -f ${json_file}
 timestamp=$(date +%s)
 title="Amazing new feature PR: $timestamp"
 
-lorem_file=/tmp/lorem-pull-request.md
-lorem_text=$(cat $lorem_file)
-
+lorem_file=test-data/lorem-pull-request.md
+lorem_text=$(cat ${lorem_file})
 
 jq -n \
-  --arg title "$title" \
+  --arg title "${title}" \
   --arg body "${lorem_text} @${default_committer}" \
   --arg head "${branch_name}" \
   --arg base "${base_branch}" \
@@ -25,10 +24,7 @@ jq -n \
     base: $base
   }' > ${json_file}
 
-
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls --data @${json_file}
-
-rm -f ${json_file}
