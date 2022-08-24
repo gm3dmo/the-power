@@ -9,7 +9,7 @@ exit
 ./add-users-to-team.sh
 ./add-maintainers-to-team.sh
 
-./create-organization-webhook.sh
+./create-an-organization-webhook.sh
 ./create-organization-project.sh preview
 ./create-organization-project-columns.sh preview
 ./add-team-to-org-project.sh
