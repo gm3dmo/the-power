@@ -1,0 +1,5 @@
+# Create the testrepo
+./create-repo.sh
+./commits-maven-project.sh
+python3 create-workflow-maven-json-file.py
+./create-commit-workflow-maven.sh
