@@ -3,7 +3,8 @@
 # https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
 # PUT /repos/:owner/:repo/contents/:path
 
-# Run this `create-log4j-pom-xml.py` to generate the `log4j-pom-xml.json` file for upload to the repo.
+# Run `create-log4j-pom-xml.py` to generate the `log4j-pom-xml.json` file for upload to the repo.
+python3 create-log4j-json-file.py
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
