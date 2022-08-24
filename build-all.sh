@@ -11,7 +11,7 @@ if [ -z "$1" ]
    ./create-org-members.sh
    ./add-users-to-team.sh
    ./add-maintainers-to-team.sh
-   ./create-organization-webhook.sh
+   ./create-an-organization-webhook.sh
    # Create the testrepo
    ./create-repo-testrepo.sh
    ./create-webhook.sh

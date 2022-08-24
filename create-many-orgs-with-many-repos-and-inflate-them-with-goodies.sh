@@ -12,7 +12,7 @@ do
   ./create-org-members.sh
   ./add-users-to-team.sh
   ./add-maintainers-to-team.sh
-  ./create-organization-webhook.sh
+  ./create-an-organization-webhook.sh
   for repo in $(cat tmp/longlistofrepos.txt)
   do
        # shim in the reponame now same as we did earlier for the org
