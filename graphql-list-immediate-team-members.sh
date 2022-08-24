@@ -9,7 +9,7 @@
 # If the script is passed an argument $1 use that as the name of the user to query
 if [ -z "$1" ]
   then
-    team=${team}
+    team=${team_slug}
   else
     team=$1
 fi
