@@ -10,7 +10,7 @@ rm -f ${graphql_query}
 cat <<EOF >$graphql_query
 {
   organization(login: "$org") {
-		name
+    name
     repositories(first: 100) {
         nodes {
             name
@@ -20,7 +20,7 @@ cat <<EOF >$graphql_query
             updatedAt
             pushedAt
            }
-   }
+    }
   }
 }
 EOF
