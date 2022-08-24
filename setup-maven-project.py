@@ -41,6 +41,31 @@ def main(args):
            with open(json_file, 'w') as out_file:
               out_file.write(json.dumps(t))
 
+
+    # Create the pom.xml template
+    px = open(Path("test-data/maven-pom.xml_"), "r")
+    px_content= px.read()
+    px_template = string.Template(px_content)
+    pom_xml_file= Path("tmp/maven-pom.xml")
+    values = {}
+    values["org"] = power_config.get('dummy_section','org',).strip('"')
+    with open(pom_xml_file, "w") as out_file:
+        out_file.write(px_template.substitute(values))
+
+    json_file = f"""tmp/maven-pom.json"""
+    with open(pom_xml_file, 'rb') as ct:
+       t = {}
+       chapter_content = ct.read()
+       chapter_base64 = base64.encodebytes(chapter_content)
+       t["message"] = f"""A java file."""
+       t["committer"] = {}
+       t["committer"]["name"] = args.default_committer
+       t["committer"]["email"] = f"noreply+{args.default_committer}@example.com"
+       t["content"] = chapter_base64.decode('UTF-8')
+       with open(json_file, 'w') as out_file:
+          out_file.write(json.dumps(t))
+
+
 if __name__ == "__main__":
     """Create files for a maven project."""
     parser = argparse.ArgumentParser()
