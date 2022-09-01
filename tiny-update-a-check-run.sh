@@ -3,9 +3,11 @@
 # https://docs.github.com/en/rest/reference/checks#update-a-check-run
 # PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}
 
+target_branch=${branch_name}
+
 if [ -z "$1" ]
   then
-     head_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch}| jq -r '.object.sha')
+     head_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
   else
      head_sha=$1
 fi
@@ -21,7 +23,7 @@ name="code-coverage"
 # See docs for conclusion states
 conclusion="success"
 
-check_run_id=${default_check_run_id}
+check_run_id=
 
 jq -n \
        --arg name "${name}" \
