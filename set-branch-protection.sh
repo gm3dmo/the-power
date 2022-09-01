@@ -14,16 +14,20 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
+cat $source_json | jq -r
+
+
 cat ${source_json}| jq --arg team_slug "$team_slug" \
                             --arg team_admin "$team_admin" \
                             --argjson enforce_admins $enforce_admins \
                             --argjson required_approving_reviewers ${required_approving_reviewers} \
-    '.restrictions.users = [ $team_admin] | .restrictions.teams = [$team_slug] 
-     | .required_pull_request_reviews.dismissal_restrictions.users = [ $team_admin]
+    '.restrictions.users = [ $team_admin] | .restrictions.teams = [$team_slug]
+     | .required_pull_request_reviews.dismissal_restrictions.users = [ $team_admin ]
      | .required_pull_request_reviews.dismissal_restrictions.teams = [ $team_slug ]
      | .required_pull_request_reviews.required_approving_review_count = $required_approving_reviewers
      | .enforce_admins = $enforce_admins
     ' > ${json_file}
+
 
 curl ${curl_custom_flags} \
      -X PUT \
