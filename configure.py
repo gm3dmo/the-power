@@ -55,6 +55,7 @@ org="${org}"
 repo="${repo_name}"
 default_repo_visibility="private"
 repo_secret_name="REPOSITORY_SECRET_001"
+allow_auto_merge="${allow_auto_merge}"
 
 organizations="site-b"
 mail_domain="example.com"
@@ -301,6 +302,7 @@ authorization_id=1
         "number_of_repos": args.number_of_repos,
         "number_of_branches": args.number_of_branches,
         "curl_custom_flags": args.curl_custom_flags,
+        "allow_auto_merge": args.allow_auto_merge,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -480,6 +482,13 @@ if __name__ == "__main__":
         dest="default_committer",
         default="hubot",
         help="The user who will make default actions such as create commits, be assigned issues.",
+    )
+    parser.add_argument(
+        "--allow-auto-merge",
+        action="store",
+        dest="allow_auto_merge",
+        default="true",
+        help="allow auto merge"
     )
     parser.add_argument(
         "--enterprise-name",
