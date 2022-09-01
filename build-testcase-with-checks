@@ -1,0 +1,15 @@
+# Create the testrepo
+./create-repo-testrepo.sh
+./create-commit-readme.sh
+./create-commit-codeowners.sh
+./add-team-to-repo.sh
+./create-branch-newbranch.sh
+./create-commit-on-newbranch.sh
+./create-commit-status.sh
+
+./create-repo-issue.sh
+./create-pull-request.sh
+
+./create-branch-protected.sh
+./update-branch-protection-with-required-check.sh
+
