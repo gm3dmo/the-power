@@ -1,0 +1,12 @@
+# Create the testrepo
+. .gh-api-examples.conf
+
+# Build a pre-receive hook on a GHES appliance
+# https://docs.github.com/en/enterprise-server/admin/policies/enforcing-policy-with-pre-receive-hooks
+
+./create-repo.sh ${pre_receive_hook_repo}
+./create-commit-readme.sh ${pre_receive_hook_repo}
+./pre-receive-hook-create-a-tree.sh > tmp/pre-receive-hook-create-a-tree-response.json
+./pre-receive-hook-create-a-commit.sh > tmp/pre-receive-new-commit-response.json
+./pre-receive-hook-update-a-reference.sh
+./create-a-pre-receive-hook.sh
