@@ -19,8 +19,6 @@ DATA=$(jq -n \
 
 echo ${DATA} > ${json_file}
 
-cat $json_file | jq -r
-
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
