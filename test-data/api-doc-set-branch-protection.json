@@ -1,7 +1,10 @@
 {
   "required_status_checks": {
     "strict": false,
-    "checks": [
+    "checks": [ {
+        "context": "continuous-integration/travis-ci",
+        "app_id": null
+      }
     ]
   },
   "enforce_admins": true,
