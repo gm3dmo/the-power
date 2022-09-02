@@ -82,6 +82,7 @@ org_secret_name="ORGANIZATION_SECRET001"
 branch_name="new_branch"
 protected_branch_name="${base_branch}"
 required_approving_reviewers=1
+required_status_check_name="ci-test/this-check-is-required"
 enforce_admins="false"
 base_branch=${base_branch}
 
