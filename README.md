@@ -1,6 +1,9 @@
 # The Power
 The Power is a simple test/learning framework to help you understand the GitHub API's. Add extra goodies to your GitHub Appliance or Organization on GitHub.com.
 
+![the-power](https://github.com/gm3dmo/the-power/actions/workflows/the-power.yml/badge.svg)
+
+
 ## Table of Contents
 
 1. [What is the Power?](#what-is-the-power)
