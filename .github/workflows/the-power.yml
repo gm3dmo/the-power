@@ -38,7 +38,8 @@ jobs:
                      --team-members "a b c d" \
                      --team-admin "a" \
                      --default-committer "b" \
-                     --private-pem-file test.pem
+                     --private-pem-file test.pem \
+                     --primer "cat .gh-api-examples.conf"
     
 
 
