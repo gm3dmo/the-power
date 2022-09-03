@@ -39,7 +39,7 @@ jobs:
                      --team-admin "a" \
                      --default-committer "b" \
                      --private-pem-file test.pem \
-                     --primer "cat .gh-api-examples.conf"
+                     --primer "list-config"
     
 
 
