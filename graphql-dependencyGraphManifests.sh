@@ -2,6 +2,9 @@
 
 # https://docs.github.com/en/graphql/reference/objects#package
 
+# For users looking for a CSV type solution for orgs on GitHub.com
+# there is: https://github.com/andyfeller/gh-dependency-report
+
 org=${1:-$org}
 
 graphql_query=tmp/graphql_query.txt
