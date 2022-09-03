@@ -29,7 +29,7 @@ jobs:
                      --enterprise-name enterprise-example \
                      --org org-example \
                      --repo testrepo \
-                     --token ${github_token} \
+                     --token ghp_mrsMigginsRfGYNzymAWV6tyRZxwbwk0JAI94 \
                      --webhook-url https://example.com/webhook \
                      --configure-app yes \
                      --app-id 1 \
