@@ -1,9 +1,6 @@
 . .gh-api-examples.conf
 
-# Wrap a graphql script for use with curl
-
-# Use a bash "here" document and shell variables will be available:
-#
+# Lists the immediate members of a team.
 
 
 # If the script is passed an argument $1 use that as the name of the user to query
