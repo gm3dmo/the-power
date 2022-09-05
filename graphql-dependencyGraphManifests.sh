@@ -6,6 +6,7 @@
 # there is: https://github.com/andyfeller/gh-dependency-report
 
 org=${1:-$org}
+repo=${2:-$repo}
 
 graphql_query=tmp/graphql_query.txt
 rm -f ${graphql_query}
