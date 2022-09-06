@@ -1,0 +1,4 @@
+. .gh-api-examples.conf
+
+gh repo edit ${org}/${repo} --delete-branch-on-merge
+
