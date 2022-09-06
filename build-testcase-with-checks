@@ -6,8 +6,12 @@ set -x
 ./add-team-to-repo.sh
 ./create-branch-newbranch.sh
 ./create-commit-on-newbranch.sh
-./create-commit-status.sh
-./create-commit-status.sh optional
+./create-commit-status.sh pending ci-test/this-check-is-required
+./create-commit-status.sh pending ci-test/this-check-is-optional
 ./create-repo-issue.sh
 ./update-branch-protection-with-required-check.sh
 ./create-pull-request.sh
+
+# To update the checks to success run the two lines below:
+# ./create-commit-status.sh success ci-test/this-check-is-required
+# ./create-commit-status.sh success ci-test/this-check-is-optional
