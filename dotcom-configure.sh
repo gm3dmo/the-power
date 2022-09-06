@@ -28,4 +28,5 @@ python3 configure.py --hostname ${hostname} \
                      --team-members "${team_members}" \
                      --team-admin "${team_admin}" \
                      --default-committer "${default_committer}" \
-                     --private-pem-file ${private_pem_file}
+                     --private-pem-file ${private_pem_file} \
+                     --pr-approver-token ${pr_approver_token}

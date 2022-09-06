@@ -86,6 +86,11 @@ required_status_check_name="ci-test/this-check-is-required"
 enforce_admins="false"
 base_branch=${base_branch}
 
+# create a PAT for the pull request approver
+# place it below to allow the default pull request
+# to be approved vi automation.
+pr_approver_token=${pr_approver_token}
+
 webhook_url=${webhook_url}
 my_ssh_pub_key=~/.ssh/id_rsa.pub
 
@@ -284,6 +289,7 @@ authorization_id=1
         "org": args.org,
         "enterprise_name": args.enterprise_name,
         "base_branch": args.base_branch,
+        "pr_approver_token": args.pr_approver_token,
         "default_app_id": args.app_id,
         "default_installation_id": args.installation_id,
         "private_key_pem_file": args.private_pem_file,
@@ -497,6 +503,13 @@ if __name__ == "__main__":
         dest="enterprise_name",
         default="",
         help="The name of your enterprise.",
+    )
+    parser.add_argument(
+        "--pr-approver-token",
+        action="store",
+        dest="pr_approver_token",
+        default="replace_with_a_PAT",
+        help="The PAT of a pr approver.",
     )
     parser.add_argument(
         "--custom-curl-flags",
