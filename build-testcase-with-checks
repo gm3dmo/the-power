@@ -1,4 +1,5 @@
 # Create the testrepo
+set -x
 ./create-repo-testrepo.sh
 ./create-commit-readme.sh
 ./create-commit-codeowners.sh
@@ -7,10 +8,6 @@
 ./create-commit-on-newbranch.sh
 ./create-commit-status.sh
 ./create-commit-status.sh optional
-
 ./create-repo-issue.sh
-./create-pull-request.sh
-
-./create-branch-protected.sh
 ./update-branch-protection-with-required-check.sh
-
+./create-pull-request.sh
