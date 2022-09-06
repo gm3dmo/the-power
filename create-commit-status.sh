@@ -11,23 +11,6 @@ if [ -z "$1" ]
     status_context="ci-test/this-check-is-optional"
 fi
 
-
-json_file=tmp/skeleton.json
-
-jq -n \
-           --arg name "${repo}" \
-           '{
-             name : $name,
-           }' > ${json_file}
-
-
-curl ${curl_custom_flags} \
-     -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL} --data @${json_file}
-
-
-
 target_branch=${branch_name}
 
 sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
