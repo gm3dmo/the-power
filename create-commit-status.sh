@@ -3,26 +3,34 @@
 # https://docs.github.com/en/rest/reference/repos#create-a-commit-status
 # POST /repos/:owner/:repo/statuses/:sha
 
+# The state of the status.
+# Can be one of: error, failure, pending, success
+# If there is no first argument use a default value of "pending"
 
 if [ -z "$1" ]
   then
-    status_context="ci-test/this-check-is-required"
+     state="pending"
   else
-    status_context="ci-test/this-check-is-optional"
+     state=$1
 fi
 
+if [ -z "$2" ]
+  then
+    status_context="ci-test/this-check-is-required"
+  else
+    status_context=$2
+fi
+
+
 target_branch=${branch_name}
-
-sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
-
-status="success"
 timestamp=$(date +%s)
 
+sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
 
 json_file=tmp/create-commit-status.json
 
 jq -n \
-        --arg state "${status}" \
+        --arg state "${state}" \
         --arg target_url "https://example.com/build/status" \
         --arg description "The build status was: $status This is completely fake. The status ran at: ${timestamp}" \
         --arg context "${status_context}" \
