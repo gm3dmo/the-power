@@ -15,7 +15,8 @@ def main():
 
     # Uncomment "wanted_string" and set it to a desired value to match and print
     # only lines which match the wanted string.
-    # wanted_string ="github_audit"
+    # wanted_string = "github_audit"
+    wanted_string = False
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         s.bind((hostname, port))
