@@ -34,7 +34,7 @@ There are many other features and test-cases you can use or adapt to build scena
 - Designed to be as simple as possible to understand. 
 - Almost exclusively uses only `curl` and `jq` to complete most tasks. Only a few of the more complex scenarios have other dependencies.
 
-### The Power is Vast
+### The Power is vast
 There are hundreds of pre-baked scripts to:
 
 * Create commits, secrets, hooks, issue comments, environments.
@@ -43,6 +43,8 @@ There are hundreds of pre-baked scripts to:
 * Demonstrate GitHub Actions Workflows.
 * Demonstrate CodeQL.
 
-### The Power is Configurable
+### The Power is configurable
 The Power is driven by it's configuration file `.gh-api.examples.conf`. You can edit this to create new organizations, teams, users to use in test cases.
 
+### Why The Power
+There are lots of great tools like [Postman](https://www.postman.com/), [JMeter](https://jmeter.apache.org/) for interacting with API's and building testsuites and many of the latest API's come with their own interactive documentation built-in like the [swagger petstore](https://petstore.swagger.io/). The Power is a solution for times and places where those tools just aren't available. 
