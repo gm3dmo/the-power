@@ -14,10 +14,16 @@ GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 json_file=tmp/create-check-run.json
 
+
+#The current status.
+#Default: queued
+#Can be one of: queued, in_progress, completed
+status=queued
+
 jq -n \
        --arg name "code-coverage" \
        --arg head_sha "${head_sha}" \
-       --arg status "queued" \
+       --arg status "${status}" \
        '{ head_sha: $head_sha, status: $status, name: $name }' > ${json_file}
 
 curl ${curl_custom_flags} \
