@@ -1,4 +1,8 @@
-# Create the testrepo
+# Builds a pull request with 2 commit statuses and codeowner approval required
+# https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+#
+# Important: This is not using the GitHub Checks API (GitHub App required)
+# 
 set -x
 ./create-repo-testrepo.sh
 ./create-commit-readme.sh
