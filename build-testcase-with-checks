@@ -6,8 +6,8 @@ set -x
 ./add-team-to-repo.sh
 ./create-branch-newbranch.sh
 ./create-commit-on-newbranch.sh
-./create-commit-status.sh pending ci-test/this-check-is-required
 ./create-commit-status.sh pending ci-test/this-check-is-optional
+./create-commit-status.sh pending ci-test/this-check-is-required
 ./create-repo-issue.sh
 ./update-branch-protection-with-required-check.sh
 ./create-pull-request.sh
@@ -15,3 +15,17 @@ set -x
 # To update the checks to success run the two lines below:
 # ./create-commit-status.sh success ci-test/this-check-is-required
 # ./create-commit-status.sh success ci-test/this-check-is-optional
+#
+echo ------------------------------------------- 
+echo Run this to make create the approval review by a codeowner:
+read x
+./create-pull-request-review.sh
+echo ------------------------------------------- 
+
+echo Run these two to make the checks update their status:
+read x
+ ./create-commit-status.sh success ci-test/this-check-is-optional
+read x
+ ./create-commit-status.sh success ci-test/this-check-is-required
+
+echo ------------------------------------------- 
