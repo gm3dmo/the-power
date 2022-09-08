@@ -3,6 +3,8 @@
 # https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
 # PUT /repos/:owner/:repo/contents/:path
 
+# https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph#supported-package-ecosystems
+
 if [ -z "$1" ]
   then
     repo=$repo
@@ -10,15 +12,20 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-base64_string=$(base64 test-data/requirements.txt_)
-content=${base64_string}
-filename_in_repo=requirements.txt
+shopt -s -o nounset
 
-json_file=tmp/create-commit-requirements.json
+source_file="test-data/python/pip/requirements.txt_"
+base64_source_file=$(base64 ${source_file})
+content=${base64_source_file}
+
+filename_in_repo="requirements.txt"
+comment="Adding a ${filename_in_repo}"
+
+json_file=tmp/create-commit-python-pip.json
 
 jq -n \
                 --arg nm "${default_committer}" \
-                --arg ms  "test commit message" \
+                --arg ms  "Adding a ${filename_in_repo} file for ${comment}" \
                 --arg em  "${USER}+${default_committer}@${mail_domain}" \
                 --arg ct  "${content}" \
                 '{message: $ms, "committer":{ "name" : $nm, "email": $em }, content: $ct }'  > ${json_file}

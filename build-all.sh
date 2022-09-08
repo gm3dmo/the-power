@@ -17,7 +17,7 @@ if [ -z "$1" ]
    ./create-webhook.sh
    ./create-commit-codeowners.sh
    ./create-commit-readme.sh
-   ./create-commit-requirements.sh
+   ./create-commit-python-pip.sh
    ./add-team-to-repo.sh
    ./create-branch-newbranch.sh
    ./create-commit-on-newbranch.sh
