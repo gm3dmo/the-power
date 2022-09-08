@@ -43,7 +43,7 @@ def main(args):
 
 
     # Create the pom.xml template
-    px = open(Path("test-data/maven-pom.xml_"), "r")
+    px = open(Path("test-data/java/maven/maven-pom.xml_"), "r")
     px_content= px.read()
     px_template = string.Template(px_content)
     pom_xml_file= Path("tmp/maven-pom.xml")
