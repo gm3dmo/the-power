@@ -1,0 +1,13 @@
+# https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html#cargotoml-vs-cargolock
+
+[[package]]
+name = "hello_world"
+version = "0.1.0"
+dependencies = [
+ "regex 1.5.0 (git+https://github.com/rust-lang/regex.git#9f9f693768c584971a4d53bc3c586c33ed3a6831)",
+]
+
+[[package]]
+name = "regex"
+version = "1.5.0"
+source = "git+https://github.com/rust-lang/regex.git#9f9f693768c584971a4d53bc3c586c33ed3a6831"
