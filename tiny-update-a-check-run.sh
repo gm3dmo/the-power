@@ -5,7 +5,16 @@
 
 target_branch=${branch_name}
 
+#check_run_id may be obtained from: https://github.com/{owner}/{repo}/pull/2/checks
+
 if [ -z "$1" ]
+  then
+    check_run_id=${default_check_run_id}
+  else
+    check_run_id=$1
+fi
+
+if [ -z "$2" ]
   then
      head_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
   else
@@ -16,20 +25,22 @@ GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 json_file=tmp/create-check-run.json
 
-#status="queued"
-#status="in_progress"
-status="completed"
-name="code-coverage"
-# See docs for conclusion states
-conclusion="success"
+check_run_name="the-power-check-run-with-annotation"
+check_run_status="completed"
 
-check_run_id=
+#conclusion an be one of:·
+# action_required, cancelled, failure, neutral, success,·
+# skipped, stale, timed_out
+check_run_conclusion="success"
+
+# status Can be one of: queued, in_progress, completed
+check_run_status="completed"
 
 jq -n \
-       --arg name "${name}" \
+       --arg name "${check_run_with_annotation}" \
        --arg head_sha "${head_sha}" \
-       --arg status "${status}" \
-       --arg conclusion  "${conclusion}" \
+       --arg status "${check_run_status}" \
+       --arg conclusion  "${check_run_conclusion}" \
        '{ head_sha: $head_sha, status: $status, name: $name, conclusion: $conclusion }' > ${json_file}
 
 curl ${curl_custom_flags} \

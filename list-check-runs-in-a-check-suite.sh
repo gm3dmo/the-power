@@ -4,16 +4,18 @@
 # https://docs.github.com/en/rest/checks/runs#list-check-runs-in-a-check-suite
 # GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
 
+
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    repo=$repo
+    check_suite_id=1
   else
-    repo=$1
+    check_suite_id=
 fi
 
 
-check_suite_id=8097066121
+# Check suite_id is obtained from:
+
 
 GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
