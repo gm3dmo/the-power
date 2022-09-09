@@ -10,15 +10,26 @@ if [ -z "$1" ]
      head_sha=$1
 fi
 
+check_run_name="the-power-checkrun-with-conclusion"
+
+#conclusion an be one of: 
+# action_required, cancelled, failure, neutral, success, 
+# skipped, stale, timed_out
+check_run_conclusion="action_required"
+
+# status Can be one of: queued, in_progress, completed
+check_run_status="queued"
+
+
 GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 json_file=tmp/create-check-run.json
 
 jq -n \
-       --arg name "code-coverage" \
+       --arg name "${check_run_name}" \
        --arg head_sha "${head_sha}" \
-       --arg status "completed" \
-       --arg conclusion "failure" \
+       --arg status "${check_run_status}" \
+       --arg conclusion "${check_run_conclusion}" \
        '{ head_sha: $head_sha, status: $status, name: $name, conclusion: $conclusion }' > ${json_file}
 
 curl ${curl_custom_flags} \

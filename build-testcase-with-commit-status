@@ -22,6 +22,10 @@ set -x
 #
 echo ------------------------------------------- 
 echo Run this to make create the approval review by a codeowner:
+echo You will need to have set the  pr_approver_token in the
+echo .gh-api-examples.conf file. The value should be a PAT of
+echo a user with permissions to approve the pull request.
+
 read x
 ./create-pull-request-review.sh
 echo ------------------------------------------- 
@@ -33,3 +37,9 @@ read x
  ./create-commit-status.sh success ci-test/this-check-is-required
 
 echo ------------------------------------------- 
+
+echo If the tiny app is configured and has appropriate permissions
+echo check runs can be created with the Checks API:
+
+ ./tiny-create-check-run-with-annotation.sh
+
