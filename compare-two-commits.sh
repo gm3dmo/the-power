@@ -17,4 +17,5 @@ basehead=(${base_branch}...${head})
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/compare/${basehead} | jq
+     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/compare/${basehead}
+     
