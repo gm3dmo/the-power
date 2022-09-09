@@ -57,7 +57,6 @@ default_repo_visibility="private"
 repo_secret_name="REPOSITORY_SECRET_001"
 allow_auto_merge="${allow_auto_merge}"
 
-organizations="site-b"
 mail_domain="example.com"
 
 team="Justice League"
