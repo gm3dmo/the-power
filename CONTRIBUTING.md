@@ -2,12 +2,13 @@
 
 Scripts in The Power have a very simple structure:
 
-- read in the config file.
-- link to the GitHub API documentation for the API endpoint.
-- the call and url being used. 
-- an option choice of target like repository to be passed via the command line
-- any other customer logic needed to prepare the call.
-- a curl command against the API endpoint.
+- Line 1: Read in the config file: `. .gh-api-examples.conf`
+- Line 2: A blank line.
+- Line 3: A comment character followed by a space: `#`, a link to the documentation for the endpoint.
+- Line 4: A comment character followed by a space and the the call. 
+- Optional: Choice of target, such as `repo` to be passed via the command line or revert to a default value.
+- Any other custom logic needed to prepare the call.
+- A curl command against the target API endpoint.
 
 ### Example: Adding Codespaces coverage:
 
