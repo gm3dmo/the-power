@@ -49,12 +49,15 @@ There are hundreds of pre-baked scripts to:
 The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs:
 
 ```
-# Branches and Branch protection
+### [Branches](https://docs.github.com/en/rest/commits/commits)
+# https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/
+proposing-changes-to-your-work-with-pull-requests/about-branches
 branch_name="new_branch"
 protected_branch_name="main"
 required_approving_reviewers=1
+required_status_check_name="ci-test/this-check-is-required"
 enforce_admins="false"
-base_branch="main"
+base_branch=main
 ```
 
 ### The Power's configuration can be shared with other tools
