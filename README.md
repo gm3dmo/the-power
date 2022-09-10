@@ -28,7 +28,7 @@ The Power adds the following to a blank appliance or organization in <=30 second
 * A [webhook](https://docs.github.com/en/developers/webhooks-and-events/about-webhooks) on *testrepo* that outputs to it's own [smee.io](https://smee.io) url.
 * A [Release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
 * [GitHub Pages](https://docs.github.com/en/pages) configured for *testrepo*.
-* A GitHub [Gist](https://docs.github.com/en/github/writing-on-github/creating-gists).
+* A [Gist](https://docs.github.com/en/github/writing-on-github/creating-gists).
 * Mermaid diagrams using [create-commit-mermaid.sh](create-commit-mermaid.sh) to demonstrate the GitHub supported diagram types on [the mermaid project](https://mermaid-js.github.io/mermaid/#/n00b-gettingStarted).
 
 There are many other features and test-cases you can use or adapt to build scenarios of your own.
