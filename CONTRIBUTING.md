@@ -2,17 +2,18 @@
 
 If you want to contribute then pull requests are awesome and very welcome. The things in in The Power that I like the most were mostly suggested by others and we'd love to hear them in the [Discussions](https://github.com/gm3dmo/the-power/discussions).
 
-### Formatting scripts
-If you are keen on writing script then please go ahead and keep the following guidance in mind:
+### Writing `The Power` scripts
+If you are keen on writing a script then please go ahead and keep the following guidance in mind:
 
-### Keep it portable
+#### Keep it portable
 
-- DO NOT make use of non-portable utilites like `grep, sed, awk`.
-- DO write a [`python 3.9`, `ruby 2.6`] where there is complexity you need to handle.
-- DO use the `tmp` directory provided with The Power
-- DO NOT use the `/tmp` directory common on Unix derived systems. This helps to preserve the ability to be isolated and run in containers.
+- DO NOT make calls of non-portable utilites like `grep, sed, awk`. This preserves the clarity of the scripts in The Power.
+- DO write a [`python 3.9`, `ruby 2.6`] script where essential complexity needs to be handled.
+- DO use the `tmp` directory provided with The Power.
+- DO NOT use the `/tmp` directory common on Unix derived systems. This helps to preserve the ability to be isolated and run in containers and other target operating systems.
 - DO clone repositories to the `src` directory.
-- DO add files to the `test-data` directory. Please use an underscore `_` as the suffix, for example `test-data/class-diagram.md_` to prevent the [class-diagram.md_](https://github.com/gm3dmo/the-power/blob/main/test-data/class-diagram.md_) file in The Power's own repository from being rendered by GitHub.
+- DO add artifacts the script needs to the `test-data` directory. Please use an underscore `_` as the suffix, for example `test-data/class-diagram.md_` to prevent the [class-diagram.md_](https://github.com/gm3dmo/the-power/blob/main/test-data/class-diagram.md_) file in The Power's own repository from being rendered by GitHub. See [create-commit-rust-cargo-lock.sh]([source_file="test-data/rust/cargo/Cargo.lock_](https://github.com/gm3dmo/the-power/blob/main/create-commit-rust-cargo-lock.sh)" for example. 
+)
 
 Scripts MUST follow this very simple structure:
 
@@ -26,7 +27,7 @@ Scripts MUST follow this very simple structure:
 
 A [`skeleton.sh`](https://github.com/gm3dmo/the-power/blob/main/skeleton.sh_) sample is provided for reference.
 
-### Example: Adding a script for The Codespaces API
+#### Example: Adding a script for The Codespaces API
 
 To add a new script for a REST API endpoint like [codespaces](https://docs.github.com/en/rest/codespaces/codespaces).
 
