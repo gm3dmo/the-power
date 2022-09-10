@@ -1,6 +1,20 @@
 ## Contributing to The Power
 
-Scripts in The Power have a very simple structure:
+If you want to contribute then pull requests are awesome and very welcome. The things in in The Power that I like the most were mostly suggested by others and we'd love to hear them in the [Discussions](https://github.com/gm3dmo/the-power/discussions).
+
+### Formatting scripts
+If you are keen on writing script then please go ahead and keep the following guidance in mind:
+
+### Keep it portable
+
+- DO NOT make use of non-portable utilites like `grep, sed, awk`.
+- DO write a [`python 3.9`, `ruby 2.6`] where there is complexity you need to handle.
+- DO use the `tmp` directory provided with The Power
+- DO NOT use the `/tmp` directory common on Unix derived systems. This helps to preserve the ability to be isolated and run in containers.
+- DO clone repositories to the `src` directory.
+- DO add files to the `test-data` directory. Please use an underscore `_` as the suffix, for example `test-data/class-diagram.md_` to prevent the [class-diagram.md_](https://github.com/gm3dmo/the-power/blob/main/test-data/class-diagram.md_) file in The Power's own repository from being rendered by GitHub.
+
+Scripts MUST follow this very simple structure:
 
 - Line 1: Read in the config file: `. .gh-api-examples.conf`
 - Line 2: A blank line.
@@ -12,23 +26,23 @@ Scripts in The Power have a very simple structure:
 
 A [`skeleton.sh`](https://github.com/gm3dmo/the-power/blob/main/skeleton.sh_) sample is provided for reference.
 
-### Example: Adding Codespaces coverage:
+### Example: Adding a script for The Codespaces API
 
 To add a new script for a REST API endpoint like [codespaces](https://docs.github.com/en/rest/codespaces/codespaces).
 
-Copy the skeleton file to a file with the name of the API call (get this from the documetation title)
+1. Copy the skeleton file to a file with the name of the API call (get this from the documetation title)
 
 ```
 cp skeleton.sh_ list-codespaces-in-a-repository-for-the-authenticated-user.sh
 ```
 
-Edit `list-codespaces-in-a-repository-for-the-authenticated-user.sh`, replace URL on line 3 with:
+2. Edit `list-codespaces-in-a-repository-for-the-authenticated-user.sh`, replace URL on line 3 with:
 
 ```
 https://docs.github.com/en/rest/codespaces/codespaces#list-codespaces-in-a-repository-for-the-authenticated-user
 ```
 
-Replace CALL with (this can be found in the API documentation:
+3. Replace CALL with (this can be found in the API documentation:
 
 ```
 GET /repos/{owner}/{repo}/codespaces
@@ -39,9 +53,8 @@ GET /repos/{owner}/{repo}/codespaces
 
 # URL
 # CALL
-#
-#
-#
+
+
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
@@ -64,7 +77,26 @@ curl ${curl_custom_flags} \
      ${GITHUB_API_BASE_URL} --data @${json_file}
 ```
 
-As its a GET request type, we can remove the json_file and jq lines.
+For `GET` request types, we can remove the:
+
+```bash
+`json_file=tmp/skeleton.json`
+```
+
+and `jq` command:
+
+```bash
+jq -n \
+           --arg name "${repo}" \
+           '{
+             name : $name,
+           }' > ${json_file}
+
+curl ${curl_custom_flags} \
+     -H "Accept: application/vnd.github.v3+json" \
+     -H "Authorization: token ${GITHUB_TOKEN}" \
+     ${GITHUB_API_BASE_URL} --data @${json_file}
+```
 
 Replace the url:
 
