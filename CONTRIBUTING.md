@@ -3,7 +3,7 @@
 If you want to contribute then pull requests are awesome and very welcome. The things in in The Power that I like the most were mostly suggested by others and we'd love to hear them in the [Discussions](https://github.com/gm3dmo/the-power/discussions).
 
 ### Writing `The Power` scripts
-If you are keen on writing a script then please go ahead and keep the following guidance in mind:
+If you are keen on writing a script, then following the guidance below should help with the smooth handling of your pull request:
 
 #### Keep it portable
 
