@@ -5,7 +5,7 @@ Scripts in The Power have a very simple structure:
 - Line 1: Read in the config file: `. .gh-api-examples.conf`
 - Line 2: A blank line.
 - Line 3: A comment character followed by a space: `#`, a link to the documentation for the endpoint.
-- Line 4: A comment character followed by a space and the the call. 
+- Line 4: A comment character followed by a space followed by the the call. 
 - Optional: Choice of target, such as `repo` to be passed via the command line or revert to a default value.
 - Any other custom logic needed to prepare the call.
 - A curl command against the target API endpoint.
