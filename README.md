@@ -60,10 +60,10 @@ enforce_admins="false"
 base_branch=main
 ```
 
-### The Power's configuration can be shared with other tools
+#### The Power's configuration can be shared with other tools
 The use of `kv` pairs in `.gh-api-examples.conf` provides maximum flexibility and simplicity. It allows the configuration file to provide the basic descriptors for other more advanced tools like Apache JMeter or [hurl](https://hurl.dev/)
 
-#### Hurl using the `.gh-api-examples.conf file`
+##### Hurl using the `.gh-api-examples.conf file`
 [hurl-repo-characteristics.sh](https://github.com/gm3dmo/the-power/blob/main/hurl-repo-characteristics.sh) shows [hurl](https://hurl.dev) provisioned with values `.gh-api-examples.conf`: 
 
 ```
