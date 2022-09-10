@@ -3,18 +3,26 @@
 # https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
 # PUT /repos/:owner/:repo/contents/:path
 
+# https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams
+
 if [ -z "$1" ]
+  then
+    diagram_types="flowchart sequence-diagram class-diagram state-diagram gantt-chart pie-chart er-diagram user-journey git-graph geojson"
+  else
+    diagram_types=$1
+fi
+
+if [ -z "$2" ]
   then
     repo=$repo
   else
-    repo=$1
+    repo=$2
 fi
 
 
-for diagram_type in flowchart sequence-diagram  class-diagram state-diagram gantt-chart pie-chart er-diagram user-journey git-graph
+for diagram_type in ${diagram_types}
 
 do
-
     if [ -z "$2" ]
       then
         filename_in_repo="${diagram_type}.md"
@@ -28,7 +36,7 @@ do
     # I found this:
     # https://stackoverflow.com/questions/61154881/how-to-send-arguments-with-slurpfile-and-jq
     
-    template_file=$(printf "test-data/${filename_in_repo}%s" "_")
+    template_file=$(printf "test-data/mermaid/${filename_in_repo}%s" "_")
     base64_string=$(base64 ${template_file})
     comment="Adding ${filename_in_repo}"
     json_file="tmp/create-commit.json"
