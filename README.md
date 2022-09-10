@@ -61,7 +61,7 @@ base_branch="main"
 The use of `kv` pairs in `.gh-api-examples.conf` provides maximum flexibility and simplicity. It allows the configuration file to provide the basic descriptors for other more advanced tools like Apache JMeter or [hurl](https://hurl.dev/)
 
 #### Hurl using the `.gh-api-examples.conf file`
-[hurl-repo-characteristics.sh](https://github.com/gm3dmo/the-power/blob/main/hurl-repo-characteristics.sh) provides a demonstration of hurl configuring itself with `.gh-api-examples.conf`: 
+[hurl-repo-characteristics.sh](https://github.com/gm3dmo/the-power/blob/main/hurl-repo-characteristics.sh) shows [hurl](https://hurl.dev) provisioned with values `.gh-api-examples.conf`: 
 
 ```
 hurl --test --variables-file .gh-api-examples.conf --json hurl-tests/repo-characteristics.hurl | jq -r
