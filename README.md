@@ -12,7 +12,7 @@
 5. [Testcases](docs/testcases.md)
 
 ## What is The Power?
-The Power is very simple test framework to help you interact with and understand the GitHub API's by building pre-defined test scenarios extra goodies to a testing instance of [GitHub Enterprise](https://docs.github.com/en/enterprise-server@3.5/admin/overview/about-github-enterprise-server) or on GitHub.com a pre-existing [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations) and [Enterprise Account](https://docs.github.com/en/get-started/onboarding/getting-started-with-github-enterprise-cloud).
+The Power is a very simple test framework to help you interact with and understand the GitHub API's by building pre-defined test scenarios extra goodies to a testing instance of [GitHub Enterprise](https://docs.github.com/en/enterprise-server@3.5/admin/overview/about-github-enterprise-server) or on GitHub.com a pre-existing [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations) and [Enterprise Account](https://docs.github.com/en/get-started/onboarding/getting-started-with-github-enterprise-cloud).
 
 The Power adds the following to a blank appliance or organization in <=30 seconds:
 
