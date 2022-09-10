@@ -10,6 +10,8 @@ Scripts in The Power have a very simple structure:
 - Any other custom logic needed to prepare the call.
 - A curl command against the target API endpoint.
 
+A [`skeleton.sh`](https://github.com/gm3dmo/the-power/blob/main/skeleton.sh_) sample is provided for reference.
+
 ### Example: Adding Codespaces coverage:
 
 To add a new script for a REST API endpoint like [codespaces](https://docs.github.com/en/rest/codespaces/codespaces).
