@@ -46,7 +46,7 @@ There are hundreds of pre-baked scripts to:
 * Demonstrate [Code scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
 
 ### The Power is highly configurable
-The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is simply key value pairs:
+The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs:
 
 ```
 # Branches and Branch protection
