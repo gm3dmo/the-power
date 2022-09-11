@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
+
 """
-Module Docstring
+This is used to prepare the json files that are sent as a commit.
 """
 
 __author__ = "David Morris (gm3dmo@gmail.com)"
-__version__ = "0.1.0"
-__license__ = "MIT"
 
 import os
 import json
@@ -16,8 +15,6 @@ import logging
 import thepower
 from pathlib import Path
 from datetime import datetime
-
-
 
 def main(args):
 
