@@ -71,6 +71,7 @@ enterprise="${enterprise_name}"
 ### [Organization](https://docs.github.com/en/rest/orgs)
 # https://docs.github.com/en/organizations
 org="${org}"
+owner="${org}"
 org_secret_name="ORGANIZATION_SECRET001"
 org_owner="${org_owner}"
 org_members="${org_members}"
