@@ -1,4 +1,11 @@
-# Create the testrepo
-./create-repo.sh
+# Create a repository and setup a simple workflow 
+./create-repo.sh | jq -r '.name'
 python3 create-workflow-simple-json-file.py
-./create-commit-workflow-simple.sh
+echo -n "Adding workflow file: "
+./create-commit-workflow-simple.sh | jq -r '.content.path'
+
+echo press enter to send a dispatch event and trigger the worfklow:
+
+ read x
+./dispatch-event.sh 
+
