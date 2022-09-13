@@ -4,7 +4,7 @@
 # GET /orgs/:org/projects
 
 A=$1
-wanted=${A:=nopreview}
+wanted="preview"
 
 
 if [ ${wanted} == "preview" ]; then
