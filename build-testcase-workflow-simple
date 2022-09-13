@@ -1,5 +1,11 @@
 # Create a repository and setup a simple workflow 
+# Prior to running this, make any needed modifications to test-data/workflow-simple.yml_
+# that are needed for the testcase.
+# The "as delivered" version of workflow-simple.yml_ will trigger the workflow
+# with dispatch event
+#
 ./create-repo.sh | jq -r '.name'
+
 python3 create-workflow-simple-json-file.py
 echo -n "Adding workflow file: "
 ./create-commit-workflow-simple.sh | jq -r '.content.path'
