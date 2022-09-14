@@ -15,4 +15,4 @@ curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/package.json --data @create-commit-javascript-package.json
+        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/package.json --data @test-data/create-commit-javascript-package.json
