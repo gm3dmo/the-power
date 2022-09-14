@@ -20,7 +20,12 @@ if [ -z "$2" ]
     org=${2}
 fi
 
-curl ${curl_custom_flags} \
-     -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${owner}/${repo}
+if [ $preferred_client == "gh" ]; then
+    echo gh api /repos/{owner}/{repo} ${gh_custom_flags}
+else
+    curl ${curl_custom_flags} \
+         -H "Accept: application/vnd.github.v3+json" \
+         -H "Authorization: token ${GITHUB_TOKEN}" \
+            ${GITHUB_API_BASE_URL}/repos/${owner}/${repo}
+fi
+
