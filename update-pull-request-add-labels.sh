@@ -3,7 +3,7 @@
 # https://developer.github.com/v3/issues/#update-an-issue
 # PATCH /repos/:owner/:repo/issues/:issue_number
 
-json_file="update-pull-request-add-labels.json"
+json_file="test-data/update-pull-request-add-labels.json"
 issue_number=$(./list-pull-requests.sh | jq '[.[].id] | max')
 
 curl ${curl_custom_flags} \
