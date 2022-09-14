@@ -3,7 +3,7 @@
 # https://docs.github.com/en/rest/reference/issues#create-a-label
 # POST /repos/:owner/:repo/labels
 
-json_file="label.json"
+json_file="test-data/label.json"
 color="ff00ff"
 
 # If the script is passed an argument $1 use that as the name
