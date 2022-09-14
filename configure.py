@@ -212,6 +212,11 @@ runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
 
+### [gh cli](https://cli.github.com/manual/gh_api)
+preferred_client="${preferred_client}"
+gh_custom_flags="--paginate --hostname ${hostname}"
+gh_custom_headers=""
+
 ### [Curl](https://curl.se/)
 # latest version of curl is recommended.
 # curl flags for timing testing etc.
@@ -377,6 +382,7 @@ pool_size=10
         "number_of_branches": args.number_of_branches,
         "curl_custom_flags": args.curl_custom_flags,
         "allow_auto_merge": args.allow_auto_merge,
+        "preferred_client": args.preferred_client,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -577,6 +583,13 @@ if __name__ == "__main__":
         dest="pr_approver_token",
         default="replace_with_a_PAT",
         help="The PAT of a pr approver.",
+    )
+    parser.add_argument(
+        "--preferred_client",
+        action="store",
+        dest="preferred_client",
+        default="curl",
+        help="The preferred client program to use for interaction with the API's. Valid values are gh or curl.",
     )
     parser.add_argument(
         "--custom-curl-flags",
