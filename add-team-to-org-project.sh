@@ -5,7 +5,7 @@
 
 project_id=$(./list-organization-projects.sh 2>/dev/null | jq '.[] | .id' | sort | head -1) 
 
-json_file=team-permissions.json
+json_file=test-data/team-permissions.json
 
 curl ${curl_custom_flags} \
      -X PUT \
