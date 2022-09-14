@@ -3,8 +3,8 @@
 # https://docs.github.com/en/rest/reference/repos#create-a-github-pages-site
 # POST /repos/:owner/:repo/pages
 
-# https://docs.github.com/en/pages
-# https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#limits-on-use-of-github-pages
+# ui: https://docs.github.com/en/pages
+# limits: https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#limits-on-use-of-github-pages
 
 
 json_file=tmp/create-pages.json

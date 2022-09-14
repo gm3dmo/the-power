@@ -3,6 +3,8 @@
 # https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation#
 # https://api.github.com/app/installations/:installation_id/access_tokens
 
+# limits: https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps
+
 installation_id=${default_installation_id}
 
 JWT=$(./tiny-call-get-jwt.sh ${default_app_id})
