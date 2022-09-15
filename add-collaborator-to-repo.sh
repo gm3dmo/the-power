@@ -3,6 +3,9 @@
 # https://docs.github.com/en/rest/reference/repos#add-a-repository-collaborator
 # PUT /repos/{owner}/{repo}/collaborators/{username}
 
+# limit: https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository
+
+
 username=${1:-lisa}
 permission=${2:-push}
 
