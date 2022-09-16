@@ -2,9 +2,9 @@
 
 p=false
 
-for reponame in $(cat tmp/longlistofrepos.txt)
+for reponame in $(cat tmp/long-list-of-repos.txt)
 do
-json_file=tmp/manyrepoDetails
+json_file=tmp/many-repo-details.json
 rm -f ${json_file}
 
 DATA=$(jq -n \
