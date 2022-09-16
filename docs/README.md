@@ -58,6 +58,9 @@ There are hundreds of pre-baked scripts to:
 * Demonstrate [GitHub Actions](https://docs.github.com/en/actions).
 * Demonstrate [Code scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
 
+#### The Power can be used with tools like docker
+The `--primer` has a default value of `list-user.sh`, a custom value can be used to start your own custom scripts when running in a container. Some users have scripts that check out repositories via git, create commits and pushes etc.
+
 #### The Power's configuration can be shared with other tools
 The use of `kv` pairs in `.gh-api-examples.conf` provides maximum flexibility and simplicity. It allows the configuration file to provide the basic descriptors for other more advanced tools like Apache JMeter or [hurl](https://hurl.dev/)
 
