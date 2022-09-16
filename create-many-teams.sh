@@ -22,7 +22,11 @@ fi
 privacy="closed"
 #privacy="secret"
 
-for custom_team_name in $(cat nato-alphabet.txt)
+
+./generate-long-list-of-teams.pl
+
+for custom_team_name in $(cat tmp/long-list-of-teams.txt)
 do
-  ./create-team.sh ${custom_team_name}
+  ./create-team.sh ${custom_team_name} &
+  sleep 0.05
 done
