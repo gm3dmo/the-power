@@ -231,6 +231,7 @@ curl_custom_flags="${curl_custom_flags}"
 # mostly used for testing things on GHES.
 number_of_orgs=${number_of_orgs}
 number_of_repos=${number_of_repos}
+number_of_teams=${number_of_teams}
 number_of_branches=${number_of_branches}
 repo_prefix="testrepo"
 org_prefix="testorg"
@@ -379,6 +380,7 @@ pool_size=10
         "runner_platform": args.runner_platform,
         "number_of_orgs": args.number_of_orgs,
         "number_of_repos": args.number_of_repos,
+        "number_of_teams": args.number_of_teams,
         "number_of_branches": args.number_of_branches,
         "curl_custom_flags": args.curl_custom_flags,
         "allow_auto_merge": args.allow_auto_merge,
@@ -534,6 +536,13 @@ if __name__ == "__main__":
         dest="number_of_repos",
         default=3,
         help="The number of repos for the bulk creators to create.",
+    )
+    parser.add_argument(
+        "--number-of-teams",
+        action="store",
+        dest="number_of_teams",
+        default=3,
+        help="The number of teams for the bulk creators to create.",
     )
     parser.add_argument(
         "--number-of-branches",
