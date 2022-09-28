@@ -125,6 +125,7 @@ required_approving_reviewers=1
 required_status_check_name="ci-test/this-check-is-required"
 enforce_admins="false"
 base_branch=${base_branch}
+delete_branch_on_merge=${delete_branch_on_merge}
 
 
 ### [Commits](https://docs.github.com/en/rest/commits/commits)
@@ -362,6 +363,7 @@ pool_size=10
         "org": args.org,
         "enterprise_name": args.enterprise_name,
         "base_branch": args.base_branch,
+        "delete_branch_on_merge": args.delete_branch_on_merge,
         "pr_approver_token": args.pr_approver_token,
         "default_app_id": args.app_id,
         "default_installation_id": args.installation_id,
@@ -578,6 +580,13 @@ if __name__ == "__main__":
         dest="allow_auto_merge",
         default="true",
         help="allow auto merge"
+    )
+    parser.add_argument(
+        "--delete-branch-on-merge",
+        action="store",
+        dest="delete_branch_on_merge",
+        default="true",
+        help="delete branch on merge"
     )
     parser.add_argument(
         "--enterprise-name",
