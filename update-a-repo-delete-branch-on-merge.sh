@@ -1,13 +1,15 @@
 . .gh-api-examples.conf
 
+# https://docs.github.com/en/rest/reference/repos#update-a-repository
+# PATCH /repos/{owner}/{repo}
 
 json_file=tmp/delete-branch-on-merge.json
 rm -f ${json_file}
 
-    jq -n \
-           --arg dbom true \
+jq -n \
+      --arg delete_branch_on_merge ${delete_branch_on_merge} \
            '{
-             delete_branch_on_merge: $dbom | test("true"),
+             delete_branch_on_merge: $delete_branch_on_merge | test("true"),
            }' > ${json_file}
 
 
@@ -17,4 +19,3 @@ curl ${curl_custom_flags} \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo} --data @${json_file}
 
-rm -f ${json_file}
