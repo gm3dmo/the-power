@@ -4,22 +4,19 @@
 # PUT /enterprises/{enterprise}/actions/oidc/customization/issuer
 # You must authenticate using an access token with the admin:enterprise scope to use this endpoint. 
 
-include_enterprise_slug=$1
+# Use $1 or "true" as a default of no argument is provided.
+include_enterprise_slug=${1:-true}
 
-if [ "$include_enterprise_slug" == "true" ]
-then
+json_file=tmp/set-actions-oidc-custom-issuer-policy-for-an-enterprise.json
+
+jq -n \
+           --arg include_enterprise_slug "${include_enterprise_slug}" \
+           '{
+             include_enterprise_slug: $include_enterprise_slug | test("true")
+           }' > ${json_file}
+
     curl ${curl_custom_flags} \
         -X PUT \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/enterprises/${enterprise}/actions/oidc/customization/issuer -d '{"include_enterprise_slug":true}'
-elif [ "$include_enterprise_slug" == "false" ]
-then
-    curl ${curl_custom_flags} \
-        -X PUT \
-        -H "Accept: application/vnd.github.v3+json" \
-        -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/enterprises/${enterprise}/actions/oidc/customization/issuer -d '{"include_enterprise_slug":false}'
-else
-  echo "You must pass either 'true' or 'false' as an argument to this script."
-fi
+i          ${GITHUB_API_BASE_URL}/enterprises/${enterprise}/actions/oidc/customization/issuer  --data @${json_file}
