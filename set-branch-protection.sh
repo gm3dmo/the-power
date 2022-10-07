@@ -14,8 +14,7 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
-cat $source_json | jq -r
-
+cat ${source_json} | jq -r  >&2
 
 cat ${source_json}| jq --arg team_slug "$team_slug" \
                             --arg team_admin "$team_admin" \
