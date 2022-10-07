@@ -27,10 +27,12 @@ jq -n \
            --arg name "${repo}" \
            --arg private $p \
            --arg visibility ${default_repo_visibility} \
+           --arg delete_branch_on_merge ${delete_branch_on_merge} \
            '{
              name : $name,
              private: $private | test("true"),
-             visibility: $visibility
+             visibility: $visibility,
+             delete_branch_on_merge: $delete_branch_on_merge | test("true")
            }' > ${json_file}
 
 

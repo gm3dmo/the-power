@@ -6,7 +6,7 @@
 
 read -r -d '' graphql_script <<- EOF
 {
-  organization(login: "${org}}") {
+  organization(login: "${org}") {
     repositories(first: 100) {
       nodes {
         name

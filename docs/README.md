@@ -12,9 +12,9 @@
 5. [Testcases](docs/testcases.md)
 
 ## What is The Power?
-The Power is a very simple test framework to help you interact with and understand the GitHub API's by building pre-defined test scenarios extra goodies to a testing instance of [GitHub Enterprise](https://docs.github.com/en/enterprise-server@3.5/admin/overview/about-github-enterprise-server) or on GitHub.com a pre-existing [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations) and [Enterprise Account](https://docs.github.com/en/get-started/onboarding/getting-started-with-github-enterprise-cloud).
+*The Power* is a simple test framework for GitHub's API's. It's goal is to help you learn to interact with and understand GitHub API's by building test scenarios such as; a repository with a pull request, teams and users on a testing instance of [GitHub Enterprise](https://docs.github.com/en/enterprise-server/admin/overview/about-github-enterprise-server) or GitHub.com a pre-existing [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations) and [Enterprise Account](https://docs.github.com/en/get-started/onboarding/getting-started-with-github-enterprise-cloud).
 
-The Power adds the following to a blank appliance or organization in <=30 seconds:
+The Power can create the following on a blank appliance or organization in <=30 seconds:
 
 * An [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations).
 * Users
@@ -23,7 +23,7 @@ The Power adds the following to a blank appliance or organization in <=30 second
 * [Branch protection](https://docs.github.com/en/github/administering-a-repository/about-protected-branches) rules on branch `main`.
 * [*CODEOWNERS*](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) file configured for the *README.md* and `.gitattributes` files.
 * An [Issue](https://github.com/features/issues).
-* A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) with a the code owner requested for review. 
+* A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) with a the code owner requested for review.
 * A manifest file for a package manager file with a vulnerability to trigger [Dependabot](https://docs.github.com/en/code-security/dependabot)
 * A [webhook](https://docs.github.com/en/developers/webhooks-and-events/about-webhooks) on *testrepo* that outputs to it's own [smee.io](https://smee.io) url.
 * A [Release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
@@ -35,7 +35,18 @@ There are many other features and test-cases you can use or adapt to build scena
 
 ### The Power is a tool for learning
 - Designed to be as simple as possible to understand. To keep things simple we exclusively uses only `curl` and `jq` to complete most tasks. Only a few of the more complex scenarios have other dependencies.
-- The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs. There are commented links to the the appropriate section in the GitHub documentation:
+
+### The Power is vast and deep
+There are hundreds of pre-baked scripts to:
+
+* Create commits, secrets, hooks, issue comments, environments.
+* Bulk up your appliance by creating hundreds or thousands of users/orgs/repos/teams/pull requests.
+* Set up a Tiny [GitHub App](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps) in less than 1 minute.
+* Demonstrate [GitHub Actions](https://docs.github.com/en/actions).
+* Demonstrate [Code scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
+
+### The Power is highly configurable
+The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs:
 
 ```
 ### [Branches](https://docs.github.com/en/rest/commits/commits)
@@ -49,23 +60,11 @@ enforce_admins="false"
 base_branch=main
 ```
 
-### The Power is vast and deep
-There are hundreds of pre-baked scripts to:
-
-* Create commits, secrets, hooks, issue comments, environments.
-* Bulk up your appliance by creating hundreds or thousands of users/orgs/repos/teams/pull requests.
-* Set up a Tiny [GitHub App](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps) in less than 1 minute.
-* Demonstrate [GitHub Actions](https://docs.github.com/en/actions).
-* Demonstrate [Code scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
-
-#### The Power can be used in a container with tools like docker
-The `--primer` has a default value of `list-user.sh`, a custom value can be used to start your own custom scripts when running in a container. Some users have scripts that check out repositories via git, create commits and pushes etc.
-
 #### The Power's configuration can be shared with other tools
 The use of `kv` pairs in `.gh-api-examples.conf` provides maximum flexibility and simplicity. It allows the configuration file to provide the basic descriptors for other more advanced tools like Apache JMeter or [hurl](https://hurl.dev/)
 
 ##### Hurl using the `.gh-api-examples.conf file`
-[hurl-repo-characteristics.sh](https://github.com/gm3dmo/the-power/blob/main/hurl-repo-characteristics.sh) shows [hurl](https://hurl.dev) provisioned with values `.gh-api-examples.conf`: 
+[hurl-repo-characteristics.sh](https://github.com/gm3dmo/the-power/blob/main/hurl-repo-characteristics.sh) shows [hurl](https://hurl.dev) provisioned with values `.gh-api-examples.conf`:
 
 ```
 hurl --test --variables-file .gh-api-examples.conf --json hurl-tests/repo-characteristics.hurl | jq -r
@@ -89,4 +88,4 @@ jsonpath "$.full_name" == "{{ org}}/{{ repo }}"
 ```
 
 ### Why The Power
-There are lots of great tools like [Postman](https://www.postman.com/), [JMeter](https://jmeter.apache.org/) for interacting with API's and building testsuites and many of the latest API's come with their own interactive documentation built-in like the [swagger petstore](https://petstore.swagger.io/). The Power is a solution for times and places where those tools just aren't available. 
+There are lots of great tools like [Postman](https://www.postman.com/), [JMeter](https://jmeter.apache.org/) for interacting with API's and building testsuites and many of the latest API's come with their own interactive documentation built-in like the [swagger petstore](https://petstore.swagger.io/). The Power is a solution for times and places where those tools just aren't available.
