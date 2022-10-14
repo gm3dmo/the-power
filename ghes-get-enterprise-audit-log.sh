@@ -1,7 +1,7 @@
 . .gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-cloud@latest/rest/secret-scanning#list-secret-scanning-alerts-for-an-enterprise
-# GET /enterprises/{enterprise}/secret-scanning/alerts
+# https://docs.github.com/en/enterprise-server/rest/enterprise-admin/audit-log
+# GET /enterprises/{enterprise}/audit-log
 
 
 # CAVEAT: The documentation at:
@@ -20,4 +20,4 @@ set -x
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/enterprises/${enterprise}/audit-log?phrase=created:>2022-05-01..2022-05-02&page=1&per_page=100"
+        "${GITHUB_API_BASE_URL}/enterprises/${enterprise}/audit-log?phrase=created:>2022-10-01..2022-10-14&page=1&per_page=1"
