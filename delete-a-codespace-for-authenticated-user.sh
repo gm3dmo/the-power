@@ -6,7 +6,7 @@
 # If the script is passed an argument $1 use that as codespace name
 if [ -z "$1" ]
   then
-    codespace_name=$(./get-a-codespace-for-authenticated-user.sh | jq -r '.name')
+    codespace_name=$(./list-codespaces-for-authenticated-user.sh | jq -r '.name')
   else
     codespace_name=$1
 fi
