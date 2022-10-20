@@ -6,7 +6,7 @@
 ## Table of Contents
 
 1. [What is the Power?](#what-is-the-power)
-2. [Setup Instructions](docs/setup.md)
+2. [Setup Instructions](setup.md)
 3. [Contributing to The Power](CONTRIBUTING.md)
 4. [Known Issues/Problems/Solutions](docs/known-issues.md)
 5. [Testcases](docs/testcases.md)
