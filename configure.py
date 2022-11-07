@@ -213,14 +213,17 @@ runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
 
+
 ### [gh cli](https://cli.github.com/manual/gh_api)
 preferred_client="${preferred_client}"
 gh_custom_flags="--paginate --hostname ${hostname}"
 gh_custom_headers=""
 
+
 ### [Curl](https://curl.se/)
 # latest version of curl is recommended.
-# curl flags for timing testing etc.
+# `curl has --write-out json` for timing testing etc.
+# using https://daniel.haxx.se/blog/2020/03/17/curl-write-out-json/
 # example:
 # curl_custom_flags="-kso /dev/null --write-out '%{json}'"
 #
