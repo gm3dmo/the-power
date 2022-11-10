@@ -10,7 +10,7 @@ release_id=$(cat $response_file | jq -r '.id')
 upload_url=$(cat $response_file | jq -r '.upload_url')
 clean_upload_url=${upload_url%?????????????}
 
-upload_asset_filename=release-asset.gz
+upload_asset_filename=test-data/release-asset.gz
 
 set -x
 curl  -v \
