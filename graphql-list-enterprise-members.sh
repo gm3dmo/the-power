@@ -7,9 +7,12 @@
 read -r -d '' graphql_script <<- EOF
 {
   enterprise(slug: "$enterprise") {
-    users(first: 100) {
+    members(first: 100) {
       nodes {
-        name
+        ... on EnterpriseUserAccount{
+          login
+          id
+        }
       }
     }
   }
