@@ -32,6 +32,7 @@ jq -n \
   '{query: $graphql_query}' > ${json_file}
 
 
+
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H 'Accept: application/vnd.github.audit-log-preview+json' \
