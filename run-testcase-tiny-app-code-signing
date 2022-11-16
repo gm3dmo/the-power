@@ -9,6 +9,13 @@ GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 # pass the GITHUB_TOKEN to all the scripts below:
 
 
+echo "Creating a tree:" 
+echo "===================="
 ./tiny-app-codesign-create-a-tree.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-tree-response.json
+echo "Creating a commit:" 
+echo "===================="
 ./tiny-app-codesign-create-a-commit.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-commit-response.json
+echo "Updating a reference:" 
+echo "===================="
+./tiny-app-codesign-create-a-tree.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-tree-response.json
 ./tiny-app-codesign-update-a-reference.sh ${GITHUB_TOKEN}
