@@ -5,7 +5,7 @@
 # We want all the activities of this script to be performed
 # by The Power's Tiny GitHub App so we first get a GitHub App Token 
 # to override the token in the config:
-GITHUB_TOKEN=$(./tiny-dump-app-token.sh)
+GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 # pass the GITHUB_TOKEN to all the scripts below:
 
 
