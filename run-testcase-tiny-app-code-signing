@@ -11,5 +11,4 @@ GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 ./tiny-app-codesign-create-a-tree.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-tree-response.json
 ./tiny-app-codesign-create-a-commit.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-commit-response.json
-#./tiny-app-codesign-update-a-reference.sh ${GITHUB_TOKEN}
-#
+./tiny-app-codesign-update-a-reference.sh ${GITHUB_TOKEN}
