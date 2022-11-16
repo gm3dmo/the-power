@@ -4,8 +4,8 @@
 # POST /repos/:owner/:repo/git/commits
 
 GITHUB_TOKEN=$1
-tree_sha=$(cat tmp/pre-receive-hook-create-a-tree-response.json | jq -r '.sha')
-json_file=tmp/pre-receive-hook-create-a-commit.json
+tree_sha=$(cat tmp/tiny-app-codesign-create-a-tree-response.json | jq -r '.sha')
+json_file=tmp/tiny-app-codesign-create-commit.json
 last_commit_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
 
 
