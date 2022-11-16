@@ -5,7 +5,7 @@
 
 
 GITHUB_TOKEN=$1
-sha=$(cat tmp/pre-receive-new-commit-response.json | jq -r '.sha')
+sha=$(cat tmp/tiny-app-codesign-create-a-commit-response.json | jq -r '.sha')
 json_file=tmp/create-commit.json
 
 
