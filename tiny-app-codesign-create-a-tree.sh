@@ -8,11 +8,13 @@
 GITHUB_TOKEN=$1
 last_commit_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
 timestamp=$(date +%s)
-json_file=tmp/github-app-codesign-create-a-tree.json
+json_file=tmp/tiny-app-code-sign-create-a-tree.json
+content="This is content added by the tiny-app-code-signing demo."
 
 
 jq -n \
         --arg base_tree "${last_commit_sha}" \
+
         --arg path "/github-app-codesign" \
 '{ "base_tree" : $base_tree, "tree" : [ { "path": $path, "mode": "100755", type: "blob", content: $content }]}'  > ${json_file}
 
