@@ -14,7 +14,7 @@ content="This is content added by the tiny-app-code-signing demo."
 
 jq -n \
         --arg base_tree "${last_commit_sha}" \
-
+        --arg content "$content" \
         --arg path "/github-app-codesign" \
 '{ "base_tree" : $base_tree, "tree" : [ { "path": $path, "mode": "100755", type: "blob", content: $content }]}'  > ${json_file}
 
