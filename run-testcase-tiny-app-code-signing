@@ -17,5 +17,4 @@ echo "===================="
 ./tiny-app-codesign-create-a-commit.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-commit-response.json
 echo "Updating a reference:" 
 echo "===================="
-./tiny-app-codesign-create-a-tree.sh ${GITHUB_TOKEN} > tmp/tiny-app-codesign-create-a-tree-response.json
 ./tiny-app-codesign-update-a-reference.sh ${GITHUB_TOKEN}
