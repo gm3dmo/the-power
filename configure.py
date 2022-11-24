@@ -212,6 +212,8 @@ enterprise_shr_group_name="my-enterprise-self-hosted-runners"
 runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
+runner_name="the-power-example-runner"
+runner_label="the-power"
 
 
 ### [gh cli](https://cli.github.com/manual/gh_api)
