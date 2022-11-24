@@ -13,7 +13,11 @@ curl -O -L https://github.com/actions/runner/releases/download/${runner_version}
 
 tar zxf actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
 
-./config.sh --url https://github.com/${org}/${repo} --token ${registration_token} --unattended --name ${runner_name} --labels ${runner_label}  --replace true
+# This is a gnarly thing to do but saves rewriting how the config file
+# gets populated for this one script that uses github.com the runner tarball download
+if [ $hostname == "api.github.com" ];
+then
+  hostname="github.com"
+fi
 
-## May need to run it like this on GHES
-#./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name the-power-example-runner --labels 'the-power' --replace true
+./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name the-power-example-runner --labels 'the-power' --replace true
