@@ -20,4 +20,4 @@ then
   hostname="github.com"
 fi
 
-./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name the-power-example-runner --labels 'the-power' --replace true
+./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name ${runner_name} --labels ${runner_labels} --replace 
