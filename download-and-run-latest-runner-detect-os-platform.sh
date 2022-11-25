@@ -17,12 +17,19 @@ tag_name=$(./list-runner-latest-release.sh)
 runner_version=${tag_name##v}
 
 # Wondering how portable these are across "uname" versions.
-runner_platform=$(uname -m)
+runner_platform_uname=$(uname -m)
+if [ $runner_platform_uname == 'x86_64' ];
+then
+   runner_platform="x64"
+fi
 
 uname_s=$(uname -s)
 if [ $uname_s == "Darwin" ];
 then
     runner_os="osx"
+elif [ $uname_s == "Linux" ];
+then
+    runner_os="linux"
 fi
 
 
@@ -49,6 +56,6 @@ then
   hostname="github.com"
 fi
 
-./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name ${runner_name} --labels ${runner_labels}  --replace 
+./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name ${runner_name} --labels ${runner_labels}  --replace
 
 ./run.sh
