@@ -213,7 +213,7 @@ runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
 runner_name="the-power-example-runner"
-runner_label="the-power"
+runner_labels="the-power,self-hosted"
 
 
 ### [gh cli](https://cli.github.com/manual/gh_api)
