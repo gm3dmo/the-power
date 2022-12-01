@@ -7,7 +7,8 @@
 # Caveat:
 # The value:
 # "upload_url": "https://uploads.github.com/repos/octocat/Hello-World/releases/1/assets{?name,label}" 
-# seems like it could be clearer.
+# seems like it could be clearer in the docs that you can't actually use that
+# as is in the form that the API returns it. This script handles that by creating the `clean_upload_url` by chopping of the last 12 characters.
 
 
 response_file=tmp/response.json
@@ -17,7 +18,6 @@ release_id=$(cat $response_file | jq -r '.id')
 upload_url=$(cat $response_file | jq -r '.upload_url')
 clean_upload_url=${upload_url%?????????????}
 
-set -x
 timestamp=$(date +%s)
 upload_asset_filename=test-data/release-asset.gz
 upload_asset_filename_b=release-asset-${timestamp}.gz
