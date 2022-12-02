@@ -1,10 +1,22 @@
 require 'openssl'
 require 'jwt'  # https://rubygems.org/gems/jwt
-
+require 'pathname'
 
 private_pem_name = ARGV[0]
+private_pem = if Pathname.new(private_pem_name).absolute?
+                File.read(private_pem_name)
+              else
+                warn <<EOM
+In .gh-api-examples.conf, a relative path is set to private_pem_file.
 
-private_pem = File.read("#{Dir.home}/#{private_pem_name}")
+   #{private_pem_name}
+
+It is regarded as a relative path from your home directory, but it is recommended to set an absolute path to avoid confusion.
+
+   #{ENV.fetch("HOME")}/#{private_pem_name}
+EOM
+                File.read("#{Dir.home}/#{private_pem_name}")
+              end
 private_key = OpenSSL::PKey::RSA.new(private_pem)
 
 
