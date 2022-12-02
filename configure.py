@@ -183,6 +183,13 @@ default_deployment_id=1
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
 # https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps
 # Set private_pem_file name to the private key you've generated and downloaded..
+#
+# If you set a relative path, it is regarded as a relative path from your home directory.
+#
+# For example:
+#   private_pem_file=Downloads/testapp.YYYY-MM-DD.private-key.pem
+#   #=> The absolute path of the pem file is $HOME/Downloads/testapp.YYYY-MM-DD.private-key.pem
+#
 private_pem_file=${private_key_pem_file}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
