@@ -186,9 +186,13 @@ default_deployment_id=1
 #
 # If you set a relative path, it is regarded as a relative path from your home directory.
 #
-# For example:
+# Relative path example (no leading slash):
 #   private_pem_file=Downloads/testapp.YYYY-MM-DD.private-key.pem
-#   #=> The absolute path of the pem file is $HOME/Downloads/testapp.YYYY-MM-DD.private-key.pem
+#   #=> The absolute path of the pem file is /home/username/Downloads/testapp.YYYY-MM-DD.private-key.pem
+
+# Absolute path example (leading slash):
+#   private_pem_file=/opt/the-power/testapp.YYYY-MM-DD.private-key.pem
+#   #=> The absolute path of the pem file is /opt/the-power/Downloads/testapp.YYYY-MM-DD.private-key.pem
 #
 private_pem_file=${private_key_pem_file}
 # When working with the power in a codespace you may need a path like:
