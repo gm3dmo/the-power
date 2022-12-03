@@ -1,14 +1,26 @@
 . .gh-api-examples.conf
 
-# You can decode your jwt at: https://jwt.io/
-
 JWT=$(ruby tiny-get-jwt.rb ${private_pem_file} ${default_app_id})
 
-echo ${JWT}
-
-
+echo ""  >&2
+echo ""  >&2
+echo "================= Private Pem File ===================="  >&2
+echo " pem file: (private key): ($private_pem_file)" >&2
+echo ""  >&2
 echo "======================================================="  >&2
-echo "Decoded jwt:"  >&2
+echo ""  >&2
+echo ""  >&2
+
+echo "======================== JWT =========================="  >&2
+echo ""  >&2
+echo ${JWT}
+echo ""  >&2
+echo "======================================================="  >&2
+echo ""  >&2
+echo ""  >&2
+
+echo "==================== Decoded JWT ======================"  >&2
 echo ""  >&2
 echo ${JWT} | jq -R 'split(".") | .[1] | @base64d | fromjson'  >&2
+echo ""  >&2
 echo "======================================================="  >&2
