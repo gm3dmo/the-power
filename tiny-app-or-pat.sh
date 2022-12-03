@@ -1,20 +1,29 @@
 . .gh-api-examples.conf
 
+# This script can be used in test cases where a endpoint
+# doesn't seem to work with the GitHub App.
+# The included example lists org repos. you can read in any script
+# you want to test.
+
 if [ -z "$1" ]
   then
       GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
-      echo "+++++++++++++++++++++++++++++++++++++++++++++" >&2
-      echo "    Using App ${GITHUB_TOKEN}" >&2
-      echo "+++++++++++++++++++++++++++++++++++++++++++++" >&2
+      echo "++++++++++++++++++++ GitHub App +++++++++++++++++++++++" >&2
+      echo >&2
+      echo " Using App Token: ${GITHUB_TOKEN}" >&2
+      echo >&2
+      echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++" >&2
   else
-      echo "=============================================" >&2
-      echo using PAT ${GITHUB_TOKEN} >&2
-      echo "=============================================" >&2
+      echo "======================== PAT ==========================" >&2
+      echo >&2
+      echo " Using PAT: ${GITHUB_TOKEN}" >&2
+      echo >&2
+      echo "=======================================================" >&2
 fi
 
 echo
 
-echo press enter when ready
+printf "press enter when ready:"
 
 read x
 

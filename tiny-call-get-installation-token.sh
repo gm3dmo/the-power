@@ -4,10 +4,13 @@
 # https://api.github.com/app/installations/:installation_id/access_tokens
 
 # limits: https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps
+#
+
+JWT=$(./tiny-call-get-jwt.sh ${default_app_id} 2>/dev/null)
+
 
 installation_id=${default_installation_id}
 
-JWT=$(./tiny-call-get-jwt.sh ${default_app_id})
 
 curl --silent ${curl_custom_flags} \
      -X POST \
