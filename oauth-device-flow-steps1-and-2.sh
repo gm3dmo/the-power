@@ -69,12 +69,17 @@ read x
 echo ========================================================================
 
 
-#browser="Edge"
-#browser="Google Chrome"
-browser="Firefox"
+if [ "${preferred_browser}" = "chrome" ]; then
+    browser="Google Chrome"
+elif [ "${preferred_browser}" = "firefox" ]; then
+    browser="Firefox"
+elif [ "${preferred_browser}" = "edge" ]; then
+    browser="Microsoft Edge"
+fi
+
 incognito=true
 
-# Chrome
+# Chrome (Mac)
 if [ "${browser}" = "Google Chrome" ];
 then
     if [ "${incognito}" == "true" ]; then
@@ -84,11 +89,21 @@ then
     fi
 fi
 
-# Firefox
+# Firefox (Mac)
 if [ "${browser}" = "Firefox" ];
 then
     if [ "${incognito}" == "true" ]; then
         open -n -a "$browser" --args  -private "http://${hostname}/login/device"
+    else
+        open -n -a "$browser" --args  "http://${hostname}/login/device"
+    fi
+fi
+
+# Edge (Mac)
+if [ "${browser}" = "Microsoft Edge" ];
+then
+    if [ "${incognito}" == "true" ]; then
+        open -n -a "$browser" --args  -incognito "http://${hostname}/login/device"
     else
         open -n -a "$browser" --args  "http://${hostname}/login/device"
     fi

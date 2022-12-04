@@ -212,6 +212,9 @@ x_client_id="<your oauth app client_id here>"
 client_secret="<your oauth app client secret here>"
 fingerprint="fingerprint1"
 authorization_id=1
+# A browser can be started for the oauth device flow scripts
+# default is chrome.
+preferred_browser=${preferred_browser}
 
 
 ### [GitHub Actions](https://docs.github.com/en/rest/actions)
@@ -403,6 +406,7 @@ pool_size=10
         "curl_custom_flags": args.curl_custom_flags,
         "allow_auto_merge": args.allow_auto_merge,
         "preferred_client": args.preferred_client,
+        "preferred_browser": args.preferred_browser,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -631,6 +635,13 @@ if __name__ == "__main__":
         dest="curl_custom_flags",
         default="--no-progress-meter",
         help="curl custom flags.",
+    )
+    parser.add_argument(
+        "--preferred_browser",
+        action="store",
+        dest="preferred_browser",
+        default="chrome",
+        help="chrome, firefox, edge are allowed values.",
     )
 
     args = parser.parse_args()
