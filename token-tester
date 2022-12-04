@@ -1,0 +1,17 @@
+. .gh-api-examples.conf
+
+
+# If the script is passed an argument $1 use that as the name
+if [ -z "$1" ]
+  then
+    GITHUB_TOKEN=$GITHUB_TOKEN
+  else
+    GITHUB_TOKEN=$1
+fi
+
+curl -v ${curl_custom_flags} \
+     -H "Accept: application/vnd.github.v3+json" \
+     -H "Authorization: token ${GITHUB_TOKEN}" \
+        ${GITHUB_API_BASE_URL}/repos/${owner}/${repo}  | jq -r '.name'
+
+
