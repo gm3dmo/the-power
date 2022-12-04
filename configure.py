@@ -215,6 +215,8 @@ authorization_id=1
 # A browser can be started for the oauth device flow scripts
 # default is chrome.
 preferred_browser=${preferred_browser}
+# default is "incognito". "normal" is allowed.
+browser_mode=${preferred_browser_mode}
 
 
 ### [GitHub Actions](https://docs.github.com/en/rest/actions)
@@ -407,6 +409,7 @@ pool_size=10
         "allow_auto_merge": args.allow_auto_merge,
         "preferred_client": args.preferred_client,
         "preferred_browser": args.preferred_browser,
+        "preferred_browser_mode": args.preferred_browser_mode,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -642,6 +645,13 @@ if __name__ == "__main__":
         dest="preferred_browser",
         default="chrome",
         help="chrome, firefox, edge are allowed values.",
+    )
+    parser.add_argument(
+        "--preferred_browser_mode",
+        action="store",
+        dest="preferred_browser_mode",
+        default="incognito",
+        help="incognito, normal are allowed values.",
     )
 
     args = parser.parse_args()
