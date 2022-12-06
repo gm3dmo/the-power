@@ -8,6 +8,7 @@ read -r -d '' graphql_script <<- EOF
 {  repository(name:"$repo", owner:"$org") {
     branchProtectionRules(first:10){
       nodes{
+        id
         pattern
         isAdminEnforced
         requiresApprovingReviews
