@@ -68,6 +68,10 @@ mail_domain="example.com"
 enterprise="${enterprise_name}"
 
 
+### GitHub API Version
+# https://docs.github.com/en/rest/overview/api-versions
+github_api_version=${github_api_version}
+
 ### [Organization](https://docs.github.com/en/rest/orgs)
 # https://docs.github.com/en/organizations
 org="${org}"
@@ -410,6 +414,7 @@ pool_size=10
         "preferred_client": args.preferred_client,
         "preferred_browser": args.preferred_browser,
         "preferred_browser_mode": args.preferred_browser_mode,
+        "github_api_version": args.github_api_version,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -652,6 +657,13 @@ if __name__ == "__main__":
         dest="preferred_browser_mode",
         default="incognito",
         help="incognito, normal are allowed values.",
+    )
+    parser.add_argument(
+        "--github-api-version",
+        action="store",
+        dest="github_api_version",
+        default="2022-11-28",
+        help="see GitHub API version docs",
     )
 
     args = parser.parse_args()
