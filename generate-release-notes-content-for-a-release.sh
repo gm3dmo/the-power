@@ -17,5 +17,4 @@ cat $json_file | jq -r >&2
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases --data @${json_file}
-
+        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/generate-notes --data @${json_file}
