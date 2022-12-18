@@ -46,3 +46,6 @@ curl_custom_flags="--insecure"
 #### Chrome storage for smee urls
 If you use smee.io very often then Chrome can end up filling up it's storage for smee.io and you must clean clean it down: More toools, Developer tools, Storage. Remove the smee entries.
 
+#### Homebrew base64 causes create-commit-commands to fail
+
+See #70 where the Homebrew base64 command on mac can break things.
