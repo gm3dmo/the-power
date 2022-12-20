@@ -24,7 +24,7 @@ import re
 
 def token_validator(token: string):
     token_format_is_valid = False
-    if token.startswith('gh') or token.startswith('github_pat_') or token.length == 40:
+    if token.startswith('gh') or token.startswith('github_pat_') or len(token) == 40:
         token_format_is_valid = True
     return token_format_is_valid
 
