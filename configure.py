@@ -325,7 +325,7 @@ pool_size=10
     else:
         args.token = input(f"Enter Personal Access Token: ")
 
-    assert thepower.token_validator(args.token)
+    assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 
 
     if args.org != "":
