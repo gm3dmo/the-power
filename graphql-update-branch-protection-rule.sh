@@ -34,7 +34,7 @@ mutation {
             requiresConversationResolution:false,
             requiresCommitSignatures:false,
             requiresLinearHistory:false,
-            isAdminEnforced:false,
+            isAdminEnforced:$enforce_admins,
             allowsForcePushes:false,
             allowsDeletions:false,
             }
