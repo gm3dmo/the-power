@@ -1,8 +1,11 @@
 . .gh-api-examples.conf
+
 # https://docs.github.com/en/graphql/reference/mutations#createipallowlistentry
 #
+#
 if [[ -z $1 ]]; then
- branch_protection_rule=BPR_XXXX
+  # This extract will only work with the simple rules in The Power:
+  branch_protection_rule=$(./graphql-list-branch-protection-patterns.sh | jq -r '.data.repository.branchProtectionRules.nodes[0].id')
 else
  branch_protection_rule=$1
 fi
