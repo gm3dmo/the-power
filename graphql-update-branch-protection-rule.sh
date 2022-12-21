@@ -50,9 +50,9 @@ jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
   '{query: $graphql_query}' > ${json_file}
 
-curl -v ${curl_custom_flags} \
+curl  ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H 'Accept: application/vnd.github.audit-log-preview+json' \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_APIV4_BASE_URL} -d @${json_file} 
+        ${GITHUB_APIV4_BASE_URL} -d @${json_file}
 
