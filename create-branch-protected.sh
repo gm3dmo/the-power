@@ -14,8 +14,8 @@ fi
 timestamp=$(date +"%s")
 json_file=tmp/create-branch-protectedbranch.json
 
-sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
-echo $sha
+
+sha=$(curl ${curl_custom_flags} --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
 
 jq -n \
 	--arg ref "refs/heads/${protected_branch_name}" \
