@@ -1,0 +1,10 @@
+# we want to add line after:
+# -H "Accept: application/vnd.github.v3+json" \
+# perl -pi -e '/module some_1/ and $_.="APPLY DELAY xx \nAPPLY LOADS  ld\n"' files*.txt
+# --header "X-GitHub-Api-Version:2022-11-28"
+# -H "X-GitHub-Api-Version:2022-11-28"
+
+cp skeleton.sh_ skeleton.sh
+
+perl -i -lpe 'print "     -H \"X-GitHub-Api-Version:\${github_api_version}\" \\" if /^\s+-H "Accept: application/' skeleton.sh
+
