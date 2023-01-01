@@ -6,5 +6,5 @@
 
 cp skeleton.sh_ skeleton.sh
 
-perl -i -lpe 'print "     -H \"X-GitHub-Api-Version:\${github_api_version}\" \\" if /^\s+-H "Accept: application/' skeleton.sh
+perl -i -lpe 'print "     -H \"X-GitHub-Api-Version:\${github_api_version}\" \\" if /^\s+-H "Accept: application\/vnd.github.v3/' skeleton.sh
 
