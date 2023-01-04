@@ -24,4 +24,4 @@ payload = {
 # Create JWT
 encoded_jwt = jwt.encode(payload, signing_key, algorithm='RS256')
      
-print(f"JWT:  ", encoded_jwt())
+print(encoded_jwt())
