@@ -3,10 +3,12 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/search?apiVersion=2022-11-28#search-repositories
 # https://api.github.com/search/repositories?q=Q
 
-# Pass query as an argument, otherwise list all repos with commits since 1st of Jan 2023
+default_start_date="$(date -v -7d -I)"
+
+# Pass query as an argument, otherwise list all repos with commits in the last seven days
 if [ -z "$1" ]
   then
-    query="pushed:>2023-01-01"
+    query="pushed:>$default_start_date"
   else
     query="$1"
 fi
