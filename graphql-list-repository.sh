@@ -1,8 +1,6 @@
 . .gh-api-examples.conf
 
-# Wrap a graphql script for use with curl
-
-# Use a bash "here" document and shell variables will be available:
+# https://docs.github.com/en/graphql/reference/objects#repository
 
 read -r -d '' graphql_script <<- EOF
 {
@@ -13,6 +11,8 @@ search(type: REPOSITORY, query: "repo:$org/$repo", first: 100) {
         databaseId
         nameWithOwner
         createdAt
+        isSecurityPolicyEnabled
+        isArchived
         repositoryTopics(first: 100) {
           totalCount
           nodes {
