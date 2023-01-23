@@ -1,6 +1,6 @@
 . .gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server/rest/reference/enterprise-admin#create-an-organization
+# https://docs.github.com/en/enterprise-server@3.7/rest/enterprise-admin/orgs#create-an-organization
 # POST /admin/organizations
 
 org=${1:-$org}
