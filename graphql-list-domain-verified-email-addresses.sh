@@ -1,6 +1,7 @@
 . .gh-api-examples.conf
 
 # Wrap a graphql script for use with curl
+# Permissions needed for GitHub App: Read access to members
 
 # Use a bash "here" document and shell variables will be available:
 
