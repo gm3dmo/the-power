@@ -2,7 +2,7 @@
 
 1. Go to your organization -> Developer Settings -> GitHub App
 
-2. Register a new app, give it a snappy name like `test-app`, a snappy homepage like `https://example.com` and a snappy webhook URL like `https://example.com/webhook`
+2. Register a new app, name it something like `test-app`, a homepage like `https://example.com/homepage` and a webhook URL like `https://example.com/webhook`
 
 3. Give it some permissions to start, any, you can change them later (see below), then hit create
 
@@ -38,4 +38,4 @@
 
 When updating app permissions, remember to approve them! To do that go to this page `https://github.com/organizations/<YOURORG>/settings/installations/<installationID>` and review request -> Accept new permissions
 
-Otherwise the permission change will be for naught.
+Otherwise the permission change will be for naught as they will not stick. The UI can be a little quirky.
