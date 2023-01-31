@@ -10,6 +10,7 @@
 3. [Contributing to The Power](CONTRIBUTING.md)
 4. [Known Issues/Problems/Solutions](known-issues.md)
 5. [Testcases](testcases.md)
+6. [Setting up a GitHub App to use with The Power](setting-up-a-gh-app.md)
 
 ## What is The Power?
 *The Power* is a simple test framework for GitHub's API's. It's goal is to help you learn to interact with and understand GitHub API's by building test scenarios such as; a repository with a pull request, teams and users on a testing instance of [GitHub Enterprise](https://docs.github.com/en/enterprise-server/admin/overview/about-github-enterprise-server) or GitHub.com a pre-existing [Organization](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations) and [Enterprise Account](https://docs.github.com/en/get-started/onboarding/getting-started-with-github-enterprise-cloud).
