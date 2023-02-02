@@ -1,7 +1,7 @@
 # Create the testrepo
 ./create-repo-testrepo.sh
-#./create-webhook.sh
-#./create-environment.sh
+./create-webhook.sh
+./create-environment.sh
 ./create-commit-readme.sh
 #
 python3 create-workflow-simple-json-file.py
@@ -14,7 +14,7 @@ echo -n "Adding workflow file: "
 ./add-team-to-repo.sh
 ./create-branch-newbranch.sh
 ./create-commit-on-newbranch.sh
-#./create-a-deployment.sh new_branch
+./create-a-deployment.sh new_branch
 ./create-repo-issue.sh
 ./create-pull-request.sh
 
