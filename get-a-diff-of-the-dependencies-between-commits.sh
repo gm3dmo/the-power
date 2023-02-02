@@ -27,7 +27,9 @@ basehead=(${base}...${head})
 
 # send a request to GitHub API
 
+set -x
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/repos/${org}/empty-project/dependency-graph/compare/${basehead}
+     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/dependency-graph/compare/${basehead}
+
