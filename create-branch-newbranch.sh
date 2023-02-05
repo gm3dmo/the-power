@@ -21,9 +21,8 @@ jq -n \
         --arg sha "${sha}" \
 	'{ ref: $ref, sha: $sha }' > ${json_file}
 
-json_string=$(cat $json_file | jq )
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data "${json_string}"
+        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data @${json_file}
