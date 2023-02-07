@@ -119,6 +119,7 @@ default_pull_request_id=2
 # place it below to allow the default pull request
 # to be approved vi automation.
 pr_approver_token=${pr_approver_token}
+default_pr_event="COMMENT"
 
 
 ### [Branches](https://docs.github.com/en/rest/commits/commits)

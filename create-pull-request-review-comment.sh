@@ -31,8 +31,8 @@ fi
 # If the script is passed an argument $4 use that as what to do with the ticket
 if [ -z "$4" ]
   then
-     event="APPROVE"
-     body="${event} Tempus fugit ut sagitta. Fructus volat ut musa.  Certainly check in with @${org}/${team_slug} who may be interested."
+     event=${default_pr_event}
+     body="create-pull-request-review-comment.sh ${event} Tempus fugit ut sagitta. Fructus volat ut musa.  Certainly check in with @${org}/${team_slug} who may be interested."
   else
      event=$4
      body="${event} Transierunt cum summa gloria. For support @${org}/${team_slug} can help."
@@ -54,7 +54,7 @@ jq -n \
 
 cat ${json_file}
 
-curl ${curl_custom_flags} \
+curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}
