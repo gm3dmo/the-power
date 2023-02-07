@@ -11,8 +11,9 @@ if [ -z "$1" ]
     pull_number=$1
 fi
 
-event="APPROVE"
-body="${event} Spatium tantummodo huiusmodi stercore cadet scribat. Probatus.  Certainly check in with @${org}/${team_slug} who may be interested."
+#event="APPROVE"
+event=${default_pr_event}
+body="create-pull-request-review.sh ${event} Spatium tantummodo huiusmodi stercore cadet scribat. Probatus.  Certainly check in with @${org}/${team_slug} who may be interested."
 
 json_file="tmp/create-pull-request-review.json"
 
