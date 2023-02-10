@@ -11,7 +11,7 @@ if [ -z "$1" ]
 fi
 
 raw_text="/docs/README.md @${org}/${team_slug}\n/.gitattributes @${default_committer}"
-base64_string=$(echo ${raw_text} | base64)
+base64_string=$(echo ${raw_text} | /usr/bin/base64)
 content=${base64_string}
 filename_in_repo=CODEOWNERS
 
