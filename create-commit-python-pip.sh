@@ -15,7 +15,7 @@ fi
 shopt -s -o nounset
 
 source_file="test-data/python/pip/requirements.txt_"
-base64_source_file=$(base64 ${source_file})
+base64_source_file=$(/usr/bin/base64 ${source_file})
 content=${base64_source_file}
 
 filename_in_repo="requirements.txt"
