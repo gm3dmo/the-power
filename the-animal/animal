@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""automate GHES... like an animal"""
+#
+# author: Sergey Goldgaber
+#
+########################################################
+
+# For regular expressions
+import re
+
+# For command-line argument parsing:
+import click
+
+from lib.common import printdebug, print_to_stderr
+from lib.classic_pat import create_classic_pat
+from lib.org import create_org
+from lib.selenium import get_config, \
+    setup_logging, \
+    lookup_domain_in_dns, \
+    get_driver, \
+    By, \
+    EC, \
+    WebDriverWait
+from lib.validate_config import validate_config, validate_login_page
+
+
+@click.command()
+@click.option('--config-file',
+              type=click.Path(exists=True),
+              required=True)
+@click.option('--debug',
+              type=str,
+              required=False,
+              default=False,
+              is_flag=True)
+@click.option('--create',
+              type=click.Choice(
+                  ['classic-pat',
+                   'org'],),
+              required=False)
+def cli(config_file, debug, create):
+    """automate GHES... like an animal"""
+    config = get_config(config_file, debug)
+    validate_config(config, config_file, debug)
+    setup_logging(config, debug)
+
+    lookup_domain_in_dns(config, debug)
+    driver = get_driver(config, debug)
+    login(config, driver, debug)
+    wait_for_version_number_to_appear(driver, debug)
+    version = get_version(driver, debug)
+    if create == 'classic-pat':
+        create_classic_pat(config, driver, debug)
+    else:
+        create_org(config, driver, debug)
+
+    if config['selenium']['pause_at_end']:
+        print_to_stderr("Hit ENTER to quit")
+        input()
+
+
+def submit_login_form_on_login_page(driver, debug):
+    """submits the login form on the login page"""
+    if debug:
+        printdebug("finding 'commit' (the 'Sign in' button) on login page")
+    sign_in_button = driver.find_element(By.NAME, 'commit')
+    if debug:
+        printdebug("submitting login form on login page")
+    sign_in_button.submit()
+
+
+def get_version(driver, debug):
+    """get the version of GHES running on this instance"""
+    if debug:
+        printdebug("finding GHES version element")
+    version_element = driver.find_element(By.CLASS_NAME, 'current-branch-name')
+    if debug:
+        printdebug("getting GHES version element content")
+    raw_version = version_element.get_attribute('innerHTML')
+    result = re.match(r'.*Version (?P<version>.*)\n', raw_version, re.DOTALL)
+    version = result.group('version')
+    return version
+
+
+def login(config, driver, debug):
+    """login to a GHES instance"""
+    login_page = config['ghes']['url']
+    if debug:
+        printdebug(f"opening login page '{login_page}'")
+    driver.get(login_page)
+    validate_login_page(driver, debug)
+    type_username_on_login_page(config, driver, debug)
+    type_password_on_login_page(config, driver, debug)
+    submit_login_form_on_login_page(driver, debug)
+
+
+def type_password_on_login_page(config, driver, debug):
+    """type the password in to the password field on the login page"""
+    if debug:
+        printdebug("finding password field on login page")
+    password_field = driver.find_element(By.ID, 'password')
+
+    if debug:
+        printdebug("typing password in to password field on login page")
+    password_field.send_keys(config['ghes']['password'])
+
+
+def type_username_on_login_page(config, driver, debug):
+    """type the username in to the username field on the login page"""
+    if debug:
+        printdebug("finding login_field id on login page")
+    login_field = driver.find_element(By.ID, 'login_field')
+
+    if debug:
+        printdebug("typing username in to login_field on login page")
+    login_field.send_keys(config['ghes']['username'])
+
+
+def wait_for_version_number_to_appear(driver, debug):
+    """wait for the GHES version number to appear on the page"""
+    if debug:
+        printdebug("waiting for GHES version number to appear on the page")
+    wait = WebDriverWait(driver, 10)
+    wait.until(EC.visibility_of_element_located((By.CLASS_NAME,
+                                                 'current-branch-name')))
+
+
+if __name__ == '__main__':
+    cli()  # pylint: disable=no-value-for-parameter
