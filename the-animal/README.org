@@ -36,9 +36,6 @@ Options:
 #+BEGIN_SRC shell
 ./animal --config-file etc/my-ghes-test.toml --create classic-pat
 #+END_SRC
-*** Create an organization
-#+BEGIN_SRC shell
-./animal --config-file etc/my-ghes-test.toml --create org
 #+END_SRC
 *** Create a classic PAT, with debugging turned on
 #+BEGIN_SRC shell
