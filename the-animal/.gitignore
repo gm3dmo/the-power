@@ -1,0 +1,7 @@
+*~*~
+.*~*~
+venv
+custom.log
+__pycache__
+\#*\#
+!lib

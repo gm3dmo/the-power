@@ -1,0 +1,63 @@
+* The Animal
+automate GHES... like an animal
+** Purpose
+Automate GHES through its web UI.
+
+This can be useful when you can't do the same thing through its API, or for testing.
+** Features
+*** Create and return a classic PAT
+*** Create an organization
+** Installation
+#+BEGIN_SRC shell
+brew install selenium-server
+python3 -m venv venv
+. ./venv/bin/activate
+pip3 install -r requirements.txt
+#+END_SRC
+** Configuration
+#+BEGIN_SRC shell
+cp etc/example.toml etc/my-ghes-test.toml
+vi etc/my-ghes-test.toml
+#+END_SRC
+** Usage
+#+BEGIN_SRC shell
+Usage: animal [OPTIONS]
+
+  automate GHES... like an animal
+
+Options:
+  --config-file PATH          [required]
+  --debug
+  --create [classic-pat|org]
+  --help                      Show this message and exit.
+#+END_SRC
+** Examples
+*** Create a classic PAT
+#+BEGIN_SRC shell
+./animal --config-file etc/my-ghes-test.toml --create classic-pat
+#+END_SRC
+*** Create an organization
+#+BEGIN_SRC shell
+./animal --config-file etc/my-ghes-test.toml --create org
+#+END_SRC
+*** Create a classic PAT, with debugging turned on
+#+BEGIN_SRC shell
+./animal --config-file etc/my-ghes-test.toml --create classic-pat --debug
+#+END_SRC
+** NOTE
+*** This was written with python 3.11.2
+*** If you use any other version you'll need to:
+#+BEGIN_SRC shell
+rm -fr venv
+python3 -m venv venv
+. ./venv/bin/activate
+pip3 install -r requirements.txt
+#+END_SRC
+** Author
+*** Sergey Goldgaber
+** Changelog
+*** 2022-02-22 - documenation fixes
+*** 2022-02-21 - new option: --create org
+*** 2022-02-21 - renamed --get to --create
+*** 2022-02-20 - initial release
+** TODO
