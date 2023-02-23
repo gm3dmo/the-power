@@ -3,30 +3,17 @@
 ./create-webhook.sh
 
 ./create-commit-readme.sh
-read x
+exit
 
 ./create-commit-codeowners.sh
-read x
 ./create-commit-python-pip.sh
-read x
 ./create-commit-test-rst.sh
-read x
 ./create-commit-test-ipynb.sh
-read x
 ./add-team-to-repo.sh
-read x
 ./create-branch-newbranch.sh
-read x
 ./create-commit-on-newbranch.sh
-read x
 ./create-repo-issue.sh
-read x
 ./create-pull-request.sh
-read x
-
 ./create-branch-protected.sh
-read x
 ./set-branch-protection.sh
-read x
-
 ./create-release.sh
