@@ -12,12 +12,12 @@ if [ -z "$1" ]
 fi
 
 
-python3 create-commit-gitattributes.py 
+python3 create-commit-on-new-branch.py 
 
-filename_in_repo=".gitattributes"
+filename_in_repo="docs/new-file-for-pull-request-txt"
 
 
-json_file=tmp/create-commit-gitattributes.json
+json_file=tmp/create-commit-on-new-branch.json
 
 curl ${curl_custom_flags} \
      -X PUT \
