@@ -1,5 +1,5 @@
 * The Animal
-automate GHES... like an animal
+automate GHES Admin PAT like an animal
 ** Purpose
 Automate GHES through its web UI.
 
