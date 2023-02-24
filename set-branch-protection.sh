@@ -14,7 +14,7 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
-cat ${source_json} | jq -r  >&2
+#cat ${source_json} | jq -r  >&2
 
 cat ${source_json}| jq --arg team_slug "$team_slug" \
                             --arg team_admin "$team_admin" \
@@ -35,4 +35,3 @@ curl ${curl_custom_flags} \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${protected_branch_name}/protection --data @${json_file}
 
-rm -f ${json_file}

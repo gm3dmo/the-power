@@ -17,7 +17,7 @@ jq -n \
         --arg body "The first and possibly last ever release." \
               '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, prerelease: $prerelease | test("true")}'  > ${json_file}
 
-cat $json_file | jq -r >&2
+#cat $json_file | jq -r >&2
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
