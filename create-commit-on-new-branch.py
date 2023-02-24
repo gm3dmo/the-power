@@ -32,15 +32,11 @@ def main(args):
     with open(p, 'rb') as ct:
        t = {}
        chapter_content = ct.read()
-       print(chapter_content)
        chapter_string = string.Template(chapter_content.decode("utf-8"))
-       print(f"""({chapter_string})""")
        values = { "org": args.org, "team_slug": args.team_slug, "default_committer": args.default_committer }
        n = chapter_string.substitute(values)
-       print(f"""({n})""")
        chapter_content = bytes(n, 'utf-8')
        chapter_base64 = base64.encodebytes(chapter_content)
-       print
        t["message"] = f"""A .gitattributes file."""
        t["committer"] = {}
        t["committer"]["name"] = args.default_committer
