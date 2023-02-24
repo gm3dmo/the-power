@@ -9,12 +9,12 @@ set -x
 ./create-commit-python-pip.sh
 ./create-commit-test-rst.sh
 ./create-commit-test-ipynb.sh
-sleep 5
+sleep 2.5
 ./create-branch-newbranch.sh
 ./create-commit-on-new-branch.sh
 ./create-repo-issue.sh
 ./create-pull-request.sh
-./create-branch-protected.sh
+#./create-branch-protected.sh
 # set the branch protection rules for main
 ./set-branch-protection.sh
 
