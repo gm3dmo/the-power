@@ -47,7 +47,7 @@ def main(args):
 number_of_users_to_create_on_ghes=${number_of_users_to_create_on_ghes}
 U=ghe-admin
 admin_user=${admin_user}
-admin_password=""
+admin_password=${admin_password}
 
 
 ### [Authorization](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
@@ -396,6 +396,7 @@ pool_size=10
         "private_key_pem_file": args.private_pem_file,
         "client_id": args.client_id,
         "admin_user": args.admin_user,
+        "admin_password": args.admin_password,
         "team_members": args.team_members,
         "team_admin": args.team_admin,
         "org_owner": args.org_owner,
@@ -462,6 +463,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
+    )
+    parser.add_argument(
+        "--admin-password", action="store", dest="admin_password", default="sample-password"
     )
     parser.add_argument(
         "-w",
