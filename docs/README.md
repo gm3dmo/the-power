@@ -24,7 +24,7 @@ The Power can create the following on a blank appliance or organization in <=30 
 * [Branch protection](https://docs.github.com/en/github/administering-a-repository/about-protected-branches) rules on branch `main`.
 * [*CODEOWNERS*](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) file configured for the *README.md* and `.gitattributes` files.
 * An [Issue](https://github.com/features/issues).
-* A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) with a the code owner requested for review.
+* A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) with a code owner requested for review. The pull request contains 2 commits against 2 files and activates the tree view.
 * A manifest file for a package manager file with a vulnerability to trigger [Dependabot](https://docs.github.com/en/code-security/dependabot)
 * A [webhook](https://docs.github.com/en/developers/webhooks-and-events/about-webhooks) on *testrepo* that outputs to it's own [smee.io](https://smee.io) url.
 * A [Release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
