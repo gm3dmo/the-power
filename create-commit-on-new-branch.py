@@ -37,7 +37,7 @@ def main(args):
        n = chapter_string.substitute(values)
        chapter_content = bytes(n, 'utf-8')
        chapter_base64 = base64.encodebytes(chapter_content)
-       t["message"] = f"""A .gitattributes file."""
+       t["message"] = f"""A brand new file to add to the default pull request."""
        t["committer"] = {}
        t["committer"]["name"] = args.default_committer
        t["committer"]["email"] = f"noreply+{args.default_committer}@example.com"
