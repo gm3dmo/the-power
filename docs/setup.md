@@ -49,9 +49,16 @@ Optionally, edit  `.gh-api-examples.conf` to add any extra customizations you wa
 bash build-all.sh
 ```
 
+#### Screen recording `build-all.sh` on GitHub Enterprise Server
+
+[![asciicast](https://asciinema.org/a/QMvQI0AcRUCpTzmxUW4GQB0GX.svg)](https://asciinema.org/a/QMvQI0AcRUCpTzmxUW4GQB0GX)
+
 ### Applying a build to an organization on GitHub.com
 
 ```
 bash build-testcase
 ```
 
+#### Screen recording build-testcase on GitHub.com
+
+[![asciicast](https://asciinema.org/a/562543.svg)](https://asciinema.org/a/562543)
