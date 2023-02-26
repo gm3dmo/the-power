@@ -12,12 +12,14 @@ if [ -z "$1" ]
     pull_number=$1
 fi
 
-json_file=/tmp/create-a-review-comment-for-a-pull-request.json
+json_file=tmp/create-a-review-comment-for-a-pull-request.json
 
-commit_id=0b21ebe4e3368f8b96b2b1d33149ef642bc5a506
+# Beware. We are extracting the first commit in the pull request here.
+# you may wan to do something else:
+commit_id=$(./list-commits-on-a-pull-request.sh | jq -r '.[0].sha')
 
 pull_request_review_body_comment="Great Stuff"
-path="/docs/new-file-for-pull-request-txt"
+path="docs/new-file-for-pull-request-txt"
 start_line=1
 start_side=RIGHT
 line=2
@@ -35,14 +37,10 @@ jq -n \
              body : $body,
 	     commit_id: $commit_id,
 	     path : $path,
-	     start_line : $start_line,
-	     start_side : $start_side,
 	     line : $line,
-	     side: $side
            }' > ${json_file}
 
-cat $json_file | jq -r
-
+	   cat $json_file | jq -r
 
 GITHUB_TOKEN=${pr_approver_token}
 curl -v ${curl_custom_flags} \
