@@ -40,7 +40,6 @@ jq -n \
 	     line : $line,
            }' > ${json_file}
 
-	   cat $json_file | jq -r
 
 GITHUB_TOKEN=${pr_approver_token}
 curl -v ${curl_custom_flags} \

@@ -17,6 +17,7 @@ content=${base64_string}
 
 lorem_text_file=test-data/lorem-issue.md
 lorem_text=$(cat $lorem_text_file)
+lorem_append="<br><br><br>The @${org}/${team_slug} will be interested in this. ${timestamp}"
 
 timestamp=$(date +%s)
 
@@ -24,8 +25,8 @@ json_file=tmp/create-repo-issue.json
 rm -f ${json_file}
 
 jq -n \
-        --arg title "Found a bug ($timestamp) " \
-        --arg body "${lorem_text}" \
+        --arg title "Security vulnerability in access control software allowing unauthorized access by dogs ($timestamp) " \
+        --arg body "${lorem_text}${lorem_append}" \
         --arg assignees "${default_committer}" \
         --arg milestone 1 \
         --arg labels "bug" \
