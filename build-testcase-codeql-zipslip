@@ -1,12 +1,26 @@
-# Create the testrepo and add the zipslip example for CodeQL
-./create-repo-testrepo.sh
-./enable-secret-scanning.sh
-./create-webhook.sh
-./create-commit-readme.sh
-./create-commit-codeowners.sh
-./create-commit-javascript-zipslip.sh
-./create-commit-codeql-zipslip.sh
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/
+
+EOF
+
+printf "${normal}"
+
+printf "${highlight} - Creating repo: ${normal}"
+./create-repo-testrepo.sh | jq -r '.name'
 ./add-team-to-repo.sh
-./create-branch-newbranch.sh
-./create-branch-protected.sh
-./set-branch-protection.sh
+printf "${highlight} - Enabling secret scanning: ${normal}"
+./enable-secret-scanning.sh  | jq -r '.security_and_analysis.secret_scanning.status'
+printf "${highlight} - Adding javascript zipslip vulnerability: ${normal}"
+./create-commit-javascript-zipslip.sh | jq -r ".content.html_url"
+printf "${highlight} - Adding codeql workflow for zipslip: ${normal}"
+./create-commit-codeql-zipslip.sh | jq -r ".content.html_url"
