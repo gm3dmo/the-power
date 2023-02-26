@@ -1,5 +1,3 @@
-
-
 normal=$(tput sgr0)
 highlight=$(tput setaf 2)
 
@@ -17,9 +15,6 @@ EOF
 
 printf "${normal}"
                                                    
-
-# Create the testrepo
-if [ -z "$1" ]
      printf "${highlight} - Creating repo: ${normal}"
     ./create-repo-testrepo.sh | jq -r '.name'
     ./add-team-to-repo.sh
@@ -31,7 +26,7 @@ if [ -z "$1" ]
     ./create-commit-codeowners.sh| jq -r ".content.html_url"
      printf "${highlight} - Creating requirements.txt: ${normal}"
     ./create-commit-python-pip.sh| jq -r ".content.html_url"
-    sleep 2.5
+    sleep 2
      printf "${highlight} - Creating new branch: ${normal}"
     ./create-branch-newbranch.sh | jq -r '.url'
      printf "${highlight} - Creating a commit on the new branch: ${normal}"
@@ -48,17 +43,4 @@ if [ -z "$1" ]
     ./create-release.sh  | jq -r '.url'
      printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
     ./create-commit-gitattributes.sh | jq -r ".content.html_url"
-
-then
-     >&2 echo "No optional being run"
-  else
-
-    # Renderers
-    ./create-commit-test-rst.sh
-    ./create-commit-test-ipynb.sh
-    ./create-commit-mermaid.sh
-    
-    # Pride labels
-    ./pride-patch-labels.sh
-
-fi
+     echo 
