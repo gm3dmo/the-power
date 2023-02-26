@@ -27,7 +27,6 @@ jq -n \
        --arg head_sha "${head_sha}" \
        --arg status "${check_run_status}" \
        '{ head_sha: $head_sha, status: $status, name: $name, "output":{"title":"Mighty Readme report","summary":"testing a failure","text":"This should annotate the first line of a commit ","annotations":[{"path":".gitattributes","annotation_level":"failure","title":"Spell Checker","message":"Check your spelling for 'banaas'.","raw_details":"Do you mean 'bananas' or 'banana'?","start_line":1,"end_line":1}]}}' > ${json_file}
-cat ${json_file} | jq -r
 
 
 curl ${curl_custom_flags} \

@@ -14,9 +14,7 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
-cat $source_json | jq -r
 
-echo =========================
 #     | .required_status_checks.checks = [ $required_status_check_name ]
 
 cat ${source_json}| jq --arg team_slug "$team_slug" \
@@ -33,7 +31,6 @@ cat ${source_json}| jq --arg team_slug "$team_slug" \
     ' > ${json_file}
 
 
-cat $json_file | jq -r
 
 curl ${curl_custom_flags} \
      -X PUT \

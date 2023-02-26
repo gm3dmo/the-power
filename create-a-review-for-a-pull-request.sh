@@ -26,7 +26,7 @@ jq -n \
 # because we may not approve our own pull request.
 GITHUB_TOKEN=${pr_approver_token}
 
-curl -v ${curl_custom_flags} \
+curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}
