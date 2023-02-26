@@ -10,7 +10,11 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-json_file="test-data/workflow-with-secrets.json"
+python3 create-workflow-with-secrets-json-file.py
+
+json_file="tmp/workflow-with-secrets.json"
+
+
 
 curl ${curl_custom_flags} \
      -X PUT \
