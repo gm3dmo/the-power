@@ -13,7 +13,7 @@ fi
 
 #event="APPROVE"
 event=${default_pr_event}
-body="create-pull-request-review.sh ${event} Spatium tantummodo huiusmodi stercore cadet scribat. Probatus.  Certainly check in with @${org}/${team_slug} who may be interested."
+body="create-a-review-for-a-pull-request.sh ${event} Review for a pull request @${org}/${team_slug} "
 
 json_file="tmp/create-pull-request-review.json"
 
@@ -26,7 +26,7 @@ jq -n \
 # because we may not approve our own pull request.
 GITHUB_TOKEN=${pr_approver_token}
 
-curl ${curl_custom_flags} \
+curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}
