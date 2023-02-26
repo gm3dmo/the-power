@@ -3,18 +3,41 @@
 #
 # Important: This is not using the GitHub Checks API (GitHub App required)
 # 
-set -x
-./create-repo-testrepo.sh
-./create-commit-readme.sh
-./create-commit-codeowners.sh
+#
+#
+ printf "Creating repo: "
+./create-repo-testrepo.sh | jq -r '.name'
 ./add-team-to-repo.sh
-./create-branch-newbranch.sh
-./create-commit-on-newbranch.sh
-./create-commit-status.sh pending ci-test/this-check-is-optional
-./create-commit-status.sh pending ci-test/this-check-is-required
-./create-repo-issue.sh
-./update-branch-protection-with-required-check.sh
-./create-pull-request.sh
+ printf "Creating docs/README: "
+./create-commit-readme.sh | jq -r ".content.html_url"
+ printf "Creating CODEOWNERS: "
+./create-commit-codeowners.sh| jq -r ".content.html_url"
+ printf "Creating requirements.txt: "
+./create-commit-python-pip.sh| jq -r ".content.html_url"
+sleep 2.5#
+ printf "Creating new branch: "
+./create-branch-newbranch.sh | jq -r '.url'
+ printf "Creating a commit on the new branch: "
+./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+ printf "Creating an issue: "
+./create-repo-issue.sh | jq -r '.html_url'
+ printf "Creating a pull request: "
+./create-pull-request.sh | jq -r '.html_url'
+# set the branch protection rules for main
+ printf "Setting branch protection rules on default branch: "
+./set-branch-protection.sh | jq -r '.url'
+
+ printf "Creating a release: "
+./create-release.sh  | jq -r '.url'
+ printf "Adding a .gitattributes file to new branch: "
+./create-commit-gitattributes.sh | jq -r ".content.html_url"
+
+ printf "Creating commit status for an optional check: "
+./create-commit-status.sh pending ci-test/this-check-is-optional | jq -r '.url'
+ printf "Creating commit status for an required check: "
+./create-commit-status.sh pending ci-test/this-check-is-required | jq -r '.url'
+ printf "Updating branch protection with required check: "
+./update-branch-protection-with-required-check.sh | jq -r '.url'
 
 # To update the checks to success run the two lines below:
 # ./create-commit-status.sh success ci-test/this-check-is-required
@@ -27,19 +50,23 @@ echo .gh-api-examples.conf file. The value should be a PAT of
 echo a user with permissions to approve the pull request.
 
 read x
-./create-pull-request-review.sh
+printf "Creating a review for a pull request: "
+./create-a-review-for-a-pull-request.sh | jq -r '.html_url'
 echo ------------------------------------------- 
 
 echo Run these two to make the checks update their status:
 read x
- ./create-commit-status.sh success ci-test/this-check-is-optional
+ printf "Updating status for optional check to success: "
+ ./create-commit-status.sh success ci-test/this-check-is-optional | jq -r '.id'
 read x
- ./create-commit-status.sh success ci-test/this-check-is-required
+ printf "Updating status for required check to success: "
+ ./create-commit-status.sh success ci-test/this-check-is-required | jq -r '.id'
 
 echo ------------------------------------------- 
 
 echo If the tiny app is configured and has appropriate permissions
 echo check runs can be created with the Checks API:
 
- ./tiny-create-check-run-with-annotation.sh
+ printf "Creating check-run with annotation: "
+./tiny-create-check-run-with-annotation.sh | jq -r '.id'
 
