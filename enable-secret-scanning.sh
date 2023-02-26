@@ -3,9 +3,7 @@
 # https://docs.github.com/en/rest/reference/repos#update-a-repository
 # PATCH /repos/{owner}/{repo}
 
-json_file=update-repo.json
-datestamp=$(date +%s)
-description="description set by script at ${datestamp}"
+json_file=tmp/update-repo.json
 
 secret_scanning="enabled"
 advanced_security="enabled"
@@ -19,9 +17,6 @@ jq -n \
            --arg advanced_security ${advanced_security} \
            '{"security_and_analysis": {"advanced_security": {"status": $advanced_security}, "secret_scanning": {"status": $secret_scanning}}}
            ' > ${json_file}
-
->&2 cat $json_file | jq -r
-
 
 curl ${curl_custom_flags} \
      -X PATCH \
