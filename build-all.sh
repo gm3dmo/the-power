@@ -1,5 +1,20 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
 
-if [ -z "$1" ]
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/
+
+EOF
+
+printf "${normal}"
+
    printf "Creating organization: "
     ./create-organization.sh | jq -r '.url'
    printf "Creating organization webhook: "
@@ -41,28 +56,3 @@ if [ -z "$1" ]
     ./create-release.sh  | jq -r '.url'
    printf "Adding a .gitattributes file to new branch: "
     ./create-commit-gitattributes.sh | jq -r ".content.html_url"
-
-  then
-     >&2 echo "No optionals being run"
-  else
-     # Pages & Gist
-    ./create-pages.sh
-    ./create-gist.sh
-
-    # Put a case statement in here
-    # Renders
-    ./create-commit-test-rst.sh
-    ./create-commit-test-ipynb.sh
-
-    # Projects
-    ./create-organization-project.sh preview
-    ./create-organization-project-columns.sh preview
-    ./add-team-to-org-project.sh
-
-    # Pride labels
-    ./pride-patch-labels.sh
-
-    # Precommit hooks
-    ./create-repo.sh hook-repo public
-    ./create-commit-pre-hook.sh hook-repo
-fi
