@@ -15,44 +15,44 @@ EOF
 
 printf "${normal}"
 
-   printf "Creating organization: "
+   printf "${highlight} - Creating organization: ${normal}"
     ./create-organization.sh | jq -r '.url'
-   printf "Creating organization webhook: "
+   printf "${highlight} - Creating organization webhook: ${normal}"
     ./create-an-organization-webhook.sh | jq -r '.id'
-   printf "Creating team:\n"
+   printf "${highlight} - Creating team:${normal}\n"
    ./create-team.sh | jq -r '.html_url'
-   printf "Creating users:\n"
+   printf "${highlight} - Creating users:${normal}\n"
    ./pwr-create-users.sh
-   printf "Creating org members:\n"
+   printf "${highlight} - Creating org members:${normal}\n"
    ./pwr-create-org-members.sh 
-   printf "Adding users to team:\n"
+   printf "${highlight} - Adding users to team:${normal}\n"
    ./pwr-add-users-to-team.sh | jq -r '.url'
-   printf "Adding maintainers to team:\n"
+   printf "${highlight} - Adding maintainers to team:${normal}\n"
    ./add-maintainers-to-team.sh | jq -r '.url'
-   printf "Creating repo: "
+   printf "${highlight} - Creating repo: ${normal}"
     ./create-repo-testrepo.sh | jq -r '.html_url'
     ./add-team-to-repo.sh
-   printf "Creating webhook: "
+   printf "${highlight} - Creating webhook: ${normal}"
     ./create-webhook.sh  | jq -r '.id'
-   printf "Creating docs/README: "
+   printf "${highlight} - Creating docs/README: ${normal}"
     ./create-commit-readme.sh | jq -r ".content.html_url"
-   printf "Creating CODEOWNERS: "
+   printf "${highlight} - Creating CODEOWNERS: ${normal}"
     ./create-commit-codeowners.sh| jq -r ".content.html_url"
-   printf "Creating requirements.txt: "
+   printf "${highlight} - Creating requirements.txt: ${normal}"
     ./create-commit-python-pip.sh| jq -r ".content.html_url"
     sleep 2.5
-   printf "Creating new branch: "
+   printf "${highlight} - Creating new branch: ${normal}"
     ./create-branch-newbranch.sh | jq -r '.url'
-   printf "Creating a commit on the new branch: "
+   printf "${highlight} - Creating a commit on the new branch: ${normal}"
     ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
-   printf "Creating an issue: "
+   printf "${highlight} - Creating an issue: ${normal}"
     ./create-repo-issue.sh | jq -r '.html_url'
-   printf "Creating a pull request: "
+   printf "${highlight} - Creating a pull request: ${normal}"
     ./create-pull-request.sh | jq -r '.html_url'
     # set the branch protection rules for main
-   printf "Setting branch protection rules on default branch: "
+   printf "${highlight} - Setting branch protection rules on default branch: ${normal}"
     ./set-branch-protection.sh | jq -r '.url'
-   printf "Creating a release: "
+   printf "${highlight} - Creating a release: ${normal}"
     ./create-release.sh  | jq -r '.url'
-   printf "Adding a .gitattributes file to new branch: "
+   printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
     ./create-commit-gitattributes.sh | jq -r ".content.html_url"
