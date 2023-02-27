@@ -61,4 +61,4 @@ bash build-testcase
 
 #### Screen recording build-testcase on GitHub.com
 
-[![asciicast](https://asciinema.org/a/562543.svg)](https://asciinema.org/a/562543)
+[![asciicast](https://asciinema.org/a/FWOOSHC144n1wp0Dyiuxer3fp.svg)](https://asciinema.org/a/FWOOSHC144n1wp0Dyiuxer3fp)
