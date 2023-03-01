@@ -33,6 +33,21 @@ To install Dog Bone Tracker, follow these steps:
     `npm start` 
     
 
+
+### ER Diagram
+#
+```mermaid
+erDiagram
+          DOG }|..|{ PAW-PRINT : has
+          DOG ||--o{ VERIFICATION : places
+          DOG ||--o{ IDENTITY-VERIFICATION : "liable for"
+          PAW-PRINT ||--o{ VERIFICATION : receives
+          IDENTITY-VERIFICATION ||--|{ VERIFICATION : covers
+          VERIFICATION ||--|{ VERIFICATION-ITEM : includes
+          DOG-BREED ||--|{ BREED : contains
+          BREED ||--o{ VERIFICATION-ITEM : "ordered in"
+```
+
 ## Usage
 
 Once the application is running, open your web browser and navigate to `http://localhost:3000` to access the Dog Bone Tracker application.
