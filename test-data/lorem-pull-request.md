@@ -13,7 +13,6 @@ program paw_print_recognition
   ! Input parameters
   integer, parameter :: n_input = 25  ! Number of input neurons
   integer, parameter :: n_hidden = 10 ! Number of hidden neurons
-  integer, parameter :: n_output = 5  ! Number of output neurons
   real, parameter :: learning_rate = 0.1 ! Learning rate
   integer, parameter :: n_epochs = 1000 ! Number of epochs
   
@@ -23,20 +22,12 @@ program paw_print_recognition
   real :: h(n_hidden) ! Hidden layer vector
   real :: w1(n_input, n_hidden) ! Input to hidden layer weights
   real :: w2(n_hidden, n_output) ! Hidden to output layer weights
-  real :: b1(n_hidden) ! Hidden layer bias vector
-  real :: b2(n_output) ! Output layer bias vector
-  real :: z1(n_hidden) ! Weighted sum of input to hidden layer
-  real :: z2(n_output) ! Weighted sum of hidden to output layer
-  real :: a1(n_hidden) ! Activation of hidden layer
-  real :: a2(n_output) ! Activation of output layer
   integer :: i, j, k, epoch ! Loop counters
   
   ! Initialize weights and biases
   call random_number(w1)
   call random_number(w2)
-  call random_number(b1)
-  call random_number(b2)
-  
+
   ! Train the neural network
   do epoch = 1, n_epochs
     ! Loop over training data
@@ -44,8 +35,6 @@ program paw_print_recognition
       ! Forward pass
       x = input_data(i,:)
       y = target_output(i,:)
-      z1 = matmul(x, w1) + b1
-      h = tanh(z1)
       z2 = matmul(h, w2) + b2
       a2 = softmax(z2)
       
@@ -53,16 +42,13 @@ program paw_print_recognition
       delta2 = a2 - y
       delta1 = delta2 * transpose(w2) * (1 - tanh(z1)**2)
       dw2 = matmul(transpose(h), delta2)
-      db2 = sum(delta2, dim=1)
-      dw1 = matmul(transpose(x), delta1)
       db1 = sum(delta1, dim=1)
       
       ! Update weights and biases
       w1 = w1 - learning_rate * dw1
-      w2 = w2 - learning_rate * dw2
-      b1 = b1 - learning_rate * db1
       b2 = b2 - learning_rate * db2
     end do
 ```
 
-
+## Prior Art
+There have been a number of paw print recognition systems over the years. We've built on those and learned a great deal.

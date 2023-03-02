@@ -14,7 +14,7 @@ lorem_text=$(cat ${lorem_file})
 
 jq -n \
   --arg title "${title}" \
-  --arg body "${lorem_text} @${default_committer}" \
+  --arg body "${lorem_text} see research by: @${default_committer}" \
   --arg head "${branch_name}" \
   --arg base "${base_branch}" \
   '{
