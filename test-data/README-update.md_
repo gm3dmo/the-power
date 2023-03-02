@@ -33,6 +33,20 @@ To install Dog Bone Tracker, follow these steps:
     `npm start` 
     
 
+## ER Diagram
+This is a fancy diagram explaining this:
+```mermaid
+erDiagram
+          DOG }|..|{ PAW-PRINT : has
+          DOG ||--o{ VERIFICATION : places
+          DOG ||--o{ IDENTITY-VERIFICATION : "liable for"
+          PAW-PRINT ||--o{ VERIFICATION : receives
+          IDENTITY-VERIFICATION ||--|{ VERIFICATION : covers
+          VERIFICATION ||--|{ VERIFICATION-ITEM : includes
+          DOG-BREED ||--|{ BREED : contains
+          BREED ||--o{ VERIFICATION-ITEM : "ordered in"
+```
+
 
 ## Usage
 
