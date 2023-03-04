@@ -14,5 +14,5 @@ set -x
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/${contents_path} --data @${json_file_to_upload}

@@ -10,7 +10,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-team_id=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
+team_id=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
 
 json_file=tmp/add-or-update-team-repository-permissions.json
 
@@ -23,5 +23,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/teams/${team_id}/repos/${org}/${repo} --data @${json_file}

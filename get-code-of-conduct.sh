@@ -9,5 +9,5 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: Accept: application/vnd.github.scarlet-witch-preview+json" \
      -H "Accept: application/vnd.github.VERSION.raw" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/codes_of_conduct/${name}

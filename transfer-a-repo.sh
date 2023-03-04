@@ -34,7 +34,7 @@ rm -f ${json_file}
 
 cat ${json_file} | jq -r
 
-curl -v -H "Authorization: token ${GITHUB_TOKEN}" \
+curl -v -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/transfer --data @${json_file}
 

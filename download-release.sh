@@ -4,7 +4,7 @@
 # GET /repos/{owner}/{repo}/releases/{release_id}
 
 response_file="tmp/latest-release.json"
-$(curl ${curl_custom_flags} -sH "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest > ${response_file})
+$(curl ${curl_custom_flags} -sH "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest > ${response_file})
 
 
 tarball_url=$(cat "$response_file" | jq -r '.tarball_url')
@@ -18,7 +18,7 @@ curl ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/octet-stream" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${download_url}" -o "tmp/${repo}.release_${tag_name}"
 
 

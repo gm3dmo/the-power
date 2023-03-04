@@ -29,7 +29,7 @@ filename="docs/README.md"
 
 set -x
 #Required if you are updating a file. The blob SHA of the file being replaced.
-blob_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename}| jq -r '.sha')
+blob_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename}| jq -r '.sha')
 
 path="${filename}"
 
@@ -47,7 +47,7 @@ cat $json_file | jq -r
 curl -v ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${path} --data @${json_file}
 
 

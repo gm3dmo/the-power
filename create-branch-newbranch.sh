@@ -14,7 +14,7 @@ fi
 timestamp=$(date +"%s")
 json_file=tmp/create-branch-newbranch.json
 
-sha=$(curl ${curl_custom_flags} --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
+sha=$(curl ${curl_custom_flags} --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
 
 jq -n \
 	--arg ref "refs/heads/${branch_name}" \
@@ -24,5 +24,5 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data @${json_file}

@@ -28,7 +28,7 @@ do
 curl --silent ${curl_custom_flags} \
           -X POST \
           -H "Accept: application/vnd.github.VERSION.full+json" \
-          -H "Authorization: token ${GITHUB_TOKEN}" \
+          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
              ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/issues/${issue_id}/comments \
 	      -d @${json_file} | jq -r '"\(.id),\(.created_at),\(.user.login)"'
 done

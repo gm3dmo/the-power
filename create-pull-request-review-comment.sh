@@ -56,5 +56,5 @@ cat ${json_file}
 
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}

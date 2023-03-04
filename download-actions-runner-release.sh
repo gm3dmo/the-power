@@ -5,7 +5,7 @@
 
 org=actions
 repo=runner
-response=$(curl ${curl_custom_flags} -sH "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest | jq -r '.body')
+response=$(curl ${curl_custom_flags} -sH "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest | jq -r '.body')
 
 echo $response > tmp/response
 
@@ -28,5 +28,5 @@ curl ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/octet-stream" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${download_url}" -o "tmp/${repo}.release_${tag_name}"

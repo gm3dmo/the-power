@@ -16,7 +16,7 @@ fi
 
 if [ -z "$2" ]
   then
-     head_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
+     head_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
   else
      head_sha=$1
 fi
@@ -45,7 +45,7 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -X PATCH \
-     -H "Authorization: token ${GITHUB_APP_TOKEN}"  \
+     -H "Authorization: Bearer ${GITHUB_APP_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/vnd.github.antiope-preview+json" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs/${check_run_id} \

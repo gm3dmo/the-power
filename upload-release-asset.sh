@@ -12,7 +12,7 @@
 
 
 response_file=tmp/response.json
-response=$(curl -sH "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest > ${response_file})
+response=$(curl -sH "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/latest > ${response_file})
 
 release_id=$(cat $response_file | jq -r '.id')
 upload_url=$(cat $response_file | jq -r '.upload_url')
@@ -23,7 +23,7 @@ upload_asset_filename=test-data/release-asset.gz
 upload_asset_filename_b=release-asset-${timestamp}.gz
 
 curl  -v \
-      -H "Authorization: token ${GITHUB_TOKEN}" \
+      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
       -H "Accept: application/json"  \
       -H "Content-Type: binary" \
          "${clean_upload_url}?name=${upload_asset_filename_b}" --data-binary @${upload_asset_filename}

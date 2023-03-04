@@ -14,5 +14,5 @@ fi
 set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/issues/${issue_number}/reactions --data '{"content":"rocket"}'
