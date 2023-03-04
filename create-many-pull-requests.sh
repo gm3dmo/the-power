@@ -40,7 +40,7 @@ do
            }' > ${json_file}
 
     curl ${curl_custom_flags} \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Accept: application/vnd.github.v3+json" \
             ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls --data @${json_file}
 done

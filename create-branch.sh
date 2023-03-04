@@ -27,7 +27,7 @@ fi
 
 json_file=tmp/create-branch-${branch_name}.json
 
-sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
+sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch} | jq -r '.object.sha')
 
 echo "==================" >&2
 echo "(${sha})" >&2
@@ -43,5 +43,5 @@ json_string=$(cat $json_file | jq )
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data "${json_string}"

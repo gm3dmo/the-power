@@ -33,7 +33,7 @@ for i in _bug,'its a bug' _duplicate,'this is a duplicate' _enhancement,'enhance
      cat ${json_file}
 
     curl ${curl_custom_flags} \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Content-Type: application/json" \
             ${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels --data @${json_file}

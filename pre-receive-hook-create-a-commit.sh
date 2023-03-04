@@ -15,7 +15,7 @@ json_file=tmp/pre-receive-hook-create-a-commit.json
 
 repo=${pre_receive_hook_repo}
 
-last_commit_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
+last_commit_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
 
 jq -n \
                 --arg name     "${default_committer}" \
@@ -29,5 +29,5 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/commits --data @${json_file}

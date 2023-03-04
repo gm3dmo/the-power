@@ -33,7 +33,7 @@ curl ${curl_custom_flags} \
      -v \
      -H "Content-type: application/json" \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         https://${hostname}/login/device/code --data @${json_file}  -o ${step1_response_file}
 
 echo " Contents of step1 response file:"

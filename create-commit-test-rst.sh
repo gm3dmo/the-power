@@ -15,6 +15,6 @@ filename=test-restructured-text.rst
 
 curl ${curl_custom_flags} \
      -X PUT \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename} --data @create-commit-test-rst.json

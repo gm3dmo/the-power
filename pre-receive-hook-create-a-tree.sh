@@ -11,7 +11,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-last_commit_sha=$(curl --silent -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
+last_commit_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${base_branch} | jq -r '.commit.sha')
 timestamp=$(date +%s)
 
 content="echo \"This script is called by hook (${pre_receive_hook_name}) You can replace it with a more useful script\" ; exit 0"
@@ -26,6 +26,6 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/trees --data @${json_file}

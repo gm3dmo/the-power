@@ -17,7 +17,7 @@ do
     echo $DATA > ${json_file}
 
     curl ${curl_custom_flags} \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Content-Type: application/json" \
             ${GITHUB_API_BASE_URL}/admin/users --data @${json_file}
     rm -f ${json_file}
@@ -27,6 +27,6 @@ do
     curl ${curl_custom_flags} \
          -X PUT \
          -H "Accept: application/vnd.github.v3+json" \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             ${GITHUB_API_BASE_URL}/orgs/${org}/memberships/${person}
 done

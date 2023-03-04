@@ -24,11 +24,11 @@ cat $json_file | jq -r
 
 set -x
 
-+ curl -v -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token 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' 
++ curl -v -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: Bearer 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' 
 
 --data @tmp/convert-an-organization-member-to-outside-collaborator.json
 
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/orgs/${org}/outside_collaborators/${username} --data @${json_file}

@@ -21,6 +21,6 @@ json_file=tmp/create-commit-on-new-branch.json
 
 curl ${curl_custom_flags} \
      -X PUT \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename_in_repo} --data @${json_file}
