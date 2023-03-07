@@ -25,6 +25,7 @@ def main(args):
     args.default_committer = power_config.get('dummy_section','default_committer',).strip('"')
     args.org = power_config.get('dummy_section','org',).strip('"')
     args.team_slug = power_config.get('dummy_section','team_slug',).strip('"')
+    args.pr_approver_name = power_config.get('dummy_section','pr_approver_name',).strip('"')
 
     p = Path('test-data/CODEOWNERS.template')
     json_file = f"""tmp/create-commit-codeowners.json"""
@@ -33,7 +34,8 @@ def main(args):
        t = {}
        chapter_content = ct.read()
        chapter_string = string.Template(chapter_content.decode("utf-8"))
-       values = { "org": args.org, "team_slug": args.team_slug, "default_committer": args.default_committer }
+       values = { "org": args.org, "team_slug": args.team_slug, "pr_approver_name": args.pr_approver_name, "default_committer": args.default_committer }
+
        n = chapter_string.substitute(values)
        chapter_content = bytes(n, 'utf-8')
        chapter_base64 = base64.encodebytes(chapter_content)

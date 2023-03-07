@@ -119,6 +119,7 @@ default_pull_request_id=2
 # place it below to allow the default pull request
 # to be approved vi automation.
 pr_approver_token=${pr_approver_token}
+pr_approver_name=${pr_approver_name}
 default_pr_event="COMMENT"
 
 
@@ -391,6 +392,7 @@ pool_size=10
         "base_branch": args.base_branch,
         "delete_branch_on_merge": args.delete_branch_on_merge,
         "pr_approver_token": args.pr_approver_token,
+        "pr_approver_name": args.pr_approver_name,
         "default_app_id": args.app_id,
         "default_installation_id": args.installation_id,
         "private_key_pem_file": args.private_pem_file,
@@ -634,6 +636,13 @@ if __name__ == "__main__":
         dest="pr_approver_token",
         default="replace_with_a_PAT",
         help="The PAT of a pr approver.",
+    )
+    parser.add_argument(
+        "--pr-approver-name",
+        action="store",
+        dest="pr_approver_name",
+        default="abc",
+        help="The name of a user.",
     )
     parser.add_argument(
         "--preferred_client",
