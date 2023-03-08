@@ -22,6 +22,7 @@ team_members="<space separated list of github usernames>"
 team_admin="<github username of team admin>"
 default_committer="<github username of your default committer>"
 pr_approver_token=aPAT
+pr_approver_name=aUserName
 
 # Used on GHES appliances for org creation.
 number_of_orgs=5
