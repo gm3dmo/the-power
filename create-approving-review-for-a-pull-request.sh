@@ -4,6 +4,7 @@
 # POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews
 
 
+pull_number=${default_pull_request_id}
 event="APPROVE"
 
 body="This is an approving review for ${event} Review for a pull request @${org}/${team_slug} "
@@ -19,6 +20,7 @@ jq -n \
 # because we may not approve our own pull request.
 GITHUB_TOKEN=${pr_approver_token}
 
+set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
