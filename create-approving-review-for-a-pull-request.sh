@@ -20,7 +20,6 @@ jq -n \
 # because we may not approve our own pull request.
 GITHUB_TOKEN=${pr_approver_token}
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
