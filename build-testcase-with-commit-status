@@ -68,8 +68,8 @@ echo .gh-api-examples.conf file. The value should be a PAT of
 echo a user with permissions to approve the pull request.
 
 read x
-printf "${highlight} - Creating a review for a pull request: ${normal}"
-./create-a-review-for-a-pull-request.sh | jq -r '.html_url'
+printf "${highlight} - Creating an approving review for a pull request: ${normal}"
+./create-approving-review-for-a-pull-request.sh | jq -r '.html_url'
 echo ------------------------------------------- 
 
 echo Run these two to make the checks update their status:
