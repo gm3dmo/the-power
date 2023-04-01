@@ -31,7 +31,7 @@ def main(args):
     args.repo = power_config.get('dummy_section','repo').strip('\"')
 
     args.repo_prefix = power_config.get('dummy_section','repo_prefix').strip('\"')
-    args.number_of_repos = int(power_config.get('dummy_section','number_of_repos'))
+    args.number_of_repos = int(args.number_of_repos) or int(power_config.get('dummy_section','number_of_repos'))
 
     conn =http.client.HTTPSConnection(args.hostname)
 
@@ -44,6 +44,7 @@ def main(args):
     # GET /repos/{owner}/{repo}
     #url = f'{args.path_prefix}/repos/{args.org}/{args.repo}'
 
+    print(f"creating: {args.number_of_repos}")
     for i in range(args.number_of_repos):
         repo_name = f"""{args.repo_prefix}-{i:07}"""
         params = {
@@ -64,6 +65,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--power-config", action="store", dest="power_config", default=".gh-api-examples.conf", help="This is the config file to use to access variables for the power.")
     parser.add_argument("-e", "--extension", action="store", dest="extension", default="c")
+
+    parser.add_argument(
+        "--repos",
+        action="store",
+        dest="number_of_repos",
+        default=False,
+        help="The number of repos to create",
+    )
+
     args = parser.parse_args()
 
     main(args)
