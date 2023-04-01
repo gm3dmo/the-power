@@ -16,5 +16,12 @@ time python3 python-create-many-repos-connection-reuse.py
 python3 python-create-many-repos-connection-reuse.py  0.13s user 0.05s system 1% cpu 16.075 total
 ```
 
+- 1000 organizations using `python-create-many-orgs-connection-reuse.py`
+```
+time python3 python-create-many-orgs-connection-reuse.py_id
+python3 python-create-many-orgs-connection-reuse.py --orgs 1000 --prefix thou  0.88s user 0.24s system 0% cpu 7:19.29 total
+```
+
+
 If you keep within the GitHub recommendations about [file sizes](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github) on your GitHub repos and total size of your repo then you'll probably never need to look at performance. If you don't do that then you probably have a host of other problems.
 
