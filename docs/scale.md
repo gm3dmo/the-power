@@ -16,6 +16,12 @@ time python3 python-create-many-repos-connection-reuse.py
 python3 python-create-many-repos-connection-reuse.py  0.13s user 0.05s system 1% cpu 16.075 total
 ```
 
+- 1000 repos using `./create-many-repos.sh`
+
+```
+./create-many-repos.sh  52.60s user 20.04s system 7% cpu 15:24.24 total
+```
+
 - 1000 repos using `python-create-many-repos-connection-reuse.py`
 
 ```
