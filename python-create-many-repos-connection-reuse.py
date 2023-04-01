@@ -30,7 +30,7 @@ def main(args):
     args.org = power_config.get('dummy_section','org').strip('\"')
     args.repo = power_config.get('dummy_section','repo').strip('\"')
 
-    args.repo_prefix = power_config.get('dummy_section','repo_prefix').strip('\"')
+    args.repo_prefix = args.repo_prefix or power_config.get('dummy_section','repo_prefix').strip('\"')
     args.number_of_repos = int(args.number_of_repos) or int(power_config.get('dummy_section','number_of_repos'))
 
     conn =http.client.HTTPSConnection(args.hostname)
@@ -41,10 +41,6 @@ def main(args):
                "Accept" :  "application/vnd.github.v3+json"
               }
 
-    # GET /repos/{owner}/{repo}
-    #url = f'{args.path_prefix}/repos/{args.org}/{args.repo}'
-
-    print(f"creating: {args.number_of_repos}")
     for i in range(args.number_of_repos):
         repo_name = f"""{args.repo_prefix}-{i:07}"""
         params = {
@@ -72,6 +68,13 @@ if __name__ == "__main__":
         dest="number_of_repos",
         default=False,
         help="The number of repos to create",
+    )
+    parser.add_argument(
+        "--prefix",
+        action="store",
+        dest="repo_prefix",
+        default=False,
+        help="the prefix for the repo name.",
     )
 
     args = parser.parse_args()
