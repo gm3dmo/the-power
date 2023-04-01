@@ -22,13 +22,11 @@ def main(args):
     power_config = thepower.read_dotcom_config(args.power_config)
     args.extension = power_config.get('dummy_section','file_extension').strip('"')
 
-
     args.url = power_config.get('dummy_section','GITHUB_API_BASE_URL')
     args.hostname = power_config.get('dummy_section','hostname')
     args.path_prefix = power_config.get('dummy_section','path_prefix')
     args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
-    args.org = power_config.get('dummy_section','org').strip('\"')
-    args.repo = power_config.get('dummy_section','repo').strip('\"')
+    args.org = args.org or power_config.get('dummy_section','org').strip('\"')
 
     args.repo_prefix = args.repo_prefix or power_config.get('dummy_section','repo_prefix').strip('\"')
     args.number_of_repos = int(args.number_of_repos) or int(power_config.get('dummy_section','number_of_repos'))
@@ -67,7 +65,7 @@ if __name__ == "__main__":
         action="store",
         dest="number_of_repos",
         default=False,
-        help="The number of repos to create",
+        help="The number of repos to create.",
     )
     parser.add_argument(
         "--prefix",
@@ -75,6 +73,13 @@ if __name__ == "__main__":
         dest="repo_prefix",
         default=False,
         help="the prefix for the repo name.",
+    )
+    parser.add_argument(
+        "--org",
+        action="store",
+        dest="org",
+        default=False,
+        help="the organization name. 
     )
 
     args = parser.parse_args()
