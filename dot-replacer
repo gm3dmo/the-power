@@ -1,0 +1,16 @@
+# we want to change:
+# . .gh-api-examples.conf
+#
+# to:
+#
+# ./.gh-api-examples.conf
+#
+cp skeleton.sh_ skeleton.sh
+wc -l skeleton.sh
+
+# At the moment this is adding a line not replacing it.
+
+perl -i -lpe 'print "$1 ./.gh-api-examples.conf" if m/^(\.\s+)(.gh-api-examples.conf)/' skeleton.sh
+
+head -10 skeleton.sh
+wc -l skeleton.sh
