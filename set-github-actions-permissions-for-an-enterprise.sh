@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#set-github-actions-permissions-for-an-enterprise
 # PUT /enterprises/{enterprise}/actions/permissions

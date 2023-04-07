@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#list-team-projects
 # GET /orgs/{org}/teams/{team_slug}/projects

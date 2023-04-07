@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/orgs#list-failed-organization-invitations
 # GET /orgs/{org}/failed_invitations

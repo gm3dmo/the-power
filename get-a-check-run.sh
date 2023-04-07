@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/checks/runs#get-a-check-run
 # GET /repos/{owner}/{repo}/check-runs/{check_run_id} 

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/issues#create-an-issue
 # POST /repos/:owner/:repo/issues

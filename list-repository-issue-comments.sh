@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Get the comments on an issue
 # https://docs.github.com/en/rest/reference/issues#list-issue-comments

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.5/rest/releases/releases#generate-release-notes-content-for-a-release
 # POST /repos/{owner}/{repo}/releases/generate-notes 

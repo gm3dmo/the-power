@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#start-a-configuration-process
 # POST /setup/api/configure

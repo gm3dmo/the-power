@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.5/rest/git/tags#get-a-tag
 # GET /repos/{owner}/{repo}/git/tags/{tag_sha}

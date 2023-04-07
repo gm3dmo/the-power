@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/projects#get-project-permission-for-a-user
 # GET /projects/{project_id}/collaborators/{username}/permission

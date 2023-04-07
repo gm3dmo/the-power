@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/graphql/reference/objects#commit
 # GraphQL script to list commit stats for a branch for org repos using the Search API.

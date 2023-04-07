@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/repos/tags#delete-a-tag-protection-state-for-a-repository
 # DELETE /repos/{owner}/{repo}/tags/protection/{tag_protection_id}

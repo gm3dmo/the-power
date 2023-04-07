@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-all-repository-topics
 # GET /repos/{owner}/{repo}/topics

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#create-or-update-an-organization-secret
 # PUT /orgs/{org}/actions/secrets/{secret_name}

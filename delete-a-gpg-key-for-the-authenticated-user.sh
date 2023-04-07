@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/users#delete-a-gpg-key-for-the-authenticated-user
 # DELETE /user/gpg_keys/{gpg_key_id}

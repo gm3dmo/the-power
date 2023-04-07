@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#list-artifacts-for-a-repository
 # GET /repos/{owner}/{repo}/actions/artifacts

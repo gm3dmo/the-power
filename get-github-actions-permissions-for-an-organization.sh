@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#get-github-actions-permissions-for-an-organization
 # GET /orgs/{org}/actions/permissions

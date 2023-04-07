@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/repos/repos#list-repository-contributors
 # GET /repos/{owner}/{repo}/contributors

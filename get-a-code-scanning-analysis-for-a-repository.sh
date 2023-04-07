@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/code-scanning#get-a-code-scanning-analysis-for-a-repository
 # GET /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}

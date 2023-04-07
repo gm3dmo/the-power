@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.3/rest/reference/apps#check-an-authorization
 # GET /applications/{client_id}/tokens/{access_token}

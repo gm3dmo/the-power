@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/orgs#create-an-organization-webhook
 # POST /orgs/{org}/hooks

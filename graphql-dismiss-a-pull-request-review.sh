@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/graphql/reference/mutations#dismisspullrequestreview
 # Script to dismiss a pull request review programatically using GraphQL API.

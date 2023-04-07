@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/reference/enterprise-admin#add-an-authorized-ssh-key
 # POST /setup/api/settings/authorized-keys

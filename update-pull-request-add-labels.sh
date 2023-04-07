@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://developer.github.com/v3/issues/#update-an-issue
 # PATCH /repos/:owner/:repo/issues/:issue_number

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation#
 # https://api.github.com/app/installations/:installation_id/access_tokens

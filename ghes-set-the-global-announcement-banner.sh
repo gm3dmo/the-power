@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/enterprise-admin/announcement#set-the-global-announcement-banner
 # PATCH /enterprise/announcement

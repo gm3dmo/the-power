@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#create-a-commit-comment
 # POST /repos/{owner}/{repo}/commits/{commit_sha}/comments

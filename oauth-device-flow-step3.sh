@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/developers/apps/authorizing-oauth-apps#device-flow
 # POST https://github.com/login/oauth/access_token

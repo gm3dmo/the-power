@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/pulls/reviews#dismiss-a-review-for-a-pull-request
 # PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals

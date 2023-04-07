@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # [!] This only works on GitHub Enterprise Cloud.
 # https://docs.github.com/en/rest/scim#get-scim-provisioning-information-for-a-user

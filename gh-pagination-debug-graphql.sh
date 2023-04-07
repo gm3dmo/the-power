@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://cli.github.com/manual/gh_api
 # Demonstrates pagination for gh api

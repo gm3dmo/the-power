@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-repository-permissions-for-a-user
 # GET /repos/:owner/:repo/collaborators/:username/permission

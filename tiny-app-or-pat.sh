@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # This script can be used in test cases where a endpoint
 # doesn't seem to work with the GitHub App.

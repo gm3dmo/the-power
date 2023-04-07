@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Depends on `generate-long-list-of-people.pl` having run to create $people_file.
 

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 JWT=$(ruby tiny-get-jwt.rb ${private_pem_file} ${default_app_id})
 

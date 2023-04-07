@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/codespaces/codespaces#get-a-codespace-for-the-authenticated-user
 # GET /user/codespaces/{codespace_name}

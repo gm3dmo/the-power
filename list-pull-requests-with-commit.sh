@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#list-pull-requests-associated-with-a-commit
 # GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls

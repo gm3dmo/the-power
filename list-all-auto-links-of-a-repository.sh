@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/repos/autolinks#list-all-autolinks-of-a-repository
 # GET /repos/{owner}/{repo}/autolinks

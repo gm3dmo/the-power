@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # lists repos and outside collabortors, including assosiated permissions
 # https://docs.github.com/en/graphql/reference/objects#repository

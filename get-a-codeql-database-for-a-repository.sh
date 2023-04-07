@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/code-scanning#get-a-codeql-database-for-a-repository
 # GET /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}

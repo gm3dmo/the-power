@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#replace-all-repository-topics
 # PUT /repos/{owner}/{repo}/topics

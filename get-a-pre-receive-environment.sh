@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.2/rest/reference/enterprise-admin#get-a-pre-receive-environment
 # GET /admin/pre-receive-environments/{pre_receive_environment_id}

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#list-self-hosted-runners-for-an-organization
 # GET /orgs/{org}/actions/runners

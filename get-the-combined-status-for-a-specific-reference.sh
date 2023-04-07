@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.5/rest/commits/statuses#get-the-combined-status-for-a-specific-reference
 # GET /repos/{owner}/{repo}/commits/{ref}/status

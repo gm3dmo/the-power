@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/teams#list-team-repositories
 # GET /orgs/{org}/teams/{team_slug}/repos

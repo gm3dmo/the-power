@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/teams/teams#check-team-permissions-for-a-repository
 # GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}

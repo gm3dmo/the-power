@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/users#list-email-addresses-for-the-authenticated-user
 # GET /user/emails

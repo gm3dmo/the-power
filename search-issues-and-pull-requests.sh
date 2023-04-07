@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/search?apiVersion=2022-11-28#search-issues-and-pull-requests
 # https://api.github.com/search/issues?q=Q

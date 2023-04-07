@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/checks#update-a-check-run
 # PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}

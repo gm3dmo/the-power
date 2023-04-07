@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/orgs/orgs#list-app-installations-for-an-organization
 # GET /orgs/{org}/installations

@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#remove-a-repository-from-an-app-installation
 # GET /user/installations/{installation_id}/repositories

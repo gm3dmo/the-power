@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#update-branch-protection
 # PUT /repos/:owner/:repo/branches/:branch/protection

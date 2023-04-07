@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # lists audit log entries for all organizaitons under the Enterprise account
 # https://docs.github.com/en/graphql/reference/objects#organization

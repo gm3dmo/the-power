@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/graphql/reference/mutations#revertpullrequest
 # Create a pull request that reverts the changes from a merged pull request

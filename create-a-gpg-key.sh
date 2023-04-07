@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/users#create-a-gpg-key-for-the-authenticated-user
 # POST /user/gpg_keys

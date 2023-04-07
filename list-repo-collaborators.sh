@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#collaborators
 # GET /repos/{owner}/{repo}/collaborators

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/checks/suites#create-a-check-suite
 # POST /repos/{owner}/{repo}/check-suites

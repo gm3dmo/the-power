@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # Add the users in ${org_members} to the organization
 # These users are org members and not part of the ${team}

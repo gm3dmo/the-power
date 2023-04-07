@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/pulls#update-a-pull-request
 # PATCH /repos/:owner/:repo/pulls/:pull_number

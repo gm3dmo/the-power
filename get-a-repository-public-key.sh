@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#get-a-repository-public-key
 # GET /repos/{owner}/{repo}/actions/secrets/public-key

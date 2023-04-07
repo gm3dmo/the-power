@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/projects#create-a-project-card
 # POST /projects/columns/:column_id/cards

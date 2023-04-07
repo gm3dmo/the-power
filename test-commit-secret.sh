@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 cd src/${repo}
 # We split the token in 2 so that it's never checked in to the power
 # in a way that will set off a false positive (hopefully).

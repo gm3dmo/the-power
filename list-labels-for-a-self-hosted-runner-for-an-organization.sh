@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#list-labels-for-a-self-hosted-runner-for-an-organization
 # GET /orgs/{org}/actions/runners/{runner_id}/labels

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-top-referral-paths
 # GET /repos/{owner}/{repo}/traffic/popular/paths

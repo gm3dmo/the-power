@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/git#update-a-reference
 # PATCH /repos/{owner}/{repo}/git/refs/{ref}

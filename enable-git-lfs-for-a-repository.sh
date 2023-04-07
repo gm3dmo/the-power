@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#enable-git-lfs-for-a-repository
 # PUT /repos/{owner}/{repo}/lfs

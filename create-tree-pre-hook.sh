@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/git#create-a-tree
 # POST /repos/:owner/:repo/git/trees

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/checks/suites#list-check-suites-for-a-git-reference
 # GET /repos/{owner}/{repo}/commits/{ref}/check-suites
