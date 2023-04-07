@@ -10,7 +10,10 @@ wc -l skeleton.sh
 
 # At the moment this is adding a line not replacing it.
 
-perl -i -lpe 'print "$1 ./.gh-api-examples.conf" if m/^(\.\s+)(.gh-api-examples.conf)/' skeleton.sh
+perl -pi -e 's{^(\.\s+)(.gh-api-examples.conf)$}{$1 ./.gh-api-examples.conf}' skeleton.sh
 
+echo ==============
 head -10 skeleton.sh
+echo ==============
+
 wc -l skeleton.sh
