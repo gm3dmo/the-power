@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Create org members. These are not members of a team.
 # Useful to test privileges.

@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions
 # PUT /orgs/:org/teams/:team_slug/repos/:owner/:repo

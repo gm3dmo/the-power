@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#get-an-organization-secret
 # GET /orgs/{org}/actions/secrets/{secret_name}

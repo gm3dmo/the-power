@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-a-delivery-for-a-repository-webhook
 # GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/orgs/custom-roles#list-custom-repository-roles-in-an-organization
 # GET /organizations/{organization_id}/custom_roles

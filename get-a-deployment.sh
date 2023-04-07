@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-a-deployment
 # GET /repos/{owner}/{repo}/deployments/{deployment_id}

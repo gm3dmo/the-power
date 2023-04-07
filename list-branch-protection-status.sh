@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/branches/branch-protection#get-branch-protection
 # GET /repos/{owner}/{repo}/branches/{branch}/protection

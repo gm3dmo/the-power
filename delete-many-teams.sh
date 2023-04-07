@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 for custom_team_name in $(cat nato-alphabet.txt)
 do

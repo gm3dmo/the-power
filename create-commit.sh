@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Not tested. Doesn't work yet.
 # POST /repos/:owner/:repo/git/commits

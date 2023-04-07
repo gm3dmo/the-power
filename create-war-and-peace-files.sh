@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 ### This example adds the chapters of the war and peace book as commits.
 

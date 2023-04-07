@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://developer.github.com/v3/teams/
 # GET /organizations/:org_id/team/:team_id

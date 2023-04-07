@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#delete-a-github-pages-site
 # DELETE /repos/:owner/:repo/pages

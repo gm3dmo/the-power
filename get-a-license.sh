@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@2.20/rest/reference/licenses#get-a-license 
 # GET /licenses/{license}

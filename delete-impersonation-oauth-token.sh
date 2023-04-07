@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/reference/enterprise-admin#delete-an-impersonation-oauth-token
 # DELETE /admin/users/{username}/authorizations

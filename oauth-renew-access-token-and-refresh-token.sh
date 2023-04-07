@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/developers/apps/building-github-apps/refreshing-user-to-server-access-tokens
 # POST https://github.com/login/oauth/access_token

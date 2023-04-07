@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/git#delete-a-reference
 # DELETE /repos/{owner}/{repo}/git/refs/{ref}

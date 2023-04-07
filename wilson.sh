@@ -2,7 +2,7 @@
 ## Get's the content of a file from a repository and decodes it from base64
 ## Replace <YOUR-GHES-HOSTNAME> with your GHES hostname
 
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 branches=$(curl -X GET ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches -H "Authorization: Token ${GITHUB_TOKEN}")
 

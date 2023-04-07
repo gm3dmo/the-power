@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.2/rest/reference/orgs#get-organization-membership-for-a-user
 # GET /orgs/{org}/memberships/{username}

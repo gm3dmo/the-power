@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/gitignore#get-all-gitignore-templates
 # GET /gitignore/templates

@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/orgs#set-organization-membership-for-a-user
 # PUT /orgs/:org/memberships/:username

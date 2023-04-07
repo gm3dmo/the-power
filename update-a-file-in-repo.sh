@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
 # PUT /repos/{owner}/{repo}/contents/{path}

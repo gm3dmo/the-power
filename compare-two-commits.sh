@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/commits/commits#compare-two-commits
 # GET /repos/{owner}/{repo}/compare/{basehead}

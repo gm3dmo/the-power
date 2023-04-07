@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#list-repository-workflows
 # GET /repos/{owner}/{repo}/actions/workflows

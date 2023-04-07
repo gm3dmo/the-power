@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/projects/cards#get-a-project-card
 # GET /projects/columns/cards/{card_id}

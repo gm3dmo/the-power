@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/rest/reference/actions#create-a-self-hosted-runner-group-for-an-enterprise
 # POST /enterprises/{enterprise}/actions/runner-groups

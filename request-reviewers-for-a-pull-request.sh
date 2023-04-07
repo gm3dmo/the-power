@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/pulls/review-requests#request-reviewers-for-a-pull-request
 # POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#create-a-pre-receive-hook
 # POST /admin/pre-receive-hooks

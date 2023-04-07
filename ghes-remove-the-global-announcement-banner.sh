@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/enterprise-admin/announcement#get-the-global-announcement-banner
 # DELETE /enterprise/announcement

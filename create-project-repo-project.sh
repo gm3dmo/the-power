@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/projects#create-a-repository-project
 # POST /repos/:owner/:repo/projects

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/repos/forks?apiVersion=2022-11-28#create-a-fork
 # POST /repos/{owner}/{repo}/forks

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#create-or-update-an-environment-secret
 # PUT /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}

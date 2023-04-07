@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#get-all-contributor-commit-activity
 # GET /repos/:owner/:repo/stats/contributors

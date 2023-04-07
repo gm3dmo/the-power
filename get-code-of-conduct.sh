@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/codes-of-conduct#get-a-code-of-conduct
 # GET /codes_of_conduct/{key}

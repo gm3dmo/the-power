@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Create plain users These are not members an org or of a team.
 # Useful to test privileges.

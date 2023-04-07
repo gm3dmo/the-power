@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/repos/lfs#disable-git-lfs-for-a-repository
 # DELETE /repos/{owner}/{repo}/lfs

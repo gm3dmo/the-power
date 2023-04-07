@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user
 # POST /user/repos

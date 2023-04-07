@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#get-an-environment-public-key
 # GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key

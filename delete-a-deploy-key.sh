@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/deploy-keys?apiVersion=2022-11-28#delete-a-deploy-key
 # DELETE /repos/{owner}/{repo}/keys/{key_id}

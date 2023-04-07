@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 json_file=tmp/organization-data.json
 rm -f ${json_file}

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # To use this invoke `list-repo-by-id.sh 3` with a repository id
 repo_id=$1

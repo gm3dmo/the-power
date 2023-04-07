@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://developer.github.com/v3/repos/#list-repository-languages
 # GET /repos/:owner/:repo/languages

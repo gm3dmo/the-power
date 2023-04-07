@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/git#get-a-reference
 # GET /repos/{owner}/{repo}/git/ref/{ref}

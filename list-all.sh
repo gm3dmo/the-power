@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 ./list-organizations.sh | jq '.[] | .login'
 ./list-organization-owners.sh | jq '.[] | .login'
 ./list-organization-repos.sh |  jq '.[] | .name'

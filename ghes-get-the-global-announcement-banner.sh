@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.8/rest/enterprise-admin/announcement#get-the-global-announcement-banner
 # GET /enterprise/announcement

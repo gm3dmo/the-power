@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/graphql/reference/mutations#convertpullrequesttodraft
 # Converts a pull request to draft.

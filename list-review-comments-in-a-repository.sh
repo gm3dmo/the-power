@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/pulls#list-review-comments-in-a-repository
 # GET /repos/{owner}/{repo}/pulls/comments

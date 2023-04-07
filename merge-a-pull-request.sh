@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/pulls#merge-a-pull-request
 # PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \

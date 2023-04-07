@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/teams#add-or-update-team-membership-for-a-user
 # PUT /orgs/:org/teams/:team_slug/memberships/:username

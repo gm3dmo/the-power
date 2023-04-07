@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/orgs#remove-organization-membership-for-a-user
 # DELETE /orgs/{org}/memberships/{username}

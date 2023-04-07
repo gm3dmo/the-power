@@ -1,5 +1,5 @@
 
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/checks/runs#list-check-runs-in-a-check-suite
 # GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs

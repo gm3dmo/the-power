@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#remove-public-organization-membership-for-the-authenticated-user
 # DELETE /orgs/{org}/public_members/{username}

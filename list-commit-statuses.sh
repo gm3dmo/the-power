@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#list-commit-statuses-for-a-reference
 # GET /repos/:owner/:repo/commits/:ref/statuses

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/enterprise-admin/global-webhooks#list-global-webhooks
 # GET /admin/hooks

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#list-pre-receive-hooks-for-an-organization
 # GET /orgs/{org}/pre-receive-hooks

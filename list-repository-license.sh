@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/licenses?apiVersion=2022-11-28#get-a-license
 # GET /repos/{owner}/{repo}/license

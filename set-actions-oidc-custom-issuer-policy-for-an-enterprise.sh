@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/oidc#set-the-github-actions-oidc-custom-issuer-policy-for-an-enterprise
 # PUT /enterprises/{enterprise}/actions/oidc/customization/issuer

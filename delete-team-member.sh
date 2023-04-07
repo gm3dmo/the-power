@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/teams#remove-team-membership-for-a-user
 # DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/users#delete-a-public-ssh-key-for-the-authenticated-user
 # DELETE /user/keys/:key_id

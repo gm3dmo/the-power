@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Credit: https://github.com/orgs/community/discussions/24850
 

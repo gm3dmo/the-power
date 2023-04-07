@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/code-scanning#upload-an-analysis-as-sarif-data
 # POST /repos/{owner}/{repo}/code-scanning/sarifs

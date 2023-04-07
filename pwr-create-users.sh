@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 people_file=tmp/longlistofpeople.txt
 head -${number_of_users_to_create_on_ghes} test-data/NAMES.TXT > ${people_file}

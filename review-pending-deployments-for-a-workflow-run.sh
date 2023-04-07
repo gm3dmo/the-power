@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#review-pending-deployments-for-a-workflow-run
 # POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments

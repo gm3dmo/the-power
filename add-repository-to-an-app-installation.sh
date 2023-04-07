@@ -1,4 +1,4 @@
-.  .gh-api-examples.conf
+.   ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#add-a-repository-to-an-app-installation
 # PUT /user/installations/:installation_id/repositories/:repository_id

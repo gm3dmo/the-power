@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
 # POST /repos/{owner}/{repo}/releases/{release_id}/assets

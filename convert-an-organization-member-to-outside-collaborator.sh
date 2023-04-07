@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/orgs/outside-collaborators#convert-an-organization-member-to-outside-collaborator
 # PUT /orgs/{org}/outside_collaborators/{username}

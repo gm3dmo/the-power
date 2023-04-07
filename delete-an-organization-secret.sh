@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#delete-an-organization-secret
 # DELETE /orgs/{org}/actions/secrets/{secret_name}

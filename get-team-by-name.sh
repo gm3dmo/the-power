@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/teams#get-a-team-by-name
 # GET /orgs/:org/teams/:team_slug

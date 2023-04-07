@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#delete-a-repository-webhook
 # DELETE /repos/{owner}/{repo}/hooks/{hook_id}

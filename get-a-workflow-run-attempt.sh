@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/workflow-runs#get-a-workflow-run-attempt
 # GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}

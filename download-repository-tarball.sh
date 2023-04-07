@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#download-a-repository-archive-tar
 # GET /repos/{owner}/{repo}/tarball/{ref}

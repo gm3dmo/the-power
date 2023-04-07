@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/actions#list-repository-secrets
 # GET /repos/{owner}/{repo}/actions/secrets

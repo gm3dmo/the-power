@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Use the external IDP to get information about the orgs users
 # The flag membersOnly: true will dismiss members that are only present in the IDP, but not in the GitHub org

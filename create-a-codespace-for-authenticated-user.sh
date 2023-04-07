@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user
 # POST /user/codespaces

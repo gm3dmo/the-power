@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token
 # GET /user/installations

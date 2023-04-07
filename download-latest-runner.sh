@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # tag name looks like: v2.299.1
 # we use the ##v shell built-in to strip the v off that.

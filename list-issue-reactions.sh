@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/reactions#list-reactions-for-an-issue
 # GET /repos/{owner}/{repo}/issues/{issue_number}/reactions
