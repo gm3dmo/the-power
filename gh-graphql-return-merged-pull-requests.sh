@@ -1,6 +1,7 @@
 . .gh-api-examples.conf
 
 # https://cli.github.com/manual/gh_api
+# pagination might be a little broken (_゜_゜_)
 
 gh api graphql --paginate -F owner="${org}"  -f query='
 query GetPRs($owner: String!, $endCursor: String) {
