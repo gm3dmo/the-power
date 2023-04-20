@@ -1,9 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# Wrap a graphql script for use with curl
+# https://docs.github.com/en/graphql/reference/mutations#enqueuepullrequest
 
-# Use a bash "here" document and shell variables will be available:
-
+# Get the pull request ID
 pull_request_id=$(./graphql-get-pull-request-id.sh | jq '.data.repository.pullRequest.id')
 
 read -r -d '' graphql_script <<- EOF
