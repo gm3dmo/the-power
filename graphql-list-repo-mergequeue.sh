@@ -9,7 +9,7 @@ read -r -d '' graphql_script <<- EOF
       nameWithOwner
       mergeQueue {
         nextEntryEstimatedTimeToMerge
-        entries {
+        entries (first: 100) {
           nodes {
             pullRequest {
               number
