@@ -1,8 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# Wrap a graphql script for use with curl
-
-# Use a bash "here" document and shell variables will be available:
+# https://docs.github.com/en/graphql/reference/objects#mergequeueentry
 
 read -r -d '' graphql_script <<- EOF
 {
