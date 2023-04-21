@@ -3,10 +3,38 @@
 
 # Build a pre-receive hook on a GHES appliance
 # https://docs.github.com/en/enterprise-server/admin/policies/enforcing-policy-with-pre-receive-hooks
+#
+normal=$(tput sgr0) highlight=$(tput setaf 2)
 
-./create-repo.sh ${pre_receive_hook_repo}
-./create-commit-readme.sh ${pre_receive_hook_repo}
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+                                                   
+
+printf "${highlight} - Creating repo: ${normal}"
+ ./create-repo.sh ${pre_receive_hook_repo} | jq -r '.name'
+printf "${highlight} - Creating docs/README.md: ${normal}"
+ ./create-commit-readme-pre-hook.sh | jq -r ".content.html_url"
+
+printf "${highlight} - Creating a tree: ${normal}"
 ./pre-receive-hook-create-a-tree.sh > tmp/pre-receive-hook-create-a-tree-response.json
-./pre-receive-hook-create-a-commit.sh > tmp/pre-receive-new-commit-response.json
-./pre-receive-hook-update-a-reference.sh
-./create-a-pre-receive-hook.sh
+cat tmp/pre-receive-hook-create-a-tree-response.json | jq -r '.url'
+printf "${highlight} - Creating a commit: ${normal}"
+./pre-receive-hook-create-a-commit.sh > tmp/pre-receive-new-commit-response.json 
+cat tmp/pre-receive-new-commit-response.json | jq -r '.sha'
+printf "${highlight} - Update hook reference: ${normal}"
+./pre-receive-hook-update-a-reference.sh | jq -r '.object.sha'
+printf "${highlight} - Create pre-receive hook: ${normal}"
+./create-a-pre-receive-hook.sh | jq -r '.name'
+
+
