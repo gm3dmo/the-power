@@ -30,7 +30,7 @@ printf "${normal}"
 printf "${highlight} - Creating repo: ${normal}"
  ./create-repo.sh | jq -r '.name'
 python3 create-workflow-simple-json-file.py
-printf "${highlight} - Committing worfklow file: ${normal}"
+printf "${highlight} - Committing workflow file: ${normal}"
  ./create-commit-workflow-simple.sh | jq -r '.content.path'
 
  read x
