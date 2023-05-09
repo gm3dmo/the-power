@@ -8,9 +8,8 @@
 json_file=tmp/create-a-custom-repository-role.json
 
 
-
-name="labeler"
-description="A role for issue and pull request labelers"
+name="testtuesday"
+description="A role for issue and pull request labelers test"
 base_role="read"
 
 jq -n \
@@ -19,7 +18,7 @@ jq -n \
            --arg base_role "${base_role}" \
            '{
              name : $name,
-             name : $description,
+             description : $description,
              base_role: $base_role,
             "permissions": [
     "add_label"
@@ -28,7 +27,8 @@ jq -n \
 
 
 
-curl ${curl_custom_flags} \
+set -x
+curl -i ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
