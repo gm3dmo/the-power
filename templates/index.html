@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Execute Shell Scripts</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+    <h1>Execute Shell Scripts</h1>
+    <form method="POST" action="/">
+        {{ form.csrf_token }}
+        <label for="{{ form.script.id }}">{{ form.script.label }}</label>
+        {{ form.script }}
+        <button type="submit">Execute</button>
+    </form>
+    {% if output %}
+    <div class="output">
+    <pre>{{ output }}</pre>
+</div>
+    {% endif %}
+</body>
+</html>
+
