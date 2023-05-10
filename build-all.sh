@@ -45,6 +45,8 @@ printf "${normal}"
     ./create-branch-newbranch.sh | jq -r '.url'
    printf "${highlight} - Creating a commit on the new branch: ${normal}"
     ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+   printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
    printf "${highlight} - Creating an issue: ${normal}"
     ./create-repo-issue.sh | jq -r '.html_url'
    printf "${highlight} - Creating a pull request: ${normal}"
