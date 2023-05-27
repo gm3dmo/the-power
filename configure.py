@@ -60,9 +60,10 @@ auth_header="Authorization: token ${token}"
 hostname=${hostname}
 path_prefix=${path_prefix}
 graphql_path_prefix=${graphql_path_prefix}
-GITHUB_API_BASE_URL=https://${hostname}${path_prefix}
-GITHUB_APIV4_BASE_URL=https://${hostname}${graphql_path_prefix}
+GITHUB_API_BASE_URL=${http_protocol}://${hostname}${path_prefix}
+GITHUB_APIV4_BASE_URL=${http_protocol}://${hostname}${graphql_path_prefix}
 mail_domain="example.com"
+
 
 ### GitHub Enterprise
 enterprise="${enterprise_name}"
@@ -419,6 +420,7 @@ pool_size=10
         "preferred_browser": args.preferred_browser,
         "preferred_browser_mode": args.preferred_browser_mode,
         "github_api_version": args.github_api_version,
+        "http_protocol": args.http_protocol,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -678,6 +680,13 @@ if __name__ == "__main__":
         dest="github_api_version",
         default="2022-11-28",
         help="see GitHub API version docs",
+    )
+    parser.add_argument(
+        "--http-protocol",
+        action="store",
+        dest="http_protocol",
+        default="https",
+        help="Mostly always https",
     )
 
     args = parser.parse_args()
