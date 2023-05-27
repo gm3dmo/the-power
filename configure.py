@@ -312,6 +312,9 @@ pool_size=10
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
+    if args.hostname == "api.github.local":
+        args.http_protocol = "http"
+
     if args.hostname == "api.github.com" or args.hostname == "api.github.local":
         args.path_prefix = ""
         args.graphql_path_prefix = "/graphql"
