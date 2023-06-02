@@ -30,7 +30,7 @@ Enter token: ***cc2d128a
 * If you want a different team name,  you can edit  `.gh-api-examples.conf` with an editor of your choice.
 
 
-### onfigure.py can run without interaction from the command line:
+### `configure.py` can run without interaction from the command line:
 Non-interactive values can be specified on the command line in order to use The Power in a custom automation:
 
 ```
@@ -38,7 +38,7 @@ python3 configure.py --hostname myserver.example.com \
                      --token ghp_****************************wh3Ybleu \
                      --webhook-url https://events.hookdeck.com/e/src_1hm2RSyiguMW
 ```
-The `--primer` flag may also be of interest. Provide the name of a primer script which will be executed when `configure.py` is complete.
+The `--primer` flag may also be of interest. Provide the name of a primer script which will be executed when `configure.py` is complete. This can be used if you want to run a sequence of commands in a container.
 
 Optionally, edit  `.gh-api-examples.conf` to add any extra customizations you want to support.
 
