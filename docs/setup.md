@@ -5,6 +5,7 @@
 * A GitHub Enterprise Server or dotcom org with a Enterprise admin user name and password 
 * A `jq` command. `brew install jq` on your client.
 * A Python >3.6 interpreter on your Mac.
+* The [JWT Rubygem](https://rubygems.org/gems/jwt). `sudo gem install jwt` - Required for [GitHub App authentication](https://github.com/gm3dmo/the-power/blob/main/docs/setting-up-a-gh-app.md#using-a-github-app-with-the-power).
 * [Create your token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). In GitHub Enterprise (give it all the scopes. Be careful and give the token an expiry date if running on GitHub.com. Strongly recommend a token with short expiry time.
 
 ### Setup
