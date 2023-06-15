@@ -2,15 +2,16 @@
 
 # https://docs.github.com/en/enterprise-cloud@latest/graphql/reference/mutations#removeenterprisemember
 
-
-set -x
-# If the script is passed an argument $1 use that as the login
 if [ -z "$1" ]
   then
-    uid="your-user-id"
+    uid="the-uid-of-the-user-to-remove"
   else
     uid=$1
 fi
+
+### the uid is the graphql "U_12345=" id
+# which you can grab with the script
+# graphql-list-user-id.sh
 
 graphql_query=tmp/graphql_query.txt
 
