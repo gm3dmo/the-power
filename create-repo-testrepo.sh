@@ -16,7 +16,7 @@ DATA=$(jq -n \
                   --arg has_discussions true \
                   --arg description "This is: ${repo}, it's a private repo.  You can look at the hooks: ${webhook_url} if that helps." \
                   --arg allow_auto_merge "${allow_auto_merge}" \
-                  '{name : $name, description: $description, private: $pr | test("true"), allow_auto_merge: $allow_auto_merge, has_issues: $has_issues, has_projects: $has_projects, has_wiki: $has_wiki, has_discussions: $has_discussions }' )
+                  '{name : $name, description: $description, private: $pr | test("true"), allow_auto_merge: $allow_auto_merge, has_issues: $has_issues, has_projects: $has_projects, has_wiki: $has_wiki, has_discussions:$has_discussions }' )
 
 echo ${DATA} > ${json_file}
 

@@ -31,7 +31,7 @@ Enter token: ***cc2d128a
 * If you want a different team name,  you can edit  `.gh-api-examples.conf` with an editor of your choice.
 
 
-### onfigure.py can run without interaction from the command line:
+### `configure.py` can run without interaction from the command line:
 Non-interactive values can be specified on the command line in order to use The Power in a custom automation:
 
 ```
