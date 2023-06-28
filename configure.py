@@ -91,6 +91,11 @@ allow_auto_merge="${allow_auto_merge}"
 repo_secret_name="REPOSITORY_SECRET_001"
 # webhook url is also used by the organization
 webhook_url=${webhook_url}
+has_issues=true
+has_wiki=true
+has_projects=true
+has_discussions=true
+has_pages=false
 
 
 ### [Team](https://docs.github.com/en/rest/teams)
