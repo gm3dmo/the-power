@@ -5,7 +5,7 @@
 
 settings='settings={"enterprise": { "public_pages": false }}'
  
-curl -v -L ${curl_custom_flags} \
+curl -L ${curl_custom_flags} \
      -X PUT \
-      -H "Accept: application/x-www-form-urlencoded" \
-        https://api_key:${admin_password}@${hostname}:8443/setup/api/settings --data-urlencode "${settings}"
+     -H "Accept: application/x-www-form-urlencoded" \
+        "https://api_key:${admin_password}@${hostname}:${mgmt_port}/setup/api/settings" --data-urlencode "${settings}"

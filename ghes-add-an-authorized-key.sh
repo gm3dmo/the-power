@@ -5,7 +5,7 @@
 
 authorized_key=$(cat ${my_ssh_pub_key})
  
-curl -v -L ${curl_custom_flags} \
+curl -L ${curl_custom_flags} \
      -X POST \
-      -H "Accept: application/x-www-form-urlencoded" \
-        https://api_key:${admin_password}@${hostname}/setup/api/settings/authorized-keys --data-urlencode "authorized_key=${authorized_key}"
+     -H "Accept: application/x-www-form-urlencoded" \
+        "https://api_key:${mgmt_password}@${hostname}:${mgmt_port}/setup/api/settings/authorized-keys" --data-urlencode "authorized_key=${authorized_key}"

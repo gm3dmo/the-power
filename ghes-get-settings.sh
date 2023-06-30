@@ -4,4 +4,4 @@
 # GET /setup/api/settings
  
 curl -L ${curl_custom_flags} \
-        https://api_key:${admin_password}@${hostname}:8443/setup/api/settings
+        https://api_key:${mgmt_password}@${hostname}:${mgmt_port}/setup/api/settings

@@ -48,6 +48,9 @@ number_of_users_to_create_on_ghes=${number_of_users_to_create_on_ghes}
 U=ghe-admin
 admin_user=${admin_user}
 admin_password=${admin_password}
+mgmt_port=${mgmt_port}
+mgmt_password=${mgmt_password}
+
 
 
 ### [Authorization](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
@@ -408,6 +411,8 @@ pool_size=10
         "client_id": args.client_id,
         "admin_user": args.admin_user,
         "admin_password": args.admin_password,
+        "mgmt_password": args.mgmt_password,
+        "mgmt_port": args.mgmt_port,
         "team_members": args.team_members,
         "team_admin": args.team_admin,
         "org_owner": args.org_owner,
@@ -477,7 +482,13 @@ if __name__ == "__main__":
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
     )
     parser.add_argument(
-        "--admin-password", action="store", dest="admin_password", default="sample-password"
+        "--admin-password", action="store", dest="admin_password", default="admin-password"
+    )
+    parser.add_argument(
+        "--mgmt-password", action="store", dest="mgmt_password", default="mgmt-password"
+    )
+    parser.add_argument(
+        "--mgmt-port", action="store", dest="mgmt_port", default=8443
     )
     parser.add_argument(
         "-w",
