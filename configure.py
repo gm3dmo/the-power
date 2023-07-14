@@ -273,6 +273,7 @@ number_of_branches=${number_of_branches}
 repo_prefix="testrepo"
 org_prefix="testorg"
 user_prefix="testuser"
+team_prefix="testteam"
 branch_prefix="testbranch"
 file_prefix="testfile"
 file_extension="c"
