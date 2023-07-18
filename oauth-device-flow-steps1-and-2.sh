@@ -4,7 +4,7 @@
 # POST https://github.com/login/device/code
 
 json_file=tmp/oauth-device-flow-step1.json
-step1_response_file=/tmp/step1-response.json
+step1_response_file=tmp/step1-response.json
 
 scope="user"
 

@@ -3,9 +3,9 @@
 # https://docs.github.com/en/developers/apps/authorizing-oauth-apps#device-flow
 # POST https://github.com/login/oauth/access_token
 
-json_file=/tmp/step3-device-flow.json
-step1_response_file=/tmp/step1-response.json
-step3_response_file=/tmp/step3-response.json
+json_file=tmp/step3-device-flow.json
+step1_response_file=tmp/step1-response.json
+step3_response_file=tmp/step3-response.json
 
 device_code=$(cat ${step1_response_file} | jq -r '.device_code')
 grant_type="urn:ietf:params:oauth:grant-type:device_code"
