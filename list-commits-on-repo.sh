@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#list-commits
+# https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28
 # GET /repos/:owner/:repo/commits
 
 curl ${curl_custom_flags} \
