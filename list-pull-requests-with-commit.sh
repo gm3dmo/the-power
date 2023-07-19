@@ -4,7 +4,7 @@
 # GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls
 
 # gnarly hardcoded commit sha or $1
-commit_sha=${1:3bb79e7ba9dc8b12a18072b8333e8238ea1b3c52}
+commit_sha=$1
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
