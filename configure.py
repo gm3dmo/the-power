@@ -217,7 +217,8 @@ default_app_id=${default_app_id}
 # https://github.com/organizations/<org>/settings/installations/<installation_id>
 default_installation_id=${default_installation_id}
 # The Client ID is used when using the device authentication flow
-client_id=$client_id
+client_id=${client_id}
+app_client_secret=${app_client_secret}
 
 
 ### [Oauth Apps API](https://docs.github.com/en/rest/apps/oauth-applications)
@@ -307,6 +308,7 @@ pool_size=10
             "dummy_section", "default_installation_id"
         )
         args.client_id = dotcom_config.get("dummy_section", "client_id")
+        args.app_client_secret = dotcom_config.get("dummy_section", "app_client_secret")
         args.team_members = dotcom_config.get("dummy_section", "team_members")
         args.team_admin = dotcom_config.get("dummy_section", "team_admin")
         args.org_owner = dotcom_config.get("dummy_section", "org_owner")
@@ -410,6 +412,7 @@ pool_size=10
         "default_installation_id": args.installation_id,
         "private_key_pem_file": args.private_pem_file,
         "client_id": args.client_id,
+        "app_client_secret": args.app_client_secret,
         "admin_user": args.admin_user,
         "admin_password": args.admin_password,
         "mgmt_password": args.mgmt_password,
@@ -478,6 +481,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-e", "--client-id", action="store", dest="client_id", default=""
+    )
+    parser.add_argument(
+        "--app-client-secret", action="store", dest="app_client_secret", default=""
     )
     parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"

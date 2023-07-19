@@ -23,6 +23,7 @@ python3 configure.py --hostname ${hostname} \
                      --webhook-url ${webhook} \
                      --configure-app yes \
                      --app-id ${app_id} \
+                     --app-client-secret ${app_client_secret} \
                      --installation-id ${installation_id} \
                      --client-id ${client_id} \
                      --team-members "${team_members}" \
