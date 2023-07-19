@@ -5,10 +5,10 @@
 
 json_file=tmp/reset-a-token.json
 
-token_to_reset=$1
+token=$1
 
 jq -n \
-       --arg access_token "${token_to_reset}" \
+       --arg access_token "${token}" \
            '{
               access_token: $access_token,
            }' > ${json_file}
