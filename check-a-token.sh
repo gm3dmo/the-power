@@ -1,21 +1,21 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#delete-an-app-token
-# DELETE /applications/{client_id}/token
-#
+# https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#check-a-token
+# POST /applications/{client_id}/token
 
-json_file=tmp/delete-an-app-token.json
+json_file=tmp/check-a-token.json
 
-token_to_delete=$1
+token_to_check=$1
 
 jq -n \
-       --arg access_token "${token_to_delete}" \
+       --arg access_token "${token_to_check}" \
            '{
               access_token: $access_token,
            }' > ${json_file}
 
 curl \
-     -X DELETE \
+     -X POST \
      --user "${client_id}:${app_client_secret}" \
      --header "X-GitHub-Api-Version: ${github_api_version}" \
      --url "${GITHUB_API_BASE_URL}/applications/${client_id}/token" --data @${json_file}
+
