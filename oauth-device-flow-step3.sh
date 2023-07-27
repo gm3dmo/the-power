@@ -35,7 +35,7 @@ echo
 
 # This is a gnarly thing to do but saves rewriting how the config file
 # gets populated for this one script that uses github.com for the device flow.
-if [ $hostname == "api.github.com" ];
+if [ $hostname = "api.github.com" ];
 then
   hostname="github.com"
 fi
