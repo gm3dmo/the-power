@@ -9,6 +9,7 @@
 
 # This is a gnarly thing to do but saves rewriting how the config file
 # gets populated for this one script that uses github.com for the device flow.
+#
 if [ $hostname == "api.github.com" ];
 then
   hostname="github.com"
@@ -16,4 +17,8 @@ fi
 
 client_id=${x_client_id}
 
-open -n -a "Google Chrome" --args  "http://${hostname}/login/oauth/authorize?client_id=${client_id}"
+# We only have 1 scope here because we don't want to provide the space separate list for the sake of simplicity.
+scope="read:enterprise"
+
+
+open -n -a "Google Chrome" --args --profile-directory="${chrome_profile}"  "http://${hostname}/login/oauth/authorize?client_id=${client_id}&scope=${scope}"

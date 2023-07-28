@@ -224,8 +224,8 @@ app_client_secret=${app_client_secret}
 ### [Oauth Apps API](https://docs.github.com/en/rest/apps/oauth-applications)
 # https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
 # https://docs.github.com/en/developers/apps/getting-started-with-apps/migrating-oauth-apps-to-github-apps
-x_client_id="<your oauth app client_id here>"
-client_secret="<your oauth app client secret here>"
+x_client_id="$x_client_id"
+x_client_secret="$x_client_secret"
 fingerprint="fingerprint1"
 authorization_id=1
 # A browser can be started for the oauth device flow scripts
@@ -233,6 +233,9 @@ authorization_id=1
 preferred_browser=${preferred_browser}
 # default is "incognito". "normal" is allowed.
 browser_mode=${preferred_browser_mode}
+# This gist is helpful for chrome profile
+# https://gist.github.com/gm3dmo/98247152b375b84ac7a9d4cbb7f92e3b
+chrome_profile="${chrome_profile}"
 
 
 ### [GitHub Actions](https://docs.github.com/en/rest/actions)
@@ -436,8 +439,11 @@ pool_size=10
         "preferred_client": args.preferred_client,
         "preferred_browser": args.preferred_browser,
         "preferred_browser_mode": args.preferred_browser_mode,
+        "chrome_profile": args.chrome_profile,
         "github_api_version": args.github_api_version,
         "http_protocol": args.http_protocol,
+        "x_client_id": args.x_client_id,
+        "x_client_secret": args.x_client_secret,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -504,6 +510,20 @@ if __name__ == "__main__":
         dest="webhook_url",
         default="smee",
         help="Set this if you want to provide your own webhook url.",
+    )
+    parser.add_argument(
+        "--x-client-id",
+        action="store",
+        dest="x_client_id",
+        default="a legacy oauth client id",
+        help="Use with legacy oauth apps.",
+    )
+    parser.add_argument(
+        "--x-client-secret",
+        action="store",
+        dest="x_client_secret",
+        default="a legacy oauth client secret",
+        help="Use with legacy oauth apps",
     )
     parser.add_argument(
         "--number-of-users",
@@ -699,6 +719,13 @@ if __name__ == "__main__":
         dest="preferred_browser_mode",
         default="incognito",
         help="incognito, normal are allowed values.",
+    )
+    parser.add_argument(
+        "--chrome-profile",
+        action="store",
+        dest="chrome_profile",
+        default="Profile 1",
+        help="The Chrome profile to start in.",
     )
     parser.add_argument(
         "--github-api-version",

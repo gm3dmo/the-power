@@ -31,4 +31,7 @@ python3 configure.py --hostname ${hostname} \
                      --default-committer "${default_committer}" \
                      --private-pem-file ${private_pem_file} \
                      --pr-approver-name ${pr_approver_name} \
-                     --pr-approver-token ${pr_approver_token}
+                     --pr-approver-token ${pr_approver_token} \
+                     --chrome-profile "${chrome_profile}" \
+                     --x-client-id ${x_client_id} \
+                     --x-client-secret ${x_client_secret} 
