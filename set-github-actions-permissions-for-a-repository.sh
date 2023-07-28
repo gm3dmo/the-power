@@ -13,10 +13,8 @@ fi
 
 json_file=tmp/set-github-actions-permissions-for-a-repository.json
 
-
 enabled="true"
 allowed_actions="selected"
-
 
 jq -n \
            --arg enabled ${enabled} \
@@ -26,8 +24,8 @@ jq -n \
               allowed_actions : $allowed_actions
            }' > ${json_file}
 
-
 curl ${curl_custom_flags} \
+     -X PUT \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
