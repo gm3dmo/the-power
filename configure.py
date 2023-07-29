@@ -228,6 +228,7 @@ x_client_id="$x_client_id"
 x_client_secret="$x_client_secret"
 fingerprint="fingerprint1"
 authorization_id=1
+oauth_token_scope="read:enterprise read:org"
 # A browser can be started for the oauth device flow scripts
 # default is chrome.
 preferred_browser=${preferred_browser}
