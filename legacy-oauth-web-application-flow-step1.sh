@@ -16,9 +16,7 @@ then
 fi
 
 client_id=${x_client_id}
+scope=${oauth_token_scope}
+url_encoded_scope=$(printf %s "${scope}" | jq -sRr @uri)
 
-# We only have 1 scope here because we don't want to provide the space separate list for the sake of simplicity.
-scope="read:enterprise"
-
-
-open -n -a "Google Chrome" --args --profile-directory="${chrome_profile}"  "http://${hostname}/login/oauth/authorize?client_id=${client_id}&scope=${scope}"
+open -n -a "Google Chrome" --args --profile-directory="${chrome_profile}"  "http://${hostname}/login/oauth/authorize?client_id=${client_id}&scope=${url_encoded_scope}"
