@@ -64,3 +64,14 @@ echo
 echo ========================================================================
 echo
 echo
+OAUTH_TOKEN=$(cat ${step3_response_file} | jq -r '.access_token')
+
+echo ${OAUTH_TOKEN}
+GITHUB_TOKEN=${OAUTH_TOKEN}
+
+set -x
+curl ${curl_custom_flags} \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
+     -H "Accept: application/vnd.github.v3+json" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+     ${GITHUB_API_BASE_URL}/enterprises/${enterprise}/consumed-licenses  | jq -r '.total_seats_consumed'
