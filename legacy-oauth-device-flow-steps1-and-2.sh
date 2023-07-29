@@ -6,11 +6,17 @@
 json_file=tmp/oauth-device-flow-step1.json
 step1_response_file=tmp/step1-response.json
 
-scope="read:enterprise"
+#scope="read:enterprise read:org read:audit_log"
+scope=${oauth_token_scope}
+
+url_encoded_scope=$(printf %s "${scope}" | jq -sRr @uri)
+echo ${url_encoded_scope}
+
+
 
 jq -n \
                 --arg client_id "${x_client_id}" \
-                --arg scope  "${scope}" \
+                --arg scope  "${url_encoded_scope}" \
                 '{ client_id: $client_id, scope: $scope  }'  > ${json_file}
 
 echo ========== Step 1: json file for client and scope ======================
