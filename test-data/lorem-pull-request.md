@@ -4,6 +4,17 @@ Pull request to propose a new feature for our dog paw print (🐾) recognition s
 
 To achieve this, we suggest using a combination of image processing techniques and machine learning algorithms. Specifically, we can use edge detection to extract the shape of the paw print and then use a neural network to recognize unique patterns within the paw print. This would allow our system to identify individual dogs based on their unique paw prints with high accuracy.
 
+```mermaid
+classDiagram
+    Animal <|-- Dog
+    Animal: +hasPaws()
+    class Dog{
+      +String pawprintID
+      +bark()
+    }
+```
+
+
 To demonstrate this feature, We have written an example code in Fortran that implements a basic pattern recognition algorithm using a neural network. The code takes as input a grayscale image of a dog paw print and outputs a prediction of which dog the paw print belongs to. Here is the example code:
 
 ```fortran
