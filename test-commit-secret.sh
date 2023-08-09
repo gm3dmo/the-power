@@ -79,6 +79,7 @@ case ${keyname} in
     google_api_key 
     azure_storage
     npm_granular 
+    npm_classic
     ;;
  *)
    echo 
