@@ -6,13 +6,14 @@
 goat_org=WebGoat
 goat_repo=WebGoat
 
-goat_archive=WebGoat.archive.zip
+goat_archive=${goat_repo}.archive.zip
 
-curl ${curl_custom_flags} \
+set -x
+curl -v ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${goat_org}/${goat_repo}/zipball/${base_branch}" -o "tmp/${repo}.archive.zip"
+        "${GITHUB_API_BASE_URL}/repos/${goat_org}/${goat_repo}/zipball/${base_branch}" -o "tmp/${goat_archive}"
 
 
 cd src/${repo}
