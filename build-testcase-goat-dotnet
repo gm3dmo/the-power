@@ -1,0 +1,37 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+                                                   
+printf "${highlight} - Creating repo: ${normal}"
+./create-repo-testrepo.sh | jq -r '.name'
+./add-team-to-repo.sh
+ printf "${highlight} - Creating webhook: ${normal}"
+./create-webhook.sh  | jq -r '.id'
+
+
+
+echo
+echo "------------ security and analysis settings ------------------"
+./list-repo.sh 2>/dev/null | jq -r '.security_and_analysis'
+echo "=============================================================="
+
+echo "Cloning the repo to src/"
+echo
+./clone-default-repo.sh
+
+echo
+echo "Now you need to run: download-goat-dotnet.sh"
+
