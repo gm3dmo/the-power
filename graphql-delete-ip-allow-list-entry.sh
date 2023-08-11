@@ -6,6 +6,9 @@
 #       jq -r '.data.organization.ipAllowListEntries.nodes[].id' | \
 #       xargs -I {} bash graphql-delete-ip-allow-list-entry.sh {}
 
+echo "Audit log entry: action:ip_allow_list_entry.destroy" >&2
+
+
 ipAllowListEntryId=$1
 
 graphql_query=tmp/graphql_query.txt

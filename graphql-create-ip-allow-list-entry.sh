@@ -2,6 +2,9 @@
 
 # https://docs.github.com/en/graphql/reference/mutations#createipallowlistentry
 
+echo "Audit log entry: action:ip_allow_list_entry.create" >&2
+
+
 org=${1:-$org}
 if [[ -z $2 ]]; then
   ip_address=$(curl -s ifconfig.me/ip)
