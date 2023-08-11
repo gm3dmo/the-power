@@ -20,8 +20,6 @@ printf "${highlight} - Creating repo: ${normal}"
 ./add-team-to-repo.sh
  printf "${highlight} - Creating webhook: ${normal}"
 ./create-webhook.sh  | jq -r '.id'
-printf "${highlight} - Creating docs/README.md: ${normal}"
-./create-commit-readme.sh | jq -r ".content.html_url"
 
 
 
@@ -35,6 +33,5 @@ echo
 ./clone-default-repo.sh
 
 echo
-echo "Now you need to run: test-commit-secret.sh to commit 
-and push the secrets you want to trigger."
+echo "Now you need to run: download-goat.sh"
 
