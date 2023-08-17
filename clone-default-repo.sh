@@ -32,9 +32,9 @@ GIT_TRACE_PACKET=true
 # export GIT_SSH_COMMAND GIT_CURL_VERBOSE GIT_TRACE GIT_TRACE_PERFORMANCE GIT_TRACE_SETUP GIT_TRACE_PACKET GIT_CURL_VERBOSE
 
 ## The GIT_CURL_VERBOSE will give you the x-github-request-id
-#export GIT_CURL_VERBOSE
+export GIT_CURL_VERBOSE
 
 
 cd src
 rm -rf ${repo}
-git clone https://ghe-admin:${GITHUB_TOKEN}@${hostname}/${org}/${repo}.git
+git clone https://${GITHUB_TOKEN}:x-oauth-basic@${hostname}/${org}/${repo}.git
