@@ -34,6 +34,8 @@ GIT_TRACE_PACKET=true
 ## The GIT_CURL_VERBOSE will give you the x-github-request-id
 export GIT_CURL_VERBOSE
 
+# See this url:
+# https://github.blog/2012-09-21-easier-builds-and-deployments-using-git-over-https-and-oauth/
 
 cd src
 rm -rf ${repo}
