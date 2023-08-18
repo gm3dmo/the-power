@@ -36,7 +36,31 @@ export GIT_CURL_VERBOSE
 
 # See this url:
 # https://github.blog/2012-09-21-easier-builds-and-deployments-using-git-over-https-and-oauth/
+#
+# https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installathon
+# You can also use an installation access token to authenticate for
+# HTTP-based Git access. You app must have the "Contents" repository
+# permission. You can then use the installation access token as the HTTP
+# password. Replace TOKEN with the installation access token: git clone
+# https://x-access-token:TOKEN@github.com/owner/repo.git".
+
+TOKEN_FRST3=${GITHUB_TOKEN:0:3}
+echo ${TOKEN_FRST3}
 
 cd src
 rm -rf ${repo}
-git clone https://${GITHUB_TOKEN}:x-oauth-basic@${hostname}/${org}/${repo}.git
+
+
+case ${TOKEN_FRST3} in
+
+    ghp)
+        git clone https://${GITHUB_TOKEN}:x-oauth-basic@${hostname}/${org}/${repo}.git
+    ;;
+    ghu)
+        git clone https://${GITHUB_TOKEN}:x-oauth-basic@${hostname}/${org}/${repo}.git
+    ;;
+    ghs)
+        git clone https://x-access-token:${GITHUB_TOKEN}@${hostname}/${org}/${repo}.git
+    ;;
+esac
+
