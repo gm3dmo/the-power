@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user
 # POST /user/codespaces
@@ -26,5 +26,5 @@ jq -n \
 set x
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      ${GITHUB_API_BASE_URL}/user/codespaces --data @${json_file}

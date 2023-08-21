@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # lists repos and outside collabortors, including assosiated permissions
 # https://docs.github.com/en/graphql/reference/objects#repository
@@ -31,5 +31,5 @@ graphql_script="$(echo ${graphql_script//\"/\\\"})"
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
        ${GITHUB_APIV4_BASE_URL} -d "{ \"query\": \"$graphql_script\"}"

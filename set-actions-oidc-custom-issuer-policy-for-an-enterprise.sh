@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/oidc#set-the-github-actions-oidc-custom-issuer-policy-for-an-enterprise
 # PUT /enterprises/{enterprise}/actions/oidc/customization/issuer
@@ -18,5 +18,5 @@ jq -n \
     curl ${curl_custom_flags} \
         -X PUT \
         -H "Accept: application/vnd.github.v3+json" \
-        -H "Authorization: token ${GITHUB_TOKEN}" \
+        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
 i          ${GITHUB_API_BASE_URL}/enterprises/${enterprise}/actions/oidc/customization/issuer  --data @${json_file}

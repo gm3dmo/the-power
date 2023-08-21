@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#create-a-release
 # POST /repos/:owner/:repo/releases
@@ -17,11 +17,11 @@ jq -n \
         --arg body "The first and possibly last ever release." \
               '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, prerelease: $prerelease | test("true")}'  > ${json_file}
 
-cat $json_file | jq -r >&2
+#cat $json_file | jq -r >&2
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases --data @${json_file}
 
 rm -f ${json_file}

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Wrap a graphql script for use with curl
 
@@ -22,6 +22,6 @@ graphql_script="$(echo ${graphql_script//\"/\\\"})"
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_APIV4_BASE_URL} -d "{ \"mutation\": \"$graphql_script\"}"
 

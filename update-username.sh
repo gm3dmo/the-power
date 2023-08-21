@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server/rest/reference/enterprise-admin#update-the-username-for-a-user
 # PATCH /admin/users/:username
@@ -18,5 +18,5 @@ cat $json
 
 set -x
 curl -v -X PATCH \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/admin/users/${old_username} --data @$json

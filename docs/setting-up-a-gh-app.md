@@ -12,7 +12,7 @@
 
 6. Now we will set it up to work with ___The Power___
 
-7. Go to your cloned repo where you've [set up the power](setup.md)
+7. Go to your cloned repo where you've [set up the power](docs/setup.md)
 
 8. `vi .gh-api-examples.conf` and change the following things:
 	1. Make sure the org is the correct one under `### [Organization](https://docs.github.com/en/rest/orgs)`

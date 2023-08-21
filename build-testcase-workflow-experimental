@@ -1,0 +1,26 @@
+# Create a repository and setup a simple workflow 
+# Prior to running this, make any needed modifications to test-data/workflow-experimental.yml_
+# that are needed for the testcase.
+# The "as delivered" version of workflow-simple.yml_ will trigger the workflow
+# on pull request events
+#
+./create-repo.sh 
+
+./add-team-to-repo.sh
+
+./create-commit-readme.sh
+
+echo -n "Adding workflow file:"
+python3 create-workflow-experimental-json-file.py
+./create-commit-workflow-experimental.sh | jq -r '.content.path'
+
+./create-branch-newbranch.sh
+./create-commit-on-newbranch.sh
+
+./create-branch-protected.sh
+./set-branch-protection.sh
+
+./create-repo-issue.sh
+./create-pull-request.sh
+
+

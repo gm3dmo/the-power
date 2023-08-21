@@ -2,19 +2,60 @@
 # https://docs.github.com/en/rest/reference/repos#create-a-commit-status
 #
 # Important: This is not using the GitHub Checks API (GitHub App required)
+#
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/
+
+EOF
+
+printf "${normal}"
+
 # 
-set -x
-./create-repo-testrepo.sh
-./create-commit-readme.sh
-./create-commit-codeowners.sh
+#
+#
+ printf "${highlight} - Creating repo: ${normal}"
+./create-repo-testrepo.sh | jq -r '.name'
 ./add-team-to-repo.sh
-./create-branch-newbranch.sh
-./create-commit-on-newbranch.sh
-./create-commit-status.sh pending ci-test/this-check-is-optional
-./create-commit-status.sh pending ci-test/this-check-is-required
-./create-repo-issue.sh
-./update-branch-protection-with-required-check.sh
-./create-pull-request.sh
+ printf "${highlight} - Creating docs/README: ${normal}"
+./create-commit-readme.sh | jq -r ".content.html_url"
+ printf "${highlight} - Creating CODEOWNERS: ${normal}"
+./create-commit-codeowners.sh| jq -r ".content.html_url"
+ printf "${highlight} - Creating requirements.txt: ${normal}"
+./create-commit-python-pip.sh| jq -r ".content.html_url"
+sleep 2
+ printf "${highlight} - Creating new branch: ${normal}"
+./create-branch-newbranch.sh | jq -r '.url'
+ printf "${highlight} - Creating a commit on the new branch: ${normal}"
+./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+ printf "${highlight} - Creating an issue: ${normal}"
+./create-repo-issue.sh | jq -r '.html_url'
+ printf "${highlight} - Creating a pull request: ${normal}"
+./create-pull-request.sh | jq -r '.html_url'
+# set the branch protection rules for main
+ printf "${highlight} - Setting branch protection rules on default branch: ${normal}"
+./set-branch-protection.sh | jq -r '.url'
+
+ printf "${highlight} - Creating a release: ${normal}"
+./create-release.sh  | jq -r '.url'
+ printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
+./create-commit-gitattributes.sh | jq -r ".content.html_url"
+
+ printf "${highlight} - Creating commit status for an optional check: ${normal}"
+./create-commit-status.sh pending ci-test/this-check-is-optional | jq -r '.url'
+ printf "${highlight} - Creating commit status for an required check: ${normal}"
+./create-commit-status.sh pending ci-test/this-check-is-required | jq -r '.url'
+ printf "${highlight} - Updating branch protection with required check: ${normal}"
+./update-branch-protection-with-required-check.sh | jq -r '.url'
 
 # To update the checks to success run the two lines below:
 # ./create-commit-status.sh success ci-test/this-check-is-required
@@ -27,19 +68,23 @@ echo .gh-api-examples.conf file. The value should be a PAT of
 echo a user with permissions to approve the pull request.
 
 read x
-./create-pull-request-review.sh
+printf "${highlight} - Creating an approving review for a pull request: ${normal}"
+./create-approving-review-for-a-pull-request.sh | jq -r '.html_url'
 echo ------------------------------------------- 
 
 echo Run these two to make the checks update their status:
 read x
- ./create-commit-status.sh success ci-test/this-check-is-optional
+ printf "${highlight} - Updating status for optional check to success: ${normal}"
+ ./create-commit-status.sh success ci-test/this-check-is-optional | jq -r '.id'
 read x
- ./create-commit-status.sh success ci-test/this-check-is-required
+ printf "${highlight} - Updating status for required check to success: ${normal}"
+ ./create-commit-status.sh success ci-test/this-check-is-required | jq -r '.id'
 
 echo ------------------------------------------- 
 
 echo If the tiny app is configured and has appropriate permissions
 echo check runs can be created with the Checks API:
 
- ./tiny-create-check-run-with-annotation.sh
+ printf "${highlight} - Creating check-run with annotation: ${normal}"
+./tiny-create-check-run-with-annotation.sh | jq -r '.id'
 

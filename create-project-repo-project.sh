@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/projects#create-a-repository-project
 # POST /repos/:owner/:repo/projects
@@ -22,7 +22,7 @@ if [ ${wanted} == "preview" ]; then
          -X POST \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Accept: application/vnd.github.inertia-preview+json"  \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/projects --data @${json_file}
 else
     >&2 echo no header in place this will fail. run with 'preview' argument.
@@ -30,7 +30,7 @@ else
          -X POST \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Content-Type: application/json" \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/projects --data @${json_file}
 fi
 

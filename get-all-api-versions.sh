@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/meta?apiVersion=2022-11-28#get-all-api-versions
 # GET /versions

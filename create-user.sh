@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#create-a-user
 # POST /admin/users
@@ -20,7 +20,7 @@ echo $DATA > tmp/${new_user}
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/admin/users --data @tmp/${new_user}
 
 rm -f tmp/${new_user}

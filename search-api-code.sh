@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/search#search-code
 # GET /search/code
@@ -16,7 +16,7 @@ search_query="${search_string}+in:file+language:${language}+repo:${org}/${repo}"
 set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/search/code?q=${search_query}"
 
 

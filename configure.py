@@ -47,7 +47,10 @@ def main(args):
 number_of_users_to_create_on_ghes=${number_of_users_to_create_on_ghes}
 U=ghe-admin
 admin_user=${admin_user}
-admin_password=""
+admin_password=${admin_password}
+mgmt_port=${mgmt_port}
+mgmt_password=${mgmt_password}
+
 
 
 ### [Authorization](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
@@ -60,9 +63,10 @@ auth_header="Authorization: token ${token}"
 hostname=${hostname}
 path_prefix=${path_prefix}
 graphql_path_prefix=${graphql_path_prefix}
-GITHUB_API_BASE_URL=https://${hostname}${path_prefix}
-GITHUB_APIV4_BASE_URL=https://${hostname}${graphql_path_prefix}
+GITHUB_API_BASE_URL=${http_protocol}://${hostname}${path_prefix}
+GITHUB_APIV4_BASE_URL=${http_protocol}://${hostname}${graphql_path_prefix}
 mail_domain="example.com"
+
 
 ### GitHub Enterprise
 enterprise="${enterprise_name}"
@@ -90,6 +94,11 @@ allow_auto_merge="${allow_auto_merge}"
 repo_secret_name="REPOSITORY_SECRET_001"
 # webhook url is also used by the organization
 webhook_url=${webhook_url}
+has_issues=true
+has_wiki=true
+has_projects=true
+has_discussions=true
+has_pages=false
 
 
 ### [Team](https://docs.github.com/en/rest/teams)
@@ -119,6 +128,8 @@ default_pull_request_id=2
 # place it below to allow the default pull request
 # to be approved vi automation.
 pr_approver_token=${pr_approver_token}
+pr_approver_name=${pr_approver_name}
+default_pr_event="COMMENT"
 
 
 ### [Branches](https://docs.github.com/en/rest/commits/commits)
@@ -206,21 +217,26 @@ default_app_id=${default_app_id}
 # https://github.com/organizations/<org>/settings/installations/<installation_id>
 default_installation_id=${default_installation_id}
 # The Client ID is used when using the device authentication flow
-client_id=$client_id
+client_id=${client_id}
+app_client_secret=${app_client_secret}
 
 
 ### [Oauth Apps API](https://docs.github.com/en/rest/apps/oauth-applications)
 # https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
 # https://docs.github.com/en/developers/apps/getting-started-with-apps/migrating-oauth-apps-to-github-apps
-x_client_id="<your oauth app client_id here>"
-client_secret="<your oauth app client secret here>"
+x_client_id="$x_client_id"
+x_client_secret="$x_client_secret"
 fingerprint="fingerprint1"
 authorization_id=1
+oauth_token_scope="read:enterprise read:org"
 # A browser can be started for the oauth device flow scripts
 # default is chrome.
 preferred_browser=${preferred_browser}
 # default is "incognito". "normal" is allowed.
 browser_mode=${preferred_browser_mode}
+# This gist is helpful for chrome profile
+# https://gist.github.com/gm3dmo/98247152b375b84ac7a9d4cbb7f92e3b
+chrome_profile="${chrome_profile}"
 
 
 ### [GitHub Actions](https://docs.github.com/en/rest/actions)
@@ -262,6 +278,7 @@ number_of_branches=${number_of_branches}
 repo_prefix="testrepo"
 org_prefix="testorg"
 user_prefix="testuser"
+team_prefix="testteam"
 branch_prefix="testbranch"
 file_prefix="testfile"
 file_extension="c"
@@ -295,6 +312,7 @@ pool_size=10
             "dummy_section", "default_installation_id"
         )
         args.client_id = dotcom_config.get("dummy_section", "client_id")
+        args.app_client_secret = dotcom_config.get("dummy_section", "app_client_secret")
         args.team_members = dotcom_config.get("dummy_section", "team_members")
         args.team_admin = dotcom_config.get("dummy_section", "team_admin")
         args.org_owner = dotcom_config.get("dummy_section", "org_owner")
@@ -309,7 +327,10 @@ pool_size=10
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
-    if args.hostname == "api.github.com":
+    if args.hostname == "api.github.local":
+        args.http_protocol = "http"
+
+    if args.hostname == "api.github.com" or args.hostname == "api.github.local":
         args.path_prefix = ""
         args.graphql_path_prefix = "/graphql"
     else:
@@ -390,11 +411,16 @@ pool_size=10
         "base_branch": args.base_branch,
         "delete_branch_on_merge": args.delete_branch_on_merge,
         "pr_approver_token": args.pr_approver_token,
+        "pr_approver_name": args.pr_approver_name,
         "default_app_id": args.app_id,
         "default_installation_id": args.installation_id,
         "private_key_pem_file": args.private_pem_file,
         "client_id": args.client_id,
+        "app_client_secret": args.app_client_secret,
         "admin_user": args.admin_user,
+        "admin_password": args.admin_password,
+        "mgmt_password": args.mgmt_password,
+        "mgmt_port": args.mgmt_port,
         "team_members": args.team_members,
         "team_admin": args.team_admin,
         "org_owner": args.org_owner,
@@ -414,7 +440,11 @@ pool_size=10
         "preferred_client": args.preferred_client,
         "preferred_browser": args.preferred_browser,
         "preferred_browser_mode": args.preferred_browser_mode,
+        "chrome_profile": args.chrome_profile,
         "github_api_version": args.github_api_version,
+        "http_protocol": args.http_protocol,
+        "x_client_id": args.x_client_id,
+        "x_client_secret": args.x_client_secret,
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -460,7 +490,19 @@ if __name__ == "__main__":
         "-e", "--client-id", action="store", dest="client_id", default=""
     )
     parser.add_argument(
+        "--app-client-secret", action="store", dest="app_client_secret", default=""
+    )
+    parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
+    )
+    parser.add_argument(
+        "--admin-password", action="store", dest="admin_password", default="admin-password"
+    )
+    parser.add_argument(
+        "--mgmt-password", action="store", dest="mgmt_password", default="mgmt-password"
+    )
+    parser.add_argument(
+        "--mgmt-port", action="store", dest="mgmt_port", default=8443
     )
     parser.add_argument(
         "-w",
@@ -469,6 +511,20 @@ if __name__ == "__main__":
         dest="webhook_url",
         default="smee",
         help="Set this if you want to provide your own webhook url.",
+    )
+    parser.add_argument(
+        "--x-client-id",
+        action="store",
+        dest="x_client_id",
+        default="a legacy oauth client id",
+        help="Use with legacy oauth apps.",
+    )
+    parser.add_argument(
+        "--x-client-secret",
+        action="store",
+        dest="x_client_secret",
+        default="a legacy oauth client secret",
+        help="Use with legacy oauth apps",
     )
     parser.add_argument(
         "--number-of-users",
@@ -481,7 +537,7 @@ if __name__ == "__main__":
         "--runner-version",
         action="store",
         dest="runner_version",
-        default="v2.294.0",
+        default="v2.306.0",
         help="Version of self hosted runner. Be sure to use the tag like this: `v2.294.0`",
     )
     parser.add_argument(
@@ -631,6 +687,13 @@ if __name__ == "__main__":
         help="The PAT of a pr approver.",
     )
     parser.add_argument(
+        "--pr-approver-name",
+        action="store",
+        dest="pr_approver_name",
+        default="abc",
+        help="The name of a user.",
+    )
+    parser.add_argument(
         "--preferred_client",
         action="store",
         dest="preferred_client",
@@ -659,11 +722,25 @@ if __name__ == "__main__":
         help="incognito, normal are allowed values.",
     )
     parser.add_argument(
+        "--chrome-profile",
+        action="store",
+        dest="chrome_profile",
+        default="Profile 1",
+        help="The Chrome profile to start in.",
+    )
+    parser.add_argument(
         "--github-api-version",
         action="store",
         dest="github_api_version",
         default="2022-11-28",
         help="see GitHub API version docs",
+    )
+    parser.add_argument(
+        "--http-protocol",
+        action="store",
+        dest="http_protocol",
+        default="https",
+        help="Mostly always https",
     )
 
     args = parser.parse_args()

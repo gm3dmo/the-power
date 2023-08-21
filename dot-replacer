@@ -1,0 +1,13 @@
+# we want to change:
+# . .gh-api-examples.conf
+#
+# to:
+#
+# ./.gh-api-examples.conf
+#
+cp skeleton.sh_ skeleton.sh
+wc -l skeleton.sh
+
+# At the moment this is adding a line not replacing it.
+
+perl -pi -e 's{^(\.\s+)(.gh-api-examples.conf)$}{$1 ./.gh-api-examples.conf}' *.sh

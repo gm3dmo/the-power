@@ -1,10 +1,13 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/graphql/reference/mutations#deleteipallowlistentry
 # Usage:
 #   $ bash graphql-list-ip-allow-list-entries.sh | \
 #       jq -r '.data.organization.ipAllowListEntries.nodes[].id' | \
 #       xargs -I {} bash graphql-delete-ip-allow-list-entry.sh {}
+
+echo "Audit log entry: action:ip_allow_list_entry.destroy" >&2
+
 
 ipAllowListEntryId=$1
 
@@ -46,7 +49,7 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H 'Accept: application/vnd.github.audit-log-preview+json' \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
 
 rm -f ${graphql_query}

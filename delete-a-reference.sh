@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/git#delete-a-reference
 # DELETE /repos/{owner}/{repo}/git/refs/{ref}
@@ -24,5 +24,5 @@ set -x
 curl ${curl_custom_flags} \
      -X DELETE \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/${ref}

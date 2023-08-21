@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # [!] This only works on GitHub Enterprise Cloud.
 # https://docs.github.com/en/rest/scim#get-scim-provisioning-information-for-a-user
@@ -15,5 +15,5 @@ echo ${scim_user_id}
 
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/scim/v2/organizations/${org}/Users/${scim_user_id}

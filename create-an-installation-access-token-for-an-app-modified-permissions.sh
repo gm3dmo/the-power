@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#create-an-installation-access-token-for-an-app
 # POST /app/installations/{installation_id}/access_tokens

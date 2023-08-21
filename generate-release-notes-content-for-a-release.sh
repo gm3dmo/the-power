@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-server@3.5/rest/releases/releases#generate-release-notes-content-for-a-release
 # POST /repos/{owner}/{repo}/releases/generate-notes 
@@ -16,5 +16,5 @@ cat $json_file | jq -r >&2
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases/generate-notes --data @${json_file}

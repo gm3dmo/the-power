@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#suspend-an-app-installation
 # PUT /app/installations/{installation_id}/suspended

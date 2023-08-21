@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/dependency-graph/dependency-review#get-a-diff-of-the-dependencies-between-commits
 # GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}
@@ -27,7 +27,9 @@ basehead=(${base}...${head})
 
 # send a request to GitHub API
 
+set -x
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/repos/${org}/empty-project/dependency-graph/compare/${basehead}
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/dependency-graph/compare/${basehead}
+

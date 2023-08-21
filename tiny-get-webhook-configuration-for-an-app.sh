@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 #  https://docs.github.com/en/rest/reference/apps#get-a-webhook-configuration-for-an-app
 # GET /app/hook/config

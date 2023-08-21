@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # This script can be used in test cases where a endpoint
 # doesn't seem to work with the GitHub App.
@@ -30,5 +30,5 @@ read x
 # GET the list of repos in the organization:
 
 set -x
-curl -v -H "Authorization: token ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/repos
+curl -v -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/repos
 

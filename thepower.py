@@ -21,6 +21,70 @@ from urllib import request
 import re
 
 
+def ghe2json(text):
+    """Converts the text output from gheboot to json"""
+    lexer = shlex.shlex(text)
+    lexer.wordchars += ".-"
+    data = {}
+    for token in lexer:
+        if token == "GHE":
+            # Extract the software version
+            data["ghe_version"] = lexer.get_token()
+            data["software_name"] = "GitHub Enterprise Server"
+        elif token == "Azure":
+            data["platform"] = token
+            # Extract the VM type and region
+            data["vm_type"] = lexer.get_token()
+            [lexer.get_token() for _ in range(2)]
+            data["region"] = lexer.get_token()
+        elif token == "AWS":
+            # Extract the VM type and region
+            data["platform"] = token
+            data["vm_type"] = lexer.get_token()
+            [lexer.get_token() for _ in range(3)]
+            data["region"] = lexer.get_token()
+        elif token == "http":
+            # Extract the HTTP URL
+            l = [lexer.get_token() for _ in range(4)]
+            s = "".join(l)
+            data["access_urls"] = {"http": f"http{s}"}
+            data["access_urls"]["hostname"] = l[3]
+        elif token == "ssh":
+            # Extract the SSH
+            # ssh -p122 admin@gm3dmo-1682111193.gh-quality.net -- cat /data/user/common/
+            port = lexer.get_token()
+            user = lexer.get_token()
+            lexer.get_token()
+            host = lexer.get_token()
+            l = [lexer.get_token() for _ in range(3)]
+            s = "".join(l)
+            print(s)
+            data["access_urls"]["ssh"] = f"""{token} {port} {user}@{host}"""
+        elif token == "IP":
+            # Extract the IP address
+            [lexer.get_token() for _ in range(2)]
+            data["ip_address"] = lexer.get_token()
+        elif token == "ssh":
+            # Extract the password command
+            data[
+                "management_console_password_command"
+            ] = f"{token} {lexer.get_token()} -- cat {lexer.get_token()}"
+        elif token == "Server":
+            # Server will automatically be terminated on 2023-04-23 21:23:51 UTC
+            # Extract the termination date
+            [lexer.get_token() for _ in range(5)]
+            termination_date = lexer.get_token()
+            l = [lexer.get_token() for _ in range(5)]
+            termination_time = "".join(l)
+            termination_tz = lexer.get_token()
+            data[
+                "termination_date"
+            ] = f"""{termination_date}T{termination_time} {termination_tz}"""
+        elif token.startswith("ghp_"):
+            # Extract the token
+            data["token"] = token
+    return json.dumps(data, indent=2)
+
 
 def token_validator(token: string):
     token_format_is_valid = False

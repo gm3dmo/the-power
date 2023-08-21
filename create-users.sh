@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 people_file=tmp/longlistofpeople.txt
 head -${number_of_users_to_create_on_ghes} test-data/NAMES.TXT > ${people_file}
@@ -14,7 +14,7 @@ do
     echo $DATA > tmp/${team_member}
 
     curl ${curl_custom_flags} \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Content-Type: application/json" \
             ${GITHUB_API_BASE_URL}/admin/users --data @tmp/${team_member} 
 

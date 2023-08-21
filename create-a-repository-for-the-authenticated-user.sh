@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user
 # POST /user/repos
@@ -38,6 +38,6 @@ set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/vnd.github.nebula-preview+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      ${GITHUB_API_BASE_URL}/user/repos --data @${json_file}
 

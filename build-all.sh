@@ -1,51 +1,60 @@
-# if we flag to build optional: build-all.sh optional then 
-# add any extra goodies to the else section:
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
 
-set -x
+printf "$highlight"
 
-if [ -z "$1" ]
-   # Create the organization
-   ./create-organization.sh
-   ./create-team.sh
-   ./create-users.sh
-   ./create-org-members.sh
-   ./add-users-to-team.sh
-   ./add-maintainers-to-team.sh
-   ./create-an-organization-webhook.sh
-   # Create the testrepo
-   ./create-repo-testrepo.sh
-   ./create-webhook.sh
-   ./create-commit-codeowners.sh
-   ./create-commit-readme.sh
-   ./create-commit-python-pip.sh
-   ./add-team-to-repo.sh
-   ./create-branch-newbranch.sh
-   ./create-commit-on-newbranch.sh
-   ./create-repo-issue.sh
-   ./create-pull-request.sh
-   ./create-branch-protected.sh
-   ./set-branch-protection.sh
-   ./create-release.sh
-   
-   ./create-pages.sh
-   ./create-gist.sh
-  then
-     >&2 echo "No optionals being run"
-  else
-    # Put a case statement in here
-    # Renders
-    ./create-commit-test-rst.sh
-    ./create-commit-test-ipynb.sh
+cat << EOF
 
-    # Projects
-    ./create-organization-project.sh preview
-    ./create-organization-project-columns.sh preview
-    ./add-team-to-org-project.sh
+  ________            ____
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/
 
-    # Pride labels
-    ./pride-patch-labels.sh
+EOF
 
-    # Precommit hooks
-    ./create-repo.sh hook-repo public
-    ./create-commit-pre-hook.sh hook-repo
-fi
+printf "${normal}"
+
+   printf "${highlight} - Creating organization: ${normal}"
+    ./create-organization.sh | jq -r '.url'
+   printf "${highlight} - Creating organization webhook: ${normal}"
+    ./create-an-organization-webhook.sh | jq -r '.id'
+   printf "${highlight} - Creating team:${normal}\n"
+   ./create-team.sh | jq -r '.html_url'
+   printf "${highlight} - Creating users:${normal}\n"
+   ./pwr-create-users.sh
+   printf "${highlight} - Creating org members:${normal}\n"
+   ./pwr-create-org-members.sh 
+   printf "${highlight} - Adding users to team:${normal}\n"
+   ./pwr-add-users-to-team.sh | jq -r '.url'
+   printf "${highlight} - Adding maintainers to team:${normal}\n"
+   ./add-maintainers-to-team.sh | jq -r '.url'
+   printf "${highlight} - Creating repo: ${normal}"
+    ./create-repo-testrepo.sh | jq -r '.html_url'
+    ./add-team-to-repo.sh
+   printf "${highlight} - Creating webhook: ${normal}"
+    ./create-webhook.sh  | jq -r '.id'
+   printf "${highlight} - Creating docs/README: ${normal}"
+    ./create-commit-readme.sh | jq -r ".content.html_url"
+   printf "${highlight} - Creating CODEOWNERS: ${normal}"
+    ./create-commit-codeowners.sh| jq -r ".content.html_url"
+   printf "${highlight} - Creating requirements.txt: ${normal}"
+    ./create-commit-python-pip.sh| jq -r ".content.html_url"
+    sleep 2.5
+   printf "${highlight} - Creating new branch: ${normal}"
+    ./create-branch-newbranch.sh | jq -r '.url'
+   printf "${highlight} - Creating a commit on the new branch: ${normal}"
+    ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+   printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
+   printf "${highlight} - Creating an issue: ${normal}"
+    ./create-repo-issue.sh | jq -r '.html_url'
+   printf "${highlight} - Creating a pull request: ${normal}"
+    ./create-pull-request.sh | jq -r '.html_url'
+    # set the branch protection rules for main
+   printf "${highlight} - Setting branch protection rules on default branch: ${normal}"
+    ./set-branch-protection.sh | jq -r '.url'
+   printf "${highlight} - Creating a release: ${normal}"
+    ./create-release.sh  | jq -r '.url'
+   printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
+    ./create-commit-gitattributes.sh | jq -r ".content.html_url"

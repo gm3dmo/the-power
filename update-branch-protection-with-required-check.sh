@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#update-branch-protection
 # PUT /repos/:owner/:repo/branches/:branch/protection
@@ -14,9 +14,7 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
-cat $source_json | jq -r
 
-echo =========================
 #     | .required_status_checks.checks = [ $required_status_check_name ]
 
 cat ${source_json}| jq --arg team_slug "$team_slug" \
@@ -33,13 +31,12 @@ cat ${source_json}| jq --arg team_slug "$team_slug" \
     ' > ${json_file}
 
 
-cat $json_file | jq -r
 
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/vnd.github.luke-cage-preview+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${protected_branch_name}/protection --data @${json_file}
 
 rm -f ${json_file}

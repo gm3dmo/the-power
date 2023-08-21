@@ -23,10 +23,15 @@ python3 configure.py --hostname ${hostname} \
                      --webhook-url ${webhook} \
                      --configure-app yes \
                      --app-id ${app_id} \
+                     --app-client-secret ${app_client_secret} \
                      --installation-id ${installation_id} \
                      --client-id ${client_id} \
                      --team-members "${team_members}" \
                      --team-admin "${team_admin}" \
                      --default-committer "${default_committer}" \
                      --private-pem-file ${private_pem_file} \
-                     --pr-approver-token ${pr_approver_token}
+                     --pr-approver-name ${pr_approver_name} \
+                     --pr-approver-token ${pr_approver_token} \
+                     --chrome-profile "${chrome_profile}" \
+                     --x-client-id ${x_client_id} \
+                     --x-client-secret ${x_client_secret} 

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/repos#create-a-release
 # POST /repos/:owner/:repo/releases
@@ -18,7 +18,7 @@ jq -n \
 curl ${curl_custom_flags} \
      -X POST \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases --data @${json_file}
 
 rm -f ${json_file}

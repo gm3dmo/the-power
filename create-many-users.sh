@@ -1,10 +1,11 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # Depends on `generate-long-list-of-people.pl` having run to create $people_file.
 
 people_file=tmp/longlistofpeople.txt
-head -${count_of_users_to_add_to_ghes} test-data/NAMES.TXT > ${people_file}
+head -${number_of_users_to_create_on_ghes} test-data/NAMES.TXT > ${people_file}
 
+TESTNAME="crt-mny-usrs"
 
 for person in `cat ${people_file}`
 do
@@ -15,11 +16,10 @@ do
 
     echo $DATA > tmp/${person}
 
-    echo curl ${curl_custom_flags} \
+    curl --user-agent ${TESTNAME}-${person} ${curl_custom_flags} \
          -X POST \
          -H "Accept: application/vnd.github.v3+json" \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/admin/users --data @tmp/${person} 
-    rm -f tmp/${person}
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            ${GITHUB_API_BASE_URL}/admin/users --data @tmp/${person}
 done
 

@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/pulls/review-requests#request-reviewers-for-a-pull-request
 # POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
@@ -25,7 +25,7 @@ jq -n \
 set -x
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/requested_reviewers --data @${json_file}
 
 

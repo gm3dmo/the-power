@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/issues#update-a-label
 # PATCH /repos/:owner/:repo/labels/:name
@@ -62,7 +62,7 @@ do
     curl ${curl_custom_flags} \
          -X PATCH \
          -H "Content-Type: application/json" \
-         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             ${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels/${name_to_update_url} --data @${json_file}
     rm -f ${json_file}
 done

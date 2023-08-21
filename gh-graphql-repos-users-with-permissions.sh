@@ -1,0 +1,24 @@
+.  ./.gh-api-examples.conf
+
+# https://cli.github.com/manual/gh_api
+# Demonstrates pagination for gh api
+
+gh api graphql --paginate -F owner="${org}"  -f query='
+query($owner: String!, $endCursor: String) {
+  organization(login: $owner){
+   repositories(first:50, after: $endCursor){
+    nodes{
+      nameWithOwner
+      collaborators(first:100){
+        edges{
+          permission
+          node{
+            login
+          }
+        }
+      }
+    }
+  }
+}
+}
+'

@@ -1,0 +1,6 @@
+# Pre Receive Hook Repository
+
+## Description
+#
+This is where we keep our [pre-receive](https://docs.github.com/en/enterprise-server/admin/policies/enforcing-policy-with-pre-receive-hooks/creating-a-pre-receive-hook-script) hooks.
+

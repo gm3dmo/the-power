@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/rest/reference/apps#unsuspend-an-app-installation
 # DELETE /app/installations/{installation_id}/suspended

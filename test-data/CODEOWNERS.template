@@ -1,0 +1,2 @@
+/docs/README.md @${org}/${team_slug}
+/.gitattributes @${pr_approver_name}

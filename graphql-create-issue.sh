@@ -1,4 +1,4 @@
-. .gh-api-examples.conf
+.  ./.gh-api-examples.conf
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
@@ -35,7 +35,7 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H 'Accept: application/vnd.github.audit-log-preview+json' \
-     -H "Authorization: token ${GITHUB_TOKEN}" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
 
 
