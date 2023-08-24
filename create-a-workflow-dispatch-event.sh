@@ -29,10 +29,6 @@ jq -n \
          }' > ${json_file}
 
 
-
-repo=repo-zeddy1
-set -x
-GITHUB_TOKEN=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
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
