@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#create-a-user
+# https://docs.github.com/en/enterprise-server/rest/enterprise-admin/users?apiVersion=2022-11-28#create-a-user
 # POST /admin/users
 
 if [ -z "$1" ]
