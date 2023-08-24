@@ -8,9 +8,6 @@
 
 if [ -z "$1" ]
   then
-
-if [ -z "$1" ]
-  then
     workflow_id=$(./list-repository-workflows.sh | jq '[.workflows[].id] | max')
   else
     workflow_id=$1
