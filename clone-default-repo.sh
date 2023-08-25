@@ -52,7 +52,7 @@ rm -rf ${repo}
 
 
 # You may need to use a flag like this in rare cases:
-git -c http.sslVerify=false
+# git -c http.sslVerify=false
 
 case ${TOKEN_FRST3} in
 
