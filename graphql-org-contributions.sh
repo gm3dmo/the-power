@@ -4,14 +4,14 @@
 # Demonstrates pagination for gh api
 # Demonstrates debug mode for gh tool
 
-export GH_DEBUG="api gh pr list"
+# export GH_DEBUG="api gh list"
 
 export GH_TOKEN=${GITHUB_TOKEN}
 
-gh api graphql --paginate -F owner="${org}" -f query='
-query($owner: String!) {
+gh api graphql --paginate -F owner="${org}" -F first=3 -f query='
+query($owner: String!, $first: Int!) {
   organization(login: $owner) {
-    membersWithRole(first: 100) {
+    membersWithRole(first: $first) {
       nodes {
         login
         contributionsCollection {
@@ -21,8 +21,8 @@ query($owner: String!) {
           totalPullRequestContributions
           totalPullRequestReviewContributions
         }
-      }
     }
+   }
   }
 }
 '
