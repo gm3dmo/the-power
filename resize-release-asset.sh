@@ -1,4 +1,11 @@
 
 count=1500000
 
-dd if=/dev/random of=test-data/release-asset.tar.gz bs=1024 count=${count}
+asset_file=test-data/release-asset.tar.gz
+bs=1024
+
+dd if=/dev/random of=${asset_file} bs=${bs} count=${count}
+
+
+echo Asset file is is now:
+ls -lh ${asset_file}
