@@ -4,7 +4,7 @@
 # GET /repos/{owner}/{repo}/commits
 
 
-# ./list-commits-on-repo.sh  | jq -r '.[] | [ .sha, .commit.author.date, .commit.message ] | @csv
+# ./list-commits-on-repo.sh  | jq -r '.[] | [ .sha, .commit.author.date, .commit.message ] | @csv'
 
 sha=${1:base_branch}
 
