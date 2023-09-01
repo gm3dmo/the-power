@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-a-repository-webhook
-# POST /repos/:owner/:repo/hooks
+# https://docs.github.com/en/rest/webhooks/repos?apiVersion=2022-11-28#create-a-repository-webhook
+# POST /repos/{owner}/{repo}/hooks
 
 
 if [ -z "$1" ]
@@ -48,4 +48,4 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/hooks --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/hooks" --data @${json_file}
