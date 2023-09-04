@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-a-commit-status
-# POST /repos/:owner/:repo/statuses/:sha
+# https://docs.github.com/en/enterprise-cloud@latest/rest/commits/statuses?apiVersion=2022-11-28#create-a-commit-status
+# POST POST /repos/{owner}/{repo}/statuses/{sha}
 
 # The state of the status.
 # Can be one of: error, failure, pending, success
