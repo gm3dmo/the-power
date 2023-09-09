@@ -80,7 +80,7 @@ github_api_version=${github_api_version}
 # https://docs.github.com/en/organizations
 org="${org}"
 owner="${org}"
-org_secret_name="ORGANIZATION_SECRET001"
+org_secret_name="ORGANIZATION_SECRET_001"
 org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
