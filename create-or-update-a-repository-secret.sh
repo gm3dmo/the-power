@@ -12,7 +12,7 @@ secret_name=${repo_secret_name}
 key_id=$(./get-a-repository-public-key.sh | jq -r '.key_id')
 repo_public_key=$(./get-a-repository-public-key.sh | jq -r '.key')
 
-encrypted_value=$(ruby create-a-repository-secret-helper.rb ${repo_public_key})
+encrypted_value=$(ruby create-a-repository-secret-helper.rb ${repo_public_key} ${repo_secret_value})
 
 
 jq -n \

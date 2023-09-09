@@ -92,6 +92,7 @@ repo="${repo_name}"
 default_repo_visibility="private"
 allow_auto_merge="${allow_auto_merge}"
 repo_secret_name="REPOSITORY_SECRET_001"
+repo_secret_value="repository_secret_string"
 # webhook url is also used by the organization
 webhook_url=${webhook_url}
 has_issues=true
