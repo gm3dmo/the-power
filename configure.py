@@ -244,6 +244,11 @@ chrome_profile="${chrome_profile}"
 enterprise_shr_group_name="my-enterprise-self-hosted-runners"
 
 
+### [Codespaces](https://docs.github.com/en/rest/codespaces/codespaces?apiVersion=2022-11-28)
+### [Managing secrets for your codespaces](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
+codespaces_secret_001="the-power-codespaces-secret"
+
+
 ### [Self hosted runner setup](https://docs.github.com/en/rest/actions/self-hosted-runner-groups)
 # https://docs.github.com/en/rest/actions/self-hosted-runners
 runner_version=${runner_version}
