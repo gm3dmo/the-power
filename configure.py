@@ -100,6 +100,11 @@ has_wiki=true
 has_projects=true
 has_discussions=true
 has_pages=false
+# Repository ruleset
+ruleset_name="repo_ruleset1"
+target="branch"
+enforcement="evaluate"
+bypass_mode="pull_request"
 
 
 ### [Team](https://docs.github.com/en/rest/teams)
