@@ -50,7 +50,8 @@ admin_user=${admin_user}
 admin_password=${admin_password}
 mgmt_port=${mgmt_port}
 mgmt_password=${mgmt_password}
-
+# GHES LDAP Settings
+ldap_dn="cn=Enterprise Ops,ou=teams,dc=github,dc=com"
 
 
 ### [Authorization](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
