@@ -20,3 +20,5 @@ jobs:
           name: the power workflow-simple artifact
           path: |
             dist/**/*.md
+          retention-days: 2
+
