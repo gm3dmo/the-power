@@ -104,7 +104,7 @@ has_wiki=true
 has_projects=true
 has_discussions=true
 has_pages=false
-# Repository ruleset
+#### [Repository ruleset](https://docs.github.com/en/free-pro-team@latest/rest/repos/rules?apiVersion=2022-11-28#create-a-repository-ruleset)
 ruleset_name="repo_ruleset1"
 target="branch"
 enforcement="evaluate"
