@@ -85,6 +85,9 @@ org_secret_name="ORGANIZATION_SECRET_001"
 org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
+# Org self hosted runners
+org_self_hosted_runner_group_name="org self hosted runners"
+
 
 
 ### [Repository](https://docs.github.com/en/rest/repos/repos#create-an-organization-repository)
