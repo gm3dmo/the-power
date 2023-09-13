@@ -12,9 +12,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-
 team_id=$(curl ${curl_custom_flags} --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
-
 
 json_file=tmp/create-a-repository-ruleset.json
 
@@ -22,6 +20,9 @@ jq -n \
            --arg name "${ruleset_name}" \
            --arg target "${target}" \
            --arg team_id ${team_id} \
+           --arg default_app_id ${default_app_id} \
+           --arg commit_message_pattern $commit_message_pattern \
+           --arg operator $operator \
            --arg bypass_mode "${bypass_mode}" \
            --arg enforcement "${enforcement}" \
            '{
@@ -33,6 +34,11 @@ jq -n \
                   "actor_id": $team_id | tonumber,
                   "actor_type": "Team",
 		  "bypass_mode": $bypass_mode
+                },
+                {
+                  "actor_id": $default_app_id | tonumber,
+                  "actor_type": "Integration",
+                  "bypass_mode": $bypass_mode
                 }
               ],
              "conditions": {
@@ -47,15 +53,18 @@ jq -n \
               }
             },
             "rules": [
-                      {
-                        "type": "commit_author_email_pattern",
-                        "parameters": {
-                          "operator": "contains",
-                          "pattern": "github"
-                        }
-                      }
-            ]
+              {
+                "type": "commit_message_pattern",
+                "parameters": {
+                  "name": "",
+                  "negate": false,
+                  "pattern": $commit_message_pattern,
+                  "operator": $operator 
+                }
+              }
+            ],
            }' > ${json_file}
+
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
