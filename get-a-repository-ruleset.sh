@@ -7,9 +7,9 @@
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    repo=$repo
+    ruleset_id=$(./get-all-repository-rulesets.sh | jq -r '.[-1].id')
   else
-    repo=$1
+    ruleset_id=$1
 fi
 
 curl ${curl_custom_flags} \
