@@ -3,6 +3,8 @@
 # https://cli.github.com/manual/gh_api
 # Demonstrates pagination for gh api
 
+export GH_TOKEN=${GITHUB_TOKEN}
+
 gh api graphql --paginate -F owner="${org}"  -f query='
 query($owner: String!, $endCursor: String) {
   organization(login: $owner){
