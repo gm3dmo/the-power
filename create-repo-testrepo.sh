@@ -3,23 +3,37 @@
 #
 #
 
-p=true
-json_file=tmp/repo-config.json
-rm -f ${json_file}
+
+
+case ${default_repo_visibility} in 
+   internal)
+       private=false
+   ;;
+   public)
+       private=false
+   ;;
+   private)
+       private=true
+   ;;
+esac
+
+json_file=tmp/create-repo.json
 
 jq -n \
         --arg name "${repo}" \
-        --arg pr $p \
+        --arg private $private \
+        --arg visibility ${default_repo_visibility}  \
         --arg has_issues ${has_issues} \
         --arg has_projects ${has_projects}  \
         --arg has_wiki ${has_wiki}  \
         --arg has_discussions ${has_discussions} \
         --arg has_pages ${has_pages} \
-        --arg description "This is: ${repo}, it's a private repo. You can look at the hooks: ${webhook_url} if that helps." \
+        --arg description "This is: ${repo}, it's a ${default_repo_visibility} repo. It's webhook is: ${webhook_url}" \
         --arg allow_auto_merge "${allow_auto_merge}" \
 	'{ name : $name, 
 	   description: $description, 
-	   private: $pr | test("true"), 
+	   private: $private | test("true"), 
+	   visibility: $visibility, 
 	   allow_auto_merge: $allow_auto_merge | test("true"), 
 	   has_issues: $has_issues | test("true"), 
 	   has_projects: $has_projects | test("true"), 
@@ -29,7 +43,6 @@ jq -n \
          }' > ${json_file}
 
 cat $json_file | jq -r
-
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
