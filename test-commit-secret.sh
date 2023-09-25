@@ -25,6 +25,13 @@ function github_pat () {
     echo export GITHUB_TOKEN=${gh1}${gh2} >github.token.compromised.secret.txt
 }
 
+function gh_app_installation () { 
+    gh1=ghs_
+    gh2=XJWCkil21UxGYF9ZPe4Khtf2AdKOH137s09t
+    echo "Commit: GitHub App Installation Access Token"
+    echo export GITHUB_TOKEN=${gh1}${gh2} >github.app-installation-access-token.compromised.secret.txt
+}
+
 
 function google_api_key () {
     google_api1="AIzaSyDxJB-"
@@ -76,6 +83,7 @@ case ${keyname} in
     ;;
  all)
     github_pat
+    gh_app_installation
     google_api_key 
     azure_storage
     npm_granular 
@@ -83,7 +91,7 @@ case ${keyname} in
     ;;
  *)
    echo 
-   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular ]"
+   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation ]"
    echo 
    ;;
 esac
