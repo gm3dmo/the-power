@@ -32,6 +32,33 @@ function gh_app_installation () {
     echo export GITHUB_TOKEN=${gh1}${gh2} >github.app-installation-access-token.compromised.secret.txt
 }
 
+function aws_access_key_id () { 
+    gh1=AKIARAR
+    gh2=N6AUAF3VHDJQJ
+    echo "Commit: AWS Access key ID"
+    echo export AWS_ACCESS_KEY_ID=${gh1}${gh2} >aws-access-key-id.compromised.secret.txt
+}
+
+function aws_secret_access_key () { 
+  
+    gh1=YgTGNtWY0W++
+    gh2=ZoDq9WfnreJ2WWscxwUksP3OlkS2
+    echo "Commit: AWS Secret Access Key"
+    echo export AWS_SECRET_ACCESS_KEY=${gh1}${gh2} >aws-secret-access-key.compromised.secret.txt
+}
+
+function aws_secret_access_key_id_combo () { 
+    # This will trigger GitHub push protection
+    
+    gh1=YgTGNtWY0W++
+    gh2=ZoDq8WfnreJ2WWscxwUksP3OlkS2
+    echo "Commit: AWS Secret Access key"
+    gh3=AKIARAR
+    gh4=N6AUAF3VHDJQJ
+    echo "Commit: AWS Access key ID"
+    echo export AWS_ACCESS_KEY=${gh1}${gh2} >aws-secret-access-key-id-combo.compromised.secret.txt
+    echo export AWS_SECRET_ACCESS_KEY=${gh3}${gh4} >>aws-secret-access-key-id-combo.compromised.secret.txt
+}
 
 function google_api_key () {
     google_api1="AIzaSyDxJB-"
@@ -82,16 +109,19 @@ case ${keyname} in
     npm_classic
     ;;
  all)
-    github_pat
-    gh_app_installation
-    google_api_key 
-    azure_storage
-    npm_granular 
-    npm_classic
+    #github_pat
+    #gh_app_installation
+    #google_api_key
+    #azure_storage
+    #npm_granular
+    #npm_classic
+    #aws_access_key_id
+    #aws_secret_access_key
+    aws_secret_access_key_id_combo
     ;;
  *)
    echo 
-   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation ]"
+   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo ]"
    echo 
    ;;
 esac
