@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
+# https://docs.github.com/en/enterprise-cloud@latest/rest/releases/assets?apiVersion=2022-11-28#update-a-release-asset
 # POST /repos/{owner}/{repo}/releases/{release_id}/assets
 #
 # Credit to:
@@ -28,7 +28,7 @@ upload_asset_filename_b=release-asset-${timestamp}.gz
 
 
 
-curl -v \
+curl \
      --progress-meter \
       -o tmp/upload.txt \
       -H "Authorization: Bearer ${GITHUB_TOKEN}" \
