@@ -7,6 +7,7 @@
 read -r -d '' graphql_script <<- EOF
 {
   organization(login: "$org") {
+        id
         name
         description
         url
