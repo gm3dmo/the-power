@@ -6,7 +6,7 @@
 * A `jq` command. `brew install jq` on your client.
 * A Python >3.6 interpreter on your Mac.
 * The [JWT Rubygem](https://rubygems.org/gems/jwt). `sudo gem install jwt` - Required for [GitHub App authentication](https://github.com/gm3dmo/the-power/blob/main/docs/setting-up-a-gh-app.md#using-a-github-app-with-the-power).
-* [Create your token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). In GitHub Enterprise (give it all the scopes. Be careful and give the token an expiry date if running on GitHub.com. Strongly recommend a token with short expiry time.
+* [Create your token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). In GitHub Enterprise (give it all the scopes. Be careful and give the token an expiry date if running on GitHub.com. Strongly recommend a token with short expiry time. If creating a lot of tokens, then this tip for [selecting all checkboxes on](https://gist.github.com/gm3dmo/e085294a622c1c72eec0e8b48d72b092) may be useful.
 
 ### Setup
 
