@@ -115,8 +115,8 @@ bypass_mode="always"
 
 ### [Team](https://docs.github.com/en/rest/teams)
 # https://docs.github.com/en/organizations/organizing-members-into-teams/about-teams
-team="Justice League"
-team_slug="justice-league"
+team="${team_name}"
+team_slug="${team_slug}"
 team_id=
 team_members="${team_members}"
 team_admin="${team_admin}"
@@ -365,6 +365,8 @@ pool_size=10
 
     assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 
+    if args.team_name != "":
+        args.team_slug = thepower.slugify(args.team_name)
 
     if args.org != "":
         logger.info(f"Org = {args.org}")
@@ -438,6 +440,8 @@ pool_size=10
         "admin_password": args.admin_password,
         "mgmt_password": args.mgmt_password,
         "mgmt_port": args.mgmt_port,
+        "team_name": args.team_name,
+        "team_slug": args.team_slug,
         "team_members": args.team_members,
         "team_admin": args.team_admin,
         "org_owner": args.org_owner,
@@ -618,6 +622,13 @@ if __name__ == "__main__":
         dest="primer",
         default="list-user.sh",
         help="The name of a primer script which will be executed when configuration is complete",
+    )
+    parser.add_argument(
+        "--team-name",
+        action="store",
+        dest="team_name",
+        default="Justice League",
+        help="The name of a team to create.",
     )
     parser.add_argument(
         "--private-pem-file",

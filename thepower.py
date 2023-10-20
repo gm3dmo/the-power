@@ -21,6 +21,14 @@ from urllib import request
 import re
 
 
+def slugify(s):
+  s = s.lower().strip()
+  s = re.sub(r'[^\w\s-]', '', s)
+  s = re.sub(r'[\s_-]+', '-', s)
+  s = re.sub(r'^-+|-+$', '', s)
+  return s
+
+
 def ghe2json(text):
     """Converts the text output from gheboot to json"""
     lexer = shlex.shlex(text)
