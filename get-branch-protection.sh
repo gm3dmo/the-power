@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/branches#get-branch-protection
+# https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28#get-branch-protection
 # GET /repos/{owner}/{repo}/branches/{branch}/protection
 
 branch=${base_branch}
