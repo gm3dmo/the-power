@@ -3,6 +3,8 @@
 # https://docs.github.com/en/rest/webhooks/repos?apiVersion=2022-11-28#create-a-repository-webhook
 # POST /repos/{owner}/{repo}/hooks
 
+# Events: https://docs.github.com/en/webhooks/webhook-events-and-payloads
+
 
 if [ -z "$1" ]
   then
@@ -35,6 +37,7 @@ jq -n \
              "dependabot_alert",
              "deploy_key",
              "deployment",
+             "deployment_status",
              "discussion",
              "discussion_comment",
              "fork",
@@ -44,19 +47,34 @@ jq -n \
              "label",
              "project",
              "merge_group",
+             "member",
              "meta",
              "milestone",
+             "package",
+             "page_build",
+             "project",
+             "project_card",
+             "project_column",
+             "public",
              "push",
              "pull_request",
              "pull_request_review",
              "pull_request_review_comment",
+             "pull_request_review_thread",
+             "registry_package",
              "release",
+             "repository",
+             "repository_advisory",
+             "repository_import",
              "repository_ruleset",
              "repository_vulnerability_alert",
              "secret_scanning_alert",
              "secret_scanning_alert_location",
+             "security_and_analysis",
              "star",
              "status",
+             "team_add",
+             "watch",
              "workflow_job",
              "workflow_run"
 
