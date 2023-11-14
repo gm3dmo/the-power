@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#get-a-repository
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#get-a-repository
 # GET /repos/{owner}/{repo}
 
 
@@ -26,6 +26,6 @@ else
     curl ${curl_custom_flags} \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/repos/${owner}/${repo}
+            "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}"
 fi
 
