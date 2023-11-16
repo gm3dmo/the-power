@@ -30,6 +30,8 @@ We recommend immediately fixing this security vulnerability by implementing prop
 - [ ] Deploy the fixes to the production environment.
 - [ ] Monitor the system for any signs of unauthorized access or other security incidents following the fix deployment.
 - [ ] Consider conducting a security audit to identify and address any other security vulnerabilities in the system.
+- [ ] #1
+- [ ] #2
 
 
 
