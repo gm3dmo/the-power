@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-a-release
+# https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#create-a-release
 # POST /repos/:owner/:repo/releases
 
 json_file=tmp/create-release.json
