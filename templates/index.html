@@ -14,10 +14,15 @@
         <button type="submit">Execute</button>
     </form>
     <br>
-    {% if output %}
+    {% if colorized_output %}
     <div class="output">
-    <pre id="output">{{ colorized_output|safe }}</pre>
-</div>
+     <pre id="colorized_output">{{ colorized_output|safe }}</pre>
+    </div>
+    {% endif %}
+    {% if colorized_error %}
+    <div class="output">
+     <pre id="colorized_error">{{ colorized_error |safe }}</pre>
+    </div>
     {% endif %}
 </body>
 </html>
