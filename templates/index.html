@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Execute Shell Scripts</title>
+    <title>The Power Web</title>
     <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link rel="stylesheet" type="text/css" href="static/pygments.css">
 </head>
 <body>
-    <h1>Execute Shell Scripts</h1>
+    <h1>Execute The Power Scripts</h1>
     <form method="POST" action="/">
         {{ form.csrf_token }}
         <label for="{{ form.script.id }}">{{ form.script.label }}</label>
         {{ form.script }}
         <button type="submit">Execute</button>
     </form>
+    <br>
     {% if output %}
     <div class="output">
-    <pre>{{ output }}</pre>
+    <pre id="output">{{ colorized_output|safe }}</pre>
 </div>
     {% endif %}
 </body>

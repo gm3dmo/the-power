@@ -3,6 +3,10 @@ from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import SelectField
 
+from pygments import highlight
+from pygments.lexers import JsonLexer
+from pygments.formatters import HtmlFormatter
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 
@@ -36,8 +40,9 @@ def index():
         script_filename = form.script.data
         # Execute the script and capture the output
         output = os.popen(f"sh {SCRIPTS_DIR}/{script_filename}").read()
+        colorized_output = highlight(output, JsonLexer(), HtmlFormatter())
 
-    return render_template('index.html', form=form, output=output)
+    return render_template('index.html', form=form, output=output, colorized_output=colorized_output)
 
 if __name__ == '__main__':
     app.run(debug=True)
