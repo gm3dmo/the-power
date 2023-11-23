@@ -1,8 +1,12 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#upload-a-release-asset
+# https://docs.github.com/en/enterprise-cloud@latest/rest/releases/assets?apiVersion=2022-11-28#update-a-release-asset
 # POST /repos/{owner}/{repo}/releases/{release_id}/assets
 #
+# Credit to:
+# https://stackoverflow.com/questions/9973056/curl-how-to-display-progress-information-while-uploading
+# and:
+# https://stackoverflow.com/questions/51222398/using-curl-data-binary-option-out-of-memory
 #
 # Caveat:
 # The value:
@@ -22,9 +26,13 @@ timestamp=$(date +%s)
 upload_asset_filename=test-data/release-asset.gz
 upload_asset_filename_b=release-asset-${timestamp}.gz
 
-curl  -v \
+
+
+curl \
+     --progress-meter \
+      -o tmp/upload.txt \
       -H "Authorization: Bearer ${GITHUB_TOKEN}" \
       -H "Accept: application/json"  \
       -H "Content-Type: binary" \
-         "${clean_upload_url}?name=${upload_asset_filename_b}" --data-binary @${upload_asset_filename}
+         "${clean_upload_url}?name=${upload_asset_filename_b}" --upload-file ${upload_asset_filename}
 

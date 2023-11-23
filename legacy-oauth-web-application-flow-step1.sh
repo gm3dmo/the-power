@@ -9,11 +9,14 @@
 
 # This is a gnarly thing to do but saves rewriting how the config file
 # gets populated for this one script that uses github.com for the device flow.
+#
 if [ $hostname == "api.github.com" ];
 then
   hostname="github.com"
 fi
 
 client_id=${x_client_id}
+scope=${oauth_token_scope}
+url_encoded_scope=$(printf %s "${scope}" | jq -sRr @uri)
 
-open -n -a "Google Chrome" --args  "http://${hostname}/login/oauth/authorize?client_id=${client_id}"
+open -n -a "Google Chrome" --args --profile-directory="${chrome_profile}"  "http://${hostname}/login/oauth/authorize?client_id=${client_id}&scope=${url_encoded_scope}"

@@ -12,7 +12,7 @@ The access control software should only allow access to authorized users who hav
 
 ### Actual Behavior:
 
-The system allows dogs (or any other animal with paws) to access the database without any form of authentication or authorization.
+The system allows dogs (or any other animal with 🐾) to access the database without any form of authentication or authorization.
 
 ### Impact:
 
@@ -30,4 +30,40 @@ We recommend immediately fixing this security vulnerability by implementing prop
 - [ ] Deploy the fixes to the production environment.
 - [ ] Monitor the system for any signs of unauthorized access or other security incidents following the fix deployment.
 - [ ] Consider conducting a security audit to identify and address any other security vulnerabilities in the system.
+- [ ] #1
+- [ ] #2
 
+
+
+### The Obligatory Diagram
+
+```mermaid
+graph TD
+%% Colors %%
+classDef red fill:#ff0018,stroke:#000,stroke-width:2px,color:#fff
+classDef orange fill:#ffA52c,stroke:#000,stroke-width:2px,color:#fff
+classDef yellow fill:#FFFF41,stroke:#000,stroke-width:2px,color:#fff
+classDef green fill:#008018,stroke:#000,stroke-width:2px,color:#fff
+classDef blue fill:#0000f9,stroke:#000,stroke-width:2px,color:#fff
+classDef purple fill:#86007d,stroke:#000,stroke-width:2px,color:#fff
+
+A[Rectangle 1]:::red --> B[Rectangle 2]:::orange
+B --> C[Rectangle 3]:::yellow
+C --> D[Rectangle 4]:::green
+D --> E[Rectangle 5]:::blue
+E --> F[Rectangle 6]:::purple
+
+```
+
+That's it.That's the diagram.
+
+
+
+> [!NOTE]
+> Highlights information that users should take into account, even when skimming.
+
+> [!IMPORTANT]
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]
+> Critical content demanding immediate user attention due to potential risks.

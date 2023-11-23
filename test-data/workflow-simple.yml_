@@ -1,5 +1,6 @@
 name: the-power-workflow-simple
 on:
+  workflow_dispatch:
   workflow_call:
   repository_dispatch:
     types: [custom_event_type]
@@ -10,4 +11,14 @@ jobs:
       - name: MyCommands
         run: |
           echo Hello
-          echo World
+          mkdir -p dist/hello
+          echo "### Hello World" > dist/hello/hello-world.md
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      - name: Archive job artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: the power workflow-simple artifact
+          path: |
+            dist/**/*.md
+          retention-days: 2
+

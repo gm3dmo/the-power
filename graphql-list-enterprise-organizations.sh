@@ -2,6 +2,7 @@
 
 # https://docs.github.com/en/graphql/reference/objects#enterpriseorganizationmembershipconnection
 # 
+# API Gap: This feature is not currently in the REST API for Enterprise administration https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28
 
 
 read -r -d '' graphql_script <<- EOF

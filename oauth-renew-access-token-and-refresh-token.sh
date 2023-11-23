@@ -3,9 +3,9 @@
 # https://docs.github.com/en/developers/apps/building-github-apps/refreshing-user-to-server-access-tokens
 # POST https://github.com/login/oauth/access_token
 
-json_file=/tmp/renew-access-token-and-refresh-token.json
-step3_response_file=/tmp/step3-response.json
-renew_response_file=/tmp/renew-response.json
+json_file=tmp/renew-access-token-and-refresh-token.json
+step3_response_file=tmp/step3-response.json
+renew_response_file=tmp/renew-response.json
 
 refresh_token=$(cat ${step3_response_file} | jq -r '.refresh_token')
 grant_type="refresh_token"

@@ -12,15 +12,16 @@ then
 fi
 
 # Step 2.
-# code is the code gathered in the step 1 script. It should have opened in a chrome browser
+# "code" is the code gathered in the step 1 script. It should have opened in a chrome browser
 # with a url like: https://example.com/callback?code=7fb98c2417446ce64c2d
-# you need to pass 7fb98c2417446ce64c2d to this script.
+# you need to pass "7fb98c2417446ce64c2d" to this script.
 
 code=$1
 
 client_id=${x_client_id}
+client_secret=${x_client_secret}
 
-curl -L \
+curl ${curl_custom_flags} -L \
      -H "Accept: application/vnd.github.v3+json" \
      -X POST \
-        "http://${hostname}/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}"
+        "http://${hostname}/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}" | jq -r

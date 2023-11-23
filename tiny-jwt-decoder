@@ -1,6 +1,11 @@
 . .gh-api-examples.conf
 
 
+# See this link:
+# https://auth0.com/docs/secure/tokens/json-web-tokens/validate-json-web-tokens
+# https://datatracker.ietf.org/doc/html/rfc7519#section-7.2
+
+
 # If the script is passed an argument $1 use that as the JWT
 if [ -z "$1" ]
   then

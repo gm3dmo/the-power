@@ -24,9 +24,9 @@ The Power can create the following on a blank appliance or organization in <=30 
 * A private [repository](https://docs.github.com/en/repositories) named *testrepo* with a [branch](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-and-deleting-branches-within-your-repository) called *new_branch*,
 * [Branch protection](https://docs.github.com/en/github/administering-a-repository/about-protected-branches) rules on branch `main`.
 * [*CODEOWNERS*](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) file configured for the *README.md* and `.gitattributes` files.
-* An [Issue](https://github.com/features/issues) with the [label](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels) `bug`
+* An [Issue](https://github.com/features/issues) with the [label](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels) `bug`.
 * A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) with a code owner requested for review. The pull request contains 2 commits against 2 files and activates the tree view.
-* A manifest file for a package manager file with a vulnerability to trigger [Dependabot](https://docs.github.com/en/code-security/dependabot)
+* A manifest file for a package manager file with a vulnerability to trigger [Dependabot](https://docs.github.com/en/code-security/dependabot).
 * A [webhook](https://docs.github.com/en/developers/webhooks-and-events/about-webhooks) on *testrepo* that outputs to it's own [smee.io](https://smee.io) url.
 * A [Release](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository).
 * [GitHub Pages](https://docs.github.com/en/pages) configured for *testrepo*.

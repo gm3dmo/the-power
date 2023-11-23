@@ -30,8 +30,6 @@ printf "${normal}"
 ./create-commit-readme.sh | jq -r ".content.html_url"
  printf "${highlight} - Creating CODEOWNERS: ${normal}"
 ./create-commit-codeowners.sh| jq -r ".content.html_url"
- printf "${highlight} - Creating requirements.txt: ${normal}"
-./create-commit-python-pip.sh| jq -r ".content.html_url"
 sleep 2
  printf "${highlight} - Creating new branch: ${normal}"
 ./create-branch-newbranch.sh | jq -r '.url'

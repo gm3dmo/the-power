@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/orgs#list-organization-members
-# GET /orgs/:org/members
+# https://docs.github.com/en/free-pro-team@latest/rest/orgs/members?apiVersion=2022-11-28#list-organization-members
+# GET /orgs/{org}/members
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]

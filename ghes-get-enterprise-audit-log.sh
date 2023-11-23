@@ -16,8 +16,7 @@
 # through a field in license file and cannot be changed by end users of
 # the appliance.
 
-set -x
-curl -v ${curl_custom_flags} \
-     -H "Accept: application/vnd.github.v3+json" \
-     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/enterprises/${enterprise}/audit-log?phrase=created:>2022-10-01..2022-10-14&page=1&per_page=1"
+curl ${curl_custom_flags} \
+    -H "Accept: application/vnd.github.v3+json" \
+    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+       "${GITHUB_API_BASE_URL}/enterprises/${enterprise}/audit-log?phrase=created:>2022-10-01..2022-10-14&page=1&per_page=1"

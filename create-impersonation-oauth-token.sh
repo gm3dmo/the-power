@@ -15,5 +15,5 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      ${GITHUB_API_BASE_URL}/admin/users/${user}/authorizations \
-     -d '{"scopes":["repo","user","gist"]}'
+     -d '{"scopes":["repo","user","gist", "admin:public_key", "write:public_key"]}'
 

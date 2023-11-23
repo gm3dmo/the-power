@@ -12,7 +12,7 @@
 
 6. Now we will set it up to work with ___The Power___
 
-7. Go to your cloned repo where you've [set up the power](setup.md)
+7. Go to your cloned repo where you've [set up the power](docs/setup.md)
 
 8. `vi .gh-api-examples.conf` and change the following things:
 	1. Make sure the org is the correct one under `### [Organization](https://docs.github.com/en/rest/orgs)`
@@ -39,3 +39,7 @@
 When updating app permissions, remember to approve them! To do that go to this page `https://github.com/organizations/<YOURORG>/settings/installations/<installationID>` and review request -> Accept new permissions
 
 Otherwise the permission change will be for naught as they will not stick. The UI can be a little quirky.
+
+## See Also
+- From @sn2b [SO YOU WANT TO USE A GITHUB APP ON YOUR ORG](https://gist.github.com/sn2b/acd544bdbe6e4fdf0dc3418b5df188a9)
+- From @loujr [GitHub App Installation Token and Authenticating as a GitHub App](https://github.com/orgs/community/discussions/48186)

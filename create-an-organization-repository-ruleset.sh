@@ -34,46 +34,73 @@ enforcement=evaluate
 # ruleset.
 
 
+team_id=$(curl ${curl_custom_flags} --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
+
+json_file=tmp/create-a-repository-ruleset.json
+
 jq -n \
            --arg name "${ruleset_name}" \
-           --arg target "${target}" \
+           --arg target ${target} \
+           --arg team_id ${team_id} \
+           --arg default_app_id ${default_app_id} \
+           --arg commit_message_pattern $commit_message_pattern \
+           --arg operator $operator \
+           --arg bypass_mode "${bypass_mode}" \
            --arg enforcement "${enforcement}" \
-           '{
-             name : $name,
-             target : $target,
-             enforcement: $enforcement,
-               "bypass_actors": [
-                {
-                  "actor_id": 234,
-                  "actor_type": "Team"
-                }
-              ],
-             "conditions": {
-              "ref_name": {
-                "include": [
-                  "refs/heads/main",
-                  "refs/heads/master"
-                ],
-                "exclude": [
-                  "refs/heads/dev*"
-                ]
-              }
-            },
-            "rules": [
-                      {
-                        "type": "commit_author_email_pattern",
-                        "parameters": {
-                          "operator": "contains",
-                          "pattern": "github"
-                        }
-                      }
-            ]
-           }' > ${json_file}
-
+           --arg included_repo "${repo}" \
+           '
+{
+  "name": $name,
+  "target": $target,
+  "enforcement": $enforcement,
+  "bypass_actors": [
+    {
+      "actor_id": $team_id | tonumber,
+      "actor_type": "Team",
+      "bypass_mode": $bypass_mode
+    },
+    {
+      "actor_id": $default_app_id | tonumber,
+      "actor_type": "Integration",
+      "bypass_mode": $bypass_mode
+    }
+  ],
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "refs/heads/main",
+        "refs/heads/master"
+      ],
+      "exclude": [
+        "refs/heads/dev*"
+      ]
+    },
+    "repository_name": {
+      "include": [
+        $included_repo
+      ],
+      "exclude": [
+        "excluded_repo"
+      ],
+      "protected": true
+    }
+  },
+  "rules": [
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": $operator,
+        "pattern": $commit_message_pattern
+      }
+    }
+  ]
+}
+' > ${json_file}
 
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/orgs/${org}/rulesets"  --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${owner}/rulesets"  --data @${json_file}
+

@@ -1,0 +1,21 @@
+name: the-power-workflow-upload-artifact
+on:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  the-power-job1:
+    runs-on: the-power
+    steps:
+      - name: MyCommands
+        run: |
+          echo Hello
+          mkdir -p test1/123
+          touch test1/123/file1.txt
+          ls -lr test1/123
+      - name: upload
+        uses: actions/upload-artifact@v3
+        with:
+            name: my-artifact
+            path: |
+              test1/**/*.txt

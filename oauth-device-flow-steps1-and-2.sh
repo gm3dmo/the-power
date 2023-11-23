@@ -4,9 +4,9 @@
 # POST https://github.com/login/device/code
 
 json_file=tmp/oauth-device-flow-step1.json
-step1_response_file=/tmp/step1-response.json
+step1_response_file=tmp/step1-response.json
 
-scope="user"
+scope="read:enterprise"
 
 jq -n \
                 --arg client_id "${client_id}" \
@@ -24,7 +24,7 @@ echo ========================================================================
 
 # This is a gnarly thing to do but saves rewriting how the config file
 # gets populated for this one script that uses github.com for the device flow.
-if [ $hostname == "api.github.com" ];
+if [ $hostname = "api.github.com" ];
 then
   hostname="github.com"
 fi
@@ -77,7 +77,7 @@ elif [ "${preferred_browser}" = "edge" ]; then
     browser="Microsoft Edge"
 fi
 
-incognito=true
+incognito=false
 
 # Chrome (Mac)
 if [ "${browser}" = "Google Chrome" ];
@@ -85,7 +85,7 @@ then
     if [ "${incognito}" == "true" ]; then
         open -n -a "$browser" --args  -incognito "http://${hostname}/login/device"
     else
-        open -n -a "$browser" --args  "http://${hostname}/login/device"
+        open -n -a "$browser" --args --profile-directory="$chrome_profile" "http://${hostname}/login/device"
     fi
 fi
 

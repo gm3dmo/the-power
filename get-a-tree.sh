@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/git#get-a-tree
+# https://docs.github.com/en/free-pro-team@latest/rest/git/trees?apiVersion=2022-11-28#get-a-tree
 # GET /repos/{owner}/{repo}/git/trees/{tree_sha}
 
 if [ -z "$1" ]

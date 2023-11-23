@@ -1,5 +1,9 @@
 .  ./.gh-api-examples.conf
 
+# https://docs.github.com/en/enterprise-server/rest/orgs/members?apiVersion=2022-11-28#set-organization-membership-for-a-user
+# PUT /orgs/{org}/memberships/{username}
+
+
 for person in ${org_owner}
 
 do
