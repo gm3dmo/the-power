@@ -9,10 +9,14 @@ from wtforms import SelectField
 from pygments import highlight
 from pygments.lexers import HttpLexer
 from pygments.lexers import JsonLexer
+from pygments.lexers import BashLexer
 from pygments.lexers import get_lexer_by_name
 
 from pygments.formatters import HtmlFormatter
+
+from pygments.styles import get_style_by_name
 from pygments.formatters import HtmlFormatter
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -44,11 +48,15 @@ def index():
     colorized_output = None
     headers = None
     colorized_error = None
+    colorized_script = None
 
     if request.method == 'POST' and form.validate_on_submit():
         # Get the selected script filename from the form
         script_filename = form.script.data
         process = subprocess.Popen(["sh", f"{SCRIPTS_DIR}/{script_filename}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # read the contents of the script file
+
+
         output1, error = process.communicate()
         output1 = output1.decode('utf-8')  # decode from bytes to string
         error = error.decode('utf-8')  # decode from bytes to string
@@ -61,9 +69,15 @@ def index():
         colorized_output = highlight(output, JsonLexer(), HtmlFormatter())
         lexer = get_lexer_by_name("http", stripall=True)
         colorized_error = highlight(error, lexer, HtmlFormatter())
+
+        bashlexer = get_lexer_by_name("bash", stripall=True)
+        with open(f'{SCRIPTS_DIR}/{script_filename}', 'r') as f:
+            script_contents = f.read()
+            # pass the script contents to the shell highlighter of pygments
+            colorized_script = highlight(script_contents, bashlexer, HtmlFormatter(style='bw'))
         
 
-    return render_template('index.html', form=form, colorized_output=colorized_output, colorized_error=colorized_error)
+    return render_template('index.html', form=form, colorized_output=colorized_output, colorized_error=colorized_error, colorized_script=colorized_script)
 
 if __name__ == '__main__':
     app.run(debug=True)

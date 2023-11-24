@@ -14,13 +14,21 @@
         <button type="submit">Execute</button>
     </form>
     <br>
+    {% if colorized_script %}
+    <div class="output">
+     <h3>Script content</h3>
+     <pre id="colorized_script">{{ colorized_script|safe }}</pre>
+    </div>
+    {% endif %}
     {% if colorized_output %}
     <div class="output">
+     <h3>Output</h3>
      <pre id="colorized_output">{{ colorized_output|safe }}</pre>
     </div>
     {% endif %}
     {% if colorized_error %}
     <div class="output">
+     <h3>Request Headers</h3>
      <pre id="colorized_error">{{ colorized_error |safe }}</pre>
     </div>
     {% endif %}
