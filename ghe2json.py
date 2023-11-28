@@ -18,6 +18,77 @@ import subprocess
 from datetime import datetime
 import re
 import thepower
+import json
+
+
+def generate_template(environment):
+    e = json.loads(environment)
+    values = {}
+    values['hostname'] =  e['hostname']
+    values['password_recovery'] =  e['password_recovery']
+    print(values)
+    t = string.Template("""H=$hostname
+
+U=admin
+
+I=$U@$H
+
+export U H I
+
+
+function ch() {
+# Start chrome with one the profiles you can list below:
+# ls -l  ~/Library/Application\ Support/Google/Chrome/
+# You will need to work out which profile is wich person
+open -n -a "Google Chrome" --args --profile-directory="Profile 19" "http://$H"
+}
+
+function chrepo() {
+# Start chrome with one the profiles you can list below:
+# ls -l  ~/Library/Application\ Support/Google/Chrome/
+# You will need to work out which profile is wich person
+. ./.gh-api-examples.conf
+open -n -a "Google Chrome" --args --profile-directory="Profile 19" "http://$H/$org/$repo"
+}
+
+function chmona() {
+# In this on my mona user has a Profile 20:
+open -n -a "Google Chrome" --args --profile-directory="Profile 20" "http://$H"
+}
+
+function ffx() {
+open -a "Firefox"  "http://$H"
+}
+
+function edg() {
+open -a "Microsoft Edge"  "http://$H"
+}
+
+function ve() {
+    cat .ghe
+}
+
+function pa() {
+  # This runs the ssh command on line 7 of the ghe output
+  # to fetch the password from the ghe server.
+  $password_recovery
+}
+
+function st() {
+    # SSH onto the ghe server
+    >&2 echo ssh to: $I
+    ssh -p122 $I
+}
+
+
+export PATH="/usr/local/opt/curl/bin:$PATH"
+
+export PS1="$H \[\e[33m\]:\W\[\e[m\]  $ \"""")
+
+    return t.safe_substitute(values)
+
+
+
 
 
 def main(args):
@@ -34,6 +105,12 @@ def main(args):
         environment = (thepower.ghe2json(text))
         with open(args.environment_file, "w") as f:
             f.write(environment)
+
+
+        t = generate_template(environment)
+        with open('shell-profile', 'w') as f:
+           f.write(t)
+
 
 
 if __name__ == "__main__":

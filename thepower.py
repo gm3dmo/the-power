@@ -18,6 +18,7 @@ import configparser
 import shlex
 from pathlib import Path
 from urllib import request
+from urllib.parse import urlparse
 import re
 
 
@@ -31,67 +32,72 @@ def slugify(s):
 
 def ghe2json(text):
     """Converts the text output from gheboot to json"""
+
     lexer = shlex.shlex(text)
-    lexer.wordchars += ".-"
-    data = {}
-    for token in lexer:
-        if token == "GHE":
-            # Extract the software version
-            data["ghe_version"] = lexer.get_token()
-            data["software_name"] = "GitHub Enterprise Server"
-        elif token == "Azure":
-            data["platform"] = token
-            # Extract the VM type and region
-            data["vm_type"] = lexer.get_token()
-            [lexer.get_token() for _ in range(2)]
-            data["region"] = lexer.get_token()
-        elif token == "AWS":
-            # Extract the VM type and region
-            data["platform"] = token
-            data["vm_type"] = lexer.get_token()
-            [lexer.get_token() for _ in range(3)]
-            data["region"] = lexer.get_token()
-        elif token == "http":
-            # Extract the HTTP URL
-            l = [lexer.get_token() for _ in range(4)]
-            s = "".join(l)
-            data["access_urls"] = {"http": f"http{s}"}
-            data["access_urls"]["hostname"] = l[3]
-        elif token == "ssh":
-            # Extract the SSH
-            # ssh -p122 admin@gm3dmo-1682111193.gh-quality.net -- cat /data/user/common/
-            port = lexer.get_token()
-            user = lexer.get_token()
-            lexer.get_token()
-            host = lexer.get_token()
-            l = [lexer.get_token() for _ in range(3)]
-            s = "".join(l)
-            print(s)
-            data["access_urls"]["ssh"] = f"""{token} {port} {user}@{host}"""
-        elif token == "IP":
-            # Extract the IP address
-            [lexer.get_token() for _ in range(2)]
-            data["ip_address"] = lexer.get_token()
-        elif token == "ssh":
-            # Extract the password command
-            data[
-                "management_console_password_command"
-            ] = f"{token} {lexer.get_token()} -- cat {lexer.get_token()}"
-        elif token == "Server":
-            # Server will automatically be terminated on 2023-04-23 21:23:51 UTC
-            # Extract the termination date
-            [lexer.get_token() for _ in range(5)]
-            termination_date = lexer.get_token()
-            l = [lexer.get_token() for _ in range(5)]
-            termination_time = "".join(l)
-            termination_tz = lexer.get_token()
-            data[
-                "termination_date"
-            ] = f"""{termination_date}T{termination_time} {termination_tz}"""
-        elif token.startswith("ghp_"):
-            # Extract the token
-            data["token"] = token
-    return json.dumps(data, indent=2)
+    lexer.whitespace_split = True
+    lexer.whitespace = ' \t\n\r\f\v'
+    tokens = list(lexer)
+    
+    # Find the index of "terminated" in the token list
+    terminated_index = tokens.index("terminated")
+    
+    # Find the index of "GHE" or "GHES" in the token list
+    try:
+        ghe_index = tokens.index("GHE")
+    except ValueError:
+        ghe_index = tokens.index("GHES")
+    
+    # The version number should be the next token
+    version = tokens[ghe_index + 1]
+    
+    # Find the index of the last occurrence of "ssh" in the token list
+    ssh_index = len(tokens) - 1 - tokens[::-1].index("ssh")
+    
+    # If the next token after "ssh" is "-p122", extract the next six tokens
+    if tokens[ssh_index+1] == "-p122":
+        extracted_tokens = tokens[ssh_index+2:ssh_index+6]
+        extracted_tokens.insert(0, tokens[ssh_index])
+        extracted_tokens.insert(1, tokens[ssh_index+1])
+        et = " ".join(extracted_tokens)
+    
+    td = ''
+    
+    termination_date = []
+    # If the next token after "terminated" is "on", get the next token
+    if tokens[terminated_index+1] == "on":
+        if not tokens[terminated_index+2].endswith("Z"):
+            next_three_tokens = tokens[terminated_index+2:terminated_index+5]
+            termination_date.extend(next_three_tokens)
+        else:
+            termination_date.append(tokens[terminated_index+2])
+    
+    td = ' '.join(termination_date)
+    
+    ip_address = "unknown"
+    ip_index= tokens.index("IP")
+    
+    if tokens[ip_index+2] == "is":
+        if tokens[ip_index+3]:
+            ip = tokens[ip_index+3]
+            ip_address = ip 
+    
+    # hostname
+    http_token = next((token for token in tokens if token.startswith("http://")), None)
+    parsed_url = urlparse(http_token)
+    hostname = (parsed_url.hostname)
+    
+    print(f"""ghes_version: {version}""")
+    print(f"""termination_date: {td}""")
+    print(f"""ip_address: {ip_address}""")
+    print(f"""hostname: {hostname}""")
+    environment = {}
+    environment['hostname'] = hostname
+    environment['password_recovery'] = et
+    environment['ip_address'] = ip_address
+    environment['ghes_version'] = version
+    environment['termination_date'] = td
+
+    return json.dumps(environment)
 
 
 def token_validator(token: string):
