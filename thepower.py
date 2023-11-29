@@ -60,7 +60,7 @@ def ghe2json(text):
         extracted_tokens.insert(1, tokens[ssh_index+1])
         et = " ".join(extracted_tokens)
     
-    td = ''
+    td = 'unknown'
     
     termination_date = []
     # If the next token after "terminated" is "on", get the next token
@@ -85,6 +85,12 @@ def ghe2json(text):
     http_token = next((token for token in tokens if token.startswith("http://")), None)
     parsed_url = urlparse(http_token)
     hostname = (parsed_url.hostname)
+
+
+    # Personal Access Token (PAT)
+    pat = 'unknown'
+    pat = next((token for token in tokens if token.startswith("ghp_")), None)
+    
     
     print(f"""ghes_version: {version}""")
     print(f"""termination_date: {td}""")
@@ -96,6 +102,7 @@ def ghe2json(text):
     environment['ip_address'] = ip_address
     environment['ghes_version'] = version
     environment['termination_date'] = td
+    environment['pat'] = pat
 
     return json.dumps(environment)
 

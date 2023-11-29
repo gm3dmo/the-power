@@ -93,7 +93,7 @@ export PS1="$H \[\e[33m\]:\W\[\e[m\]  $ \"""")
 
 def main(args):
     if args.ghe_file == False:
-        print(f"""Reading ghe output from stdin. Please paste below:\n""")
+        print(f"""Reading ghe output from stdin. Please paste below the output from gheboot informing you that the appliance is ready (optionally also paset in a token for an admin user with all scopes set.:\n""")
         lines = []
         while True:
             line = input()
