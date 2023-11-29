@@ -102,7 +102,7 @@ def ghe2json(text):
     environment['ip_address'] = ip_address
     environment['ghes_version'] = version
     environment['termination_date'] = td
-    environment['pat'] = pat
+    environment['token'] = pat
 
     return json.dumps(environment)
 
@@ -135,26 +135,10 @@ def get_webhook_url():
 
 
 def process_ghe_boot_file(filename):
-    """
-    We  can get all we want from the fourth line on the .ghe file:
-    ssh -p122 admin@janedoe-0fb00b506b5e3e51f.ghe-test.net -- cat /data/user/common/qaboot-password
-    """
     ghe_data = {}
     with open(filename, 'r') as reader:
-        lines = reader.readlines()
-        for counter, line in enumerate(lines):
-            if re.search(r'Your GHE .* is ready', line):
-                ghe_data['version'] = line.strip('\n')
-            p = re.compile(r'ssh://admin@(.*):122')
-            if p.search(line):
-                ghe_data['hostname'] = p.search(line)[1]
-            if re.search(r'IP address', line):
-                ghe_data['ip_address'] = line.strip('\n')
-            if re.search(r'terminated', line):
-                ghe_data['termination_date'] = line.strip('\n')
-            # match if it's the last line and it doesn't contain spaces
-            if counter == len(lines) -1 and re.match(r'^\S+$', line):
-                ghe_data['token'] = line.strip('\n')
+       ghe_data = json.load(reader)
+           
     return ghe_data
 
 
@@ -169,12 +153,12 @@ def open_webhook_url_in_browser(hook_url, browser="chrome"):
         pass
 
 
-
 def read_ghe_boot_file():
     home = Path.home()
-    home_ghe = home / '.ghe'
-    ghe = '.ghe'
-    if os.path.exists('.ghe'):
+    home_ghe = home / 'environment.json'
+    ghe = 'environment.json'
+    if os.path.exists(ghe):
+        logging.info(f"Environment config detected: : {ghe}")
         file_to_process = ghe
         return(process_ghe_boot_file(file_to_process))
     elif os.path.exists(home_ghe):

@@ -144,3 +144,5 @@ dmypy.json
 cython_debug/
 
 actions-runner
+
+environment.json
