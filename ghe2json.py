@@ -83,7 +83,8 @@ function st() {
 
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
-export PS1="$H \[\e[33m\]:\W\[\e[m\]  $ \"""")
+export PS1="%m %F{yellow}:%1~%f $ "
+
 
     return t.safe_substitute(values)
 

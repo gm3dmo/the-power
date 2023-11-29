@@ -370,12 +370,14 @@ pool_size=10
         default_installation_id = 1
         client_id = 1
 
+
     if args.token != "":
-        logger.info(f"Token = *******")
-    elif "token" in ghe_config:
+        logger.info(f"Token = args.token") 
+    elif "token" in ghe_config and ghe_config["token"] not in [None, ""]:
         args.token = ghe_config["token"]
     else:
         args.token = input(f"Enter Personal Access Token: ")
+
 
     assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 

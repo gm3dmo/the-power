@@ -99,7 +99,7 @@ def ghe2json(text):
 
     # Personal Access Token (PAT)
     pat = 'unknown'
-    pat = next((token for token in tokens if token.startswith("ghp_")), None)
+    pat = next((token for token in tokens if token.startswith("ghp_")), '')
     
     # password
     pw = run_password_recovery(et)
