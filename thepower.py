@@ -22,6 +22,16 @@ from urllib.parse import urlparse
 import re
 
 
+def run_password_recovery(password_recovery_command):
+    if password_recovery_command:
+        process = subprocess.run(password_recovery_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        s = process.stdout.decode()
+        s = s.rstrip('\n')
+        return s
+    else:
+        return "No password recovery command found"
+
+
 def slugify(s):
   s = s.lower().strip()
   s = re.sub(r'[^\w\s-]', '', s)
@@ -91,6 +101,8 @@ def ghe2json(text):
     pat = 'unknown'
     pat = next((token for token in tokens if token.startswith("ghp_")), None)
     
+    # password
+    pw = run_password_recovery(et)
     
     print(f"""ghes_version: {version}""")
     print(f"""termination_date: {td}""")
@@ -103,6 +115,8 @@ def ghe2json(text):
     environment['ghes_version'] = version
     environment['termination_date'] = td
     environment['token'] = pat
+    environment['mgmt_password'] = pw
+    environment['admin_password'] = pw
 
     return json.dumps(environment)
 

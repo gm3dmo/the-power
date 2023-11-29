@@ -47,9 +47,9 @@ def main(args):
 number_of_users_to_create_on_ghes=${number_of_users_to_create_on_ghes}
 U=ghe-admin
 admin_user=${admin_user}
-admin_password=${admin_password}
+admin_password="${admin_password}"
 mgmt_port=${mgmt_port}
-mgmt_password=${mgmt_password}
+mgmt_password="${mgmt_password}"
 # GHES LDAP Settings
 ldap_dn="cn=Enterprise Ops,ou=teams,dc=github,dc=com"
 
@@ -344,6 +344,20 @@ pool_size=10
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
+    print(ghe_config)
+
+    if args.admin_password != "":
+        logger.info(f"Password is set")
+    elif "admin_password" in ghe_config:
+        args.admin_password = ghe_config["admin_password"]
+
+    if args.mgmt_password != "":
+        logger.info(f"MGMT password is set")
+    elif "mgmt_password" in ghe_config:
+        args.mgmt_password = ghe_config["mgmt_password"]
+
+
+
     if args.hostname == "api.github.local":
         args.http_protocol = "http"
 
@@ -517,10 +531,10 @@ if __name__ == "__main__":
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
     )
     parser.add_argument(
-        "--admin-password", action="store", dest="admin_password", default="admin-password"
+        "--admin-password", action="store", dest="admin_password", default=""
     )
     parser.add_argument(
-        "--mgmt-password", action="store", dest="mgmt_password", default="mgmt-password"
+        "--mgmt-password", action="store", dest="mgmt_password", default=""
     )
     parser.add_argument(
         "--mgmt-port", action="store", dest="mgmt_port", default=8443
