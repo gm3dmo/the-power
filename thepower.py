@@ -40,7 +40,7 @@ def slugify(s):
   return s
 
 
-def ghe2json(text):
+def ghe2json(text, ssh=True):
     """Converts the text output from gheboot to json"""
 
     lexer = shlex.shlex(text)
@@ -83,16 +83,8 @@ def ghe2json(text):
     
     td = ' '.join(termination_date)
     
-    ip_address = "unknown"
-    ip_index= tokens.index("IP")
-    
-    if tokens[ip_index+2] == "is":
-        if tokens[ip_index+3]:
-            ip = tokens[ip_index+3]
-            ip_address = ip 
-    
     # hostname
-    http_token = next((token for token in tokens if token.startswith("http://")), None)
+    http_token = next((token for token in tokens if token.startswith(("http://", "https://"))), None)
     parsed_url = urlparse(http_token)
     hostname = (parsed_url.hostname)
 
@@ -102,16 +94,14 @@ def ghe2json(text):
     pat = next((token for token in tokens if token.startswith("ghp_")), '')
     
     # password
-    pw = run_password_recovery(et)
+    if ssh == True:
+        pw = run_password_recovery(et)
+    else:
+        pw = "unknown"
     
-    print(f"""ghes_version: {version}""")
-    print(f"""termination_date: {td}""")
-    print(f"""ip_address: {ip_address}""")
-    print(f"""hostname: {hostname}""")
     environment = {}
     environment['hostname'] = hostname
     environment['password_recovery'] = et
-    environment['ip_address'] = ip_address
     environment['ghes_version'] = version
     environment['termination_date'] = td
     environment['token'] = pat
