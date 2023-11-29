@@ -344,7 +344,7 @@ pool_size=10
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
-    print(ghe_config)
+    #print(ghe_config)
 
     if args.admin_password != "":
         logger.info(f"Password is set")

@@ -172,7 +172,7 @@ def read_ghe_boot_file():
     home_ghe = home / 'environment.json'
     ghe = 'environment.json'
     if os.path.exists(ghe):
-        logging.info(f"Environment config detected: : {ghe}")
+        logging.debug(f"Environment config detected: : {ghe}")
         file_to_process = ghe
         return(process_ghe_boot_file(file_to_process))
     elif os.path.exists(home_ghe):
