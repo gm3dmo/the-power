@@ -10,7 +10,7 @@ column_id=6
 
 
 
-for cnt_id in {2..12}
+for cnt_id in {13..1000}
 do
 
 content_id=$cnt_id
