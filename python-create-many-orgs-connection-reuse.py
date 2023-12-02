@@ -11,6 +11,7 @@ __author__ = "David Morris (gm3dmo@gmail.com)"
 
 import os
 import json
+import sys
 import string
 import base64
 import argparse
@@ -39,6 +40,9 @@ def main(args):
     args.org_prefix = str(args.org_prefix) or str(power_config.get('dummy_section','org_prefix').strip('\"'))
     args.number_of_orgs = int(args.number_of_orgs) or int(power_config.get('dummy_section','number_of_orgs').strip('\"'))
 
+    quantity = args.number_of_orgs
+    subject = "organizations"
+
     conn =http.client.HTTPSConnection(args.hostname)
 
     token = f"""Bearer {args.GITHUB_TOKEN}"""
@@ -47,7 +51,8 @@ def main(args):
                "Accept" :  "application/vnd.github.v3+json"
               }
 
-    for i in range(args.number_of_orgs):
+    start = datetime.now()
+    for i in range(quantity):
         org_name = f"""{args.org_prefix}-{i:07}"""
         logger.debug(f"creating {org_name}")
         params = {
@@ -63,6 +68,14 @@ def main(args):
         logger.debug(r1.read())
 
     conn.close()
+
+    end = datetime.now()
+    elapsed = end - start
+    print(
+        f"""elapsed time: {elapsed} to create {quantity} {subject}""",
+        file=sys.stderr,
+    )
+
 
 
 if __name__ == "__main__":

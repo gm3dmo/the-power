@@ -9,40 +9,40 @@ import argparse
 import logging
 import http
 import thepower
+from strom import create_issue
 from pathlib import Path
 from datetime import datetime
 
-def create_issue(conn, url, params, headers):
-    conn.request('POST', url, params, headers=headers)
-    r1 = conn.getresponse()
-    r1.read()
 
 
 def main(args):
-
     loglevel = args.loglevel.upper()
     logging.basicConfig(level=loglevel)
     logger = logging.getLogger(__name__)
 
     power_config = thepower.read_dotcom_config(args.power_config)
-    args.extension = power_config.get('dummy_section','file_extension').strip('"')
+    args.extension = power_config.get("dummy_section", "file_extension").strip('"')
 
-    args.url = power_config.get('dummy_section','GITHUB_API_BASE_URL')
-    args.hostname = power_config.get('dummy_section','hostname')
-    args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
-    args.org = power_config.get('dummy_section','org').strip('\"')
-    args.repo = power_config.get('dummy_section','repo').strip('\"')
+    args.url = power_config.get("dummy_section", "GITHUB_API_BASE_URL")
+    args.hostname = power_config.get("dummy_section", "hostname")
+    args.GITHUB_TOKEN = power_config.get("dummy_section", "GITHUB_TOKEN")
+    args.org = power_config.get("dummy_section", "org").strip('"')
+    args.repo = power_config.get("dummy_section", "repo").strip('"')
 
-    args.number_of_issues = int(args.number_of_issues) or int(power_config.get('dummy_section','number_of_issues'))
-    logger.info(f"""creating: {args.number_of_issues} issues""")
+    args.number_of_issues = int(args.number_of_issues) or int(
+        power_config.get("dummy_section", "number_of_issues")
+    )
 
+    quantity = args.number_of_issues
+    subject = "issues"
+    logger.info(f"""creating: {quantity} issues""")
 
     token = f"""Bearer {args.GITHUB_TOKEN}"""
     headers = {
-               "Authorization" : token,
-               "Accept" :  "application/vnd.github.v3+json",
-               "User-Agent" : "the-power"
-              }
+        "Authorization": token,
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "the-power",
+    }
 
     conn = http.client.HTTPSConnection(args.hostname)
 
@@ -51,28 +51,40 @@ def main(args):
     for i in range(args.number_of_issues):
         issue = f"""test-issue-{i:07}"""
         params = {
-                "title": f"issue test: {issue}",
-                "body": f"issue test: {issue}",
-               }
+            "title": f"issue test: {issue}",
+            "body": f"issue test: {issue}",
+        }
         params = json.dumps(params)
-        url =  f"""{args.url}/repos/{args.org}/{args.repo}/issues"""
+        url = f"""{args.url}/repos/{args.org}/{args.repo}/issues"""
         try:
-           logger.debug(f"""sending request {i}""")
-           create_issue(conn, url, params, headers)
+            logger.debug(f"""sending request {i}""")
+            create_issue(conn, url, params, headers)
         except Exception as e:
-           print(f"""Error: {e}""") 
+            print(f"""Error: {e}""")
 
     end = datetime.now()
     elapsed = end - start
-    print(f"""elapsed time: {elapsed} to create {args.number_of_issues} issues""", file=sys.stderr)
+    print(
+        f"""elapsed time: {elapsed} to create {quantity} {subject}""",
+        file=sys.stderr,
+    )
 
     conn.close()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--power-config", action="store", dest="power_config", default=".gh-api-examples.conf", help="This is the config file to use to access variables for the power.")
-    parser.add_argument("-e", "--extension", action="store", dest="extension", default="c")
+    parser.add_argument(
+        "-c",
+        "--power-config",
+        action="store",
+        dest="power_config",
+        default=".gh-api-examples.conf",
+        help="This is the config file to use to access variables for the power.",
+    )
+    parser.add_argument(
+        "-e", "--extension", action="store", dest="extension", default="c"
+    )
 
     parser.add_argument(
         "--issues",
@@ -92,7 +104,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-
     main(args)
-
-

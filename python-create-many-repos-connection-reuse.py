@@ -79,7 +79,7 @@ if __name__ == "__main__":
         action="store",
         dest="org",
         default=False,
-        help="the organization name. 
+        help="The organization name in which to create repositories."
     )
 
     args = parser.parse_args()
