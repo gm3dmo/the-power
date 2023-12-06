@@ -23,7 +23,7 @@ jobs:
     - name: Building
       run: npm run build
     - name: Compressing
-      run: tar -czvf the-power-ui.app.tar.gz build/the-power-ui.app
+      run: tar -czvf the-power-ui.app.tar.gz build/the-power-ui-linux-x64/the-power-ui.app
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
