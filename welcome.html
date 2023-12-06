@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to The Power UI !!!</title>
+  <script src="welcome.js"></script>
+    <style>
+        @font-face {
+        font-family: xkcd;
+        src: url('https://cdn.rawgit.com/ipython/xkcd-font/master/xkcd-script/font/xkcd-script.woff') format('woff');
+        }
+        .xkcd {
+        font-family: xkcd;
+        }
+        #shell.blinking-cursor:after {
+        content: '|'; /* This is the cursor */
+        animation: 1s blink step-end infinite;
+         }
+
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+  <h1 style="color: rgb(36, 3, 106); font-weight: bold;">Welcome to The Power UI</h1>
+  <button id="start">Start</button>
+  <button id="quit-button" style="color: red; font-weight: bold;">Quit</button>
+  <div id="shell" style="border: 1px solid black; padding: 10px; margin-top: 30px; margin-bottom: 10px;"></div>
+  <button id="reconfigure">Reconfigure</button>
+  
+  <div style="display: flex; position: absolute; top: 10px; right: 10px;">
+    <div style="margin-right: 5px;">&#x0386;</div>
+    <select id="font-selection">
+      <option value="Arial">Arial</option>
+      <option value="xkcd">xkcd</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Times New Roman">Times New Roman</option>
+    </select>
+  </div>
+
+  <script>
+document.getElementById('start').addEventListener('click', () => {
+  window.location.href = 'index.html';
+});
+document.getElementById('reconfigure').addEventListener('click', async () => {
+  if (confirm('This will reconfigure the app. Are you sure?')) {
+    // Get the path to the user data directory
+    const userDataPath = await window.myApi.getUserDataPath();
+    // Run python3 configure.py with the target directory as an argument
+    await window.myApi.runInteractiveScript(`configure.py`, ['--confpath', userDataPath]);
+  }
+});
+
+  document.getElementById('quit-button').addEventListener('click', () => {
+    window.myApi.quit();
+  });
+
+  function changeFont(font) {
+  document.body.style.fontFamily = font;
+  const buttons = document.getElementsByTagName('button');
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].style.fontFamily = font;
+  }
+}
+
+document.getElementById('font-selection').addEventListener('change', (event) => {
+  // Change the font of the body and buttons
+  changeFont(event.target.value);
+
+  // Save the selected font to local storage
+  localStorage.setItem('selectedFont', event.target.value);
+});
+  </script>
+</body>
+</html>
