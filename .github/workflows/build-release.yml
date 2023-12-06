@@ -21,7 +21,7 @@ jobs:
       run: npm run build
     - name: Compressing
       run: |
-        ls -alh build/the-power-ui-linux-x64
+        ls -alh build/the-power-ui-darwin-x64
         pwd
         tar -czvf the-power-ui.app.tar.gz build/the-power-ui-darwin-x64/the-power-ui.app
     - uses: "marvinpinto/action-automatic-releases@latest"
