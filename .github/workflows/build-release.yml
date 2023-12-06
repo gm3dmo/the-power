@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup Node
@@ -15,19 +15,15 @@ jobs:
         cache: 'npm'
     - name: Install dependancies
       run: |
-         sudo apt-get update
-         sudo apt-get install python3
-         sudo apt-get install jq
          npm install --save-dev electron-packager
          npm install
     - name: Building
       run: npm run build
     - name: Compressing
       run: |
-        ls -alh
         ls -alh build/the-power-ui-linux-x64
         pwd
-        tar -czvf the-power-ui.app.tar.gz build/the-power-ui-linux-x64/the-power-ui.app
+        tar -czvf the-power-ui.app.tar.gz build/the-power-ui-darwin-x64/the-power-ui.app
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
