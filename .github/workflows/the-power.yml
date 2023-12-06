@@ -17,7 +17,7 @@ jobs:
       debian_10_csv_file:  "/tmp/debian-10-syslog.csv"
       heroku_csv_file:  "/tmp/heroku-sample.csv"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
