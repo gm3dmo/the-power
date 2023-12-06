@@ -484,7 +484,8 @@ pool_size=10
         "x_client_secret": args.x_client_secret,
     }
 
-    out_filename = ".gh-api-examples.conf"
+    target_dir = sys.argv[1]
+    out_filename = os.path.join(args.confpath, '.gh-api-examples.conf')
 
     try:
         with open(out_filename, "w") as out_file:
@@ -495,11 +496,11 @@ pool_size=10
     except Exception as e:
         logger.warn(f"\n{bcolors.WARNING}Configuration run failed. {e}")
 
-    cmd = f"""./{args.primer}"""
-    logger.info(f"\n{bcolors.OKGREEN}Launching primer command: {args.primer}")
+    #cmd = f"""./{args.primer}"""
+    #logger.info(f"\n{bcolors.OKGREEN}Launching primer command: {args.primer}")
     # Now run the primer script to execute whatever task is wanted for this particular thing
     # can be useful when creating a container that executes some repetive task.
-    subprocess.run(cmd, shell=True, check=True)
+    # subprocess.run(cmd, shell=True, check=True)
     logger.info(
         f"\n{bcolors.OKBLUE}========================================================="
     )
@@ -519,6 +520,7 @@ if __name__ == "__main__":
         dest="configure_github_app",
         default="no",
     )
+    parser.add_argument('--confpath', action="store", dest="confpath", help='The path to store the conf file')
     parser.add_argument("-a", "--app-id", action="store", dest="app_id", default=1)
     parser.add_argument(
         "-i", "--installation-id", action="store", dest="installation_id", default=1

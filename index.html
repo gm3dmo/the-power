@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+#scriptQueue, #logs {
+    width: 100%; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+    resize: both;
+    border: 1px solid #000;
+    overflow: auto;
+}
+@font-face {
+	    font-family: xkcd;
+	    src: url('https://cdn.rawgit.com/ipython/xkcd-font/master/xkcd-script/font/xkcd-script.woff') format('woff');
+    }
+    .xkcd {
+  	  font-family: xkcd;
+    }    
+button.arrow {
+  color: black;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.6em;
+  font-weight: bold;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+button.arrow.up::before {
+  content: "↑";
+}
+
+button.arrow.down::before {
+  content: "↓";
+}
+</style>
+</head>
+
+
+<body>
+    <h1 style="color: rgb(36, 3, 106); font-weight: bold;">The Power UI !!!</h1>
+    <h3>Scripts List:</h3>
+    <p>Select the scripts you want to run in the order you want to run them from drop down menu.</p>
+    <select id="scriptSelector"></select>
+    <button id="addToQueueButton">Add to Queue</button>
+    <button id="runScriptsButton">Run Scripts</button>
+    <button id="resetSelectionButton">Reset Selection</button>
+    <h3>Scripts Execution List:</h3>
+    <div id="scriptQueue"></div>
+    <h3>Execution Logs:</h3>
+     <div id="logs"></div>
+
+     <div style="display: flex; position: absolute; top: 10px; right: 10px;">
+      <div style="margin-right: 5px;">&#x0386;</div>
+      <select id="font-selection">
+        <option value="Arial">Arial</option>
+        <option value="xkcd">xkcd</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+      </select>
+    </div>
+    <script>
+      // Function to change the font of the body and buttons
+      function changeFont(font) {
+        document.body.style.fontFamily = font;
+        const buttons = document.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+          buttons[i].style.fontFamily = font;
+        }
+      }
+    
+    
+      // Add an event listener for the font selection dropdown
+      document.getElementById('font-selection').addEventListener('change', (event) => {
+        // Change the font of the body and buttons
+        changeFont(event.target.value);
+    
+        // Save the selected font to local storage
+        localStorage.setItem('selectedFont', event.target.value);
+      });
+    </script>
+
+<script>
+// Function to fetch scripts from main process and populate select box
+function populateScripts() {
+    myApi.getScripts()
+      .then(scripts => {
+          var select = document.getElementById("scriptSelector");
+          scripts.forEach(script => {
+              var option = document.createElement("option");
+              option.text = script;
+              option.value = script;
+              select.add(option);
+          });
+      })
+      .catch(err => {
+          console.error(err);
+      });
+}
+
+window.addEventListener('load', function () {
+    document.getElementById("addToQueueButton").addEventListener("click", addToQueue);
+    document.getElementById("runScriptsButton").addEventListener("click", runScripts);
+    document.getElementById("resetSelectionButton").addEventListener("click", resetSelection);
+})
+
+
+function addToQueue() {
+  var selectedScript = document.getElementById("scriptSelector").value;
+  if (selectedScript) {
+    var div = document.createElement("div");
+    div.textContent = selectedScript;
+    div.dataset.scriptName = selectedScript;
+
+    var upButton = document.createElement("button");
+    upButton.className = "arrow up";
+    upButton.addEventListener("mousedown", function() {
+      this.style.color = "red";
+      this.style.textShadow = "-1px 0 red, 0 1px red, 1px 0 red, 0 -1px red";
+    });
+    upButton.addEventListener("mouseup", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    upButton.addEventListener("mouseleave", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    upButton.addEventListener("click", function() {
+      if (div.previousElementSibling) {
+        div.parentNode.insertBefore(div, div.previousElementSibling);
+      }
+    });
+
+    var downButton = document.createElement("button");
+    downButton.className = "arrow down";
+    downButton.addEventListener("mousedown", function() {
+      this.style.color = "red";
+      this.style.textShadow = "-1px 0 red, 0 1px red, 1px 0 red, 0 -1px red";
+    });
+    downButton.addEventListener("mouseup", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    downButton.addEventListener("mouseleave", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    downButton.addEventListener("click", function() {
+      if (div.nextElementSibling) {
+        div.parentNode.insertBefore(div.nextElementSibling, div);
+      }
+    });
+
+    var removeButton = document.createElement("button");
+    removeButton.textContent = "x";
+    removeButton.className = "arrow";
+    removeButton.addEventListener("mousedown", function() {
+      this.style.color = "red";
+      this.style.textShadow = "-1px 0 red, 0 1px red, 1px 0 red, 0 -1px red";
+    });
+    removeButton.addEventListener("mouseup", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    removeButton.addEventListener("mouseleave", function() {
+      this.style.color = "black";
+      this.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    });
+    removeButton.addEventListener("click", function() {
+      div.parentNode.removeChild(div);
+    });
+
+    upButton.style.verticalAlign = "+2px";
+    downButton.style.verticalAlign = "+2px";
+    removeButton.style.verticalAlign = "1px";
+    div.appendChild(upButton);
+    div.appendChild(downButton);
+    div.appendChild(removeButton);
+
+    document.getElementById("scriptQueue").appendChild(div);
+  }
+}
+
+
+
+async function runScripts() {
+    // Clear the "Execution Logs" box
+    document.getElementById("logs").innerHTML = "";
+
+    var scriptQueue = document.getElementById("scriptQueue");
+    var scripts = scriptQueue.getElementsByTagName("div");
+
+    for (let script of scripts) {
+        try {
+            let result = await myApi.runScript(script.dataset.scriptName);
+
+            // Print the script output
+            var outputDiv = document.createElement("div");
+            outputDiv.innerHTML = `<br><span style="color: blue; font-weight: bold;">Running ` + script.textContent + `: </span>` + `<span style="color: black; font-weight: normal;">`  + JSON.stringify([result.output], null, 2).replace(/\\n/g, '\n').replace(/\\/g, '') + "</span><br>";
+            document.getElementById("logs").appendChild(outputDiv);
+
+            // If this is the last script and it finished without errors, print "Done" message
+            if (script === scripts[scripts.length - 1] && !JSON.stringify(result.output).includes("Error")) {
+                var doneDiv = document.createElement("div");
+                doneDiv.textContent = "Done!";
+                doneDiv.style.color = "green";
+                doneDiv.style.fontWeight = "bold";
+                document.getElementById("logs").appendChild(doneDiv);
+            }
+        } catch (error) {
+            var errorDiv = document.createElement("div");
+            errorDiv.innerHTML = `<br><span style="color: red; font-weight: bold;">Error: Error occurred while executing ` + script.textContent + `: </span>` + `<span style="color: black; font-weight: normal;">` + error + "</span><br>";
+            document.getElementById("logs").appendChild(errorDiv);
+        }
+    }
+}
+
+
+
+
+function resetSelection() {
+    var scriptQueue = document.getElementById("scriptQueue");
+    while (scriptQueue.firstChild) {
+        scriptQueue.firstChild.remove();
+    }
+    document.getElementById("logs").textContent = "";
+}
+
+window.onload = function() {
+  document.getElementById('quit-button').addEventListener('click', () => {
+    myApi.quit();
+  });
+   // Populate the select box with scripts
+ populateScripts();
+
+ const selectedFont = localStorage.getItem('selectedFont');
+        if (selectedFont) {
+          changeFont(selectedFont);
+          document.getElementById('font-selection').value = selectedFont;
+        };
+
+    // Print the server log
+    myApi.onConsoleLog((message) => {
+  var logDiv = document.createElement("div");
+  logDiv.innerHTML = "<b style='color: blue;'>Server:</b> " + message;
+  document.getElementById("logs").appendChild(logDiv);
+});
+// Handle script output
+myApi.onScriptOutput(({ scriptName, output }) => {
+  var outputDiv = document.createElement("div");
+  outputDiv.innerHTML = `<br><span style="color: blue; font-weight: bold;">Running ${scriptName}: </span>` + `<span style="color: black; font-weight: normal;">`  + JSON.stringify([output], null, 2).replace(/\\n/g, '\n').replace(/\\/g, '') + "</span><br>";
+  document.getElementById("logs").appendChild(outputDiv);
+});
+}
+</script>
+<button id="quit-button" style="color: red; font-weight: bold;">Quit</button>
+</body>
+</html>
