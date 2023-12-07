@@ -208,25 +208,33 @@ ipcMain.handle('run-script', async (event, scriptName) => {
       await fs.promises.writeFile(tempScriptPath, newScriptContent);
       const child = spawn('/bin/bash', ['-c', `bash "${tempScriptPath}"`], { cwd: scriptDir });
 
-      child.stdout.on('data', (data) => {
-        event.sender.send('script-output', { scriptName, output: data.toString() });
+       child.stdout.on('data', (data) => {
+        if (!mainWindow.isDestroyed()) {
+          event.sender.send('script-output', { scriptName, output: data.toString() });
+        }
       });
-
+      
       child.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
+        if (!mainWindow.isDestroyed()) {
+          console.error(`stderr: ${data}`);
+        }
       });
-
+      
       child.on('error', (error) => {
-        console.error('Failed to start subprocess.', error);
-        reject(error);
+        if (!mainWindow.isDestroyed()) {
+          console.error('Failed to start subprocess.', error);
+          reject(error);
+        }
       });
-
+      
       child.on('close', (code) => {
-        if (code !== 0) {
-          console.error(`child process exited with code ${code}`);
-          reject(new Error(`child process exited with code ${code}`));
-        } else {
-          resolve({ output: 'Script executed successfully' });
+        if (!mainWindow.isDestroyed()) {
+          if (code !== 0) {
+            console.error(`child process exited with code ${code}`);
+            reject(new Error(`child process exited with code ${code}`));
+          } else {
+            resolve({ output: 'Script executed successfully' });
+          }
         }
       });
     } catch (error) {
