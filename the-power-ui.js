@@ -187,7 +187,7 @@ ipcMain.handle('run-script', async (event, scriptName) => {
         if (line.startsWith('./')) {
           // Replace the relative path to the script with an absolute path
           const scriptName = line.split(' ')[0].slice(2);
-          const absoluteScriptPath = path.join(__dirname, scriptName);
+          const absoluteScriptPath = path.join(appPath, scriptName);
           return line.replace(`./${scriptName}`, absoluteScriptPath);
         } else if (line.trim() === '.  ./.gh-api-examples.conf') {
           // Replace the line
