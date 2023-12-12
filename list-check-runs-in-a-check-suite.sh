@@ -10,7 +10,7 @@ if [ -z "$1" ]
   then
     check_suite_id=1
   else
-    check_suite_id=
+    check_suite_id=$1
 fi
 
 
@@ -20,6 +20,7 @@ fi
 GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 
+set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
