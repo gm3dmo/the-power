@@ -1,0 +1,29 @@
+name: the-power-workflow-simple
+on:
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  blank:
+    runs-on: ubuntu-latest
+    steps:
+      - name: MyCommands
+        run: |
+          curl --version
+          curl --write-out '%output{header.json}%{header_json}%output{timing.json}%{json}' --trace trace.txt -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
+          echo Hello
+          mkdir -p artifacts/trace
+          echo "### Artifacts" > dist/trace/readme.md
+          cp trace.txt dist/trace
+          cp timing.json dist/trace
+          cp header.json dist/trace
+      # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+      - name: Archive job artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: the power workflow-simple artifact
+          path: |
+            dist/**/*.*
+          retention-days: 2
+
