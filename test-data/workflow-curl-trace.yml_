@@ -13,17 +13,17 @@ jobs:
           curl --version
           curl --write-out '%output{header.json}%{header_json}%output{timing.json}%{json}' --trace trace.txt -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
           echo Hello
-          mkdir -p artifacts/trace
+          mkdir -p artifact/trace
           echo "### Artifacts" > dist/trace/readme.md
-          cp trace.txt dist/trace
-          cp timing.json dist/trace
-          cp header.json dist/trace
+          cp trace.txt artifacts/trace
+          cp timing.json artifacts/trace
+          cp header.json artifacts/trace
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       - name: Archive job artifacts
         uses: actions/upload-artifact@v3
         with:
           name: the power workflow-simple artifact
           path: |
-            dist/**/*.*
+            artifacts/**/*.*
           retention-days: 2
 
