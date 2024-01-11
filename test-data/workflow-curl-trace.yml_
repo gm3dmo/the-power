@@ -14,7 +14,7 @@ jobs:
           curl --write-out '%output{header.json}%{header_json}%output{timing.json}%{json}' --trace trace.txt -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
           echo Hello
           mkdir -p artifact/trace
-          echo "### Artifacts" > dist/trace/readme.md
+          echo "### Artifacts" > artifacts/trace/readme.md
           cp trace.txt artifacts/trace
           cp timing.json artifacts/trace
           cp header.json artifacts/trace
