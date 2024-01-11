@@ -29,11 +29,12 @@ printf "${normal}"
 
 printf "${highlight} - Creating repo: ${normal}"
  ./create-repo.sh | jq -r '.name'
-python3 create-workflow-simple-json-file.py
+python3 create-workflow-curl-trace-json-file.py
 printf "${highlight} - Committing workflow file: ${normal}"
- ./create-commit-workflow-simple.sh | jq -r '.content.path'
+ ./create-commit-workflow-curl-trace.sh | jq -r '.content.path'
 
 echo "Press enter to run the workflow dispatch:"
+
  read x
 ./dispatch-event.sh 
 
