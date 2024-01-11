@@ -15,8 +15,8 @@ jobs:
           mkdir -p artifacts/trace
           echo "### Artifacts" > artifacts/trace/readme.md
           cp trace.txt artifacts/trace
-          cp timing.json artifacts/trace
-          cp header.json artifacts/trace
+          #cp timing.json artifacts/trace
+          #cp header.json artifacts/trace
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       - name: Archive job artifacts
         uses: actions/upload-artifact@v3
