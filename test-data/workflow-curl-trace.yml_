@@ -11,7 +11,7 @@ jobs:
       - name: MyCommands
         run: |
           curl --version
-          curl --write-out '%output{header.json}%{header_json}' --trace trace.txt -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
+          curl --trace trace.txt -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
           mkdir -p artifacts/trace
           echo "### Artifacts" > artifacts/trace/readme.md
           cp trace.txt artifacts/trace
