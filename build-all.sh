@@ -29,7 +29,7 @@ printf "${normal}"
    ./pwr-add-users-to-team.sh | jq -r '.url'
    printf "${highlight} - Adding maintainers to team:${normal}\n"
    ./add-maintainers-to-team.sh | jq -r '.url'
-   printf "${highlight} - Creating repo: ${normal}"
+   printf "${highlight} - Creating repo: ${normal}\n"
     ./create-repo-testrepo.sh | jq -r '.html_url'
     ./add-team-to-repo.sh
    printf "${highlight} - Creating webhook: ${normal}"

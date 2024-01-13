@@ -32,7 +32,6 @@ jq -n \
              "code_scanning_alert",
              "commit_comment",
              "create",
-             "custom_property_values",
              "delete",
              "dependabot_alert",
              "deploy_key",

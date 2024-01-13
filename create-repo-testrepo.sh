@@ -3,8 +3,6 @@
 #
 #
 
-
-
 case ${default_repo_visibility} in 
    internal)
        private=false
@@ -17,7 +15,8 @@ case ${default_repo_visibility} in
    ;;
 esac
 
-json_file=tmp/create-repo.json
+json_file=tmp/create-testrepo.json
+
 
 jq -n \
         --arg name "${repo}" \
@@ -42,15 +41,10 @@ jq -n \
 	   has_pages: $has_pages | test("true") 
          }' > ${json_file}
 
-cat $json_file | jq -r
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/orgs/${org}/repos --data @${json_file}
-
-
-
-
+        "${GITHUB_API_BASE_URL}/orgs/${org}/repos" --data @${json_file}
