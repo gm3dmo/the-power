@@ -1,0 +1,28 @@
+name: the-power-workflow-simple
+on:
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:    
+      - run: curl --version
+      - run: |
+          sudo apt remove curl
+          sudo apt purge curl
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev autoconf libtool make
+          cd /usr/local/src
+          sudo wget https://curl.haxx.se/download/curl-7.88.1.zip
+          sudo unzip curl-7.88.1.zip
+          cd curl-7.88.1
+          sudo ./buildconf
+          sudo ./configure --with-ssl 
+          sudo make
+          sudo make install
+          sudo cp /usr/local/bin/curl /usr/bin/curl
+          sudo ldconfig
+         
+      - run: curl --version
