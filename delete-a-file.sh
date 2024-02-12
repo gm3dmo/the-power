@@ -6,18 +6,28 @@
 
 json_file=tmp/skeleton.json
 
+path="docs/README.md"
+message="deleiting README.md"
+
+sha=$(curl 'X-GitHub-Api-Version: 2022-11-28' -H 'Accept: application/vnd.github.v3+json' -H "Authorization: Bearer $GITHUB_TOKEN" "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/contents/${path}" | jq -r '.sha')
+
+
 jq -n \
-           --arg name "${repo}" \
+           --arg message "${message}" \
+           --arg name "${default_committer}" \
+           --arg sha "${sha}" \
            '{
-             name : $name,
+             message: $message,
+             name: $name,
+             sha: $sha,
            }' > ${json_file}
 
 
-path=/docs/README.md
 
-curl ${curl_custom_flags} \
+set -x
+curl -v ${curl_custom_flags} \
      -X DELETE \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/contents/${path}"
+        "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/contents/${path}" --data @$json_file
