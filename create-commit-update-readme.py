@@ -14,6 +14,7 @@ import base64
 import argparse
 import logging
 import thepower
+import time
 from pathlib import Path
 from datetime import datetime
 
@@ -30,9 +31,10 @@ def main(args):
     filename_in_repo = f"""docs/README.md"""
     with open(p, 'rb') as ct:
        t = {}
+       ts = time.time()
        chapter_content = ct.read()
        chapter_base64 = base64.encodebytes(chapter_content)
-       t["message"] = f"""Updating the docs/README.md file."""
+       t["message"] = f"""Updating the docs/README.md file {ts}"""
        t["committer"] = {}
        t["sha"] = args.blob_sha
        t["branch"] = args.branch_name
