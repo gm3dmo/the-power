@@ -1,0 +1,10 @@
+set -a
+. .gh-api-examples.conf
+
+perl -e '$n=$ENV{files_changed}; for my $i (1..$n) { my $filename = sprintf("src/$ENV{repo}/numbers/%04d.txt", $i); open my $fh, ">", $filename or die "Could not open file '$filename' $!"; close $fh; }'
+
+cd src/$repo
+
+git add numbers
+git commit -m "Adding some files to bulk up the pull request"
+git push
