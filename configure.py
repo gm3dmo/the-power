@@ -134,6 +134,8 @@ default_issue_id=1
 # https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
 # https://docs.github.com/en/get-started/writing-on-github
 default_pull_request_id=2
+# When using xxx
+files_changed=15
 
 # A Pull request may not be approved by it's author.
 # create a PAT for the pull request approver
