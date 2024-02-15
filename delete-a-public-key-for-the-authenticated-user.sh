@@ -9,5 +9,4 @@ curl ${curl_custom_flags} \
      -X DELETE \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/user/keys/${key_id}
-
+        "${GITHUB_API_BASE_URL}/user/keys/${key_id}"
