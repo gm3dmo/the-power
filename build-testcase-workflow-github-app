@@ -1,0 +1,39 @@
+# Create a repository and setup a workflow that uses a GitHub App
+# Prior to running this, make any needed modifications to test-data/workflow-github-app.yml_
+# that are needed for the testcase.
+#
+
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+==================================================
+$0
+==================================================
+
+EOF
+
+printf "${normal}"
+                                                   
+
+printf "${highlight} - Creating repo: ${normal}"
+ ./create-repo.sh | jq -r '.name'
+python3 create-workflow-simple-json-file.py
+
+printf "${highlight} - Committing workflow file: ${normal}"
+ ./create-commit-workflow-github-app.sh 
+# ./create-commit-workflow-github-app.sh | jq -r '.content.path'
+
+echo "Press enter to run the workflow dispatch:"
+ read x
+./dispatch-event.sh 
+

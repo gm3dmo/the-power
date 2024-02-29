@@ -233,6 +233,7 @@ default_installation_id=${default_installation_id}
 # The Client ID is used when using the device authentication flow
 client_id=${client_id}
 app_client_secret=${app_client_secret}
+app_cert_secret_name=app_cert_secret
 
 
 ### [Oauth Apps API](https://docs.github.com/en/rest/apps/oauth-applications)

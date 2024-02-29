@@ -1,0 +1,28 @@
+
+# https://github.com/actions/create-github-app-token?tab=readme-ov-file#create-github-app-token
+name: the-power-workflow-github-app-create-issue
+on:
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  blank:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create GitHub App token
+      id: create_token
+      uses: actions/create-github-app-token@v1
+      with:
+          app-id: $default_app_id
+          private-key: ${{ secrets.app_cert_secret }}
+          # https://github.com/actions/create-github-app-token?tab=readme-ov-file#owner
+          owner: $org
+    - name: Create issue
+      uses: octokit/request-action@v2.x
+      with:
+        route: POST /repos/${{ github.repository }}/issues
+        title: "New issue from workflow created by GitHub App"
+        body: "This is a new issue created from a GitHub Action workflow."
+      env:
+        GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
