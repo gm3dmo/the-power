@@ -1,0 +1,33 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+                                                   
+     printf "${highlight} - Creating repo: ${normal}"
+    ./create-repo-testrepo.sh | jq -r '.name'
+    ./add-team-to-repo.sh
+
+     printf "${highlight} - Creating a repository ruleset: ${normal}"
+     ./create-a-repository-ruleset-branch-pattern-github-app-override.sh | jq -r '._links.html.href'
+     sleep 2
+
+  
+   printf "${highlight} - Create a commit using the GitHub App: ${normal}"
+   ./tiny-create-commit-timeserial-file.sh | jq -r '.content.html_url'
+   echo
+   printf "${highlight} - Attempt to Create a commit using PAT (expected state is failure): ${normal}"
+   ./tiny-create-commit-timeserial-file.sh pat
+   
+
