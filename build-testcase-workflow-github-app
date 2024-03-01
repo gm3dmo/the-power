@@ -29,6 +29,11 @@ printf "${highlight} - Creating repo: ${normal}"
  ./create-repo.sh | jq -r '.name'
 python3 create-workflow-simple-json-file.py
 
+# This step loads the GitHub App private key into an organization level secret
+printf "${highlight} - Creating organization level secret for the GitHub App: ${normal}"
+./create-an-organization-secret-for-app-private-key.sh
+
+
 printf "${highlight} - Committing workflow file: ${normal}"
  ./create-commit-workflow-github-app.sh 
 # ./create-commit-workflow-github-app.sh | jq -r '.content.path'
