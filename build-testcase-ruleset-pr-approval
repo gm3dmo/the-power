@@ -1,0 +1,60 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+                                                   
+     printf "${highlight} - Creating repo: ${normal}"
+    ./create-repo-testrepo.sh | jq -r '.name'
+    ./add-team-to-repo.sh
+     printf "${highlight} - Creating webhook: ${normal}"
+    ./create-webhook.sh  | jq -r '.id'
+
+     # An org owner and the default GitHub App can override the ruleset: 
+     printf "${highlight} - Creating ruleset app ovverride and org owner override: ${normal}"
+    ./create-a-repository-ruleset-branch-pattern-github-app-override-org-owner-override.sh | jq -r '._links.html.href'
+
+     printf "${highlight} - Creating docs/README.md: ${normal}"
+    ./create-commit-readme.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating CODEOWNERS: ${normal}"
+    ./create-commit-codeowners.sh| jq -r ".content.html_url"
+     printf "${highlight} - Creating requirements.txt: ${normal}"
+    ./create-commit-python-pip.sh| jq -r ".content.html_url"
+    sleep 2
+     printf "${highlight} - Creating new branch: ${normal}"
+    ./create-branch-newbranch.sh | jq -r '.url'
+     printf "${highlight} - Creating a commit on the new branch: ${normal}"
+    ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating an issue: ${normal}"
+    ./create-repo-issue.sh | jq -r '.html_url'
+     printf "${highlight} - Creating a pull request: ${normal}"
+    ./create-pull-request.sh | jq -r '.html_url'
+
+     # Now add a file to new_branch after the pull request has been created:
+     printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
+    ./create-commit-gitattributes.sh | jq -r ".content.html_url"
+     echo 
+
+
+    # If you have the appropriate token set in `pr_approver_token`
+    # then you can provide an approving review:
+     printf "${highlight} - Creating an approving review on pull request: ${normal}"
+     ./create-approving-review-for-a-pull-request.sh | jq -r '.state'
+
+
+    # The GitHub App merges the pull request
+     printf "${highlight} - Merging the pull request: ${normal}"
+    ./tiny-merge-a-pull-request.sh | jq -r '.message'
