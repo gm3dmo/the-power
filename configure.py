@@ -144,6 +144,9 @@ files_changed=15
 pr_approver_token=${pr_approver_token}
 pr_approver_name=${pr_approver_name}
 default_pr_event="COMMENT"
+# https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#merge-a-pull-request
+# valid for merge_method are merge, squash, rebase
+merge_method=merge
 
 
 ### [Branches](https://docs.github.com/en/rest/commits/commits)
