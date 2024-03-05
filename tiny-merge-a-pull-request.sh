@@ -21,9 +21,11 @@ json_file=tmp/merge-a-pull-request.json
 jq -n \
            --arg commit_title "${commit_title}" \
            --arg commit_message "${commit_message}" \
+           --arg merge_method "${merge_method}" \
            '{
              commit_title : $commit_title,
              commit_message : $commit_message,
+             merge_method: $merge_method,
            }' > ${json_file}
 
 
