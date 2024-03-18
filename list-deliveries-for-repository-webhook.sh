@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#list-deliveries-for-a-repository-webhook
+# https://docs.github.com/en/rest/repos/webhooks?apiVersion=2022-11-28#list-deliveries-for-a-repository-webhook
 # GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
 
 
