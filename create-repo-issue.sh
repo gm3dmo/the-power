@@ -29,8 +29,8 @@ jq -n \
         --arg body "${lorem_text}${lorem_append}" \
         --arg assignees "${default_committer}" \
         --arg milestone 1 \
-        --arg labels "bug" \
-	'{"title": $title, "body": $body, "assignees": [ $assignees ], "labels": [ $labels ] }'  > ${json_file}
+        --argjson labels '["bug", "documentation"]' \
+	'{"title": $title, "body": $body, "assignees": [ $assignees ], "labels":  $labels  }'  > ${json_file}
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
