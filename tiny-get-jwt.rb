@@ -20,11 +20,14 @@ EOM
 private_key = OpenSSL::PKey::RSA.new(private_pem)
 
 
+offset_time_by = 0
+n = (Time.now.to_i + offset_time_by) + (10 * 60)
+
 payload = {
   # iat = issued at time
   iat: Time.now.to_i,
   # exp = JWT expiration time (10 minute maximum)
-  exp: Time.now.to_i + (10 * 60),
+  exp: n,
   # GitHub App ID identifier
   iss: ARGV[1].to_i
 }
