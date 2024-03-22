@@ -1,9 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-a-deploy-key
+# https://docs.github.com/en/enterprise-cloud@latest/rest/deploy-keys/deploy-keys?apiVersion=2022-11-28#create-a-deploy-key
 # POST /repos/{owner}/{repo}/keys
 #
-set -x
 
 public_key_file=${1:-${my_ssh_pub_key}}
 public_key=$(cat ${public_key_file})
