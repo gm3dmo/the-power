@@ -29,10 +29,6 @@ cat ${source_json}| jq --arg team_slug "$team_slug" \
     ' > ${json_file}
 
 
-cat $json_file
-
-exit
-
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
