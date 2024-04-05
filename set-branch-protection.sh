@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#update-branch-protection
-# PUT /repos/:owner/:repo/branches/:branch/protection
+# https://docs.github.com/en/rest/branches/branch-protection?apiVersion=2022-11-28#update-branch-protection
+# PUT /repos/{owner}/{repo}/branches/{branch}/protection
+
 
 # If the script is passed an argument $1 use that as the name of the repo
 if [ -z "$1" ]
