@@ -34,8 +34,10 @@ def main(args):
     args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
 
     args.number_of_users_to_create_on_ghes = int(power_config.get('dummy_section','number_of_users_to_create_on_ghes'))
+    args.user_prefix = (power_config.get('dummy_section','user_prefix')).strip('"')
 
     logger.info(f"""creating: {args.number_of_users_to_create_on_ghes} users""")
+    logger.info(f"""creating: {args.user_prefix} prefix for username""")
 
 
     token = f"""Bearer {args.GITHUB_TOKEN}"""
@@ -52,7 +54,7 @@ def main(args):
                "User-Agent" : f"""the-power-{i}"""
               }
         
-        username  = f"""pwr-{ts}-user-{i:07}"""
+        username  = f"""{args.user_prefix}-{i:07}"""
         params = {
                 "login": f"{username}",
                 "email": f"{username}+pwr@example.com",
@@ -60,6 +62,8 @@ def main(args):
         params = json.dumps(params)
         url =  f"""{args.url}/admin/users"""
         try:
+           logger.debug(f"""creating username {username}""")
+           logger.debug(f"""sending params {params}""")
            logger.debug(f"""sending request {i}""")
            postit(conn, url, params, headers)
         except Exception as e:
