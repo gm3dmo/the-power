@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import time
 import string
 import base64
 import argparse
@@ -11,6 +12,7 @@ import http
 import thepower
 from pathlib import Path
 from datetime import datetime
+
 
 def postit(conn, url, params, headers):
     conn.request('POST', url, params, headers=headers)
@@ -30,10 +32,8 @@ def main(args):
     args.url = power_config.get('dummy_section','GITHUB_API_BASE_URL')
     args.hostname = power_config.get('dummy_section','hostname')
     args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
-    args.org = power_config.get('dummy_section','org').strip('\"')
-    args.repo = power_config.get('dummy_section','repo').strip('\"')
 
-    args.number_of_users_to_create_on_ghes = int(args.number_of_users_to_create_on_ghes) or int(power_config.get('dummy_section','number_of_users_to_create_onghes'))
+    args.number_of_users_to_create_on_ghes = int(power_config.get('dummy_section','number_of_users_to_create_on_ghes'))
 
     logger.info(f"""creating: {args.number_of_users_to_create_on_ghes} users""")
 
@@ -43,6 +43,7 @@ def main(args):
     conn = http.client.HTTPSConnection(args.hostname)
 
     # time how lng it takes to create all the things
+    ts = time.time()
     start = datetime.now()
     for i in range(args.number_of_users_to_create_on_ghes):
         headers = {
@@ -50,7 +51,8 @@ def main(args):
                "Accept" :  "application/vnd.github.v3+json",
                "User-Agent" : f"""the-power-{i}"""
               }
-        username  = f"""pwr-usr-{i:07}"""
+        
+        username  = f"""pwr-{ts}-user-{i:07}"""
         params = {
                 "login": f"{username}",
                 "email": f"{username}+pwr@example.com",
@@ -65,7 +67,7 @@ def main(args):
 
     end = datetime.now()
     elapsed = end - start
-    print(f"""elapsed time: {elapsed} to create {args.number_of_users} users""", file=sys.stderr)
+    print(f"""elapsed time: {elapsed} to create {args.number_of_users_to_create_on_ghes} users""", file=sys.stderr)
 
     conn.close()
 
@@ -79,7 +81,6 @@ if __name__ == "__main__":
         "--users",
         action="store",
         dest="number_of_users_to_create_on_ghes",
-        default=3,
         help="The number of users to create on GHES.",
     )
     parser.add_argument(
