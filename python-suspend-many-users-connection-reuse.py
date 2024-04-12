@@ -66,6 +66,7 @@ def main(args):
                }
         params = json.dumps(params)
         url =  f"""{args.url}/users/username"""
+        logger.debug(f"""suspending: {username}""")
         try:
            logger.debug(f"""creating username {username}""")
            logger.debug(f"""sending params {params}""")
