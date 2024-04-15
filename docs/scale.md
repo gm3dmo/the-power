@@ -35,6 +35,29 @@ python-create-many-orgs-connection-reuse-pool.py
 python-create-many-users-connection-reuse-pool.py
 ```
 
+Pool script taking approx 3 minutes to create 1000 repositories:
+
+```
+python python-create-many-repos-connection-reuse-pool.py
+INFO:root:Reading config file: .gh-api-examples.conf
+INFO:root:Reading config app_id: 1
+INFO:__main__:creating: 1000 repos
+INFO:__main__:on host: gm3dmo-0f9aefebf2d0229af.ghe-test.org
+INFO:__main__:on org: acme
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+WARNING:urllib3.connectionpool:Connection pool is full, discarding connection: gm3dmo-0f9aefebf2d0229af.ghe-test.org. Connection pool size: 1
+elapsed time: 0:03:15.595511 to create 1000 repos
+```
+
 ## Creating a "large" environment.
 
 - 30 repos using `create-many-repos.sh`
