@@ -1,6 +1,40 @@
 # Scaling and Performance Testing
 Whilst The Power is not designed to do scaling/performance/load testing it has some capabilities that can be used for this.
 
+Edit this section in the `.gh-api-example.conf` file and set the values you want:
+
+```
+## Default values for scripts that generate many of a resource.
+# mostly used for testing things on GHES.
+number_of_orgs=3
+number_of_repos=3
+number_of_teams=3
+number_of_branches=10
+repo_prefix="gestrepo"
+org_prefix="fruitbat"
+user_prefix="testusertoad"
+team_prefix="testteam"
+branch_prefix="testbranch"
+file_prefix="testfile"
+```
+
+These scripts use connection reuse to speed things up a lot:
+
+```
+python-create-many-issues-connection-reuse.py     
+python-create-many-users-connection-reuse.py
+python-create-many-orgs-connection-reuse.py       
+python-create-many-repos-connection-reuse.py
+```
+
+The connection pooling scripts are currently the fastest way of creating many resources using The Power. You'll need to install `urllib3` in your python environment:
+
+```
+python-create-many-repos-connection-reuse-pool.py 
+python-create-many-orgs-connection-reuse-pool.py  
+python-create-many-users-connection-reuse-pool.py
+```
+
 ## Creating a "large" environment.
 
 - 30 repos using `create-many-repos.sh`
