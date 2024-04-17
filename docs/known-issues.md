@@ -48,4 +48,4 @@ If you use smee.io very often then Chrome can end up filling up it's storage for
 
 #### Homebrew base64 causes create-commit-commands to fail
 
-See #70 where the Homebrew base64 command on mac can break things.
+See [#70](https://github.com/gm3dmo/the-power/issues/70) where the Homebrew base64 command on mac can break things.
