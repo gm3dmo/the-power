@@ -1,0 +1,28 @@
+name: Create issue
+on:
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+jobs:
+  create_issue:
+    env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+        TITLE: "Pipeline failure"
+        LABELS: bug 
+        BODY: |
+            @pipcrispy
+    runs-on:
+        - self-hosted
+    timeout-minutes: 10
+    permissions:
+        issues: write
+        #content: read
+    steps:
+        - run: |
+            wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+            && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+            && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+            && sudo apt update \
+            && sudo apt install gh -y
+        - run: gh issue create --title "$TITLE" --label "$LABELS" --body "$BODY"
