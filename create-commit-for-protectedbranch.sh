@@ -4,7 +4,7 @@
 # PUT /repos/:owner/:repo/contents/:path
 
 raw_text="this is a test for the draft pull request on ${protected_branch_name}"
-base64_string=$(echo ${raw_text} | base64)
+base64_string=$(echo ${raw_text} | ./base64encode.py)
 content=${base64_string}
 branch=foo_branch
 

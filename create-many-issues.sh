@@ -4,7 +4,7 @@
 # POST /repos/:owner/:repo/issues
 
 raw_text="/README.md @${org}/${team_slug}" 
-base64_string=$(echo ${raw_text} | base64)
+base64_string=$(echo ${raw_text} | ./base64encode.py)
 content=${base64_string}
 
 for i in {100..1100}

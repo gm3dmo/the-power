@@ -10,7 +10,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-base64_string=$(base64 dotnet.csproj_)
+base64_string=$(./base64encode.py dotnet.csproj_)
 content=${base64_string}
 filename_in_repo=dotnet.csproj
 comment=".net project file like a pom.xml or requirements.txt. Used to trigger dependabot."

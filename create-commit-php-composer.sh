@@ -16,7 +16,7 @@ shopt -s -o nounset
 
 
 source_file="test-data/php/composer/composer.json_"
-base64_source_file=$(base64 ${source_file})
+base64_source_file=$(./base64encode.py ${source_file})
 content=${base64_source_file}
 
 filename_in_repo="composer.json"

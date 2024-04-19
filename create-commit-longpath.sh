@@ -4,7 +4,7 @@
 # PUT /repos/:owner/:repo/contents/:path
 
 raw_text="/README.md @${org}/${team_slug}" 
-base64_string=$(cat test-data/lorem.txt  | base64)
+base64_string=$(cat test-data/lorem.txt  | ./base64encode.py)
 content=${base64_string}
 
 json_file=tmp/create-commit-lorem.json
@@ -15,7 +15,7 @@ commit_message="test commit with ${chrlen} characters"
 
 jq -n \
                 --arg name     $default_committer \
-                --arg message  ${commit_message}" \
+                --arg message  "${commit_message}" \
                 --arg email    "${USER}+${default_committer}@${mail_domain}" \
                 --arg content  "${content}" \
                 '{message: $message, "committer":{ "name" : $name, "email": $email }, content: $content }'  > ${json_file}

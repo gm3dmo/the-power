@@ -4,7 +4,7 @@
 # POST /repos/:owner/:repo/issues
 
 raw_text="/README.md @${org}/${team_slug}" 
-base64_string=$(echo ${raw_text} | base64)
+base64_string=$(echo ${raw_text} | ./base64encode.py)
 content=${base64_string}
 
 count_of_issues_to_create=${1:-10}
