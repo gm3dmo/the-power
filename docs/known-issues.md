@@ -46,6 +46,7 @@ curl_custom_flags="--insecure"
 #### Chrome storage for smee urls
 If you use smee.io very often then Chrome can end up filling up it's storage for smee.io and you must clean clean it down: More toools, Developer tools, Storage. Remove the smee entries.
 
-#### Homebrew base64 causes create-commit-commands to fail
 
-See [#70](https://github.com/gm3dmo/the-power/issues/70) where the Homebrew base64 command on mac can break things.
+#### Homebrew base64 causes create-commit-commands to fail
+Thanks to @kyanny, The Power now has `base64encode.py` to free it from relying on the behaviours of operating system supplied `base64` commands.  For the backstory see [#70](https://github.com/gm3dmo/the-power/issues/70) where the Homebrew base64 command on mac can break things.
+
