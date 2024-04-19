@@ -15,7 +15,7 @@ commit_message="test commit with ${chrlen} characters"
 
 jq -n \
                 --arg name     $default_committer \
-                --arg message  ${commit_message}" \
+                --arg message  "${commit_message}" \
                 --arg email    "${USER}+${default_committer}@${mail_domain}" \
                 --arg content  "${content}" \
                 '{message: $message, "committer":{ "name" : $name, "email": $email }, content: $content }'  > ${json_file}
