@@ -9,7 +9,7 @@
 name=angular_angular__2022-02-10_17_36_10__export
 sarif_file=test-data/codeql/sarif/${name}.sarif
 sarif_b64_file=test-data/${name}.b64
-gzip -c ${sarif_file} | base64  > ${sarif_b64_file}
+gzip -c ${sarif_file} | ./base64encode.py  > ${sarif_b64_file}
 file ${sarif_b64_file}
 
 sarif_b64_string=$(cat ${sarif_b64_file})

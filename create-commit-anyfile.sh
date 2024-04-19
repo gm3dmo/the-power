@@ -24,7 +24,7 @@ fi
 # https://stackoverflow.com/questions/61154881/how-to-send-arguments-with-slurpfile-and-jq
 
 template_file=$(printf "${filename_in_repo}%s" "_")
-base64_string=$(base64 ${template_file})
+base64_string=$(./base64encode.py ${template_file})
 comment="Adding ${filename_in_repo}"
 json_file="tmp/create-commit.json"
 

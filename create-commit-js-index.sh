@@ -17,7 +17,7 @@ comment="Adding ${filename_in_repo}"
 json_file="tmp/create-commit.json"
 
 content_plain_text=$(echo 'alert("Hello, World!");' > tmp/${filename_in_repo}_)
-content_base64=$(base64 tmp/${filename_in_repo}_)
+content_base64=$(./base64encode.py tmp/${filename_in_repo}_)
 
 jq -n \
                 --arg name "${default_committer}" \

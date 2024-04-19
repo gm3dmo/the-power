@@ -12,7 +12,7 @@ if [ -z "$1" ]
 fi
 
 raw_text="/README.md @${org}/${team_slug}" 
-base64_string=$(echo ${raw_text} | base64)
+base64_string=$(echo ${raw_text} | ./base64encode.py)
 content=${base64_string}
 
 lorem_text_file=test-data/lorem-issue.md

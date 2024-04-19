@@ -10,7 +10,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-base64_string=$(base64 test-data/pom.xml_)
+base64_string=$(./base64encode.py test-data/pom.xml_)
 content=${base64_string}
 filename_in_repo=pom.xml
 

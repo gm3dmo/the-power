@@ -4,7 +4,7 @@
 # PUT /repos/:owner/:repo/contents/:path
 
 raw_text="/README.md @${org}/${team_slug}" 
-base64_string=$(cat test-data/lorem.txt  | base64)
+base64_string=$(cat test-data/lorem.txt  | ./base64encode.py)
 content=${base64_string}
 
 json_file=tmp/create-commit-lorem.json
