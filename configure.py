@@ -266,6 +266,12 @@ enterprise_shr_group_name="my-enterprise-self-hosted-runners"
 codespaces_secret_001="the-power-codespaces-secret"
 
 
+### [Rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+# [Commit metadata restrictions](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#metadata-restrictions
+)
+required_commit_prefix=${1:-PWR-100}
+
+
 ### [Self hosted runner setup](https://docs.github.com/en/rest/actions/self-hosted-runner-groups)
 # https://docs.github.com/en/rest/actions/self-hosted-runners
 runner_version=${runner_version}
