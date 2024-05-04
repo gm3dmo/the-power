@@ -36,6 +36,8 @@ jobs:
           echo "Deleting repo-release1"
           ./delete-repo.sh 
       - name: Power default testcase
+        env:
+          TERM: xterm  # Set TERM environment variable
         run: |
           echo "Running build-testcase"
           ./build-testcase
