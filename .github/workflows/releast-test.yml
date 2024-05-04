@@ -20,8 +20,8 @@ jobs:
                      --enterprise-name gm3dmo-enterprise-cloud-testing \
                      --org forest-town \
                      --repo repo-release1 \
-                     --token ${forestpat} \
-                     --webhook-url ${webhook} \
+                     --token ${FORESTPAT} \
+                     --webhook-url ${{ env.WEBHOOK }} \
                      --configure-app yes \
                      --app-id 1 \
                      --installation-id 1 \
