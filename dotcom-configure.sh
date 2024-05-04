@@ -34,4 +34,5 @@ python3 configure.py --hostname ${hostname} \
                      --pr-approver-token ${pr_approver_token} \
                      --chrome-profile "${chrome_profile}" \
                      --x-client-id ${x_client_id} \
-                     --x-client-secret ${x_client_secret} 
+                     --x-client-secret ${x_client_secret} \
+                     --default-repo-visibility public

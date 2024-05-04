@@ -19,7 +19,8 @@ jobs:
                 python3 configure.py --hostname api.github.com \
                      --enterprise-name gm3dmo-enterprise-cloud-testing \
                      --org forest-town \
-                     --repo repo-release1 \
+                     --repo pwr-release1 \
+                     --default-repo-visibility public \
                      --token ${{ secrets.FORESTPAT }} \
                      --webhook-url ${{ vars.WEBHOOK }} \
                      --configure-app yes \
