@@ -20,8 +20,8 @@ jobs:
                      --enterprise-name gm3dmo-enterprise-cloud-testing \
                      --org forest-town \
                      --repo repo-release1 \
-                     --token ${FORESTPAT} \
-                     --webhook-url ${{ env.WEBHOOK }} \
+                     --token ${{ secrets.FORESTPAT }} \
+                     --webhook-url ${{ vars.WEBHOOK }} \
                      --configure-app yes \
                      --app-id 1 \
                      --installation-id 1 \
@@ -31,6 +31,3 @@ jobs:
                      --default-committer "pipcrispy" \
                      --private-pem-file test.pem \
                      --primer "list-config"
-        env:
-          FORESTPAT: ${{ secrets.DEPLOY_KEY }}j
-          WEBHOOK: ${{ env.WEBHOOK }}
