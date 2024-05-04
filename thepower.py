@@ -88,16 +88,38 @@ def ghe2json(text, ssh=True):
     parsed_url = urlparse(http_token)
     hostname = (parsed_url.hostname)
 
-
     # Personal Access Token (PAT)
     pat = 'unknown'
     pat = next((token for token in tokens if token.startswith("ghp_")), '')
+
+    #IP address instances: 10.0.0.1, 10.0.0.2
+    # 
+    # Find the index of "IP" in the token list
+    ip_addresses = []
+    ip_index = tokens.index("IP")
+    ips = next((token for token in tokens if token.startswith("IP")), '')
+
+    if tokens[ip_index+1] == "address":
+        if tokens[ip_index+2] == "is":
+            ip_address = tokens[ip_index+3]
+            print(f"this is a single host installation: {ip_address}") 
+            ip_addresses.append(ip_address)
+            primary=ip_address
+            secondary = "none"
+        elif tokens[ip_index+2] == "instances:":
+            primary = str(tokens[ip_index+3]).strip(",")
+            secondary = str(tokens[ip_index+4])
+            ip_addresses.append(primary)
+            ip_addresses.append(secondary)
+
     
     # password
     if ssh == True:
         pw = run_password_recovery(et)
     else:
         pw = "unknown"
+
+ 
     
     environment = {}
     environment['hostname'] = hostname
@@ -107,6 +129,9 @@ def ghe2json(text, ssh=True):
     environment['token'] = pat
     environment['mgmt_password'] = pw
     environment['admin_password'] = pw
+    environment['ip_addresses'] = ip_addresses
+    environment['ip_primary'] = primary
+    environment['ip_replica'] = secondary
 
     return json.dumps(environment)
 

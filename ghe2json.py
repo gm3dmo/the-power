@@ -10,6 +10,8 @@ __license__ = "GPL"
 import os
 import sys
 import string
+import time
+import random
 import argparse
 import logging
 import logging.config
@@ -19,6 +21,42 @@ from datetime import datetime
 import re
 import thepower
 import json
+import pprint
+
+
+def clear_screen():
+    # Check if the operating system is Windows
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
+def print_progress_bar():
+    total_steps = 10  # Number of steps in the progress bar
+    progress_symbol = "="
+    empty_symbol = " "
+    progress_bar_length = 50  # Length of the progress bar
+
+    print("Converting Hubot output...")
+    for step in range(total_steps + 1):
+        # Calculate the percentage of completion
+        percent_complete = step / total_steps
+        progress_length = int(percent_complete * progress_bar_length)
+        
+        # Construct the progress bar string
+        progress_bar = progress_symbol * progress_length
+        empty_space = empty_symbol * (progress_bar_length - progress_length)
+        progress_display = f"[{progress_bar}{empty_space}] {percent_complete * 100:.2f}%"
+        
+        # Print the progress bar
+        sys.stdout.write(f"\r{progress_display}")
+        sys.stdout.flush()
+        
+        # Sleep for a random amount of time less than 0.4 seconds to simulate work
+        time.sleep(random.uniform(0, 0.4))
+    
+# Call the function to display the progress bar
 
 
 def generate_template(environment):
@@ -26,10 +64,12 @@ def generate_template(environment):
     values = {}
     values['hostname'] =  e['hostname']
     values['password_recovery'] =  e['password_recovery']
-    print(values)
-    t = string.Template("""H=$hostname
+    values['ip_replica'] = e['ip_replica'] or None
+    t = string.Template(r"""H=$hostname
 
 U=admin
+
+replica_ip=$ip_replica
 
 I=$U@$H
 
@@ -80,6 +120,12 @@ function st() {
     ssh -p122 $I
 }
 
+function sr() {
+    # SSH onto the ghe server
+    >&2 echo ssh to: $replica_ip
+    ssh -p122 admin@$replica_ip
+}
+
 
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
@@ -96,7 +142,8 @@ export PS1="%m %F{yellow}:%1~%f $ "
 
 def main(args):
     if args.ghe_file == False:
-        print(f"""Reading ghe output from stdin. Please paste below the output from gheboot informing you that the appliance is ready (optionally also paset in a token for an admin user with all scopes set.:\n""")
+        clear_screen()
+        print(f"""\nPlease paste below the output from gheboot informing you that the appliance is ready (optionally also paste in a token for an admin user with all scopes set. When that's done press the return key twice:\n""")
         lines = []
         while True:
             line = input()
@@ -113,6 +160,15 @@ def main(args):
         t = generate_template(environment)
         with open('shell-profile', 'w') as f:
            f.write(t)
+
+        print("\n")
+        print_progress_bar()
+        print(f"""\n\nConverted Hubot output to "environment.json" file:\n""")
+        with open(args.environment_file, "r") as f:
+            j = json.loads(f.read())
+            pprint.pprint(j)
+        print(f"{'='*80}")
+            
 
 
 
