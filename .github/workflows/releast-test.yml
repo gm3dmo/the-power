@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to Release1
+      - name: Run configure.py
         run: |
                 python3 configure.py --hostname api.github.com \
                      --enterprise-name gm3dmo-enterprise-cloud-testing \
@@ -31,3 +31,8 @@ jobs:
                      --default-committer "pipcrispy" \
                      --private-pem-file test.pem \
                      --primer "list-config"
+     - name: Delete repo-release1
+        run: |
+          echo "Deleting repo-release1"
+          ./delete-repo.sh 
+
