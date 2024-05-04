@@ -132,6 +132,7 @@ def ghe2json(text, ssh=True):
     environment['ip_addresses'] = ip_addresses
     environment['ip_primary'] = primary
     environment['ip_replica'] = secondary
+    environment['token_generate_url'] = f"https://{hostname}/settings/tokens/new"
 
     return json.dumps(environment)
 

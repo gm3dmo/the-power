@@ -168,6 +168,16 @@ with all scopes set). When that's done press the return key twice to proceed:\n"
             j = json.loads(f.read())
             pprint.pprint(j)
         print(f"{'='*80}")
+        print("\n")
+        message = """To create a PAT quick. In Chrome Open the developer console (Option + Command J):
+
+ $$('input[type="checkbox"').map(i => i.checked = true)
+
+"""
+        print(f"\033[93m\n\n{message}\033[0m\n")  
+        
+
+
             
 
 
