@@ -138,8 +138,11 @@ export PS1="%m %F{yellow}:%1~%f $ "
 
 def main(args):
     if args.ghe_file == False:
+        message="""Please paste below the output from gheboot informing you that the
+appliance is ready (optionally paste in a token for an admin user
+with all scopes set). When that's done press the return key twice to proceed:\n"""
         clear_screen()
-        print(f"""\nPlease paste below the output from gheboot informing you that the appliance is ready (optionally also paste in a token for an admin user with all scopes set. When that's done press the return key twice:\n""")
+        print(f"\033[93m\n\n{message}\033[0m\n")  
         lines = []
         while True:
             line = input()
@@ -156,7 +159,8 @@ def main(args):
         t = generate_template(environment)
         with open('shell-profile', 'w') as f:
            f.write(t)
-
+            
+        print(f"\033[92m")
         print("\n")
         print_progress_bar()
         print(f"""\n\nConverted Hubot output to "environment.json" file:\n""")
