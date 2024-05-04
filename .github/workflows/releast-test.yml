@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "Deleting repo-release1"
           ./delete-repo.sh 
-      - name: Run The Powers default testcase: build-testcase
+      - name: Power default testcase
         run: |
           echo "Running build-testcase"
           ./build-testcase
