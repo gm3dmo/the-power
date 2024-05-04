@@ -3,10 +3,6 @@
 ghe2json command line tool to convert gheboot output to json.
 """
 
-__author__ = "David Morris"
-__version__ = "0.1.0"
-__license__ = "GPL"
-
 import os
 import sys
 import string
