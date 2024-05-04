@@ -31,7 +31,7 @@ jobs:
                      --default-committer "pipcrispy" \
                      --private-pem-file test.pem \
                      --primer "list-config"
-     - name: Delete repo-release1
+      - name: Delete repo-release1
         run: |
           echo "Deleting repo-release1"
           ./delete-repo.sh 
