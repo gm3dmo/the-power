@@ -1,0 +1,36 @@
+name: Deploy to Release1
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: release1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Release1
+        run: |
+                python3 configure.py --hostname api.github.com \
+                     --enterprise-name gm3dmo-enterprise-cloud-testing \
+                     --org forest-town \
+                     --repo repo-release1 \
+                     --token ${forestpat} \
+                     --webhook-url ${webhook} \
+                     --configure-app yes \
+                     --app-id 1 \
+                     --installation-id 1 \
+                     --client-id client_id \
+                     --team-members "pipcrispy robin-of-loxley roger-de-courcey" \
+                     --team-admin "roger-de-courcey" \
+                     --default-committer "pipcrispy" \
+                     --private-pem-file test.pem \
+                     --primer "list-config"
+        env:
+          FORESTPAT: ${{ secrets.DEPLOY_KEY }}j
+          WEBHOOK: ${{ env.WEBHOOK }}
