@@ -46,8 +46,8 @@ def ghe2json(text, ssh=True):
     lexer = shlex.shlex(text)
     lexer.whitespace_split = True
     lexer.whitespace = ' \t\n\r\f\v'
-    tokens = list(lexer)
-    
+    tokens = list(lexer) 
+
     # Find the index of "terminated" in the token list
     terminated_index = tokens.index("terminated")
     
@@ -87,6 +87,12 @@ def ghe2json(text, ssh=True):
     http_token = next((token for token in tokens if token.startswith(("http://", "https://"))), None)
     parsed_url = urlparse(http_token)
     hostname = (parsed_url.hostname)
+
+    # Admin user
+    admin_index = tokens.index("(Log")
+    admin_user = str(tokens[admin_index+3]).strip("'")
+
+
 
     # Personal Access Token (PAT)
     pat = 'unknown'
@@ -132,6 +138,7 @@ def ghe2json(text, ssh=True):
     environment['ip_addresses'] = ip_addresses
     environment['ip_primary'] = primary
     environment['ip_replica'] = secondary
+    environment['admin_user'] = admin_user
 
     return json.dumps(environment)
 
