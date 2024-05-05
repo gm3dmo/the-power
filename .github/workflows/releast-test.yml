@@ -1,0 +1,46 @@
+name: Deploy to Release1
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: release1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run configure.py
+        run: |
+                python3 configure.py --hostname api.github.com \
+                     --enterprise-name gm3dmo-enterprise-cloud-testing \
+                     --org forest-town \
+                     --repo pwr-release1 \
+                     --default-repo-visibility public \
+                     --token ${{ secrets.FORESTPAT }} \
+                     --webhook-url ${{ vars.WEBHOOK }} \
+                     --configure-app yes \
+                     --app-id 1 \
+                     --installation-id 1 \
+                     --client-id client_id \
+                     --team-members "pipcrispy robin-of-loxley roger-de-courcey" \
+                     --team-admin "roger-de-courcey" \
+                     --default-committer "pipcrispy" \
+                     --private-pem-file test.pem \
+                     --primer "list-config"
+      - name: Delete repo-release1
+        run: |
+          echo "Deleting repo-release1"
+          ./delete-repo.sh 
+      - name: Power default testcase
+        env:
+          TERM: xterm  # Set TERM environment variable
+        run: |
+          echo "Running build-testcase"
+          ./build-testcase
+
+

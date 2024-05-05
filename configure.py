@@ -93,7 +93,7 @@ org_self_hosted_runner_group_name="org self hosted runners"
 ### [Repository](https://docs.github.com/en/rest/repos/repos#create-an-organization-repository)
 # https://docs.github.com/en/repositories
 repo="${repo_name}"
-default_repo_visibility="private"
+default_repo_visibility="${default_repo_visibility}"
 allow_auto_merge="${allow_auto_merge}"
 repo_secret_name="REPOSITORY_SECRET_001"
 repo_secret_value="repository_secret_string"
@@ -453,6 +453,7 @@ pool_size=10
         "webhook_url": args.webhook_url,
         "private_pem_file": args.private_pem_file,
         "org": args.org,
+        "default_repo_visibility" : args.default_repo_visibility,
         "enterprise_name": args.enterprise_name,
         "base_branch": args.base_branch,
         "delete_branch_on_merge": args.delete_branch_on_merge,
@@ -782,6 +783,13 @@ if __name__ == "__main__":
         dest="chrome_profile",
         default="Profile 1",
         help="The Chrome profile to start in.",
+    )
+    parser.add_argument(
+        "--default-repo-visibility",
+        action="store",
+        dest="default_repo_visibility",
+        default="private",
+        help="Set the default visibility for repositories",
     )
     parser.add_argument(
         "--github-api-version",
