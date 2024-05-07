@@ -89,9 +89,17 @@ def ghe2json(text, ssh=True):
     hostname = (parsed_url.hostname)
 
     # Admin user
-    admin_index = tokens.index("(Log")
-    admin_user = str(tokens[admin_index+3]).strip("'")
-
+    try:
+        admin_index = tokens.index("(Log") 
+        admin_user = str(tokens[admin_index+3]).strip("'")
+    except ValueError:
+        admin_user = "unknown"
+    
+    try: 
+        admin_index = tokens.index("Console")
+        admin_user = str(tokens[admin_index+2]).strip("'")
+    except ValueError:
+        admin_user = "unknown"
 
 
     # Personal Access Token (PAT)
@@ -102,21 +110,36 @@ def ghe2json(text, ssh=True):
     # 
     # Find the index of "IP" in the token list
     ip_addresses = []
-    ip_index = tokens.index("IP")
-    ips = next((token for token in tokens if token.startswith("IP")), '')
+    try:
+        ip_index = tokens.index("IP")
+        ips = next((token for token in tokens if token.startswith("IP")), '')
+    except ValueError:
+        ip_index = False
+        ips = "none"
 
-    if tokens[ip_index+1] == "address":
-        if tokens[ip_index+2] == "is":
-            ip_address = tokens[ip_index+3]
-            print(f"this is a single host installation: {ip_address}") 
-            ip_addresses.append(ip_address)
-            primary=ip_address
-            secondary = "none"
-        elif tokens[ip_index+2] == "instances:":
-            primary = str(tokens[ip_index+3]).strip(",")
-            secondary = str(tokens[ip_index+4])
-            ip_addresses.append(primary)
-            ip_addresses.append(secondary)
+
+    if ip_index == False:
+        ip_address = False
+        primary = None
+        secondary = None
+        ip_addresses = [primary, secondary]
+    else:
+        ip_address = "none"
+        ip_addresses.append(ip_address)
+        primary=ip_address
+        secondary = "none"
+        if tokens[ip_index+1] == "address":
+            if tokens[ip_index+2] == "is":
+                ip_address = tokens[ip_index+3]
+                print(f"this is a single host installation: {ip_address}") 
+                ip_addresses.append(ip_address)
+                primary=ip_address
+                secondary = "none"
+            elif tokens[ip_index+2] == "instances:":
+                primary = str(tokens[ip_index+3]).strip(",")
+                secondary = str(tokens[ip_index+4])
+                ip_addresses.append(primary)
+                ip_addresses.append(secondary)
 
     
     # password
