@@ -1,0 +1,5 @@
+{
+    "github_ssl": {
+      "cert": "REPLACE WITH YOUR CERT OR CERT CHAIN"
+    }
+}
