@@ -8,7 +8,7 @@ cd src/${repo}
 git branch ${branch_name}  origin/${branch_name}
 git switch -c ${branch_name}
 
-mkdir make-n-commits
+mkdir -p make-n-commits
 timestamp=$(date +%s)
 
 for d in `seq 1 ${number_of_commits}`;
