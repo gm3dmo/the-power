@@ -1,22 +1,26 @@
 .  ./.gh-api-examples.conf
 
-export number_of_commits=10
+export number_of_commits
 
-cd src
+./clone-default-repo.sh
 
-git clone https://${U}:${token}@${hostname}/${org}/${repo}.git
+cd src/${repo}
+git branch ${branch_name}  origin/${branch_name}
+git switch -c ${branch_name}
 
-cd ${repo}
+mkdir make-n-commits
+timestamp=$(date +%s)
 
 for d in `seq 1 ${number_of_commits}`;
  do 
- pwd;
- echo $d;
- touch file$d.md;
- echo $d >> file${d}.md
- git add file$d.md;
- git commit -m "adding file $d";
- echo "==============================================="
- time  git push
- echo "==============================================="
+    filename=make-n-commits/file-${timestamp}-commit-number-${d}.md
+    touch ${filename}
+    echo $d >> ${filename}
+    git add ${filename}  > /dev/null
+    git commit -m "adding file: ${filename}" > /dev/null
  done
+
+echo =====================
+date
+git push
+echo =====================

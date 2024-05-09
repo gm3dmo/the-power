@@ -303,6 +303,7 @@ number_of_orgs=${number_of_orgs}
 number_of_repos=${number_of_repos}
 number_of_teams=${number_of_teams}
 number_of_branches=${number_of_branches}
+number_of_commits=${number_of_commits}
 repo_prefix="testrepo"
 org_prefix="testorg"
 user_prefix="testuser"
@@ -481,6 +482,7 @@ pool_size=10
         "runner_os": args.runner_os,
         "runner_platform": args.runner_platform,
         "number_of_orgs": args.number_of_orgs,
+        "number_of_commits": args.number_of_commits,
         "number_of_repos": args.number_of_repos,
         "number_of_teams": args.number_of_teams,
         "number_of_branches": args.number_of_branches,
@@ -671,6 +673,13 @@ if __name__ == "__main__":
         dest="number_of_orgs",
         default=3,
         help="The number of orgs for the bulk creators to create.",
+    )
+    parser.add_argument(
+        "--number-of-commits",
+        action="store",
+        dest="number_of_commits",
+        default=25,
+        help="The number of commits for the bulk creators to create.",
     )
     parser.add_argument(
         "--number-of-repos",
