@@ -16,7 +16,7 @@ fi
 
 if [ -z "$2" ]
   then
-    status_context="ci-test/this-check-is-required"
+    status_context="ci/commit-status-required"
   else
     status_context=$2
 fi
