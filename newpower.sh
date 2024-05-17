@@ -7,6 +7,13 @@
 #
 # Usage: ./script.sh <new-directory-name>
 
+# Check if script was run with --help
+if [ "$1" == "--help" ]; then
+    echo "Usage: ./script.sh <new-directory-name>"
+    echo "Clones 'the-power' repository into a new directory and runs a default build."
+    exit 0
+fi
+
 # Check if script was run with an argument
 if [ -z "$1" ]; then
     echo "Error: No directory name provided."
