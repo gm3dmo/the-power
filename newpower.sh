@@ -2,7 +2,7 @@
 
 # Version: 0.1.1
 
-# This script clones a fresh copy of the 'the-power' repository into a new directory.
+# This script clones a fresh copy of the 'the-power' repository into a new directory within ~/the-power.
 # The name of the new directory should be provided as an argument when running this script.
 # After cloning the repository, the script will call 'all-the-things.sh' to run a default build of 'the-power'.
 #
