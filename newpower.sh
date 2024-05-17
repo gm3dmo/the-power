@@ -43,7 +43,7 @@ if ! python3 -m venv myenv; then
 fi
 
 # Activate the virtual environment
-source myenv/bin/activate
+source myenv/bin/activate || { echo "Error: Failed to activate virtual environment."; exit 1; }
 
 # Install the playwright package
 if ! pip install playwright; then
