@@ -33,6 +33,8 @@ current_version=$(sed -n 's/^# Version: //p' "$0")
 # Extract version number from the cloned script
 cloned_version=$(sed -n 's/^# Version: //p' ~/the-power/$1/newpower.sh)
 
+echo "The script may appear to hang here. Please be patient."
+
 # Change to the new directory
 cd ~/the-power/$1 || { echo "Error: Failed to change directory."; exit 1; }
 
