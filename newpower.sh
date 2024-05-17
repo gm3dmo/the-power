@@ -6,11 +6,11 @@
 # The name of the new directory should be provided as an argument when running this script.
 # After cloning the repository, the script will call 'all-the-things.sh' to run a default build of 'the-power'.
 #
-# Usage: ./script.sh <new-directory-name>
+# Usage: ./newpower.sh <new-directory-name>
 
 # Check if script was run with --help
 if [ "$1" == "--help" ]; then
-    echo "Usage: ./script.sh <new-directory-name>"
+    echo "Usage: ./newpower.sh <new-directory-name>"
     echo "Clones 'the-power' repository into a new directory and runs a default build."
     exit 0
 fi
