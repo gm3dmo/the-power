@@ -113,13 +113,13 @@ function pa() {
 function st() {
     # SSH onto the ghe server
     >&2 echo ssh to: $I
-    ssh -p122 $I
+    ssh -o StrictHostKeyChecking=no -p122 $I
 }
 
 function sr() {
     # SSH onto the ghe server
     >&2 echo ssh to: $replica_ip
-    ssh -p122 admin@$replica_ip
+    ssh -o StrictHostKeyChecking=no -p122 admin@$replica_ip
 }
 
 
