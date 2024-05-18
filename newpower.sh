@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 0.1.1
+# Version: 0.1.2
 
 # This script clones a fresh copy of the 'the-power' repository into a new directory.
 # The name of the new directory should be provided as an argument when running this script.
@@ -31,7 +31,7 @@ fi
 current_version=$(sed -n 's/^# Version: //p' "$0")
 
 # Extract version number from the cloned script
-cloned_version=$(sed -n 's/^# Version: //p' "~/the-power/$1/newpower.sh") || { echo "Error: Failed to extract version number from cloned script."; }
+cloned_version=$(sed -n 's/^# Version: //p' ~/the-power/$1/newpower.sh) || { echo "Error: Failed to extract version number from cloned script."; }
 
 echo "The script may appear to hang here. Please be patient."
 
