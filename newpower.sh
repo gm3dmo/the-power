@@ -59,6 +59,11 @@ if ! ~/the-power/$1/all-the-things.sh; then
     exit 1
 fi
 
+# Pull in generated files for variable usage below
+. ~/the-power/$1/.gh-api-examples.conf
+. ~/the-power/$1/shell-profile
+
+# Set terminal colors
 normal=$(tput sgr0)
 highlight=$(tput setaf 2)
 
@@ -73,6 +78,7 @@ printf "${highlight}ch${normal}: open a new instance of chrome using profile #19
 if [ -n "$org" ] && [ -n "$repo" ]; then
     printf "${highlight}chrepo${normal}: open a new instance of chrome using profile #19 at http://%s/%s/%s\n" "$H" "$org" "$repo"
 fi
+
 
 printf "${highlight}chmona${normal}: open a new instance of chrome using profile #20 at http://%s\n" "$H"
 printf "${highlight}ffx${normal}: open a new instance of firefox (if available) at http://%s\n" "$H"
