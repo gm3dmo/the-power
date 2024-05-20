@@ -169,7 +169,7 @@ with all scopes set). When that's done press the return key twice to proceed:\n"
     print(f"\033[92m")
     print("\n")
     print_progress_bar()
-    print(f"""\n\nConverted Hubot output to "environment.json" file:\n""")
+    print(f"""\n\nConverted Hubot output to "{args.environment_file}" file:\n""")
     with open(args.environment_file, "r") as f:
         j = json.loads(f.read())
         pprint.pprint(j)
