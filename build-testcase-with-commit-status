@@ -49,40 +49,91 @@ sleep 2
 ./create-commit-gitattributes.sh | jq -r ".content.html_url"
 
  printf "${highlight} - Creating commit status for an optional check: ${normal}"
-./create-commit-status.sh pending ci-test/this-check-is-optional | jq -r '.url'
+./create-commit-status.sh pending ci/commit-status-optional | jq -r '.url'
  printf "${highlight} - Creating commit status for an required check: ${normal}"
-./create-commit-status.sh pending ci-test/this-check-is-required | jq -r '.url'
+./create-commit-status.sh pending ci/commit-status-required | jq -r '.url'
  printf "${highlight} - Updating branch protection with required check: ${normal}"
 ./update-branch-protection-with-required-check.sh | jq -r '.url'
 
-# To update the checks to success run the two lines below:
-# ./create-commit-status.sh success ci-test/this-check-is-required
-# ./create-commit-status.sh success ci-test/this-check-is-optional
-#
-echo ------------------------------------------- 
-echo Run this to make create the approval review by a codeowner:
-echo You will need to have set the  pr_approver_token in the
-echo .gh-api-examples.conf file. The value should be a PAT of
-echo a user with permissions to approve the pull request.
+sleep 3
 
-read x
-printf "${highlight} - Creating an approving review for a pull request: ${normal}"
-./create-approving-review-for-a-pull-request.sh | jq -r '.html_url'
-echo ------------------------------------------- 
+. .gh-api-examples.conf
 
-echo Run these two to make the checks update their status:
-read x
- printf "${highlight} - Updating status for optional check to success: ${normal}"
- ./create-commit-status.sh success ci-test/this-check-is-optional | jq -r '.id'
-read x
- printf "${highlight} - Updating status for required check to success: ${normal}"
- ./create-commit-status.sh success ci-test/this-check-is-required | jq -r '.id'
+clear
+echo ------------------------------------------- 
+if [ ${pr_approver_token} != "replace_with_a_PAT" ]; then
+    echo "Do you want to create an approving review by a codeowner using token ${pr_approver_token}:"
+    x=n
+    read x
+    if [ "$x" != "y" ]; then
+        echo "Skip creating approval review by codeowner"
+    elif [ "$x" == "y" ]; then
+        printf "${highlight} - Creating an approving review for a pull request: ${normal}"
+        ./create-approving-review-for-a-pull-request.sh | jq -r '.html_url'
+    fi
+fi
 
 echo ------------------------------------------- 
 
-echo If the tiny app is configured and has appropriate permissions
-echo check runs can be created with the Checks API:
+# Ask the user if they want to run these two commands to update the check statuses
 
- printf "${highlight} - Creating check-run with annotation: ${normal}"
-./tiny-create-check-run-with-annotation.sh | jq -r '.id'
+clear
+echo -------------------------------------------
+echo
+echo "Press y to update the optional commit status to success" 
+echo "Press any other key to skip this step"
+echo
+x=n
+read x
+if [ "$x" != "y" ]; then
+    echo "Skipping updating the optional commit status"
+elif [ "$x" == "y" ]; then
+    printf "${highlight} - Updating status for optional commit-status-opitonal to success: ${normal}"
+    ./create-commit-status.sh success ci/commit-status-optional | jq -r '.id'
+fi
+
+clear
+x=n
+echo
+echo "Press y to update the required commit status to success" 
+echo "Press any other key to skip this step"
+echo
+read x
+if [ "$x" != "y" ]; then
+    echo "Skipping updating ci/commit-status-required" 
+elif [ "$x" == "y" ]; then
+    printf "${highlight} - Updating status for required check to success: ${normal}"
+    ./create-commit-status.sh success ci/commit-status-required | jq -r '.id'
+fi
+
+
+clear
+x=n
+echo
+echo "Press y to create a check run" 
+echo "Press any other key to skip this step"
+echo
+read x
+if [ "$x" != "y" ]; then
+    echo "Skip creating check run"
+elif [ "$x" == "y" ]; then
+    printf "${highlight} - Creating check run with annotation: ${normal}"
+    check_run_id=$(./tiny-create-check-run-with-annotation.sh | jq -r '.id')
+    printf "${highlight} - Created check run id: ${check_run_id} ${normal}"
+fi
+
+clear
+x=n
+echo
+echo "Press y to update check run id ${check_run_id}" 
+echo "Press any other key to skip this step"
+echo
+read x
+if [ "$x" != "y" ]; then
+    echo "Skip updating check run"
+elif [ "$x" == "y" ]; then
+    printf "${highlight} - Updating check run id: $check_run_id ${normal}"
+    ./tiny-update-a-check-run.sh ${check_run_id}
+fi
+
 

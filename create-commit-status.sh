@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/commits/statuses?apiVersion=2022-11-28#create-a-commit-status
-# POST POST /repos/{owner}/{repo}/statuses/{sha}
+# POST /repos/{owner}/{repo}/statuses/{sha}
 
 # The state of the status.
 # Can be one of: error, failure, pending, success
@@ -16,7 +16,7 @@ fi
 
 if [ -z "$2" ]
   then
-    status_context="ci-test/this-check-is-required"
+    status_context="ci/pwr-commit-status-required"
   else
     status_context=$2
 fi

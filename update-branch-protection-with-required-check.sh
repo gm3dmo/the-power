@@ -14,16 +14,13 @@ fi
 json_file=tmp/branch-protection.json
 source_json=test-data/api-doc-set-branch-protection.json
 
-
-#     | .required_status_checks.checks = [ $required_status_check_name ]
-
 cat ${source_json}| jq --arg team_slug "$team_slug" \
                             --arg team_admin "$team_admin" \
                             --argjson enforce_admins $enforce_admins \
                             --argjson required_approving_reviewers ${required_approving_reviewers} \
                             --arg required_status_check_name ${required_status_check_name} \
     '.restrictions.users = [ $team_admin] | .restrictions.teams = [$team_slug]
-     | .required_status_checks.checks = [ { context: $required_status_check_name, app_id: null  } ]
+     | .required_status_checks.checks = [ { context: $required_status_check_name, app_id: null  },{ context: "ci/commit-status-required", app_id: null  } ]
      | .required_pull_request_reviews.dismissal_restrictions.users = [ $team_admin ]
      | .required_pull_request_reviews.dismissal_restrictions.teams = [ $team_slug ]
      | .required_pull_request_reviews.required_approving_review_count = $required_approving_reviewers
