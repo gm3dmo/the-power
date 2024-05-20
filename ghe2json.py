@@ -137,6 +137,7 @@ export PS1="%m %F{yellow}:%1~%f $ "
 
 
 def main(args):
+    text = ""
     if args.ghe_file == False:
         message="""Please paste below the output from gheboot informing you that the
 appliance is ready (optionally paste in a token for an admin user
@@ -151,35 +152,40 @@ with all scopes set). When that's done press the return key twice to proceed:\n"
             else:
                 break
         text = '\n'.join(lines)
-        environment = (thepower.ghe2json(text))
-        with open(args.environment_file, "w") as f:
-            f.write(environment)
+    else:
+        # assume the file exists
+        with open(args.ghe_file, "r") as f:
+            text = f.read()
+
+    environment = (thepower.ghe2json(text))
+    with open(args.environment_file, "w") as f:
+        f.write(environment)
 
 
-        t = generate_template(environment)
-        with open('shell-profile', 'w') as f:
-           f.write(t)
-            
-        print(f"\033[92m")
-        print("\n")
-        print_progress_bar()
-        print(f"""\n\nConverted Hubot output to "environment.json" file:\n""")
-        with open(args.environment_file, "r") as f:
-            j = json.loads(f.read())
-            pprint.pprint(j)
-        print(f"{'='*80}")
-        print("\n")
-        message = """To create a PAT quick. In Chrome Open the developer console (Option + Command J):
+    t = generate_template(environment)
+    with open('shell-profile', 'w') as f:
+        f.write(t)
+        
+    print(f"\033[92m")
+    print("\n")
+    print_progress_bar()
+    print(f"""\n\nConverted Hubot output to "{args.environment_file}" file:\n""")
+    with open(args.environment_file, "r") as f:
+        j = json.loads(f.read())
+        pprint.pprint(j)
+    print(f"{'='*80}")
+    print("\n")
+    message = """To create a PAT quick. In Chrome Open the developer console (Option + Command J):
 
  $$('input[type="checkbox"').map(i => i.checked = true)
 
 """
-        print(f"\033[93m\n\n{message}\033[0m\n")  
-        
+    print(f"\033[93m\n\n{message}\033[0m\n")  
+
+
 
 
             
-
 
 
 if __name__ == "__main__":

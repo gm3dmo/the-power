@@ -41,7 +41,23 @@ def slugify(s):
 
 
 def ghe2json(text, ssh=True):
-    """Converts the text output from gheboot to json"""
+    """Converts the text output from gheboot to json.
+    
+    Example input:
+
+@kyanny
+, Your requested GHES 3.10.3 single-node resources in  australiaeast on azure (named: gheboot-kyanny-1716187058841) true are ready!
+This is a(n) SINGLE-NODE deployment of GHES
+Access the UI at:
+  http://kyanny-mclq08.ghe-test.com
+Access the instance via SSH at:
+  ssh://admin@gheboot-all-kyanny-0-mclq08.ghe-test.com:122
+The instances in this deployment are:
+  gheboot-all-kyanny-0-mclq08.ghe-test.com
+You can get the Management Console and 'ghe-admin' user's password by running:
+ssh -p122 admin@gheboot-all-kyanny-0-mclq08.ghe-test.com -- cat /data/user/common/gheboot-password
+This Server will automatically be terminated on 2024-05-22T06:38:39Z    
+    """
 
     lexer = shlex.shlex(text)
     lexer.whitespace_split = True
