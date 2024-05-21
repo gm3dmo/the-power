@@ -1,7 +1,7 @@
 name: Deploy to Release1
 
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
   workflow_dispatch:
@@ -13,7 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Run configure.py
         run: |
                 python3 configure.py --hostname api.github.com \
@@ -42,5 +43,3 @@ jobs:
         run: |
           echo "Running build-testcase"
           ./build-testcase
-
-
