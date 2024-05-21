@@ -104,5 +104,5 @@ printf "\n${highlight}cd ${install_dir}/%s && source ${install_dir}/%s/shell-pro
 
 # Compare the version numbers
 if [ "$current_version" != "$cloned_version" ]; then
-    printf "\n\n${highlight}Warning:${normal} Version number of the cloned newpower.sh (${highlight}%s${normal}) is different from your current local copy (${highlight}%s${normal}). You may wish to update your local copy." "$cloned_version" "$current_version"
+    printf "\n\n${highlight}Warning:${normal} Version number of the cloned ghespower (${highlight}%s${normal}) is different from your current local copy (${highlight}%s${normal}). You may wish to update your local copy." "$cloned_version" "$current_version"
 fi
