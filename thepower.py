@@ -7,10 +7,12 @@ __author__ = "Your Name"
 __version__ = "0.1.0"
 __license__ = "MIT"
 
+import random
 import sys
 import string
 import os.path
 import logging
+import time
 import urllib
 import json
 import subprocess
@@ -261,6 +263,41 @@ def read_dotcom_config(dotcom_config_file):
     else: 
         logging.warning(f"""No config file: {dotcom_config_file}""")
     return dotcom_config
+
+
+def clear_screen():
+    # Check if the operating system is Windows
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
+def print_progress_bar():
+    total_steps = 10  # Number of steps in the progress bar
+    progress_symbol = "="
+    empty_symbol = " "
+    progress_bar_length = 50  # Length of the progress bar
+
+    print("Converting Hubot output...")
+    for step in range(total_steps + 1):
+        # Calculate the percentage of completion
+        percent_complete = step / total_steps
+        progress_length = int(percent_complete * progress_bar_length)
+        
+        # Construct the progress bar string
+        progress_bar = progress_symbol * progress_length
+        empty_space = empty_symbol * (progress_bar_length - progress_length)
+        progress_display = f"[{progress_bar}{empty_space}] {percent_complete * 100:.2f}%"
+        
+        # Print the progress bar
+        sys.stdout.write(f"\r{progress_display}")
+        sys.stdout.flush()
+        
+        # Sleep for a random amount of time less than 0.4 seconds to simulate work
+        time.sleep(random.uniform(0, 0.4))
+    
+# Call the function to display the progress bar
 
 
 if __name__ == "__main__":
