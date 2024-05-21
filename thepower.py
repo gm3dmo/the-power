@@ -67,8 +67,26 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     tokens = list(lexer) 
 
     # Find the index of "terminated" in the token list
-    terminated_index = tokens.index("terminated")
+    termination_date = []
+    try: 
+       terminated_index = tokens.index("terminated")
+    except ValueError:
+        terminated_index = False
+
+    if terminated_index == False:
+       td = 'unknown'
+    else:
+        termination_date = None
+        # If the next token after "terminated" is "on", get the next token
+        if tokens[terminated_index+1] == "on":
+            if not tokens[terminated_index+2].endswith("Z"):
+                next_three_tokens = tokens[terminated_index+2:terminated_index+5]
+                termination_date.extend(next_three_tokens)
+            else:
+                termination_date.append(tokens[terminated_index+2])
+    td = ' '.join(termination_date)
     
+
     # Find the index of "GHE" or "GHES" in the token list
     try:
         ghe_index = tokens.index("GHE")
@@ -87,19 +105,6 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
         extracted_tokens.insert(0, tokens[ssh_index])
         extracted_tokens.insert(1, tokens[ssh_index+1])
         et = " ".join(extracted_tokens)
-    
-    td = 'unknown'
-    
-    termination_date = []
-    # If the next token after "terminated" is "on", get the next token
-    if tokens[terminated_index+1] == "on":
-        if not tokens[terminated_index+2].endswith("Z"):
-            next_three_tokens = tokens[terminated_index+2:terminated_index+5]
-            termination_date.extend(next_three_tokens)
-        else:
-            termination_date.append(tokens[terminated_index+2])
-    
-    td = ' '.join(termination_date)
     
     # hostname
     http_token = next((token for token in tokens if token.startswith(("http://", "https://"))), None)
