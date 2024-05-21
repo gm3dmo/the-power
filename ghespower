@@ -8,6 +8,7 @@
 #
 # Usage: ./ghespower <new-directory-name>
 
+
 # Check if script was run with --help
 if [ "$1" == "--help" ]; then
     echo "Usage: ./ghespower <new-directory-name>"
