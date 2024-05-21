@@ -3,46 +3,9 @@
 import argparse
 import json
 import logging
-import os
 import pprint
-import random
 import shlex
-import sys
-import time
-
-def clear_screen():
-    # Check if the operating system is Windows
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
-
-
-def print_progress_bar():
-    total_steps = 10  # Number of steps in the progress bar
-    progress_symbol = "="
-    empty_symbol = " "
-    progress_bar_length = 50  # Length of the progress bar
-
-    print("Converting Hubot output...")
-    for step in range(total_steps + 1):
-        # Calculate the percentage of completion
-        percent_complete = step / total_steps
-        progress_length = int(percent_complete * progress_bar_length)
-        
-        # Construct the progress bar string
-        progress_bar = progress_symbol * progress_length
-        empty_space = empty_symbol * (progress_bar_length - progress_length)
-        progress_display = f"[{progress_bar}{empty_space}] {percent_complete * 100:.2f}%"
-        
-        # Print the progress bar
-        sys.stdout.write(f"\r{progress_display}")
-        sys.stdout.flush()
-        
-        # Sleep for a random amount of time less than 0.4 seconds to simulate work
-        time.sleep(random.uniform(0, 0.4))
-    
-# Call the function to display the progress bar
+import thepower
 
 
 def terraform_workspace_id(text):
@@ -76,7 +39,7 @@ def main(args):
     if args.ghe_file == False:
         message="""Please paste below the output from gheboot informing you
         Terraform Workspace ID (ws-xxxxxx). When that's done press the return key twice to proceed:\n"""
-        clear_screen()
+        thepower.clear_screen()
         print(f"\033[93m\n\n{message}\033[0m\n")  
         lines = []
         while True:
@@ -102,7 +65,7 @@ def main(args):
 
     print(f"\033[92m")
     print("\n")
-    print_progress_bar()
+    thepower.print_progress_bar()
     print(f"""\n\nConverted Hubot output to "{args.environment_file}" file:\n""")
     with open(args.environment_file, "r") as f:
         j = json.loads(f.read())
