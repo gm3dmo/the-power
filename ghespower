@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Version: 0.1.2
+# Version: 0.1.3
 
-# This script clones a fresh copy of the 'the-power' repository into a new directory.
+# This script clones a fresh copy of the 'the-power' repository into a new directory within the install_dir specified below.
 # The name of the new directory should be provided as an argument when running this script.
 # After cloning the repository, the script will call 'all-the-things.sh' to run a default build of 'the-power'.
 #
-# Usage: ./script.sh <new-directory-name>
+# Usage: ./ghespower <new-directory-name>
 
 # Check if script was run with --help
 if [ "$1" == "--help" ]; then
-    echo "Usage: ./script.sh <new-directory-name>"
-    echo "Clones 'the-power' repository into a new directory and runs a default build."
+    echo "Usage: ./ghespower <new-directory-name>"
+    echo "Clones 'the-power' repository into a new directory and then runs build-all"
     exit 0
 fi
 
@@ -34,7 +34,7 @@ fi
 current_version=$(sed -n 's/^# Version: //p' "$0")
 
 # Extract version number from the cloned script
-cloned_version=$(sed -n 's/^# Version: //p' ~/the-power-runtimes/$1/newpower.sh) || { echo "Error: Failed to extract version number from cloned script."; }
+cloned_version=$(sed -n 's/^# Version: //p' ${install_dir}/$1/ghespower) || { echo "Error: Failed to extract version number from cloned script."; }
 
 echo "The script may appear to hang here. Please be patient."
 
@@ -53,6 +53,12 @@ source ${venv_dir}/bin/activate || { echo "Error: Failed to activate virtual env
 # Install the playwright package
 if ! pip install playwright; then
     echo "Error: Failed to install playwright."
+    exit 1
+fi
+
+# Install the playwright browsers
+if ! playwright install; then
+    echo "Error: Failed to install playwright browsers"
     exit 1
 fi
 
@@ -94,7 +100,7 @@ if [ -n "$replica_ip" ]; then
 fi
 
 printf "\nTo use these shortcuts temporarily for this shell session, run the following:\n"
-printf "\n${highlight}cd ${install_dir}/%s && source ~/the-power/%s/shell-profile\n" "$1" "$1"
+printf "\n${highlight}cd ${install_dir}/%s && source ${install_dir}/%s/shell-profile\n" "$1" "$1"
 
 # Compare the version numbers
 if [ "$current_version" != "$cloned_version" ]; then
