@@ -7,6 +7,8 @@
 # After cloning the repository, the script will call 'all-the-things.sh' to run a default build of 'the-power'.
 #
 # Please note: This script has only been developed/tested against recent MacOS releases and requires additional development time to be ported to other operating systems.
+# Current requirements for the-power itself are available here: https://github.com/gm3dmo/the-power/blob/main/docs/setup.md#prerequisites
+# Automation to check for and install these as needed is currently planned
 #
 # Usage: ./ghespower <new-directory-name>
 
