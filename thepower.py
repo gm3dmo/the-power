@@ -76,7 +76,6 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     if terminated_index == False:
        td = 'unknown'
     else:
-        termination_date = None
         # If the next token after "terminated" is "on", get the next token
         if tokens[terminated_index+1] == "on":
             if not tokens[terminated_index+2].endswith("Z"):
