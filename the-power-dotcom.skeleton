@@ -23,6 +23,7 @@ team_admin="<github username of team admin>"
 default_committer="<github username of your default committer>"
 pr_approver_token=aPAT
 pr_approver_name=aUserName
+default_repo_visibility=private
 
 # Used on GHES appliances for org creation.
 number_of_orgs=5

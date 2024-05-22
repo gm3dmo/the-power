@@ -35,4 +35,5 @@ python3 configure.py --hostname "${hostname}" \
                      --chrome-profile "${chrome_profile}" \
                      --x-client-id "${x_client_id}" \
                      --x-client-secret "${x_client_secret}" \
-                     --default-repo-visibility public
+                     --default-repo-visibility ${default_repo_visibility}
+
