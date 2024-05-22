@@ -6,6 +6,8 @@
 # The name of the new directory should be provided as an argument when running this script.
 # After cloning the repository, the script will call 'all-the-things.sh' to run a default build of 'the-power'.
 #
+# Please note: This script has only been developed/tested against recent MacOS releases and requires additional development time to be ported to other operating systems.
+#
 # Usage: ./ghespower <new-directory-name>
 
 
