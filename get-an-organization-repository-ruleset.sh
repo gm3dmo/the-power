@@ -4,7 +4,13 @@
 # GET /orgs/{org}/rulesets/{ruleset_id}
 
 
-ruleset_id=$1
+# If the script is passed an argument $1 use that as the name
+if [ -z "$1" ]
+  then
+    ruleset_id=$(./get-all-organization-repository-rulesets.sh | jq '[.[].id] | max')
+  else
+    rulset_id=%1
+fi
 
 
 curl ${curl_custom_flags} \
