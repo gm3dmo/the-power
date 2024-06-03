@@ -11,7 +11,7 @@ if [ -z "$1" ]
   then
     ruleset_id=$(./get-all-organization-repository-rulesets.sh | jq '[.[].id] | max')
   else
-    rulset_id=%1
+    rulset_id=$1
 fi
 
 ruleset_name=org_repo_ruleset1
