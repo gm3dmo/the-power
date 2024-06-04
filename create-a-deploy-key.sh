@@ -11,7 +11,7 @@ ts=$(date +%s)
 json_file=tmp/create-a-deploy-key.json
 
 jq -n \
-              --arg title "The Key ${ts}" \
+              --arg title "The Power Deploy Key ${ts}" \
               --arg key "${public_key}" \
                     '{title: $title, key: $key}' > ${json_file}
 
@@ -19,4 +19,4 @@ curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Content-Type: application/json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/keys --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/keys" --data @${json_file}
