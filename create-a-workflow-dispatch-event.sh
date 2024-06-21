@@ -15,12 +15,14 @@ fi
 
 json_file=tmp/create-a-workflow-dispatch-event.json
 
-ref=main
-logLevel="info"
+ref=${protected_branch_name}
+# In the power you can use new_branch 
+#ref_${branch_name}
+# gh cli can do this also:
+# gh workflow run the-power-workflow-simple --ref new_branch
 
 jq -n \
         --arg ref "$ref" \
-        --arg logLevel "$logLevel" \
         '{
           ref: $ref
          }' > ${json_file}
@@ -29,5 +31,4 @@ jq -n \
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/actions/workflows/${workflow_id}/dispatches" --data '{"ref" : "main"}'
-
+        "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/actions/workflows/${workflow_id}/dispatches" --data @${json_file}
