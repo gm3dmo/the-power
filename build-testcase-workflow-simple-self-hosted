@@ -1,0 +1,65 @@
+# Create a repository and setup a simple workflow 
+# Prior to running this, make any needed modifications to test-data/workflow-simple.yml_
+# that are needed for the testcase.
+# The "as delivered" version of workflow-simple.yml_ will trigger the workflow
+# with dispatch event
+#
+
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+==================================================
+$0
+==================================================
+
+EOF
+
+printf "${normal}"
+                                                   
+
+printf "${highlight} - Creating repo: ${normal}"
+ ./create-repo.sh | jq -r '.name'
+python3 create-workflow-simple-self-hosted-json-file.py
+printf "${highlight} - Committing workflow file: ${normal}"
+ ./create-commit-workflow-simple-self-hosted.sh | jq -r '.content.path'
+
+
+. .gh-api-examples.conf
+
+# Get the registration token for the runner before we cd into the runner download
+# directory.
+registration_token=$(./create-a-registration-token-for-a-repository.sh | jq -r '.token')
+
+rm -rf actions-runner
+mkdir actions-runner && cd actions-runner
+
+curl -O -L https://github.com/actions/runner/releases/download/${runner_version}/actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
+
+tar zxf actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
+
+# This is a gnarly thing to do but saves rewriting how the config file
+# gets populated for this one script that uses github.com the runner tarball download
+if [ $hostname == "api.github.com" ];
+then
+  hostname="github.com"
+fi
+
+./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name ${runner_name} --labels ${runner_labels} --replace 
+
+# need to run.sh the runner
+
+echo "Press enter to run the workflow dispatch:"
+ read x
+./dispatch-event.sh 
+
+
