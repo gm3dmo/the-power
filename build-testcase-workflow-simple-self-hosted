@@ -58,6 +58,8 @@ fi
 
 # need to run.sh the runner
 
+cd ..
+
 echo "Press enter to run the workflow dispatch:"
  read x
 ./dispatch-event.sh 
