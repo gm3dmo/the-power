@@ -8,7 +8,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-if [ $hostname == api.github.com ]; then
+if [ "${hostname}" = "api.github.com" ]; then
   hostname=github.com
 fi
 
@@ -66,4 +66,3 @@ case ${TOKEN_FRST3} in
         git clone --branch ${branch_name} https://x-access-token:${GITHUB_TOKEN}@${hostname}/${org}/${repo}.git
     ;;
 esac
-
