@@ -20,7 +20,7 @@ if [ -z "$2" ]
     org=${2}
 fi
 
-if [ $preferred_client == "gh" ]; then
+if [ "${preferred_client}" = "gh" ]; then
     echo gh api /repos/{owner}/{repo} ${gh_custom_flags}
 else
     curl ${curl_custom_flags} \
