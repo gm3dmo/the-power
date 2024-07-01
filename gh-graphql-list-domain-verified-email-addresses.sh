@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/graphql/reference/objects#ipallowlistentry
+# https://github.blog/changelog/2020-05-19-api-support-for-viewing-organization-members-verified-email-addresses/
 
 enterprise=${1:-$enterprise}
 
