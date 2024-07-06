@@ -3,6 +3,7 @@
 from playwright.sync_api import sync_playwright
 import json
 import time
+import thepower
 
 def run(playwright):
     browser = playwright.chromium.launch(headless=False)
@@ -43,7 +44,10 @@ def run(playwright):
 
     # Wait for the token to be visible and retrieve its value
     token_value = page.inner_text('#new-oauth-token')
+    hashed_token = thepower.hash_and_encode(token_value)
+      
     print(f"Retrieved token: {token_value}")
+    print(f"hashed token: {hashed_token}")
 
     # Load the current environment.json into memory
     with open('environment.json', 'r') as f:
