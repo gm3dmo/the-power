@@ -18,10 +18,22 @@ import json
 import subprocess
 import configparser
 import shlex
+import hashlib
+import base64
 from pathlib import Path
 from urllib import request
 from urllib.parse import urlparse
 import re
+
+
+def hash_and_encode(token):
+    """Creates the hashed token for a PAT. See the guidance at [generating a sha 265 hash value for a token](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/identifying-audit-log-events-performed-by-an-access-token#generating-a-sha-256-hash-value-for-a-token)
+    """
+    # Hash the token using SHA-256
+    sha256_hash = hashlib.sha256(token.encode()).digest()
+    # Base64 encode the binary hash
+    base64_encoded = base64.b64encode(sha256_hash).decode()
+    return base64_encoded
 
 
 def run_password_recovery(password_recovery_command):
