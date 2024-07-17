@@ -26,8 +26,8 @@ sudo gem install jwt
 - Change into the the directory and version of the power.
 - Run [`configure.py`](/configure.py) to generate the `.gh-api-examples.conf` file. This file feeds variables to the scripts in The Power.:
 
-```
-$ python3 configure.py
+```bash
+python3 configure.py
 ```
 
 `configure.py` asks questions, You need to provide your token and hostname of your
