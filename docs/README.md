@@ -91,4 +91,4 @@ jsonpath "$.full_name" == "{{ org}}/{{ repo }}"
 ```
 
 ### Why The Power
-There are lots of great tools like [Postman](https://www.postman.com/), [JMeter](https://jmeter.apache.org/) for interacting with API's and building testsuites and many of the latest API's come with their own interactive documentation built-in like the [swagger petstore](https://petstore.swagger.io/). The Power is a solution for times and places where those tools just aren't available.
+There are lots of great tools like [JMeter](https://jmeter.apache.org/) for interacting with API's and building testsuites and many of the latest API's come with their own interactive documentation built-in like the [swagger petstore](https://petstore.swagger.io/). The Power is a solution for times and places where those tools just aren't available.
