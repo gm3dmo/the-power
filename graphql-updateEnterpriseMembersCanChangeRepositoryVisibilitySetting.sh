@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/graphql/reference/mutations#updateenterpriseadministratorrole
+# https://docs.github.com/en/graphql/reference/mutations#updateenterprisememberscanchangerepositoryvisibilitysetting
 
 graphql_query=tmp/graphql_query.txt
 
