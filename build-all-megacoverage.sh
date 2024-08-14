@@ -58,3 +58,5 @@ printf "${normal}"
     ./create-release.sh  | jq -r '.url'
    printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
     ./create-commit-gitattributes.sh | jq -r ".content.html_url"
+   printf "${highlight} - Adding an environment: ${normal}"
+    ./create-environment.sh
