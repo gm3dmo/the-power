@@ -13,12 +13,12 @@ if [ -z "$1" ]
 fi
 
 
-if [[ ${default_repo_visibility} == "private" ]]; then
+if [ ${default_repo_visibility} = "private" ]
+   then
     p="true"
-else
+   else
     p="false"
 fi
-
 
 json_file=tmp/repo-details.json
 rm -f ${json_file}
