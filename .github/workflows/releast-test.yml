@@ -32,7 +32,8 @@ jobs:
                      --team-admin "roger-de-courcey" \
                      --default-committer "pipcrispy" \
                      --private-pem-file test.pem \
-                     --primer "list-config"
+                     --primer "list-config" \
+                     --curl_custom_flags "--fail-with-body"
       - name: Delete repo-release1
         run: |
           echo "Deleting repo-release1"
