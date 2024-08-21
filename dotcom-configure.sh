@@ -35,5 +35,6 @@ python3 configure.py --hostname "${hostname}" \
                      --chrome-profile "${chrome_profile}" \
                      --x-client-id "${x_client_id}" \
                      --x-client-secret "${x_client_secret}" \
-                     --default-repo-visibility ${default_repo_visibility}
+                     --default-repo-visibility ${default_repo_visibility} \
+                     --curl_custom_flags "--fail-with-body --no-progress-bar"
 

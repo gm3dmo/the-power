@@ -757,10 +757,10 @@ if __name__ == "__main__":
         help="The preferred client program to use for interaction with the API's. Valid values are gh or curl.",
     )
     parser.add_argument(
-        "--custom-curl-flags",
+        "--curl_custom_flags",
         action="store",
         dest="curl_custom_flags",
-        default="--no-progress-meter",
+        default="--no-progress-meter --fail-with-body",
         help="curl custom flags.",
     )
     parser.add_argument(
