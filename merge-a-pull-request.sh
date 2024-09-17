@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/pulls#merge-a-pull-request
+# https://docs.github.com/en/enterprise-cloud@latest/rest/pulls/pulls?apiVersion=2022-11-28#merge-a-pull-request
 # PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge
 
 
@@ -14,15 +14,19 @@ fi
 
 commit_title="PR commit title"
 commit_message="PR commit message."
+# merge, squash, rebase
+merge_method="squash"
 
 json_file=tmp/merge-a-pull-request.json
 
 jq -n \
            --arg commit_title "${commit_title}" \
            --arg commit_message "${commit_message}" \
+           --arg merge_method "${merge_method}" \
            '{
              commit_title : $commit_title,
              commit_message : $commit_message,
+             merge_method: $merge_method,
            }' > ${json_file}
 
 
