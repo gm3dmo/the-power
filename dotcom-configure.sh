@@ -36,5 +36,5 @@ python3 configure.py --hostname "${hostname}" \
                      --x-client-id "${x_client_id}" \
                      --x-client-secret "${x_client_secret}" \
                      --default-repo-visibility ${default_repo_visibility} \
-                     --curl_custom_flags "--fail-with-body --no-progress-bar"
+                     --curl_custom_flags "--fail-with-body --no-progress-meter"
 
