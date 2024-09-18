@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/billing#get-github-advanced-security-active-committers-for-an-organization
+# https://docs.github.com/en/enterprise-cloud@latest/rest/billing/billing?apiVersion=2022-11-28#get-github-advanced-security-active-committers-for-an-organization
 # GET /orgs/{org}/settings/billing/advanced-security
 
 curl ${curl_custom_flags} \
