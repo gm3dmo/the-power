@@ -182,7 +182,12 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     else:
         pw = "unknown"
 
- 
+    # backup-utils server
+    try:
+        backup_utils_index = tokens.index("Backup")
+        backup_utils = str(tokens[backup_utils_index+14]).strip("'")
+    except ValueError:
+        backup_utils = None
     
     environment = {}
     environment['hostname'] = hostname
@@ -197,6 +202,8 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     environment['ip_replica'] = secondary
     environment['admin_user'] = admin_user
     environment['token_generate_url'] = f"https://{hostname}/settings/tokens/new"
+    if backup_utils is not None:
+        environment['backup_utils'] = backup_utils
 
     return json.dumps(environment)
 
