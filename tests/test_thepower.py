@@ -1,3 +1,9 @@
+# Run this unit test by running:
+#
+#   python3 -m unittest discover -s tests -p 'test_*.py'
+#
+# from the root directory of the-power repository.
+
 import unittest
 import json
 from thepower import ghe2json
@@ -5,6 +11,7 @@ from thepower import ghe2json
 class TestGhe2Json(unittest.TestCase):
     maxDiff = None
 
+    # unit test for single-node instance information
     def test_ghe2json(self):
         input_text = """
         @kyanny
@@ -39,6 +46,7 @@ class TestGhe2Json(unittest.TestCase):
         result =json.loads(ghe2json(input_text, ssh=False))
         self.assertEqual(result, expected_output)
 
+    # unit test for high availability instances information
     def test_ghe2json_ha(self):
         input_text = """
 @gm3dmo
