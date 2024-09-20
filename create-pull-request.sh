@@ -11,7 +11,9 @@ title="Amazing new feature PR: $timestamp"
 
 lorem_file=test-data/lorem-pull-request.md
 lorem_text=$(cat ${lorem_file})
-draft_pull_request="true"
+
+# Set draft_pull_request to true here for override:
+#draft_pull_request="true"
 
 jq -n \
   --arg title "${title}" \

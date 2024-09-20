@@ -147,6 +147,8 @@ default_pr_event="COMMENT"
 # https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#merge-a-pull-request
 # valid for merge_method are merge, squash, rebase
 merge_method=merge
+# draft pull request can be true or false
+draft_pull_request="false"
 
 
 ### [Branches](https://docs.github.com/en/rest/commits/commits)
