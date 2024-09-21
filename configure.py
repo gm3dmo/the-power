@@ -232,6 +232,7 @@ private_pem_file=${private_key_pem_file}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
 # The App ID: value at https://github.com/organizations/<org>/settings/apps/<appname>
+default_app_name=${default_app_name}
 default_app_id=${default_app_id}
 # https://github.com/organizations/<org>/settings/installations/<installation_id>
 default_installation_id=${default_installation_id}
@@ -338,6 +339,7 @@ pool_size=10
         ghe_config["token"] = dotcom_config.get("dummy_section", "token")
         args.org = dotcom_config.get("dummy_section", "org")
         args.default_app_id = dotcom_config.get("dummy_section", "default_app_id")
+        args.default_app_name = dotcom_config.get("dummy_section", "default_app_name")
         args.default_installation_id = dotcom_config.get(
             "dummy_section", "default_installation_id"
         )
@@ -379,9 +381,10 @@ pool_size=10
         args.graphql_path_prefix = "/graphql"
     else:
         # Set the path up for a GHES server
-        default_app_id = 1
+        default_app_id = 4
         default_installation_id = 1
         client_id = 1
+        args.default_app_name = args.default_app_name
 
 
     if args.token != "":
@@ -462,6 +465,7 @@ pool_size=10
         "pr_approver_token": args.pr_approver_token,
         "pr_approver_name": args.pr_approver_name,
         "default_app_id": args.app_id,
+        "default_app_name": args.default_app_name,
         "default_installation_id": args.installation_id,
         "private_key_pem_file": args.private_pem_file,
         "client_id": args.client_id,
@@ -533,7 +537,8 @@ if __name__ == "__main__":
         dest="configure_github_app",
         default="no",
     )
-    parser.add_argument("-a", "--app-id", action="store", dest="app_id", default=1)
+    parser.add_argument("-a", "--app-id", action="store", dest="app_id", default=4)
+    parser.add_argument("--app-name", action="store", dest="default_app_name", default="the-power-app01")
     parser.add_argument(
         "-i", "--installation-id", action="store", dest="installation_id", default=1
     )
