@@ -58,7 +58,6 @@ def run(playwright):
 
     page.click('input[type="submit"][value="Create GitHub App"]');
 
-    time.sleep(100)
 
 def main(args):
     with sync_playwright() as playwright:
