@@ -15,7 +15,7 @@ fi
 commit_title="PR commit title"
 commit_message="PR commit message."
 # merge, squash, rebase
-merge_method="squash"
+#merge_method="squash"
 
 json_file=tmp/merge-a-pull-request.json
 

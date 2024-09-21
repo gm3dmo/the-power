@@ -274,8 +274,7 @@ def read_dotcom_config(dotcom_config_file):
     dotcom_config_file =  Path(dotcom_config_file)
     if dotcom_config_file.is_file():
         dotcom_config = fake_ini_file(dotcom_config_file)
-        logging.info(f"""Reading config file: {dotcom_config_file}""")
-        logging.info(f"""Reading config app_id: {dotcom_config.getint('dummy_section','default_app_id')}""")
+        logging.debug(f"""Reading config file: {dotcom_config_file}""")
     else: 
         logging.warning(f"""No config file: {dotcom_config_file}""")
     return dotcom_config

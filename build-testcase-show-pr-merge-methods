@@ -1,0 +1,77 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+
+
+sleep_for=10
+
+for merge_method in merge squash rebase
+do
+     printf "${highlight} - merge_method = ${merge_method} ${normal}\n"
+    python gh-set-value.py --key merge_method --value ${merge_method}
+    python gh-set-value.py --key repo --value repo-${merge_method}
+    ./delete-repo.sh repo-${merge_method} >/dev/null 2>&1
+                                                   
+     printf "${highlight} - Creating repo: ${normal}"
+    ./create-repo-testrepo.sh | jq -r '.name'
+
+
+    ./add-team-to-repo.sh
+     printf "${highlight} - Creating webhook: ${normal}"
+    ./create-webhook.sh  | jq -r '.id'
+     printf "${highlight} - Creating docs/README.md: ${normal}"
+    ./create-commit-readme.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating CODEOWNERS: ${normal}"
+    ./create-commit-codeowners.sh| jq -r ".content.html_url"
+     printf "${highlight} - Creating requirements.txt: ${normal}"
+    ./create-commit-python-pip.sh| jq -r ".content.html_url"
+    sleep 2
+     printf "${highlight} - Creating new branch: ${normal}"
+
+    ./create-branch-newbranch.sh | jq -r '.url'
+
+    # set the branch protection rules for main
+     printf "${highlight} - Setting branch protection rules on default branch: ${normal}"
+    ./set-branch-protection.sh | jq -r '.url'
+
+     printf "${highlight} - Creating a commit on the new branch: ${normal}"
+    ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating an issue: ${normal}"
+    ./create-repo-issue.sh | jq -r '.html_url'
+     printf "${highlight} - Creating a pull request: ${normal}"
+    ./create-pull-request.sh | jq -r '.html_url'
+
+     printf "${highlight} - List pull request mergeable state: ${normal}"
+    ./list-pull-request.sh | jq -r '.mergeable'
+
+
+     printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
+    ./create-commit-gitattributes.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - List pull request mergeable state: ${normal}"
+    ./list-pull-request.sh | jq -r '.mergeable'
+
+     printf "${highlight} - Sleeping: ${sleep_for} ${normal}"
+    sleep ${sleep_for}
+     printf "${highlight} - List pull request mergeable state: ${normal}"
+    ./list-pull-request.sh | jq -r '.mergeable'
+
+     printf "${highlight} - Merging: ${normal}"
+    ./merge-a-pull-request.sh | jq -r '.merged'
+     echo 
+done
