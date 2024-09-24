@@ -20,7 +20,7 @@ cat ${source_json}| jq --arg team_slug "$team_slug" \
                             --argjson required_approving_reviewers ${required_approving_reviewers} \
                             --arg required_status_check_name ${required_status_check_name} \
     '.restrictions.users = [ $team_admin] | .restrictions.teams = [$team_slug]
-     | .required_status_checks.checks = [ { context: $required_status_check_name, app_id: null  },{ context: "ci/commit-status-required", app_id: null  } ]
+     | .required_status_checks.checks = [ { context: $required_status_check_name, app_id: null  },{ context: "ci/commit-status-optional", app_id: null  } ]
      | .required_pull_request_reviews.dismissal_restrictions.users = [ $team_admin ]
      | .required_pull_request_reviews.dismissal_restrictions.teams = [ $team_slug ]
      | .required_pull_request_reviews.required_approving_review_count = $required_approving_reviewers
@@ -28,12 +28,10 @@ cat ${source_json}| jq --arg team_slug "$team_slug" \
     ' > ${json_file}
 
 
-
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Accept: application/vnd.github.luke-cage-preview+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${protected_branch_name}/protection --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/branches/${protected_branch_name}/protection" --data @${json_file}
 
-rm -f ${json_file}
