@@ -2,10 +2,12 @@
 
 # https://docs.github.com/en/rest/reference/checks#create-a-check-run
 # POST /repos/{owner}/{repo}/check-runs
+
+branch_for_check=${branch_name}
  
 if [ -z "$1" ]
   then
-     head_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch}| jq -r '.object.sha')
+     head_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${branch_for_check}| jq -r '.object.sha')
   else
      head_sha=$1
 fi
