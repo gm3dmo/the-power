@@ -7,7 +7,7 @@
 # https://github.com/{owner}/{repo}/pull/2/checks
 if [ -z "$1" ]
   then
-    check_run_id=${default_check_run_id}
+    check_run_id=$(./list-check-runs-for-a-git-reference.sh $target_branch |   jq -r '.check_runs | last | .id')
   else
     check_run_id=$1
 fi
@@ -15,4 +15,4 @@ fi
 curl  ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs/${check_run_id}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs/${check_run_id}"
