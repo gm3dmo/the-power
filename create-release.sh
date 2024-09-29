@@ -1,13 +1,23 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#create-a-release
-# POST /repos/:owner/:repo/releases
+# https://docs.github.com/en/enterprise-cloud@latest/rest/releases/releases?apiVersion=2022-11-28#create-a-release
+# POST /repos/{owner}/{repo}/releases
 
-json_file=tmp/create-release.json
+
 timestamp=$(date +%s)
 draft="false"
 prerelease="false"
 generate_release_notes="true"
+
+if [ -z "$1" ]
+  then
+    tag="v1.0.${timestamp}" 
+  else
+    tag=$1
+fi
+
+
+json_file=tmp/create-release.json
 
 jq -n \
         --arg tag "v1.0.${timestamp}" \
@@ -16,7 +26,7 @@ jq -n \
         --arg prerelease ${prerelease} \
         --arg draft ${draft} \
         --arg generate_release_notes  ${generate_release_notes} \
-        --arg body "The first and possibly last ever release." \
+        --arg body "A release created by The Power." \
               '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, draft: $draft | test("true"), prerelease: $prerelease | test("true")}'  > ${json_file}
 
 #cat $json_file | jq -r >&2
@@ -24,6 +34,6 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases" --data @${json_file}
 
 rm -f ${json_file}

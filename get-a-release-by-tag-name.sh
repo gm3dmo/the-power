@@ -7,7 +7,8 @@
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    tag=$tag
+
+    tag=$(./list-releases.sh | jq -r 'last.tag_name')
   else
     tag=$1
 fi
