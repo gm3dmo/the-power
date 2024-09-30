@@ -6,9 +6,28 @@
 # handle $1 being a user name or a user id
 user_login=$1
 
-
 # Use jq to extract the latest entry and add a "date_sso_response" field to the output 
 # so that we can see the date of the SSO response in a human-readable format.
+#
+#   {
+#    "@timestamp": 1727701595387,
+#    "_document_id": "Ixs8jylvtY_XS6Gm-Yv1ew",
+#    "action": "business.sso_response",
+#    "actor": "roger-de-courcey",
+#    "actor_id": 80921036,
+#    "actor_is_bot": false,
+#    "business": "gm3dmo-enterprise-cloud-testing",
+#    "business_id": 3082,
+#    "created_at": 1727701595387,
+#    "external_identity_nameid": "roger-de-courcey@protonmail.com",
+#    "external_identity_username": null,
+#    "issuer": "http://www.okta.com/exkfj6k12Vh7IJda94x6",
+#    "name": "Gm3dmo Enterprise Cloud Testing",
+#    "operation_type": "authentication",
+#    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+#    "date_sso_response": "2024-09-30 13:06:35" <------ Get's added by the jq command.
+#   }
+
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
