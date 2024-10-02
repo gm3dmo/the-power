@@ -96,6 +96,7 @@ function datadog_api_key () {
     datadog_c2=f3cdda69f99882a4812902
     echo "Commit: datadog_api_key"
     echo "DATADOG_API_KEY=${datadog_c1}${datadog_c2}" >datadog_api_key.compromised.secret.txt
+    echo "${datadog_c1}${datadog_c2}" >datadog_api_key.compromised.secret-no-prefix.txt
 }
 
 
