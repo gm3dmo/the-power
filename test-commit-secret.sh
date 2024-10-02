@@ -3,6 +3,17 @@
 
 # This script is intended to run after build-testcase-secret-scanning
 
+# If a secret is not being detected:
+
+# Locate the pattern here: https://docs.github.com/en/enterprise-cloud@latest/code-security/secret-scanning/introduction/supported-secret-scanning-patterns?learn=secret_scanning&learnProduct=code-security
+
+# If the pattern has a tick only in the "Partner" column then the User
+# will never get a report of the pattern, it is reported directly to the
+# provider when found in a public repo.
+# In this example script the datadog_api_key pattern is an example.
+# Some tools that scan may be scanning for DATADOG_API_KEY as a hint
+# that a token may be stored there.
+
 cd src/${repo}
 # We split the token in 2 so that it's never checked in to the power
 # in a way that will set off a false positive (hopefully).
@@ -19,6 +30,7 @@ if [ -z "$1" ]
 fi
 
 function github_pat () { 
+o
     gh1=ghp_9
     gh2=gDO8kvREKK9toy7CsUunZEY77XvGA1pNv5F
     echo "Commit: GitHub PAT"
@@ -96,12 +108,14 @@ function datadog_api_key () {
     datadog_c2=f3cdda69f99882a4812902
     datadog_c3=f3cbee69f99881deadbeef
     datadog_c4=f3cbee69980xdeadbeef
+    datadog_c5=ee8aaaaaaaa
+    datadog_c6=aaaaaaaaaaaaaaaaaaaa
     echo "Commit: datadog_api_key"
     echo "DATADOG_API_KEY=${datadog_c1}${datadog_c2}" >datadog_api_key.compromised.secret.txt
     echo "${datadog_c1}${datadog_c2}" >datadog_api_key.compromised.secret-no-prefix.txt
     echo "DATADOG_API_KEY=${datadog_c1}${datadog_c3}" >datadog_api_key.compromised.secret-beef.txt
-    echo "DATADOG_API_KEY=${datadog_c1}${datadog_c3}" >datadog_api_key.compromised.secret-beef-non-hex.txt
-    echo "DATADOG_API_KEY=${datadog_c1}${datadog_c4}" >datadog_api_key.compromised.secret-beef-underlength.txt
+    echo "DATADOG_API_KEY=${datadog_c1}${datadog_c4}" >datadog_api_key.compromised.secret-beef-non-hex.txt
+    echo "DATADOG_API_KEY=${datadog_c1}${datadog_c6}" >datadog_api_key.compromised.secret-straight-a.txt
 }
 
 
