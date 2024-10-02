@@ -80,6 +80,46 @@ Cluster will automatically be terminated on 2024-08-19T10:56:44+00:00
         result =json.loads(ghe2json(input_text, ssh=False))
         self.assertEqual(result, expected_output)
 
+    # unit test for single-node instance information with backup-utils enabled
+    def test_ghe2json_backup_utils(self):
+        input_text = """
+@kyanny
+, Your requested GHES 3.14.0 single-node resources in  australiaeast on azure (named: gheboot-kyanny-1726216807714) true are ready!
+This is a(n) SINGLE-NODE deployment of GHES
+Access the UI at:
+  http://kyanny-i3shce.ghe-test.net
+Access the instance via SSH at:
+  ssh://admin@gheboot-all-kyanny-0-i3shce.ghe-test.net:122
+The instances in this deployment are:
+  gheboot-all-kyanny-0-i3shce.ghe-test.net
+You can get the Management Console and 'ghe-admin' user's password by running:
+ssh -p122 admin@gheboot-all-kyanny-0-i3shce.ghe-test.net -- cat /data/user/common/gheboot-password
+This Server will automatically be terminated on 2024-09-15T08:40:52Z
+You've requested a Backup Utils server for this deployment.
+Access the Backup Utils server via SSH at:
+  ssh://ghe-admin@backups-kyanny-i3shce.ghe-test.net:22
+  *This server will be terminated along with the rest of the instances in this request.
+        """
+        
+        expected_output = {
+            'hostname': 'kyanny-i3shce.ghe-test.net',
+            'password_recovery': 'ssh -p122 admin@gheboot-all-kyanny-0-i3shce.ghe-test.net -- cat /data/user/common/gheboot-password',
+            'ghes_version': '3.14.0',
+            'termination_date': '2024-09-15T08:40:52Z',
+            'token': '',
+            'mgmt_password': 'unknown',
+            'admin_password': 'unknown',
+            'ip_addresses': [None, None],
+            'ip_primary': None,
+            'ip_replica': None,
+            'admin_user': 'ghe-admin',
+            'token_generate_url': f"https://kyanny-i3shce.ghe-test.net/settings/tokens/new",
+            'backup_utils': 'ssh://ghe-admin@backups-kyanny-i3shce.ghe-test.net:22'
+        }
+        
+        result =json.loads(ghe2json(input_text, ssh=False))
+        self.assertEqual(result, expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
