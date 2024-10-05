@@ -22,10 +22,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-remote_theme: pages-themes/modernist@v0.2.0
-plugins:
-- jekyll-remote-theme 
-  
 
 include:
   - docs
@@ -44,6 +40,7 @@ jobs:
         with:
           source: ./docs
           destination: ./_site
+          theme: modernist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
