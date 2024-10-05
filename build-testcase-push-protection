@@ -11,6 +11,8 @@ cat << EOF
  / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
 /_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
 
+  The world's fastest demo of Push Protection
+
 EOF
 
 printf "${normal}"
@@ -18,8 +20,8 @@ printf "${normal}"
 printf "${highlight} - Creating repo: ${normal}"
 ./create-repo-testrepo.sh | jq -r '.name'
 sleep 5
-printf "${highlight} - Enable secret scanning on repo: ${normal}"
-./enable-push-protection.sh | jq -r '.security_and_analysis.push_protection.status'
+printf "${highlight} - Enable push protection on repo: ${normal}"
+./enable-push-protection.sh | jq -r '.security_and_analysis.secret_scanning_push_protection.status'
 ./add-team-to-repo.sh
  printf "${highlight} - Creating webhook: ${normal}"
 ./create-webhook.sh  | jq -r '.id'
@@ -32,12 +34,22 @@ echo "------------ security and analysis settings ------------------"
 ./list-repo.sh 2>/dev/null | jq -r '.security_and_analysis'
 echo "=============================================================="
 
-echo "Cloning the repo to src/"
+echo "Cloning the repo to directory src/"
 echo
-./clone-default-repo.sh
+./clone-default-repo.sh >/dev/null 2>&1
 
-echo "This has built a simple repository and enabled secret scanning."
 echo
-echo "Now you need to run: test-commit-secret.sh to commit 
-and push the secrets you want to trigger."
-
+echo
+echo "Now you need to run:"
+echo 
+echo " ./test-commit-secret.sh"
+echo 
+echo 
+echo "This will commit a number of common secrets locally"
+echo "and attempt to push them to the repo."
+echo
+echo "If you are here you are probably going to want read about:"
+echo 
+echo "https://docs.github.com/en/enterprise-cloud@latest/code-security/secret-scanning/troubleshooting-secret-scanning-and-push-protection/troubleshooting-secret-scanning#push-protection-limitations"
+echo
+echo
