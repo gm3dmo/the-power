@@ -22,10 +22,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-
-include:
-  - docs
-
 jobs:
   # Build job
   build:
