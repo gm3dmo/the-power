@@ -36,6 +36,10 @@ The Power can create the following on a blank appliance or organization in <=30 
 
 There are many other features and test-cases you can use or adapt to build scenarios of your own.
 
+> [!NOTE]  
+> The power is not intended as an example of how to write shell scripts.
+
+
 ### The Power is a tool for learning
 - Designed to be as simple as possible to understand. To keep things simple we exclusively uses only `curl` and `jq` to complete most tasks. Only a few of the more complex scenarios have other dependencies.
 
