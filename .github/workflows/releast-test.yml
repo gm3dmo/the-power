@@ -33,7 +33,7 @@ jobs:
                      --default-committer "pipcrispy" \
                      --private-pem-file test.pem \
                      --primer "list-config" \
-                     --curl_custom_flags "--fail-with-body --no-progress-meter"
+                     --custom-curl-flags "--fail-with-body --no-progress-meter"
       - name: Delete repo-release1
         run: |
           echo "Deleting repo-release1"
