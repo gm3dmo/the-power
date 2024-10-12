@@ -17,6 +17,7 @@ printf "${normal}"
                                                    
      printf "${highlight} - Creating repo: ${normal}"
     ./create-repo-testrepo.sh | jq -r '.name'
+     printf "${highlight} - Adding team to repo (team_slug must be set in your .gh-api-examples.conf file)${normal}\n"
     ./add-team-to-repo.sh
      printf "${highlight} - Creating webhook: ${normal}"
     ./create-webhook.sh  | jq -r '.id'
