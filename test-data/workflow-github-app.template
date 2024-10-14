@@ -18,7 +18,7 @@ jobs:
           private-key: ${{ secrets.app_cert_secret }}
           # https://github.com/actions/create-github-app-token?tab=readme-ov-file#owner
           owner: $org
-    - name: Create issue
+    - name: Create issue using octokit
       uses: octokit/request-action@v2.x
       with:
         route: POST /repos/${{ github.repository }}/issues
@@ -26,3 +26,12 @@ jobs:
         body: "This is a new issue created from a GitHub Action workflow."
       env:
         GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
+
+    - name: Close issue number 1 using gh authed as the github app
+      env:
+        GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
+      run: |
+              export GH_DEBUG="api gh pr list"
+              gh auth status 
+              gh issue close 1 --repo $org/$repo
+

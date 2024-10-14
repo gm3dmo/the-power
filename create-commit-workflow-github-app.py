@@ -27,6 +27,7 @@ def main(args):
     args.team_slug = power_config.get('dummy_section','team_slug',).strip('"')
     args.pr_approver_name = power_config.get('dummy_section','pr_approver_name',).strip('"')
     args.default_app_id = power_config.get('dummy_section','default_app_id',).strip('"')
+    args.repo = power_config.get('dummy_section','repo',).strip('"')
 
     p = Path('test-data/workflow-github-app.template')
     json_file = f"""tmp/create-commit-workflow-github-app.json"""
@@ -35,7 +36,7 @@ def main(args):
        t = {}
        chapter_content = ct.read()
        chapter_string = string.Template(chapter_content.decode("utf-8"))
-       values = { "org": args.org, "default_app_id" : args.default_app_id }
+       values = { "org": args.org, "default_app_id" : args.default_app_id, "repo": args.repo }
 
        n = chapter_string.safe_substitute(values)
        print(n)
