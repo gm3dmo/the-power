@@ -79,7 +79,7 @@ if __name__ == "__main__":
         action="store",
         dest="org",
         default=False,
-        help="the organization name. 
+        help="the organization name."
     )
 
     args = parser.parse_args()
