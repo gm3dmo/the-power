@@ -13,7 +13,6 @@ if [ -z "$1" ]
      head_sha=$1
 fi
 
-GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 json_file=tmp/create-check-run.json
 
@@ -23,16 +22,17 @@ json_file=tmp/create-check-run.json
 #Can be one of: queued, in_progress, completed
 status=queued
 
+
 jq -n \
-       --arg name "code-coverage" \
+       --arg name "${check_run_name}" \
        --arg head_sha "${head_sha}" \
        --arg status "${status}" \
        '{ head_sha: $head_sha, status: $status, name: $name }' > ${json_file}
 
+
+GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
+
 curl ${curl_custom_flags} \
-     -X POST \
      -H "Authorization: Bearer ${GITHUB_APP_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.antiope-preview+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs \
-        --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs" --data @${json_file}

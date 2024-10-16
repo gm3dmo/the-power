@@ -157,6 +157,7 @@ branch_name="new_branch"
 protected_branch_name="${base_branch}"
 required_approving_reviewers=1
 required_status_check_name="ci/commit-status-required"
+check_run_name="power-check-run-code-coverage"
 enforce_admins="false"
 base_branch=${base_branch}
 delete_branch_on_merge=${delete_branch_on_merge}
