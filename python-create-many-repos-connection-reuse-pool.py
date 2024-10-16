@@ -42,6 +42,7 @@ def main(args):
     args.hostname = power_config.get('dummy_section','hostname')
     args.path_prefix = power_config.get('dummy_section','path_prefix')
     args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
+    args.repo_prefix = power_config.get('dummy_section','repo_prefix')
 
     if args.number_of_repos is False:
         args.number_of_repos = int(power_config.get('dummy_section','number_of_repos'))
@@ -49,10 +50,15 @@ def main(args):
     if args.org is False:
         args.org = power_config.get('dummy_section','org').strip('"')
 
+    if args.repo_prefix is False:
+        args.repo_prefix = "default-prefix"  # Set a default prefix or raise an error
+
     logger.info(f"""creating: {args.number_of_repos} repos""")
     logger.info(f"""on host: {args.hostname}""")
     logger.info(f"""on org: {args.org}""")
+    logger.info(f"""on org: {args.repo_prefix}""")
 
+    sys.exit(1)
 
     token = f"Bearer {args.GITHUB_TOKEN}"
     http = urllib3.PoolManager(num_pools=12)
@@ -60,7 +66,7 @@ def main(args):
     start = datetime.now()
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=12) as executor:
-        executor.map(lambda x: make_request(x, args, http, token), range(args.number_of_repos))
+        executor.map(lambda x: make_request(x, args, http, token), range(4307, 30000))
 
     end = datetime.now()
     elapsed = end - start
