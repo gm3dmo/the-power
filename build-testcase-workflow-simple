@@ -7,6 +7,7 @@
 
 normal=$(tput sgr0)
 highlight=$(tput setaf 2)
+yellow=$(tput setaf 3)
 
 printf "$highlight"
 
@@ -33,7 +34,26 @@ python3 create-workflow-simple-json-file.py
 printf "${highlight} - Committing workflow file: ${normal}"
  ./create-commit-workflow-simple.sh | jq -r '.content.path'
 
-echo "Press enter to run the workflow dispatch:"
- read x
-./dispatch-event.sh 
+
+printf "\n"
+printf "${yellow} - Press w to trigger a workflow dispatch event: ${normal}\n"
+printf "${yellow} - Press r to trigger a repository dispatch event: ${normal}\n"
+printf "\n"
+
+read -p "Enter the dispatch event type: " event_type
+
+
+case $event_type in
+  w)
+    echo "workflow_dispatch"
+    ./create-a-workflow-dispatch-event.sh
+    ;;
+  r)
+    echo "repository_dispatch"
+    ./dispatch-event.sh 
+    ;;
+  *)
+    echo "Invalid option"
+    ;;
+esac
 

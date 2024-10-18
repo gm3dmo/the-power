@@ -28,7 +28,8 @@ jq -n \
          }' > ${json_file}
 
 
-curl -v ${curl_custom_flags} \
+curl  ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/actions/workflows/${workflow_id}/dispatches" --data @${json_file}
+

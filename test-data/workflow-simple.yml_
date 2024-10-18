@@ -39,10 +39,19 @@ jobs:
             dist/**/*.md
           retention-days: 2
 
-      - name: gh search example with debug mode
+      #- name: gh search example with debug mode
+      #  env:
+      #    GITHUB_TOKEN: ${{ github.token }}
+      #  run: |
+      #        export GH_DEBUG="api gh pr list"
+      #        gh search prs "test"
+
+
+      - name: gh repo list
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
               export GH_DEBUG="api gh pr list"
-              gh search prs "test"
+              gh auth status 
+              gh repo list
 
