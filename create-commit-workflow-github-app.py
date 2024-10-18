@@ -39,7 +39,7 @@ def main(args):
        values = { "org": args.org, "default_app_id" : args.default_app_id, "repo": args.repo }
 
        n = chapter_string.safe_substitute(values)
-       print(n)
+       #print(n)
        
        chapter_content = bytes(n, 'utf-8')
        chapter_base64 = base64.encodebytes(chapter_content)

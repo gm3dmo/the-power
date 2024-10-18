@@ -7,7 +7,7 @@ on:
   repository_dispatch:
     types: [custom_event_type]
 jobs:
-  blank:
+  the-power-actions-job-demo-github-app-create-issue:
     runs-on: [ 'ubuntu-latest' ]
     steps:
     - name: Create GitHub App token
@@ -19,7 +19,7 @@ jobs:
           # https://github.com/actions/create-github-app-token?tab=readme-ov-file#owner
           owner: $org
 
-    - name: Create issue using octokit
+    - name: Create an issue using octokit
       uses: octokit/request-action@v2.x
       with:
         route: POST /repos/${{ github.repository }}/issues
@@ -36,35 +36,11 @@ jobs:
               gh auth status 
               gh issue close 1 --repo $org/$repo
 
-
-  # This workflow contains a single job called "build"
-  single_repo:
-    # The type of runner that the job will run on
+  two_repos_visible:
     runs-on: ubuntu-latest
     environment: app_token_test
     steps:
-      - name: Generate a token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
-        with:
-           app-id: ${{ secrets.APP_ID }}
-           private-key: ${{ secrets.PRIVATE_KEY }}
-  
-      - name: Use the token
-        shell: bash
-        env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
-        run: |
-          echo "Testing the GitHub App token by using it with a GraphQL API query"
-          curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ env.TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" \
-          -d '{"query":"{ viewer { repositories(first: 100) { nodes { name } } } }"}' \
-          https://api.github.com/graphql | jq -r '.data.viewer.repositories.nodes | length'
-
-  couple_repos:
-    runs-on: ubuntu-latest
-    environment: app_token_test
-    steps:
-      - name: Generate a token
+      - name: Generate GitHub App Token
         id: generate_token
         uses: actions/create-github-app-token@v1
         with:
@@ -73,36 +49,53 @@ jobs:
            owner: ${{ github.repository_owner }}
            repositories: power-github-app-workflow1,power-github-app-workflow2
   
-      - name: Use the token
+      - name: gh graphql query to list totalCount of repos in org expect to see 2 repos plus public repos
         shell: bash
         env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          #GH_DEBUG: "api gh list" 
         run: |
-          echo "Testing the GitHub App token by using it with a GraphQL API query"
-          curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ env.TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" \
-          -d '{"query":"{ viewer { repositories(first: 100) { nodes { name } } } }"}' \
-          https://api.github.com/graphql | jq -r '.data.viewer.repositories.nodes | length'
-          
-  all_repos:
-            # The type of runner that the job will run on
-            runs-on: ubuntu-latest
-            environment: app_token_test
-            steps:
-              - name: Generate a token
-                id: generate_token
-                uses: actions/create-github-app-token@v1
-                with:
-                   app-id: ${{ secrets.APP_ID }}
-                   private-key: ${{ secrets.PRIVATE_KEY }}
-                   owner: ${{ github.repository_owner }}
-          
-              - name: Use the token
-                shell: bash
-                env:
-                  TOKEN: ${{ steps.generate_token.outputs.token }}
-                run: |
-                  echo "Testing the GitHub App token by using it with a GraphQL API query"
-                  curl -L -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ env.TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" \
-                  -d '{"query":"{ viewer { repositories(first: 100) { nodes { name } } } }"}' \
-                  https://api.github.com/graphql | jq -r '.data.viewer.repositories.nodes | length'
+          gh auth status
+          gh api graphql -F owner="$org"  -f query='query($owner: String! ) { organization(login: $owner) { repositories { totalCount } } }' | jq -r
+
+
+  all_repos_visible:
+    runs-on:  ubuntu-latest
+    environment: app_token_test
+    steps:
+      - name: Generate GitHub App token with owner set
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+           app-id: ${{ secrets.APP_ID }}
+           private-key: ${{ secrets.PRIVATE_KEY }}
+           owner: ${{ github.repository_owner }}
+      - name: gh graphql query to list totalCount of repos in org expect totalcount equals all repos in org 
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          #GH_DEBUG: "api gh list" 
+        run: |
+          gh auth status
+          gh api graphql -F owner="$org"  -f query='query($owner: String! ) { organization(login: $owner) { repositories { totalCount } } }' | jq -r
+
+
+  one_repo_plus_all_public_repos_visible:
+    runs-on: ubuntu-latest
+    environment: app_token_test
+    steps:
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+           app-id: ${{ secrets.APP_ID }}
+           private-key: ${{ secrets.PRIVATE_KEY }}
+      - name:  gh graphql query to list totalCount of repos in org
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          #GH_DEBUG: "api gh list" 
+        run: |
+          gh auth status
+          gh api graphql -F owner="$org"  -f query='query($owner: String! ) { organization(login: $owner) { repositories { totalCount } } }' | jq -r
 

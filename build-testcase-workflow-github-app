@@ -5,6 +5,8 @@
 
 normal=$(tput sgr0)
 highlight=$(tput setaf 2)
+yellow=$(tput setaf 3)
+
 
 printf "$highlight"
 
@@ -29,9 +31,9 @@ printf "${highlight} - Creating repo: ${normal}"
  ./create-repo.sh | jq -r '.name'
 python3 create-workflow-simple-json-file.py
 
-printf "${highlight} - Creating target repos: ${normal}"
- ./create-repo.sh power-github-app-workflow1 | jq -r '.name'
- ./create-repo.sh power-github-app-workflow2 | jq -r '.name'
+printf "${highlight} - Creating target repos: ${normal}\n"
+ ./create-repo.sh power-github-app-workflow1 >/dev/null 2>&1
+ ./create-repo.sh power-github-app-workflow2 >/dev/null 2>&1
 
 # This step loads the GitHub App private key into an organization level secret
 printf "${highlight} - Creating organization level secret for the GitHub App: ${normal}"
@@ -39,10 +41,29 @@ printf "${highlight} - Creating organization level secret for the GitHub App: ${
 
 
 printf "${highlight} - Committing workflow file: ${normal}"
- ./create-commit-workflow-github-app.sh 
-# ./create-commit-workflow-github-app.sh | jq -r '.content.path'
+# ./create-commit-workflow-github-app.sh 
+ ./create-commit-workflow-github-app.sh | jq -r '.content.path'
 
-echo "Press enter to run the workflow dispatch:"
- read x
-./dispatch-event.sh 
+
+printf "\n"
+printf "${yellow} - Press w to trigger a workflow dispatch event. ${normal}\n"
+printf "${yellow} - Press r to trigger a repository dispatch event. ${normal}\n"
+printf "\n"
+
+read -p "Enter the dispatch event type: " event_type
+
+
+case $event_type in
+  w)
+    echo "workflow_dispatch"
+    ./create-a-workflow-dispatch-event.sh
+    ;;
+  r)
+    echo "repository_dispatch"
+    ./dispatch-event.sh 
+    ;;
+  *)
+    echo "Invalid option"
+    ;;
+esac
 

@@ -11,7 +11,7 @@ visibility="all"
 key_id=$(./get-an-organization-public-key.sh | jq -r '.key_id')
 org_public_key=$(./get-an-organization-public-key.sh | jq -r '.key')
 export private_pem_file
-echo $private_pem_file
+#echo $private_pem_file
 encrypted_value=$(ruby create-an-organization-secret-for-app-private-key.rb ${org_public_key})
 
 jq -n \
@@ -30,4 +30,5 @@ curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/orgs/${org}/actions/secrets/${secret_name} --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${org}/actions/secrets/${secret_name}" --data @${json_file}
+
