@@ -4,7 +4,7 @@
 # GET /repos/:owner/:repo/pulls/:pull_number/reviews/:review_id
 
 pull=2
-review_id=1
+review_id=$1
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \

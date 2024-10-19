@@ -13,7 +13,8 @@ fi
 
 #event="APPROVE"
 event=${default_pr_event}
-body="create-a-review-for-a-pull-request.sh ${event} Review for a pull request @${org}/${team_slug} "
+body="create-a-review-for-a-pull-request.sh ${event} Review for a pull request @${org}/${team_slug}. Demonstrates [create a review for a pull request](https://docs.github.com/en/rest/reference/pulls#create-a-review-for-a-pull-request)"
+
 
 json_file="tmp/create-pull-request-review.json"
 

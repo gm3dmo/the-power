@@ -21,6 +21,7 @@ read -r -d '' graphql_script <<- EOF
               }
               body
               createdAt
+              submittedAt
               state
               resourcePath
               comments(first: 5) {
