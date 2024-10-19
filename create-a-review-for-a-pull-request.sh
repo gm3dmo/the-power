@@ -11,23 +11,31 @@ if [ -z "$1" ]
     pull_number=$1
 fi
 
-#event="APPROVE"
 event=${default_pr_event}
+
 body="create-a-review-for-a-pull-request.sh ${event} Review for a pull request @${org}/${team_slug}. Demonstrates [create a review for a pull request](https://docs.github.com/en/rest/reference/pulls#create-a-review-for-a-pull-request)"
 
 
-json_file="tmp/create-pull-request-review.json"
+json_file="tmp/create-a-review-for-a-pull-request.json"
 
 jq -n \
        --arg event "$event" \
        --arg body "$body" \
              '{event: $event, body: $body}' > ${json_file}
 
-# This overrides the token with one for the pull request approver
+# The pr_approver_token overrides the default token with one for the pull request approver
 # because we may not approve our own pull request.
-GITHUB_TOKEN=${pr_approver_token}
+if [ -z "${pr_approver_token}" ]
+  then
+    echo "pr_approver_token variable is not set. Exiting." >&2
+    exit 1
+else
+    GITHUB_TOKEN=${pr_approver_token}
+fi
+
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews" --data @${json_file}
+
