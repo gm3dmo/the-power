@@ -99,6 +99,7 @@ repo_secret_name="REPOSITORY_SECRET_001"
 repo_secret_value="repository_secret_string"
 # webhook url is also used by the organization
 webhook_url=${webhook_url}
+repo_webhook_secret="pwr-repo-webhook-secret"
 has_issues=true
 has_wiki=true
 has_projects=true
