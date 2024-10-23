@@ -11,11 +11,20 @@ You'll need an endpoint for your hook to deliver to. I like to use a cheap virtu
 
 ```shell
 python -m venv pwrhook
+```
+
+```shell
+source pwrhook/bin/activate
+pip install piptools
+pip-compile requirements-pwrhook.in
 pip install -r requirements-pwrhook.txt
 ```
 
-## Running the hook reciever
-I like to start this in a tmux session if this is going to be a long running testing session.
+## Repo setup
+Running `create-webhook-with-secret.sh` will create a repository webhook with a secret, set to `repo_webhook_secret` defined in `.gh-api-examples.conf`
+
+## Running the hook receiver
+The tmux program is useful if this is going to be a long running test.
 
 Activate your virtual environment:
 
@@ -44,8 +53,11 @@ Press CTRL+C to quit
 
 ```
 
-Now make an event happen that will create an event that triggers the hook.
+Create an event that triggers the hook:
 
 ```
 ./create-issue-comment.sh
 ```
+
+
+
