@@ -20,7 +20,7 @@ import time
 from flask import Flask, request
 import hashlib
 import hmac
-from werkzeug.exceptions import HTTPException  # Import HTTPException
+#from werkzeug.exceptions import HTTPException  # Import HTTPException
 
 def verify_signature(payload_body, secret_token, signature_header):
     """
@@ -40,9 +40,11 @@ def verify_signature(payload_body, secret_token, signature_header):
     hash_object = hmac.new(secret_token.encode('utf-8'), msg=payload_body, digestmod=hashlib.sha256)
     expected_signature = "sha256=" + hash_object.hexdigest()
     if not hmac.compare_digest(expected_signature, signature_header):
-        raise HTTPException(status_code=403, detail="Request signatures didn't match!")
+        raise HTTPException(status_code=403, detail="Request signature didn't match signature on record")
     else:
-        print("woo the signature matches")
+        print("---------------------")
+        print("the webhook signature matches" )
+        print("---------------------")
 
 
 app = Flask(__name__)
@@ -57,11 +59,11 @@ def slurphook():
         signature_header = request.headers.get('X-Hub-Signature-256')
         print("---------------------")
         print("Headers:", request.headers)  # Print the headers
+        print("---------------------")
         #print("Payload body:", request.data.decode('utf-8'))  # Print the payload body
-        #print("JSON payload:", request.json)  # Print the JSON payload if available
+        print("JSON payload:\n\n", json.dumps(request.json, indent=4))  # Print the JSON payload if available
         verify_signature(request.data, args.hook_secret, signature_header)
         #verify_signature(request.data.decode('utf-8'), "bangersandmash", signature_header)
-        time.sleep(2)
         return ('status',200)
 
 
@@ -80,6 +82,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     app.config['DEBUG'] = True
-    app.run(host='0.0.0.0', port=8000)
-
-
+    app.run(host='localhost', port=8000)
