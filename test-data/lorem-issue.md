@@ -35,7 +35,15 @@ We recommend immediately fixing this security vulnerability by implementing prop
 
 
 
-### The Obligatory Diagram
+
+### Notes on Mermaid
+Mermaid project is at [https://www.npmjs.com/package/mermaid](https://www.npmjs.com/package/mermaid) and is likely to run ahead of the GitHub version.
+
+```mermaid
+info
+```
+
+#### The Obligatory Mermaid diagram
 
 ```mermaid
 graph TD
