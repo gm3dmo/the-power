@@ -6,10 +6,8 @@
 actor_type="installations"
 actor_id=${default_installation_id}
 
-TS=$(date +%s)
-MIN_TIMESTAMP=$((${TS}-86400))
-MAX_TIMESTAMP=$((${TS}-1000))
-
+MIN_TIMESTAMP="2024-11-11"
+MAX_TIMESTAMP="2024-11-12"
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
