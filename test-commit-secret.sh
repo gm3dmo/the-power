@@ -7,6 +7,8 @@
 
 # Locate the pattern here: https://docs.github.com/en/enterprise-cloud@latest/code-security/secret-scanning/introduction/supported-secret-scanning-patterns?learn=secret_scanning&learnProduct=code-security
 
+# It's really not a good idea to use shell scripting to test these keys.
+
 # If the pattern has a tick only in the "Partner" column then the User
 # will never get a report of the pattern, it is reported directly to the
 # provider when found in a public repo.
@@ -42,6 +44,30 @@ function gh_app_installation () {
     echo "Commit: GitHub App Installation Access Token"
     echo export GITHUB_TOKEN=${gh1}${gh2} >github.app-installation-access-token.compromised.secret.txt
 }
+
+
+function firebase1 () {
+  # firebase_cloud_messaging_server_key				
+  # is currently (2024-11-13) the only key type in
+  # https://docs.github.com/en/enterprise-cloud@latest/code-security/secret-scanning/introduction/supported-secret-scanning-patterns?learn=secret_scanning&learnProduct=code-security
+
+  fb1="AIzaSyAHpjrqTY6c2eG"
+  fb2="JExDMBLbFDa7_sXrCEgE"
+  echo "Commit: Firebase cloud messaging server key?"
+  echo export firebase_messaging_server_key =${fb1}${fb2} >firebase_api_key.txt
+
+  fb3="BHEe7kXN8frjWZCCbSE3MxJgAHLgB621NB7mFFqJV"
+  fb4="jpuYiK80Lb4JbsV30vXtuRszLZPxALfJja2PXgagDOxh1Y"
+  echo "Commit: Firebase Messaging server public key?"
+  echo export firebase_public_key=${fb3}${fb4} >firebase_messaging_server_public_key.txt
+
+  fb5="EcUUHHTxxsSsJSR"
+  fb5="_YQojRo2u-3wPyehHIzF5tadSeO0"
+  echo "Commit: Firebase Messaging server private key?"
+  echo export firebase_private_key =${fb5}${fb6} >firebase_messaging_server_private_key.txt
+
+}
+
 
 function aws_access_key_id () { 
     gh1=AKIARAR
@@ -149,10 +175,11 @@ case ${keyname} in
     aws_secret_access_key
     aws_secret_access_key_id_combo
     datadog_api_key
+    firebase1
     ;;
  *)
    echo 
-   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key ]"
+   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key, firebase ]"
    echo 
    ;;
 esac
