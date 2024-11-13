@@ -30,7 +30,6 @@ if [ -z "$1" ]
 fi
 
 function github_pat () { 
-o
     gh1=ghp_9
     gh2=gDO8kvREKK9toy7CsUunZEY77XvGA1pNv5F
     echo "Commit: GitHub PAT"
