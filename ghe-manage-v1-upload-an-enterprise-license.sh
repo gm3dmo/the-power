@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server@3.14/rest/enterprise-admin/manage-ghes?apiVersion=2022-11-28#upload-an-enterprise-license
+# https://docs.github.com/en/enterprise-server/rest/enterprise-admin/manage-ghes?apiVersion=2022-11-28#upload-an-enterprise-license
 # PUT /manage/v1/config/license
 
 # Note the documentation says: Uploads an enterprise license. This operation does not automatically activate the license.
