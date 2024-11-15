@@ -52,6 +52,12 @@ There are hundreds of pre-baked scripts to:
 * Demonstrate [GitHub Actions](https://docs.github.com/en/actions).
 * Demonstrate [Code scanning](https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning).
 
+### The Power is fast
+You can stitch together scripts to create demos of features or rapidly test a bug or capability.
+
+- [Secret Scanning Speed Run](https://www.youtube.com/watch?v=CvEMjQ0YZ0I) creates a repository, enables secret scanning, clones the repository and leaves you ready to commit secrets using [build-testcase-secret-scanning](https://github.com/gm3dmo/the-power/blob/main/build-testcase-secret-scanning)
+
+
 ### The Power is highly configurable
 The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs:
 
