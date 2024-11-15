@@ -21,6 +21,6 @@ curl -L ${curl_custom_flags} \
 #         "https://${hostname}:${mgmt_port}/manage/v1/config/init" --form "license=@${license_file}"  --form "password=${mgmt_password}"
 # The error message:
 # {"error":{"message":"failed to initialize config: invalid request: password already set","request_id":"602e3c4a-4a50-4d9b-8539-f0dfe794d3b4"}}
-curl: (22) The requested URL returned error: 400
+# curl: (22) The requested URL returned error: 400
 
 
