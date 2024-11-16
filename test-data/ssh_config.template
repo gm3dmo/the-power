@@ -1,0 +1,22 @@
+# The Power SSH Config examples
+Host {{ ghes_hostname }}
+   Hostname {{ ghes_hostname }}
+   Port {{ ssh_port }}
+   IdentityFile ~/.ssh/ed25519_{{ username }}
+   User {{ username }}
+
+Host ghes
+   Hostname {{ ghes_hostname }}
+   Port {{ ssh_port }}
+   IdentityFile ~/.ssh/ed25519_{{ username }}
+   User {{ username }}
+
+Host vulnerablekex
+   Hostname {{ ghes_hostname }}
+   Port {{ ssh_port }}
+   IdentityFile ~/.ssh/ed25519_{{ username }}
+   User {{ username }}
+   KexAlgorithms {{ vulnerable_kex_algorithm }}
+   # KexAlgorithms ecdh-sha2-nistp256
+   # git clone git@vulnerablekex:acme/testrepo.git
+
