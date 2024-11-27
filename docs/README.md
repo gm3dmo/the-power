@@ -59,6 +59,7 @@ You can stitch together scripts to create demos of features or rapidly test a bu
 - [Push Protection Speed Run](https://www.youtube.com/watch?v=0rzGeNt0Na0) a speed run demo of GitHub Push Protection feature.
 - [Secret Scanning Speed Run](https://www.youtube.com/watch?v=CvEMjQ0YZ0I) creates a repository, enables secret scanning, clones the repository and leaves you ready to commit secrets using [build-testcase-secret-scanning](https://github.com/gm3dmo/the-power/blob/main/build-testcase-secret-scanning).
 - [GitHub App Commit Signing Demo](https://www.youtube.com/watch?v=xRLtkkl4w7I) uses the [run-testcase-tiny-app-commit-signing](https://github.com/gm3dmo/the-power/blob/main/run-testcase-tiny-app-commit-signing) testcase to demonstrate a GitHub App.
+- [Build a Simple GitHub Actions Workflow](https://www.youtube.com/watch?v=MNu2LjIImK4) uses the [build-testcase-workflow-simple](https://github.com/gm3dmo/the-power/blob/main/build-testcase-workflow-simple) script to demonstrate building a GitHub Actions Workflow.
 
 ### The Power is highly configurable
 The configuration file `.gh-api.examples.conf` is the green fuse that drives The Power. The configuration file format is a simple list of key value pairs:
