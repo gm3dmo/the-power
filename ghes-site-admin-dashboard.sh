@@ -2,7 +2,7 @@
 
 # https://docs.github.com/en/enterprise-server/admin/monitoring-activity-in-your-enterprise/exploring-user-activity-in-your-enterprise/accessing-reports-for-your-instance#downloading-reports-programmatically
 
-curl_custom_flags="--write-out %output{tmp/vars.json}%{json} --write-out %output{tmp/header.json}%{header_json} --silent"
+curl_custom_flags='--write-out "%output{tmp/variables.json}%{json}%output{tmp/header.json}%{header_json}'
 
 # scriptname=$(basename "$0")
 # while IFS= read -r line; do
@@ -39,14 +39,15 @@ curl ${curl_custom_flags} -u ${admin_user}:${GITHUB_TOKEN} \
      "https://${hostname}/stafftools/reports/${report_name}"  -o ${report_file}
 
 echo
-echo "========== vars.json ==================="
+echo "========== tmp/variables.json ==================="
+echo
 
-
-  http_code=$(jq -r  '.http_code' tmp/vars.json)
+  http_code=$(jq -r  '.http_code' tmp/variables.json)
   printf "   http_code: %s\n"  "${http_code}"
   
 echo
-echo "========== header.json ==================="
+echo "========== tmp/header.json ==================="
+echo
 
   xg=$(jq -r '."x-github-request-id"[0]' tmp/header.json)
   printf "   x-github-request-id: %s\n"  "${xg}"
