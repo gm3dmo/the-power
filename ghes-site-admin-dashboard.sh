@@ -2,7 +2,7 @@
 
 # https://docs.github.com/en/enterprise-server/admin/monitoring-activity-in-your-enterprise/exploring-user-activity-in-your-enterprise/accessing-reports-for-your-instance#downloading-reports-programmatically
 
-curl_custom_flags='--write-out "%output{tmp/variables.json}%{json}%output{tmp/header.json}%{header_json}'
+curl_custom_flags='--silent --write-out "%output{tmp/variables.json}%{json}%output{tmp/header.json}%{header_json}'
 
 # scriptname=$(basename "$0")
 # while IFS= read -r line; do
@@ -15,7 +15,7 @@ echo "===== Sitem Admin Dashboard Reports ====="
 echo
 echo "Choose a report to download:"
 echo
-options=("all_users.csv" "all_repositories.csv")
+options=("active_users.csv" "all_users.csv" "dormant_users.csv" "suspended_users.csv"  "all_organizations.csv" "all_repositories.csv" )
 
 # Print menu options with indentation
 for i in "${!options[@]}"; do
@@ -56,6 +56,18 @@ echo
 
 echo
 echo "========== ${report_file} ==================="
+echo
+
 ls -l ${report_file}
+
+echo
+echo contents of ${report_file}:
+echo
+cat ${report_file}
+
+echo
+echo
+
+
 
 
