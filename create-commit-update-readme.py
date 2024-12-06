@@ -25,6 +25,7 @@ def main(args):
     args.extension = power_config.get('dummy_section','file_extension').strip('"')
     args.default_committer = power_config.get('dummy_section','default_committer',).strip('"')
     args.branch_name = power_config.get('dummy_section','branch_name',).strip('"')
+    args.default_issue_id = power_config.get('dummy_section','default_issue_id',).strip('"')
 
     p = Path('test-data/README-update.md_')
     json_file = f"""tmp/create-commit-update-readme.json"""
@@ -34,7 +35,7 @@ def main(args):
        ts = time.time()
        chapter_content = ct.read()
        chapter_base64 = base64.encodebytes(chapter_content)
-       t["message"] = f"""Updating the docs/README.md file {ts}"""
+       t["message"] = f"""Updating the docs/README.md file {ts} close #{args.default_issue_id}"""
        t["committer"] = {}
        t["sha"] = args.blob_sha
        t["branch"] = args.branch_name
