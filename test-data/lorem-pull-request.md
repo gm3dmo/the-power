@@ -14,6 +14,14 @@ classDiagram
     }
 ```
 
+### Special mention
+The problem described in #1 should be resolved by this PR. This appear in the graphql [pullrequest closingIssuesReferences](https://docs.github.com/en/graphql/reference/objects#pullrequest) 
+
+- Resolve #1
+
+
+
+### Feature demonstration
 
 To demonstrate this feature, We have written an example code in Fortran that implements a basic pattern recognition algorithm using a neural network. The code takes as input a grayscale image of a dog paw print and outputs a prediction of which dog the paw print belongs to. Here is the example code:
 
@@ -22,22 +30,15 @@ program paw_print_recognition
   implicit none
   
   ! Input parameters
-  integer, parameter :: n_input = 25  ! Number of input neurons
   integer, parameter :: n_hidden = 10 ! Number of hidden neurons
   real, parameter :: learning_rate = 0.1 ! Learning rate
-  integer, parameter :: n_epochs = 1000 ! Number of epochs
   
   ! Variables
   real :: x(n_input) ! Input vector
-  real :: y(n_output) ! Target output vector
-  real :: h(n_hidden) ! Hidden layer vector
-  real :: w1(n_input, n_hidden) ! Input to hidden layer weights
-  real :: w2(n_hidden, n_output) ! Hidden to output layer weights
   integer :: i, j, k, epoch ! Loop counters
   
   ! Initialize weights and biases
   call random_number(w1)
-  call random_number(w2)
 
   ! Train the neural network
   do epoch = 1, n_epochs
@@ -45,19 +46,12 @@ program paw_print_recognition
     do i = 1, n_training
       ! Forward pass
       x = input_data(i,:)
-      y = target_output(i,:)
-      z2 = matmul(h, w2) + b2
       a2 = softmax(z2)
       
       ! Backward pass
-      delta2 = a2 - y
       delta1 = delta2 * transpose(w2) * (1 - tanh(z1)**2)
-      dw2 = matmul(transpose(h), delta2)
       db1 = sum(delta1, dim=1)
       
-      ! Update weights and biases
-      w1 = w1 - learning_rate * dw1
-      b2 = b2 - learning_rate * db2
     end do
 ```
 
