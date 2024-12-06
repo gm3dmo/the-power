@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server/admin/monitoring-activity-in-your-enterprise/exploring-user-activity-in-your-enterprise/accessing-reports-for-your-instance#downloading-reports-programmatically
+documentation_link=https://docs.github.com/en/enterprise-server/admin/monitoring-activity-in-your-enterprise/exploring-user-activity-in-your-enterprise/accessing-reports-for-your-instance
 
 curl_custom_flags='--silent --write-out "%output{tmp/variables.json}%{json}%output{tmp/header.json}%{header_json}'
 
@@ -11,7 +11,12 @@ curl_custom_flags='--silent --write-out "%output{tmp/variables.json}%{json}%outp
 # exit
 
 clear
-echo "===== Sitem Admin Dashboard Reports ====="
+echo
+echo
+echo "===== Site Admin Dashboard Reports ====="
+echo 
+echo "This is an explainer for how to approach downloading reports for your instance described in:"
+echo "${documentation_link}"
 echo
 echo "Choose a report to download:"
 echo
@@ -36,7 +41,7 @@ done
 report_file="tmp/${report_name}"
 
 curl ${curl_custom_flags} -u ${admin_user}:${GITHUB_TOKEN} \
-     "https://${hostname}/stafftools/reports/${report_name}"  -o ${report_file}
+     "https://${hostname}/stafftools/reports/${report_name}" -o ${report_file}
 
 echo
 echo "========== tmp/variables.json ==================="
