@@ -297,8 +297,10 @@ gh_custom_headers=""
 # using https://daniel.haxx.se/blog/2020/03/17/curl-write-out-json/
 # example:
 # curl_custom_flags="-kso /dev/null --write-out '%{json}'"
+# curl_custom_flags="--fail-with-body --no-progress-meter --write-out %output{a.txt}%{json}%output{b.txt}%{header_json}"
 #
 # use a custom value for user-agent make things traceable
+
 curl_custom_flags="${curl_custom_flags}"
 
 
