@@ -9,6 +9,9 @@ draft="false"
 prerelease="false"
 generate_release_notes="true"
 
+# The power default to having discussions enabled so you might need to handle this:
+discussion_category_name="Announcements"
+
 if [ -z "$1" ]
   then
     tag="v1.0.${timestamp}" 
@@ -25,9 +28,10 @@ jq -n \
         --arg name "Release 1 ($timestamp)" \
         --arg prerelease ${prerelease} \
         --arg draft ${draft} \
+        --arg discussion_category_name ${discussion_category_name} \
         --arg generate_release_notes  ${generate_release_notes} \
         --arg body "A release created by The Power." \
-              '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, draft: $draft | test("true"), prerelease: $prerelease | test("true")}'  > ${json_file}
+              '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, draft: $draft | test("true"), prerelease: $prerelease | test("true"), discussion_category_name: $discussion_category_name}'  > ${json_file}
 
 #cat $json_file | jq -r >&2
 
