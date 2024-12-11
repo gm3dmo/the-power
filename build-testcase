@@ -43,7 +43,7 @@ printf "${normal}"
     ./set-branch-protection.sh | jq -r '.url'
 
      printf "${highlight} - Creating a release: ${normal}"
-    ./create-release.sh  | jq -r '.url'
+    ./create-release.sh  | jq -r '.html_url'
      printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
     ./create-commit-gitattributes.sh | jq -r ".content.html_url"
      echo 
