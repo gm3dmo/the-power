@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/checks#create-a-check-run
+# https://docs.github.com/en/enterprise-cloud@latest/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
 # POST /repos/{owner}/{repo}/check-runs
 
 
@@ -36,3 +36,4 @@ curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_APP_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs" --data @${json_file}
+
