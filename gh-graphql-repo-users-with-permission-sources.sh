@@ -9,6 +9,10 @@ gh api graphql -F owner="${org}" -F repo="${repo}" -f query='
 query($owner: String!, $repo: String!) {
   repository(owner: $owner, name: $repo) {
     nameWithOwner
+    visibility 
+    updatedAt
+    pushedAt
+    archivedAt
     collaborators(first: 100) {
       edges {
         permission
