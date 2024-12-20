@@ -6,7 +6,7 @@
 # limits: https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository
 
 
-username=${1:-mona}
+username=${repo_collaborator}
 permission=${2:-push}
 
 JSON_TEMPLATE='{"permission":"%s"}'
