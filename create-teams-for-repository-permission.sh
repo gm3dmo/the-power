@@ -6,11 +6,12 @@
 # Permissions for teams are from:
 # https://docs.github.com/en/enterprise-cloud@latest/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions
 
+
 for team_type in ${available_team_permissions}
 do
 
-    prefix=pwr-team
-    team_name="${prefix}-${team_type}"
+    prefix=${team_permission_prefix}
+    team_name="${prefix}-team-${team_type}"
     team=$team_name
     privacy="closed"
     #privacy="secret"
@@ -18,12 +19,10 @@ do
     
      jq -n \
                     --arg name "${team}" \
-                    --arg description "${team} is a ${privacy} team. See: https://docs.github.com/en/enterprise-cloud@latest/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions" \
+                    --arg description "${prefix}: ${team} is a ${privacy} team. See: https://docs.github.com/en/enterprise-cloud@latest/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions" \
                     --arg privacy "$privacy" \
                     '{name: $name, description: $description, privacy: $privacy }' > ${json_file}
 
- cat $json_file | jq -r
-    
     curl ${curl_custom_flags} \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \

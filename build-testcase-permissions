@@ -20,20 +20,38 @@ printf "${normal}"
      printf "${highlight} - Creating webhook: ${normal}"
     ./create-webhook.sh  | jq -r '.id'
     sleep 5
-    # Start with a clean slate deleting all the teams for this test suite
-    ./delete-teams-for-permissions.sh
-    # Create the teams named based on permissions
-    ./create-teams-for-repository-permission.sh
-    
-    # Add users into teams
-    ./add-users-to-teams-for-repository-permission.sh
-    
-    ./add-repo-to-permissions-teams.sh
 
-    ./delete-admin-from-teams-for-permissions.sh
+     printf "${highlight} - Clean the slate and delete teams (if they exist): ${normal}"
+    echo
+    echo
+    ./delete-teams-for-permissions.sh
+    echo
+
+     printf "${highlight} - Create the teams named based on permissions:  ${normal}"
+    echo
+    echo
+    ./create-teams-for-repository-permission.sh
+    echo
     
-    # Add/invite an outside collaborator
-    ./add-collaborator-to-repo.sh
+     printf "${highlight} - Add users to teams:  ${normal}"
+    echo
+    echo
+    ./add-users-to-teams-for-repository-permission.sh
+    echo
+    
+     printf "${highlight} - Add repo to teams:  ${normal}"
+    echo
+    echo
+    ./add-repo-to-permissions-teams.sh
+    echo
+     printf "${highlight} - Delete team_admin user from created teams:  ${normal}"
+     echo
+     echo
+    ./delete-admin-from-teams-for-permissions.sh
+     echo
+    
+     printf "${highlight} - Add/Invite repo_collaborator user to repo:  ${normal}"
+    ./add-collaborator-to-repo.sh | jq -r '.invitee.login'
 
      printf "${highlight} - Creating docs/README.md: ${normal}"
     ./create-commit-readme.sh | jq -r ".content.html_url"
@@ -49,7 +67,7 @@ printf "${normal}"
      printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
     ./create-commit-update-readme.sh | jq -r ".content.html_url"
      printf "${highlight} - Creating an issue: ${normal}"
-    ./create-repo-issue.sh | jq -r '.html_url'
+    ./create-an-issue.sh | jq -r '.html_url'
      printf "${highlight} - Creating a pull request: ${normal}"
     ./create-pull-request.sh | jq -r '.html_url'
     # set the branch protection rules for main

@@ -3,6 +3,7 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
 # POST /repos/{owner}/{repo}/issues
 
+
 if [ -z "$1" ]
   then
     repo=$repo
@@ -21,15 +22,14 @@ lorem_append="<br><br><br>The @${org}/${team_slug} will be interested in this. $
 timestamp=$(date +%s)
 
 json_file=tmp/create-an-issue.json
-rm -f ${json_file}
 
 jq -n \
-        --arg title "Security vulnerability in access control software allowing unauthorized access by dogs ($timestamp) " \
+        --arg title "Security vulnerability in access control software allowing unauthorized access by dogs ($timestamp)" \
         --arg body "${lorem_text}${lorem_append}" \
-        --arg assignees "${default_committer}" \
+        --arg assignees "${default_issue_assignee}" \
         --arg milestone 1 \
-        --arg labels "bug" \
-	'{"title": $title, "body": $body, "assignees": [ $assignees ], "labels": [ $labels ] }'  > ${json_file}
+        --argjson labels '["bug", "documentation"]' \
+	'{"title": $title, "body": $body, "assignees": [ $assignees ], "labels":  $labels  }' > ${json_file}
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
