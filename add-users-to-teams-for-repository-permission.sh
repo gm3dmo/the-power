@@ -23,6 +23,7 @@ do
     team_slug=${team_name}
     team_id=$(curl ${curl_custom_flags} -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
     team_member="${permission_to_user[$team_permission]}"
+    echo "${team_member} ---> ${team_permission}"
     
     curl ${curl_custom_flags} \
          -X PUT \

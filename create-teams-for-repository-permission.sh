@@ -6,7 +6,7 @@
 # Permissions for teams are from:
 # https://docs.github.com/en/enterprise-cloud@latest/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions
 
-for team_type in pull triage push maintain admin
+for team_type in ${available_team_permissions}
 do
 
     prefix=pwr-team
@@ -27,6 +27,6 @@ do
     curl ${curl_custom_flags} \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            "${GITHUB_API_BASE_URL}/orgs/${org}/teams" --data @${json_file}
+            "${GITHUB_API_BASE_URL}/orgs/${org}/teams" --data @${json_file} > tmp/create-team-${team}.json
 
 done
