@@ -112,8 +112,8 @@ commit_message_pattern="MAGIC-MIKE"
 operator="starts_with" 
 enforcement="evaluate"
 bypass_mode="always"
-repo_collaborator=""
-issue_assignee=""
+repo_collaborator="mona"
+issue_assignee="hubot"
 
 
 ### [Team](https://docs.github.com/en/rest/teams)
