@@ -1,7 +1,7 @@
 .   ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/teams#add-or-update-team-membership-for-a-user
-# PUT /orgs/:org/teams/:team_slug/memberships/:username
+# https://docs.github.com/en/enterprise-cloud@latest/rest/teams/members?apiVersion=2022-11-28#add-or-update-team-membership-for-a-user
+# PUT /orgs/{org}/teams/{team_slug}/memberships/{username}
 
 # Adds a single user to the default team.
 
@@ -27,4 +27,4 @@ curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_member}
+        "${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_member}"
