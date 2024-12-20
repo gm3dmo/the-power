@@ -29,6 +29,8 @@ printf "${normal}"
     ./add-users-to-teams-for-repository-permission.sh
     
     ./add-repo-to-permissions-teams.sh
+
+    ./delete-admin-from-teams-for-permissions.sh
     
     # Add/invite an outside collaborator
     ./add-collaborator-to-repo.sh
