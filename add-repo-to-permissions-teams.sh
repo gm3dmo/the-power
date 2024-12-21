@@ -13,7 +13,6 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-declare -A permission_to_user
 permissions=("pull" "triage" "push" "maintain" "admin")
 
 prefix=pwr
