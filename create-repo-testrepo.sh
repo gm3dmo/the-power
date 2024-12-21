@@ -29,10 +29,12 @@ jq -n \
         --arg has_pages ${has_pages} \
         --arg description "This is: ${repo}, it's a ${default_repo_visibility} repo. It's webhook is: ${webhook_url}" \
         --arg allow_auto_merge "${allow_auto_merge}" \
+        --arg license_template "${license_template}" \
 	'{ name : $name, 
 	   description: $description, 
 	   private: $private | test("true"), 
 	   visibility: $visibility, 
+	   license_template: $license_template, 
 	   allow_auto_merge: $allow_auto_merge | test("true"), 
 	   has_issues: $has_issues | test("true"), 
 	   has_projects: $has_projects | test("true"), 
