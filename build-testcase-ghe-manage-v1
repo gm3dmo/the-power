@@ -1,0 +1,69 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+    Test case for GHE Manage V1 API:
+    https://docs.github.com/en/enterprise-server/rest/enterprise-admin/manage-ghes?apiVersion=2022-11-28
+
+
+EOF
+
+printf "${normal}"
+                                                   
+    printf "${highlight} - check-a-license : ${normal}"
+    ./ghe-manage-v1-check-a-license.sh
+
+    printf "${highlight} - get-all-ghes-release-versions-for-all-nodes : ${normal}"
+    ./ghe-manage-v1-get-all-ghes-release-versions-for-all-nodes.sh
+
+    printf "${highlight} - get-ghes-node-metadata-for-all-nodes : ${normal}"
+    ./ghe-manage-v1-get-ghes-node-metadata-for-all-nodes.sh
+
+    printf "${highlight} - get-the-configured-ssh-keys : ${normal}"
+    ./ghe-manage-v1-get-the-configured-ssh-keys.sh
+
+    printf "${highlight} - get-the-enterprise-license-information : ${normal}"
+    ./ghe-manage-v1-get-the-enterprise-license-information.sh
+
+    printf "${highlight} - get-the-ghes-settings : ${normal}"
+    ./ghe-manage-v1-get-the-ghes-settings.sh
+
+    printf "${highlight} - get-the-status-of-a-ghe-config-apply : ${normal}"
+    ./ghe-manage-v1-get-the-status-of-a-ghe-config-apply-run
+
+    printf "${highlight} - get-the-status-of-a-ghe-config-apply-run : ${normal}"
+    ./ghe-manage-v1-get-the-status-of-a-ghe-config-apply-run.sh
+
+    printf "${highlight} - get-the-status-of-maintenance-mode : ${normal}"
+    ./ghe-manage-v1-get-the-status-of-maintenance-mode.sh
+
+    printf "${highlight} - get-the-status-of-services-running-on-all-cluster-nodes: ${normal}"
+    ./ghe-manage-v1-get-the-status-of-services-running-on-all-cluster-nodes.sh
+
+    printf "${highlight} - get-the-system-requirement-check-results-for-configured-cluster-nodes : ${normal}"
+    ./ghe-manage-v1-get-the-system-requirement-check-results-for-configured-cluster-nodes.sh
+
+    printf "${highlight} -initialize-instance-configuration-with-license-upload : ${normal}"
+    ./ghe-manage-v1-initialize-instance-configuration-with-license-upload.sh
+
+    printf "${highlight} - list-events-from-ghe-config-apply : ${normal}"
+    ./ghe-manage-v1-list-events-from-ghe-config-apply.sh
+
+    printf "${highlight} - set-the-status-of-maintenance-mode : ${normal}"
+    ./ghe-manage-v1-set-the-status-of-maintenance-mode.sh
+
+    printf "${highlight} - trigger-a-ghe-config-apply-run : ${normal}"
+    ./ghe-manage-v1-trigger-a-ghe-config-apply-run.sh
+
+    printf "${highlight} - upload-an-enterprise-license : ${normal}"
+    ./ghe-manage-v1-upload-an-enterprise-license.sh
+
