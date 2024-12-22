@@ -11,6 +11,8 @@ if [ -z "$1" ]
     repo=$1
 fi
 
+python3 create-workflow-simple-json-file.py
+
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
