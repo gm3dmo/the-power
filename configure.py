@@ -134,6 +134,7 @@ team_permission_prefix="pwr"
 # https://docs.github.com/en/issues
 # https://docs.github.com/en/get-started/writing-on-github
 default_issue_id=1
+default_sub_issue_id=3
 
 
 ### [Pull requests](https://docs.github.com/en/rest/pulls)
