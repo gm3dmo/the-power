@@ -15,7 +15,7 @@ fi
 json_file=tmp/attach-a-configuration-to-repositories.json
 
 scope="selected"
-selected_repository_ids="[843055762]"
+selected_repository_ids="[917658869]"
 
 jq -n \
            --arg scope "${scope}" \
