@@ -8,4 +8,4 @@ pull_number=${default_pull_request_id}
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/comments
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/comments"
