@@ -7,7 +7,7 @@
 
 if [ -z "$1" ]
   then
-    review_id=1
+    review_id=$(./list-reviews-for-pull-request.sh | jq -r '[.[].id] | max')
   else
     review_id=$1
 fi
