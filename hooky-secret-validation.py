@@ -20,7 +20,7 @@ import time
 from flask import Flask, request
 import hashlib
 import hmac
-#from werkzeug.exceptions import HTTPException  # Import HTTPException
+from werkzeug.exceptions import HTTPException  # Add this import
 
 
 def verify_signature(payload_body, secret_token, signature_header):
