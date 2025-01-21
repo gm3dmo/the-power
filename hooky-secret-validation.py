@@ -84,6 +84,14 @@ if __name__ == '__main__':
         help="The secret for the webhook",
     )
 
+    parser.add_argument(
+        "--status-code",
+        action="store",
+        dest="status_code",
+        default=200,
+        help="The response code the webhook will return",
+    )
+
     args = parser.parse_args()
 
     app.config['DEBUG'] = True
