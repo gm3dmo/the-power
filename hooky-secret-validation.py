@@ -69,7 +69,7 @@ def slurphook():
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
             
-        return ('status', 200)
+        return ('status', args.status_code)
 
 
 if __name__ == '__main__':
