@@ -56,13 +56,19 @@ def slurphook():
     if request.method == 'POST':
         app.logger.debug("hook triggered")
         app.logger.debug("-" * 21)
-        app.logger.debug(f"X-Hub-Signature-256: {request.headers.get('X-Hub-Signature-256')}")
+        
         signature_header = request.headers.get('X-Hub-Signature-256')
+        app.logger.debug(f"X-Hub-Signature-256: {signature_header}")
         app.logger.debug("-" * 21)
         app.logger.debug(f"Headers: {request.headers}")
         app.logger.debug("-" * 21)
         app.logger.debug(f"JSON payload:\n\n{json.dumps(request.json, indent=4)}")
-        verify_signature(request.data, args.hook_secret, signature_header)
+        
+        if signature_header and args.hook_secret:
+            verify_signature(request.data, args.hook_secret, signature_header)
+        else:
+            app.logger.debug("Skipping signature verification - no signature header or secret provided")
+            
         return ('status', 200)
 
 
