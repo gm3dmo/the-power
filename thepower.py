@@ -38,6 +38,8 @@ def hash_and_encode(token):
 
 def run_password_recovery(password_recovery_command):
     if password_recovery_command:
+        # Inject the StrictHostKeyChecking option
+        password_recovery_command = password_recovery_command.replace("ssh ", "ssh -o StrictHostKeyChecking=no ")
         process = subprocess.run(password_recovery_command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         s = process.stdout.decode()
         s = s.rstrip('\n')
