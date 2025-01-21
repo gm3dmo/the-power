@@ -17,7 +17,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request
+from flask import Flask, request, abort
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -37,11 +37,11 @@ def verify_signature(payload_body, secret_token, signature_header):
         signature_header: header received from GitHub (x-hub-signature-256)
     """
     if not signature_header:
-        raise HTTPException(description="x-hub-signature-256 header is missing!", response=None, response_code=403)
+        abort(403, description="x-hub-signature-256 header is missing!")
     hash_object = hmac.new(secret_token.encode('utf-8'), msg=payload_body, digestmod=hashlib.sha256)
     expected_signature = "sha256=" + hash_object.hexdigest()
     if not hmac.compare_digest(expected_signature, signature_header):
-        raise HTTPException(description="Request signature didn't match signature on record", response=None, response_code=403)
+        abort(403, description="Request signature didn't match signature on record")
     else:
         app.logger.debug("-" * 21)
         app.logger.debug("the webhook signature matches")
