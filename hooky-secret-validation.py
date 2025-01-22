@@ -142,6 +142,43 @@ def slurphook():
         return ('status', args.status_code)
 
 
+@app.route('/hookdb', methods=['GET'])
+def view_hooks():
+    try:
+        conn = sqlite3.connect(args.db_name)
+        cursor = conn.cursor()
+        
+        # Get all webhook events, ordered by most recent first
+        cursor.execute('''
+            SELECT timestamp, event_type, payload, signature 
+            FROM webhook_events 
+            ORDER BY timestamp DESC
+        ''')
+        
+        hooks = cursor.fetchall()
+        
+        # Format the data as HTML
+        html = '<h1>Webhook Events</h1>\n'
+        for hook in hooks:
+            timestamp, event_type, payload, signature = hook
+            html += f'<div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">'
+            html += f'<p><strong>Timestamp:</strong> {timestamp}</p>'
+            html += f'<p><strong>Event Type:</strong> {event_type}</p>'
+            html += f'<p><strong>Signature:</strong> {signature}</p>'
+            html += f'<p><strong>Payload:</strong></p>'
+            html += f'<pre>{json.dumps(json.loads(payload), indent=2)}</pre>'
+            html += '</div>'
+        
+        return html
+        
+    except Exception as e:
+        app.logger.error(f"Failed to retrieve webhook data: {str(e)}")
+        return f'<h1>Error</h1><p>{str(e)}</p>', 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
