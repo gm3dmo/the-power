@@ -664,7 +664,7 @@ if __name__ == "__main__":
         "--primer",
         action="store",
         dest="primer",
-        default="list-user.sh",
+        default="pwr-get-octocat.sh",
         help="The name of a primer script which will be executed when configuration is complete",
     )
     parser.add_argument(
