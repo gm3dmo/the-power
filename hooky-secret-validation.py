@@ -21,6 +21,8 @@ from flask import Flask, request, abort
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
+import sqlite3
+from pathlib import Path
 
 
 def verify_signature(payload_body, secret_token, signature_header):
@@ -48,6 +50,30 @@ def verify_signature(payload_body, secret_token, signature_header):
         app.logger.debug("-" * 21)
 
 
+def init_db():
+    """Initialize the SQLite database and create tables if they don't exist."""
+    app.logger.debug("Initializing database...")
+    
+    db_path = Path(args.db_name)
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    
+    # Create table for webhook events
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS webhook_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            event_type TEXT,
+            payload TEXT,
+            signature TEXT
+        )
+    ''')
+    
+    conn.commit()
+    conn.close()
+    app.logger.debug(f"Database initialized at {db_path.absolute()}")
+
+
 app = Flask(__name__)
 
 
@@ -58,6 +84,8 @@ def slurphook():
         app.logger.debug("-" * 21)
         
         signature_header = request.headers.get('X-Hub-Signature-256')
+        event_type = request.headers.get('X-GitHub-Event', 'unknown')
+        
         app.logger.debug(f"X-Hub-Signature-256: {signature_header}")
         app.logger.debug("-" * 21)
         app.logger.debug(f"Headers: {request.headers}")
@@ -68,8 +96,107 @@ def slurphook():
             verify_signature(request.data, args.hook_secret, signature_header)
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
+        
+        # Store webhook data in database with more detailed logging
+        try:
+            app.logger.debug(f"Attempting to connect to database: {args.db_name}")
+            conn = sqlite3.connect(args.db_name)
+            cursor = conn.cursor()
+            
+            # Log the data we're about to insert
+            app.logger.debug(f"Preparing to insert - Event Type: {event_type}")
+            app.logger.debug(f"Signature: {signature_header}")
+            
+            insert_query = '''
+                INSERT INTO webhook_events (event_type, payload, signature)
+                VALUES (?, ?, ?)
+            '''
+            values = (
+                event_type,
+                json.dumps(request.json),
+                signature_header
+            )
+            
+            app.logger.debug("Executing insert query...")
+            cursor.execute(insert_query, values)
+            
+            app.logger.debug("Committing transaction...")
+            conn.commit()
+            
+            # Verify the insert worked
+            cursor.execute("SELECT COUNT(*) FROM webhook_events")
+            count = cursor.fetchone()[0]
+            app.logger.debug(f"Total records in database: {count}")
+            
+            app.logger.debug(f"Successfully stored webhook data in database: {args.db_name}")
+        except Exception as e:
+            app.logger.error(f"Failed to store webhook data: {str(e)}")
+            app.logger.error(f"Error type: {type(e)}")
+            # Re-raise the exception to see the full traceback in the logs
+            raise
+        finally:
+            if 'conn' in locals():
+                conn.close()
+                app.logger.debug("Database connection closed")
             
         return ('status', args.status_code)
+
+
+@app.route('/hookdb', methods=['GET'])
+def view_hooks():
+    try:
+        # Get page number from query parameter, default to 1
+        page = request.args.get('page', 1, type=int)
+        
+        conn = sqlite3.connect(args.db_name)
+        cursor = conn.cursor()
+        
+        # Get total count of records
+        cursor.execute('SELECT COUNT(*) FROM webhook_events')
+        total_records = cursor.fetchone()[0]
+        
+        # Get single record for current page
+        cursor.execute('''
+            SELECT timestamp, event_type, payload, signature 
+            FROM webhook_events 
+            ORDER BY timestamp DESC
+            LIMIT 1 OFFSET ?
+        ''', (page - 1,))
+        
+        hook = cursor.fetchone()
+        
+        # Format the data as HTML
+        html = '<h1>Webhook Events</h1>\n'
+        html += f'<p>Showing event {page} of {total_records}</p>\n'
+        
+        if hook:
+            timestamp, event_type, payload, signature = hook
+            html += f'<div style="margin: 20px 0; border: 1px solid #ccc; padding: 10px;">'
+            html += f'<p><strong>Timestamp:</strong> {timestamp}</p>'
+            html += f'<p><strong>Event Type:</strong> {event_type}</p>'
+            html += f'<p><strong>Signature:</strong> {signature}</p>'
+            html += f'<p><strong>Payload:</strong></p>'
+            html += f'<pre>{json.dumps(json.loads(payload), indent=2)}</pre>'
+            html += '</div>'
+        else:
+            html += '<p>No webhook events found.</p>'
+        
+        # Add navigation buttons
+        html += '<div style="margin: 20px 0;">'
+        if page > 1:
+            html += f'<a href="/hookdb?page={page-1}" style="margin-right: 20px; padding: 10px; background: #eee; text-decoration: none; color: black;">Previous</a>'
+        if page < total_records:
+            html += f'<a href="/hookdb?page={page+1}" style="padding: 10px; background: #eee; text-decoration: none; color: black;">Next</a>'
+        html += '</div>'
+        
+        return html
+        
+    except Exception as e:
+        app.logger.error(f"Failed to retrieve webhook data: {str(e)}")
+        return f'<h1>Error</h1><p>{str(e)}</p>', 500
+    finally:
+        if 'conn' in locals():
+            conn.close()
 
 
 if __name__ == '__main__':
@@ -92,7 +219,19 @@ if __name__ == '__main__':
         help="The response code the webhook will return",
     )
 
+    parser.add_argument(
+        "--db-name",
+        action="store",
+        dest="db_name",
+        default="hooks.db",
+        help="The name of the database to store hooks",
+    )
+
+
     args = parser.parse_args()
 
+    # Initialize the database before starting the app
+    init_db()
+    
     app.config['DEBUG'] = True
     app.run(host='localhost', port=8000)
