@@ -1,4 +1,3 @@
-
 """
 A simple Flask app that will act as a endpoint for a hook.
 
@@ -11,16 +10,18 @@ Create a venv:
 
 """
 
+
 import os
 import argparse
 import sys
 import json
 import string
 import time
-from flask import Flask, request
+from flask import Flask, request, abort
 import hashlib
 import hmac
-#from werkzeug.exceptions import HTTPException  # Import HTTPException
+from werkzeug.exceptions import HTTPException  # Add this import
+
 
 def verify_signature(payload_body, secret_token, signature_header):
     """
@@ -36,15 +37,15 @@ def verify_signature(payload_body, secret_token, signature_header):
         signature_header: header received from GitHub (x-hub-signature-256)
     """
     if not signature_header:
-        raise HTTPException(status_code=403, detail="x-hub-signature-256 header is missing!")
+        abort(403, description="x-hub-signature-256 header is missing!")
     hash_object = hmac.new(secret_token.encode('utf-8'), msg=payload_body, digestmod=hashlib.sha256)
     expected_signature = "sha256=" + hash_object.hexdigest()
     if not hmac.compare_digest(expected_signature, signature_header):
-        raise HTTPException(status_code=403, detail="Request signature didn't match signature on record")
+        abort(403, description="Request signature didn't match signature on record")
     else:
-        print("---------------------")
-        print("the webhook signature matches" )
-        print("---------------------")
+        app.logger.debug("-" * 21)
+        app.logger.debug("the webhook signature matches")
+        app.logger.debug("-" * 21)
 
 
 app = Flask(__name__)
@@ -53,18 +54,22 @@ app = Flask(__name__)
 @app.route('/webhook', methods=['POST'])
 def slurphook():
     if request.method == 'POST':
-        print("hook triggered")
-        print("---------------------")
-        print("X-Hub-Signature-256:", request.headers.get('X-Hub-Signature-256')) 
+        app.logger.debug("hook triggered")
+        app.logger.debug("-" * 21)
+        
         signature_header = request.headers.get('X-Hub-Signature-256')
-        print("---------------------")
-        print("Headers:", request.headers)  # Print the headers
-        print("---------------------")
-        #print("Payload body:", request.data.decode('utf-8'))  # Print the payload body
-        print("JSON payload:\n\n", json.dumps(request.json, indent=4))  # Print the JSON payload if available
-        verify_signature(request.data, args.hook_secret, signature_header)
-        #verify_signature(request.data.decode('utf-8'), "bangersandmash", signature_header)
-        return ('status',200)
+        app.logger.debug(f"X-Hub-Signature-256: {signature_header}")
+        app.logger.debug("-" * 21)
+        app.logger.debug(f"Headers: {request.headers}")
+        app.logger.debug("-" * 21)
+        app.logger.debug(f"JSON payload:\n\n{json.dumps(request.json, indent=4)}")
+        
+        if signature_header and args.hook_secret:
+            verify_signature(request.data, args.hook_secret, signature_header)
+        else:
+            app.logger.debug("Skipping signature verification - no signature header or secret provided")
+            
+        return ('status', args.status_code)
 
 
 if __name__ == '__main__':
@@ -75,8 +80,16 @@ if __name__ == '__main__':
         "--secret",
         action="store",
         dest="hook_secret",
-        default=False,
+        default=None,
         help="The secret for the webhook",
+    )
+
+    parser.add_argument(
+        "--status-code",
+        action="store",
+        dest="status_code",
+        default=200,
+        help="The response code the webhook will return",
     )
 
     args = parser.parse_args()
