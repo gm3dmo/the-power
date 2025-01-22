@@ -145,29 +145,49 @@ def slurphook():
 @app.route('/hookdb', methods=['GET'])
 def view_hooks():
     try:
+        # Get page number from query parameter, default to 1
+        page = request.args.get('page', 1, type=int)
+        
         conn = sqlite3.connect(args.db_name)
         cursor = conn.cursor()
         
-        # Get all webhook events, ordered by most recent first
+        # Get total count of records
+        cursor.execute('SELECT COUNT(*) FROM webhook_events')
+        total_records = cursor.fetchone()[0]
+        
+        # Get single record for current page
         cursor.execute('''
             SELECT timestamp, event_type, payload, signature 
             FROM webhook_events 
             ORDER BY timestamp DESC
-        ''')
+            LIMIT 1 OFFSET ?
+        ''', (page - 1,))
         
-        hooks = cursor.fetchall()
+        hook = cursor.fetchone()
         
         # Format the data as HTML
         html = '<h1>Webhook Events</h1>\n'
-        for hook in hooks:
+        html += f'<p>Showing event {page} of {total_records}</p>\n'
+        
+        if hook:
             timestamp, event_type, payload, signature = hook
-            html += f'<div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">'
+            html += f'<div style="margin: 20px 0; border: 1px solid #ccc; padding: 10px;">'
             html += f'<p><strong>Timestamp:</strong> {timestamp}</p>'
             html += f'<p><strong>Event Type:</strong> {event_type}</p>'
             html += f'<p><strong>Signature:</strong> {signature}</p>'
             html += f'<p><strong>Payload:</strong></p>'
             html += f'<pre>{json.dumps(json.loads(payload), indent=2)}</pre>'
             html += '</div>'
+        else:
+            html += '<p>No webhook events found.</p>'
+        
+        # Add navigation buttons
+        html += '<div style="margin: 20px 0;">'
+        if page > 1:
+            html += f'<a href="/hookdb?page={page-1}" style="margin-right: 20px; padding: 10px; background: #eee; text-decoration: none; color: black;">Previous</a>'
+        if page < total_records:
+            html += f'<a href="/hookdb?page={page+1}" style="padding: 10px; background: #eee; text-decoration: none; color: black;">Next</a>'
+        html += '</div>'
         
         return html
         
