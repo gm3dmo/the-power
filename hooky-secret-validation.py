@@ -145,17 +145,13 @@ def slurphook():
 @app.route('/hookdb', methods=['GET'])
 def view_hooks():
     try:
-        # Get page number from query parameter, default to 1
         page = request.args.get('page', 1, type=int)
-        
         conn = sqlite3.connect(args.db_name)
         cursor = conn.cursor()
         
-        # Get total count of records
         cursor.execute('SELECT COUNT(*) FROM webhook_events')
         total_records = cursor.fetchone()[0]
         
-        # Get single record for current page
         cursor.execute('''
             SELECT timestamp, event_type, payload, signature 
             FROM webhook_events 
@@ -165,29 +161,169 @@ def view_hooks():
         
         hook = cursor.fetchone()
         
-        # Format the data as HTML
-        html = '<h1>Webhook Events</h1>\n'
-        html += f'<p>Showing event {page} of {total_records}</p>\n'
+        # HTML with clean Helvetica styling and vanilla JavaScript
+        html = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Webhook Events</title>
+            <style>
+                body {{
+                    font-family: Helvetica, Arial, sans-serif;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    color: #333333;
+                }}
+                .container {{
+                    padding: 20px;
+                }}
+                h1 {{
+                    font-weight: 500;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    color: #000000;
+                }}
+                .event-info {{
+                    margin: 20px 0;
+                    padding: 20px;
+                    border: 1px solid #e1e1e1;
+                    border-radius: 3px;
+                }}
+                .event-info p {{
+                    margin: 10px 0;
+                    line-height: 1.5;
+                }}
+                .nav-buttons {{
+                    text-align: center;
+                    margin: 20px 0;
+                }}
+                .nav-button {{
+                    display: inline-block;
+                    padding: 8px 16px;
+                    margin: 0 10px;
+                    background-color: #000000;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 3px;
+                }}
+                .nav-button:hover {{
+                    background-color: #333333;
+                }}
+                .nav-button.disabled {{
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }}
+                pre {{
+                    background-color: #f8f8f8;
+                    padding: 15px;
+                    border-radius: 3px;
+                    overflow-x: auto;
+                    font-family: monospace;
+                    max-height: 400px;
+                    overflow-y: auto;
+                    border: 1px solid #e1e1e1;
+                    margin: 10px 0;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }}
+                .page-info {{
+                    text-align: center;
+                    color: #666666;
+                    margin: 20px 0;
+                    font-size: 14px;
+                }}
+                .copy-button {{
+                    float: right;
+                    padding: 5px 10px;
+                    background-color: #000000;
+                    color: white;
+                    border: none;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    font-family: Helvetica, Arial, sans-serif;
+                }}
+                .copy-button:hover {{
+                    background-color: #333333;
+                }}
+                .header-row {{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                }}
+                .label {{
+                    font-weight: bold;
+                    color: #000000;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Webhook Events</h1>
+                <div class="page-info">Event {page} of {total_records}</div>
+        '''
         
         if hook:
             timestamp, event_type, payload, signature = hook
-            html += f'<div style="margin: 20px 0; border: 1px solid #ccc; padding: 10px;">'
-            html += f'<p><strong>Timestamp:</strong> {timestamp}</p>'
-            html += f'<p><strong>Event Type:</strong> {event_type}</p>'
-            html += f'<p><strong>Signature:</strong> {signature}</p>'
-            html += f'<p><strong>Payload:</strong></p>'
-            html += f'<pre>{json.dumps(json.loads(payload), indent=2)}</pre>'
-            html += '</div>'
+            html += f'''
+                <div class="event-info">
+                    <p><span class="label">Timestamp:</span> {timestamp}</p>
+                    <p><span class="label">Event Type:</span> {event_type}</p>
+                    <p><span class="label">Signature:</span> {signature}</p>
+                    <div class="header-row">
+                        <span class="label">Payload:</span>
+                        <button class="copy-button" onclick="copyPayload()">Copy</button>
+                    </div>
+                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
+                </div>
+            '''
         else:
             html += '<p>No webhook events found.</p>'
         
-        # Add navigation buttons
-        html += '<div style="margin: 20px 0;">'
+        html += '''
+                <div class="nav-buttons">
+        '''
+        
         if page > 1:
-            html += f'<a href="/hookdb?page={page-1}" style="margin-right: 20px; padding: 10px; background: #eee; text-decoration: none; color: black;">Previous</a>'
+            html += f'<a href="/hookdb?page={page-1}" class="nav-button">Previous</a>'
+        else:
+            html += '<span class="nav-button disabled">Previous</span>'
+            
         if page < total_records:
-            html += f'<a href="/hookdb?page={page+1}" style="padding: 10px; background: #eee; text-decoration: none; color: black;">Next</a>'
-        html += '</div>'
+            html += f'<a href="/hookdb?page={page+1}" class="nav-button">Next</a>'
+        else:
+            html += '<span class="nav-button disabled">Next</span>'
+            
+        html += '''
+                </div>
+            </div>
+            <script>
+                function copyPayload() {
+                    const payload = document.getElementById('payload').textContent;
+                    navigator.clipboard.writeText(payload).then(function() {
+                        const button = document.querySelector('.copy-button');
+                        button.textContent = 'Copied!';
+                        setTimeout(function() {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    });
+                }
+                
+                // Fade in effect
+                document.addEventListener('DOMContentLoaded', function() {
+                    const container = document.querySelector('.container');
+                    container.style.opacity = '0';
+                    container.style.transition = 'opacity 0.5s ease-in';
+                    setTimeout(function() {
+                        container.style.opacity = '1';
+                    }, 100);
+                });
+            </script>
+        </body>
+        </html>
+        '''
         
         return html
         
