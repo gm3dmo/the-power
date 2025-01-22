@@ -21,6 +21,8 @@ from flask import Flask, request, abort
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
+import sqlite3
+from pathlib import Path
 
 
 def verify_signature(payload_body, secret_token, signature_header):
@@ -46,6 +48,30 @@ def verify_signature(payload_body, secret_token, signature_header):
         app.logger.debug("-" * 21)
         app.logger.debug("the webhook signature matches")
         app.logger.debug("-" * 21)
+
+
+def init_db():
+    """Initialize the SQLite database and create tables if they don't exist."""
+    app.logger.debug("Initializing database...")
+    
+    db_path = Path(args.db_name)
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    
+    # Create table for webhook events
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS webhook_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            event_type TEXT,
+            payload TEXT,
+            signature TEXT
+        )
+    ''')
+    
+    conn.commit()
+    conn.close()
+    app.logger.debug(f"Database initialized at {db_path.absolute()}")
 
 
 app = Flask(__name__)
@@ -92,7 +118,19 @@ if __name__ == '__main__':
         help="The response code the webhook will return",
     )
 
+    parser.add_argument(
+        "--db-name",
+        action="store",
+        dest="db_name",
+        default="hooks.db",
+        help="The name of the database to store hooks",
+    )
+
+
     args = parser.parse_args()
 
+    # Initialize the database before starting the app
+    init_db()
+    
     app.config['DEBUG'] = True
     app.run(host='localhost', port=8000)
