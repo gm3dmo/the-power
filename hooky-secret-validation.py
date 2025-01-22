@@ -84,6 +84,8 @@ def slurphook():
         app.logger.debug("-" * 21)
         
         signature_header = request.headers.get('X-Hub-Signature-256')
+        event_type = request.headers.get('X-GitHub-Event', 'unknown')
+        
         app.logger.debug(f"X-Hub-Signature-256: {signature_header}")
         app.logger.debug("-" * 21)
         app.logger.debug(f"Headers: {request.headers}")
@@ -94,6 +96,48 @@ def slurphook():
             verify_signature(request.data, args.hook_secret, signature_header)
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
+        
+        # Store webhook data in database with more detailed logging
+        try:
+            app.logger.debug(f"Attempting to connect to database: {args.db_name}")
+            conn = sqlite3.connect(args.db_name)
+            cursor = conn.cursor()
+            
+            # Log the data we're about to insert
+            app.logger.debug(f"Preparing to insert - Event Type: {event_type}")
+            app.logger.debug(f"Signature: {signature_header}")
+            
+            insert_query = '''
+                INSERT INTO webhook_events (event_type, payload, signature)
+                VALUES (?, ?, ?)
+            '''
+            values = (
+                event_type,
+                json.dumps(request.json),
+                signature_header
+            )
+            
+            app.logger.debug("Executing insert query...")
+            cursor.execute(insert_query, values)
+            
+            app.logger.debug("Committing transaction...")
+            conn.commit()
+            
+            # Verify the insert worked
+            cursor.execute("SELECT COUNT(*) FROM webhook_events")
+            count = cursor.fetchone()[0]
+            app.logger.debug(f"Total records in database: {count}")
+            
+            app.logger.debug(f"Successfully stored webhook data in database: {args.db_name}")
+        except Exception as e:
+            app.logger.error(f"Failed to store webhook data: {str(e)}")
+            app.logger.error(f"Error type: {type(e)}")
+            # Re-raise the exception to see the full traceback in the logs
+            raise
+        finally:
+            if 'conn' in locals():
+                conn.close()
+                app.logger.debug("Database connection closed")
             
         return ('status', args.status_code)
 
