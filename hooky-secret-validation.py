@@ -146,22 +146,42 @@ def slurphook():
 def view_hooks():
     try:
         page = request.args.get('page', 1, type=int)
+        sort_by = request.args.get('sort', 'timestamp')
+        sort_dir = request.args.get('dir', 'desc')
+        
         conn = sqlite3.connect(args.db_name)
         cursor = conn.cursor()
         
         cursor.execute('SELECT COUNT(*) FROM webhook_events')
         total_records = cursor.fetchone()[0]
         
+        # Get current record for main display using ID instead of offset
         cursor.execute('''
             SELECT timestamp, event_type, payload, signature 
             FROM webhook_events 
-            ORDER BY timestamp DESC
-            LIMIT 1 OFFSET ?
-        ''', (page - 1,))
+            WHERE rowid = ?
+        ''', (page,))
         
         hook = cursor.fetchone()
+        if not hook:  # If no record found, get the first one
+            cursor.execute('''
+                SELECT timestamp, event_type, payload, signature 
+                FROM webhook_events 
+                ORDER BY timestamp DESC
+                LIMIT 1
+            ''')
+            hook = cursor.fetchone()
         
-        # HTML with clean Helvetica styling and vanilla JavaScript
+        # Get 8 records for the table with their rowids
+        cursor.execute(f'''
+            SELECT rowid, timestamp, event_type, signature 
+            FROM webhook_events 
+            ORDER BY {sort_by} {sort_dir}
+            LIMIT 8
+        ''')
+        
+        table_records = cursor.fetchall()
+        
         html = f'''
         <!DOCTYPE html>
         <html>
@@ -247,6 +267,35 @@ def view_hooks():
                 .copy-button:hover {{
                     background-color: #333333;
                 }}
+                .webhook-table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                    font-size: 14px;
+                }}
+                .webhook-table th, .webhook-table td {{
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #e1e1e1;
+                }}
+                .webhook-table th {{
+                    background-color: #f8f8f8;
+                    font-weight: 500;
+                    cursor: pointer;
+                }}
+                .webhook-table th:hover {{
+                    background-color: #eaeaea;
+                }}
+                .webhook-table tr {{
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }}
+                .webhook-table tr:hover {{
+                    background-color: #f8f8f8;
+                }}
+                .webhook-table tr.selected {{
+                    background-color: #f0f0f0;
+                }}
                 .header-row {{
                     display: flex;
                     justify-content: space-between;
@@ -256,6 +305,22 @@ def view_hooks():
                 .label {{
                     font-weight: bold;
                     color: #000000;
+                }}
+                .table-container {{
+                    margin: 40px 0;
+                    border: 1px solid #e1e1e1;
+                    border-radius: 3px;
+                    overflow: hidden;
+                }}
+                .table-title {{
+                    font-size: 18px;
+                    margin: 20px 0;
+                    color: #333;
+                }}
+                .sort-arrow {{
+                    display: inline-block;
+                    margin-left: 5px;
+                    color: #666;
                 }}
             </style>
         </head>
@@ -278,11 +343,7 @@ def view_hooks():
                     </div>
                     <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
                 </div>
-            '''
-        else:
-            html += '<p>No webhook events found.</p>'
-        
-        html += '''
+                
                 <div class="nav-buttons">
         '''
         
@@ -298,6 +359,49 @@ def view_hooks():
             
         html += '''
                 </div>
+                
+                <h2 class="table-title">Recent Webhooks</h2>
+                <div class="table-container">
+                    <table class="webhook-table">
+                        <thead>
+                            <tr>
+        '''
+        
+        sort_headers = [
+            ('timestamp', 'Timestamp'),
+            ('event_type', 'Event Type'),
+            ('signature', 'Signature')
+        ]
+        
+        for col, label in sort_headers:
+            arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
+            new_dir = 'asc' if sort_by == col and sort_dir == 'desc' else 'desc'
+            html += f'''
+                <th onclick="window.location.href='/hookdb?page={page}&sort={col}&dir={new_dir}'">
+                    {label}<span class="sort-arrow">{arrow}</span>
+                </th>
+            '''
+        
+        html += '''
+                            </tr>
+                        </thead>
+                        <tbody>
+        '''
+        
+        for rowid, timestamp, event_type, signature in table_records:
+            selected = 'selected' if page == rowid else ''
+            html += f'''
+                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}'">
+                    <td>{timestamp}</td>
+                    <td>{event_type}</td>
+                    <td>{signature}</td>
+                </tr>
+            '''
+        
+        html += '''
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <script>
                 function copyPayload() {
@@ -311,7 +415,6 @@ def view_hooks():
                     });
                 }
                 
-                // Fade in effect
                 document.addEventListener('DOMContentLoaded', function() {
                     const container = document.querySelector('.container');
                     container.style.opacity = '0';
