@@ -256,7 +256,7 @@ def view_hooks():
             <style>
                 body {{
                     font-family: Arial, sans-serif;
-                    margin: 20px;
+                    margin: 20px 156px;
                 }}
                 table {{
                     width: 100%;
@@ -265,7 +265,7 @@ def view_hooks():
                     table-layout: fixed;
                 }}
                 table th {{
-                    padding: 8px 40px;
+                    padding: 8px 16px;
                     text-align: left;
                     background-color: #f5f5f5;
                     border-bottom: 2px solid #ddd;
@@ -275,8 +275,11 @@ def view_hooks():
                     z-index: 1;
                     background-color: #fff;
                 }}
+                table th:nth-child(2), table td:nth-child(2) {{
+                    padding-left: 4px;
+                }}
                 table td {{
-                    padding: 8px 40px;
+                    padding: 8px 16px;
                     text-align: left;
                     border-bottom: 1px solid #ddd;
                     white-space: nowrap;
@@ -310,6 +313,17 @@ def view_hooks():
                 }}
                 .clear-button:hover {{
                     background-color: #cc0000;
+                }}
+                .copy-button {{
+                    background-color: #006400;  /* Dark green */
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    padding: 4px 8px;
+                    cursor: pointer;
+                }}
+                .copy-button:hover {{
+                    background-color: #004d00;  /* Darker green on hover */
                 }}
                 .event-info {{
                     margin: 20px 0;
@@ -359,19 +373,6 @@ def view_hooks():
                     color: #666666;
                     margin: 20px 0;
                     font-size: 14px;
-                }}
-                .copy-button {{
-                    float: right;
-                    padding: 5px 10px;
-                    background-color: #000000;
-                    color: white;
-                    border: none;
-                    border-radius: 3px;
-                    cursor: pointer;
-                    font-family: Helvetica, Arial, sans-serif;
-                }}
-                .copy-button:hover {{
-                    background-color: #333333;
                 }}
                 .webhook-table {{
                     width: 100%;
@@ -602,12 +603,14 @@ def view_hooks():
         html += '<table><tr>'
         sort_headers = [
             ('rowid', 'Event ID'),
-            ('timestamp', 'Timestamp'),
             ('event_type', 'Event Type')
         ]
         if has_actions:
             sort_headers.append(('action', 'Action'))
-        sort_headers.append(('signature', 'Signature'))
+        sort_headers.extend([
+            ('timestamp', 'Timestamp'),
+            ('signature', 'Signature')
+        ])
         
         for col, label in sort_headers:
             arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
@@ -644,7 +647,6 @@ def view_hooks():
                 html += f'''
                     <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
                         <td>{rowid}</td>
-                        <td>{timestamp}</td>
                         <td>{event_type}</td>'''
                 
                 if has_actions:
@@ -652,6 +654,7 @@ def view_hooks():
                         <td>{action if has_action else ""}</td>'''
                         
                 html += f'''
+                        <td>{timestamp}</td>
                         <td>{signature}</td>
                     </tr>
                 '''
