@@ -1,12 +1,8 @@
 """
-A simple Flask app that will act as a endpoint for a hook.
+This is a python Flask app which receives webhooks, stores the hook payload and headers in
+a sqlite database. For setup instructions see:
 
-Create a venv:
-
-    python -m venv hooktest
-    source hooktest/bin/activate
-
-    python hooky.py
+https://github.com/gm3dmo/the-power/blob/main/docs/testing-webhooks.md
 
 """
 
