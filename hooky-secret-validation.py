@@ -252,24 +252,64 @@ def view_hooks():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>The Power Webhook Event Receiver</title>
+            <title>Webhook Events</title>
             <style>
                 body {{
-                    font-family: Helvetica, Arial, sans-serif;
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #ffffff;
-                    color: #333333;
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
                 }}
-                .container {{
-                    padding: 20px;
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                    table-layout: fixed;
                 }}
-                h1 {{
-                    font-weight: 500;
-                    text-align: center;
-                    margin-bottom: 30px;
-                    color: #000000;
+                table th {{
+                    padding: 8px 40px;
+                    text-align: left;
+                    background-color: #f5f5f5;
+                    border-bottom: 2px solid #ddd;
+                    cursor: pointer;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                    background-color: #fff;
+                }}
+                table td {{
+                    padding: 8px 40px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 0;
+                }}
+                tr:hover {{
+                    background-color: #f5f5f5;
+                    cursor: pointer;
+                }}
+                tr.selected {{
+                    background-color: #e0e0e0;
+                }}
+                .sort-arrow {{
+                    margin-left: 5px;
+                    color: #999;
+                }}
+                .nav-buttons {{
+                    margin: 20px 0;
+                }}
+                .nav-buttons button {{
+                    padding: 8px 16px;
+                    cursor: pointer;
+                }}
+                .clear-button {{
+                    background-color: #ff4444;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                }}
+                .clear-button:hover {{
+                    background-color: #cc0000;
                 }}
                 .event-info {{
                     margin: 20px 0;
@@ -385,11 +425,6 @@ def view_hooks():
                     font-size: 18px;
                     margin: 20px 0;
                     color: #333;
-                }}
-                .sort-arrow {{
-                    display: inline-block;
-                    margin-left: 5px;
-                    color: #666;
                 }}
                 .search-container {{
                     margin: 20px 0;
