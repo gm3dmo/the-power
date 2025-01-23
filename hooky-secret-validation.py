@@ -151,11 +151,18 @@ def clear_events():
         db = get_db()
         cursor = db.cursor()
         
-        # Delete all events
-        cursor.execute('DELETE FROM webhook_events')
-        
-        # Reset the sequence
-        cursor.execute('DELETE FROM sqlite_sequence WHERE name="webhook_events"')
+        # Drop and recreate the table to ensure a complete reset
+        cursor.execute('DROP TABLE IF EXISTS webhook_events')
+        cursor.execute('''
+            CREATE TABLE webhook_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime')),
+                event_type TEXT,
+                payload TEXT,
+                signature TEXT,
+                headers TEXT
+            )
+        ''')
         
         db.commit()
         return jsonify({'status': 'success'})
