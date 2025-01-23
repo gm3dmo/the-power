@@ -17,7 +17,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort
+from flask import Flask, request, abort, g
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -50,13 +50,29 @@ def verify_signature(payload_body, secret_token, signature_header):
         app.logger.debug("-" * 21)
 
 
+# Create Flask app first
+app = Flask(__name__)
+
+# Then define database functions
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(args.db_name)
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+@app.teardown_appcontext
+def close_db(error):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
+
+
 def init_db():
     """Initialize the SQLite database and create tables if they don't exist."""
     app.logger.debug("Initializing database...")
     
-    db_path = Path(args.db_name)
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
+    db = get_db()
+    cursor = db.cursor()
     
     # Create table for webhook events
     cursor.execute('''
@@ -69,12 +85,8 @@ def init_db():
         )
     ''')
     
-    conn.commit()
-    conn.close()
-    app.logger.debug(f"Database initialized at {db_path.absolute()}")
-
-
-app = Flask(__name__)
+    db.commit()
+    app.logger.debug(f"Database initialized at {args.db_name}")
 
 
 @app.route('/webhook', methods=['POST'])
@@ -100,7 +112,7 @@ def slurphook():
         # Store webhook data in database with more detailed logging
         try:
             app.logger.debug(f"Attempting to connect to database: {args.db_name}")
-            conn = sqlite3.connect(args.db_name)
+            conn = get_db()
             cursor = conn.cursor()
             
             # Log the data we're about to insert
@@ -149,8 +161,8 @@ def view_hooks():
         sort_by = request.args.get('sort', 'timestamp')
         sort_dir = request.args.get('dir', 'desc')
         
-        conn = sqlite3.connect(args.db_name)
-        cursor = conn.cursor()
+        db = get_db()
+        cursor = db.cursor()
         
         cursor.execute('SELECT COUNT(*) FROM webhook_events')
         total_records = cursor.fetchone()[0]
@@ -439,7 +451,6 @@ def view_hooks():
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -468,9 +479,10 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
-
-    # Initialize the database before starting the app
-    init_db()
+    
+    # Create app context before initializing database
+    with app.app_context():
+        init_db()
     
     app.config['DEBUG'] = True
     app.run(host='localhost', port=8000)
