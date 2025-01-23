@@ -210,9 +210,11 @@ def view_hooks():
             timestamp, event_type, payload, signature, headers = hook
             event_display_html = f'''
                 <div class="event-info">
-                    <p><span class="label">Timestamp:</span> {timestamp}</p>
-                    <p><span class="label">Event Type:</span> {event_type}</p>
-                    <p><span class="label">Signature:</span> {signature}</p>
+                    <p>
+                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
+                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
+                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
+                    </p>
                     
                     <div class="header-row">
                         <span class="section-header">Headers:</span>
@@ -226,24 +228,13 @@ def view_hooks():
                     </div>
                     <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
                 </div>
-                
-                <div class="nav-buttons">
             '''
-            
-            # Add navigation buttons
-            if page > 1:
-                event_display_html += f'<a href="/hookdb?page={page-1}&search={search}" class="nav-button">Previous</a>'
-            else:
-                event_display_html += '<span class="nav-button disabled">Previous</span>'
-                
-            if page < total_records:
-                event_display_html += f'<a href="/hookdb?page={page+1}&search={search}" class="nav-button">Next</a>'
-            else:
-                event_display_html += '<span class="nav-button disabled">Next</span>'
-            
-            event_display_html += '</div>'
         
-        # Then create main HTML
+        # Get total count and max rowid
+        cursor.execute('SELECT MAX(rowid) FROM webhook_events')
+        max_rowid = cursor.fetchone()[0]
+        total_records = max_rowid if max_rowid else 0
+        
         html = f'''
         <!DOCTYPE html>
         <html>
@@ -341,9 +332,11 @@ def view_hooks():
                     border-bottom: 1px solid #e1e1e1;
                 }}
                 .webhook-table th {{
-                    background-color: #f8f8f8;
-                    font-weight: 500;
                     cursor: pointer;
+                    padding: 10px;
+                    text-align: left;
+                    border-bottom: 1px solid #e1e1e1;
+                    font-weight: bold;
                 }}
                 .webhook-table th:hover {{
                     background-color: #eaeaea;
@@ -456,15 +449,62 @@ def view_hooks():
                 .danger-button:hover {{
                     background-color: #dc352b;
                 }}
+                
+                .info-item {{
+                    display: inline-block;
+                    margin-right: 50px;
+                }}
             </style>
         </head>
         <body>
             <div class="container">
                 <h1>The Power Webhook Event Receiver</h1>
                 <div class="page-info">Event {page} of {total_records}</div>
-                
-                {event_display_html}
-                
+                <div class="nav-buttons">
+        '''
+        
+        # Previous button
+        if page > 1:
+            prev_page = page - 1
+            html += f'<a href="/hookdb?page={prev_page}&search={search}" class="nav-button">Previous</a>'
+        else:
+            html += '<span class="nav-button disabled">Previous</span>'
+        
+        # Next button
+        if page < total_records:
+            next_page = page + 1
+            html += f'<a href="/hookdb?page={next_page}&search={search}" class="nav-button">Next</a>'
+        else:
+            html += '<span class="nav-button disabled">Next</span>'
+        
+        html += '</div>'
+        
+        if hook:
+            timestamp, event_type, payload, signature, headers = hook
+            html += f'''
+                <div class="event-info">
+                    <p>
+                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
+                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
+                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
+                    </p>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Headers:</span>
+                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
+                    </div>
+                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Payload:</span>
+                        <button class="copy-button" onclick="copyPayload()">Copy</button>
+                    </div>
+                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
+                </div>
+            '''
+        
+        # After the event info section, add the table:
+        html += f'''
                 <h2 class="table-title">Recent Webhooks</h2>
                 <div class="search-container">
                     <label class="search-label">Filter by Event Type:</label>
@@ -480,7 +520,6 @@ def view_hooks():
                             <tr>
         '''
         
-        # Modify sort headers to include search parameter
         sort_headers = [
             ('timestamp', 'Timestamp'),
             ('event_type', 'Event Type'),
@@ -502,7 +541,14 @@ def view_hooks():
                         <tbody>
         '''
         
-        for rowid, timestamp, event_type, signature, headers in table_records:
+        # Debug the values
+        app.logger.debug(f"Table records: {table_records}")
+        
+        for record in table_records:
+            rowid = record[0]
+            timestamp = record[1]
+            event_type = record[2]
+            signature = record[3]
             selected = 'selected' if page == rowid else ''
             html += f'''
                 <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
