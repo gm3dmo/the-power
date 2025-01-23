@@ -151,10 +151,11 @@ def clear_events():
         db = get_db()
         cursor = db.cursor()
         
-        # Drop both tables and vacuum the database
+        # Drop the events table
         cursor.execute('DROP TABLE IF EXISTS webhook_events')
-        cursor.execute('DROP TABLE IF EXISTS sqlite_sequence')
-        cursor.execute('VACUUM')
+        
+        # Reset the sequence explicitly
+        cursor.execute('UPDATE sqlite_sequence SET seq = 0 WHERE name = "webhook_events"')
         
         # Recreate the webhook_events table
         cursor.execute('''
@@ -169,10 +170,6 @@ def clear_events():
         ''')
         
         db.commit()
-        
-        # Close and reopen the database connection
-        db.close()
-        db = get_db()
         
         return jsonify({'status': 'success'})
     except Exception as e:
