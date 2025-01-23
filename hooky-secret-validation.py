@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g
+from flask import Flask, request, abort, g, redirect
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -138,6 +138,19 @@ def slurphook():
         return ('status', args.status_code)
 
 
+@app.route('/truncate', methods=['POST'])
+def truncate_events():
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('DELETE FROM webhook_events')
+        db.commit()
+        return redirect('/hookdb')
+    except Exception as e:
+        app.logger.error(f"Failed to truncate events: {str(e)}")
+        return f'Error: {str(e)}', 500
+
+
 @app.route('/hookdb', methods=['GET'])
 def view_hooks():
     try:
@@ -156,22 +169,29 @@ def view_hooks():
         cursor.execute(f'SELECT COUNT(*) FROM webhook_events {search_condition}', search_param)
         total_records = cursor.fetchone()[0]
         
-        # Get current record for main display using ID instead of offset
-        cursor.execute('''
-            SELECT timestamp, event_type, payload, signature, headers 
-            FROM webhook_events 
-            WHERE rowid = ?
-        ''', (page,))
-        
-        hook = cursor.fetchone()
-        if not hook:  # If no record found, get the first one
+        # Only try to get a record if we have any
+        if total_records > 0:
             cursor.execute('''
                 SELECT timestamp, event_type, payload, signature, headers 
                 FROM webhook_events 
-                ORDER BY timestamp DESC
-                LIMIT 1
-            ''')
+                WHERE rowid = ?
+            ''', (page,))
+            
             hook = cursor.fetchone()
+            if not hook:  # If requested page doesn't exist, get first record
+                cursor.execute('''
+                    SELECT timestamp, event_type, payload, signature, headers
+                    FROM webhook_events 
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                ''')
+                hook = cursor.fetchone()
+                if hook:  # If we got a record, update page to match its rowid
+                    cursor.execute('SELECT rowid FROM webhook_events ORDER BY timestamp DESC LIMIT 1')
+                    page = cursor.fetchone()[0]
+        else:
+            hook = None
+            page = 0
         
         # Get 8 records for the table with their rowids, including search filter
         cursor.execute(f'''
@@ -184,12 +204,51 @@ def view_hooks():
         
         table_records = cursor.fetchall()
         
-        # Start HTML with all styles defined first
+        # Create event display HTML first
+        event_display_html = ''
+        if hook:
+            timestamp, event_type, payload, signature, headers = hook
+            event_display_html = f'''
+                <div class="event-info">
+                    <p><span class="label">Timestamp:</span> {timestamp}</p>
+                    <p><span class="label">Event Type:</span> {event_type}</p>
+                    <p><span class="label">Signature:</span> {signature}</p>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Headers:</span>
+                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
+                    </div>
+                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Payload:</span>
+                        <button class="copy-button" onclick="copyPayload()">Copy</button>
+                    </div>
+                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
+                </div>
+                
+                <div class="nav-buttons">
+            '''
+            
+            # Add navigation buttons
+            if page > 1:
+                event_display_html += f'<a href="/hookdb?page={page-1}&search={search}" class="nav-button">Previous</a>'
+            else:
+                event_display_html += '<span class="nav-button disabled">Previous</span>'
+                
+            if page < total_records:
+                event_display_html += f'<a href="/hookdb?page={page+1}&search={search}" class="nav-button">Next</a>'
+            else:
+                event_display_html += '<span class="nav-button disabled">Next</span>'
+            
+            event_display_html += '</div>'
+        
+        # Then create main HTML
         html = f'''
         <!DOCTYPE html>
         <html>
         <head>
-            <title>The Power: Webhook Events Receiver</title>
+            <title>The Power Webhook Event Receiver</title>
             <style>
                 body {{
                     font-family: Helvetica, Arial, sans-serif;
@@ -373,50 +432,38 @@ def view_hooks():
                 pre#payload {{
                     max-height: 300px;
                 }}
+                
+                .danger-zone {{
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    text-align: right;
+                }}
+                
+                .danger-button {{
+                    font-family: Helvetica, Arial, sans-serif;
+                    padding: 10px 20px;
+                    background-color: #ff3b30;
+                    color: white;
+                    border: none;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                    font-size: 14px;
+                    font-weight: 500;
+                }}
+                
+                .danger-button:hover {{
+                    background-color: #dc352b;
+                }}
             </style>
         </head>
         <body>
             <div class="container">
-                <h1>The Power: Webhook Events Receiver</h1>
+                <h1>The Power Webhook Event Receiver</h1>
                 <div class="page-info">Event {page} of {total_records}</div>
-        '''
-        
-        if hook:
-            timestamp, event_type, payload, signature, headers = hook
-            html += f'''
-                <div class="event-info">
-                    <p><span class="label">Timestamp:</span> {timestamp}</p>
-                    <p><span class="label">Event Type:</span> {event_type}</p>
-                    <p><span class="label">Signature:</span> {signature}</p>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Headers:</span>
-                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
-                    </div>
-                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Payload:</span>
-                        <button class="copy-button" onclick="copyPayload()">Copy</button>
-                    </div>
-                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
-                </div>
                 
-                <div class="nav-buttons">
-            '''
-        
-        if page > 1:
-            html += f'<a href="/hookdb?page={page-1}&search={search}" class="nav-button">Previous</a>'
-        else:
-            html += '<span class="nav-button disabled">Previous</span>'
-            
-        if page < total_records:
-            html += f'<a href="/hookdb?page={page+1}&search={search}" class="nav-button">Next</a>'
-        else:
-            html += '<span class="nav-button disabled">Next</span>'
-            
-        html += '''
-                </div>
+                {event_display_html}
                 
                 <h2 class="table-title">Recent Webhooks</h2>
                 <div class="search-container">
@@ -425,7 +472,7 @@ def view_hooks():
                            class="search-box" 
                            placeholder="Search event types... (press Enter to search)"
                            onkeydown="handleSearch(event)"
-                           value="''' + search + '''">
+                           value="{search}">
                 </div>
                 <div class="table-container">
                     <table class="webhook-table">
@@ -469,7 +516,14 @@ def view_hooks():
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="danger-zone">
+                    <form id="truncateForm" action="/truncate" method="POST" onsubmit="return confirmTruncate()">
+                        <button type="submit" class="danger-button">Clear All Events</button>
+                    </form>
+                </div>
             </div>
+            
             <script>
                 function handleSearch(event) {
                     if (event.key === 'Enter') {
@@ -500,6 +554,10 @@ def view_hooks():
                             button.textContent = 'Copy';
                         }, 2000);
                     });
+                }
+                
+                function confirmTruncate() {
+                    return confirm('Are you sure you want to delete ALL webhook events? This cannot be undone.');
                 }
                 
                 document.addEventListener('DOMContentLoaded', function() {
