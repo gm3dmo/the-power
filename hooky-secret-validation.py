@@ -70,12 +70,9 @@ def init_db():
     db = get_db()
     cursor = db.cursor()
     
-    # Drop and recreate the table to ensure correct schema
-    cursor.execute('DROP TABLE IF EXISTS webhook_events')
-    
-    # Create table for webhook events with all required columns
+    # Create table only if it doesn't exist
     cursor.execute('''
-        CREATE TABLE webhook_events (
+        CREATE TABLE IF NOT EXISTS webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime')),
             event_type TEXT,
