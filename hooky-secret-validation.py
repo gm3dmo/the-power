@@ -148,7 +148,7 @@ def view_hooks():
         page = request.args.get('page', 1, type=int)
         sort_by = request.args.get('sort', 'timestamp')
         sort_dir = request.args.get('dir', 'desc')
-        search = request.args.get('search', '')  # Get search parameter
+        search = request.args.get('search', '')
         
         db = get_db()
         cursor = db.cursor()
@@ -162,7 +162,7 @@ def view_hooks():
         
         # Get current record for main display using ID instead of offset
         cursor.execute('''
-            SELECT timestamp, event_type, payload, signature 
+            SELECT timestamp, event_type, payload, signature, headers 
             FROM webhook_events 
             WHERE rowid = ?
         ''', (page,))
@@ -170,7 +170,7 @@ def view_hooks():
         hook = cursor.fetchone()
         if not hook:  # If no record found, get the first one
             cursor.execute('''
-                SELECT timestamp, event_type, payload, signature 
+                SELECT timestamp, event_type, payload, signature, headers 
                 FROM webhook_events 
                 ORDER BY timestamp DESC
                 LIMIT 1
@@ -179,7 +179,7 @@ def view_hooks():
         
         # Get 8 records for the table with their rowids, including search filter
         cursor.execute(f'''
-            SELECT rowid, timestamp, event_type, signature 
+            SELECT rowid, timestamp, event_type, signature, headers 
             FROM webhook_events 
             {search_condition}
             ORDER BY {sort_by} {sort_dir}
@@ -188,7 +188,7 @@ def view_hooks():
         
         table_records = cursor.fetchall()
         
-        # Add search box to HTML
+        # Start HTML with all styles defined first
         html = f'''
         <!DOCTYPE html>
         <html>
@@ -351,6 +351,32 @@ def view_hooks():
                     margin-right: 10px;
                     color: #666666;
                 }}
+                
+                .headers-box {{
+                    background-color: #f8f8f8;
+                    padding: 15px;
+                    border-radius: 3px;
+                    overflow-x: auto;
+                    font-family: monospace;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    border: 1px solid #e1e1e1;
+                    margin: 10px 0;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    font-size: 14px;
+                }}
+                
+                .section-header {{
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    font-weight: bold;
+                    color: #000000;
+                }}
+                
+                pre#payload {{
+                    max-height: 300px;
+                }}
             </style>
         </head>
         <body>
@@ -360,21 +386,25 @@ def view_hooks():
         '''
         
         if hook:
-            timestamp, event_type, payload, signature = hook
+            timestamp, event_type, payload, signature, headers = hook
             html += f'''
                 <div class="event-info">
                     <p><span class="label">Timestamp:</span> {timestamp}</p>
                     <p><span class="label">Event Type:</span> {event_type}</p>
                     <p><span class="label">Signature:</span> {signature}</p>
+                    
+                    <div class="section-header">Headers:</div>
+                    <pre class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="section-header">Payload:</div>
                     <div class="header-row">
-                        <span class="label">Payload:</span>
                         <button class="copy-button" onclick="copyPayload()">Copy</button>
                     </div>
                     <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
                 </div>
                 
                 <div class="nav-buttons">
-        '''
+            '''
         
         if page > 1:
             html += f'<a href="/hookdb?page={page-1}&search={search}" class="nav-button">Previous</a>'
@@ -426,7 +456,7 @@ def view_hooks():
                         <tbody>
         '''
         
-        for rowid, timestamp, event_type, signature in table_records:
+        for rowid, timestamp, event_type, signature, headers in table_records:
             selected = 'selected' if page == rowid else ''
             html += f'''
                 <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
