@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect, jsonify
+from flask import Flask, request, abort, g, redirect
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -145,59 +145,16 @@ def truncate_events():
         return f'Error: {str(e)}', 500
 
 
-@app.route('/clear', methods=['POST'])
-def clear_events():
+@app.route('/hookdb', methods=['GET'])
+def view_hooks():
     try:
-        db = get_db()
-        cursor = db.cursor()
-        
-        # Drop the events table
-        cursor.execute('DROP TABLE IF EXISTS webhook_events')
-        
-        # Reset the sequence using exact syntax
-        cursor.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='webhook_events'")
-        
-        # Recreate the webhook_events table
-        cursor.execute('''
-            CREATE TABLE webhook_events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime')),
-                event_type TEXT,
-                payload TEXT,
-                signature TEXT,
-                headers TEXT
-            )
-        ''')
-        
-        db.commit()
-        
-        return jsonify({'status': 'success'})
-    except Exception as e:
-        app.logger.error(f"Failed to clear events: {str(e)}")
-        return jsonify({'status': 'error', 'message': str(e)}), 500
-
-
-@app.route('/hookdb')
-def hookdb():
-    try:
-        page = request.args.get('page', type=int, default=1)
-        search = request.args.get('search', default='')
-        sort_by = request.args.get('sort', default='timestamp')
-        sort_dir = request.args.get('dir', default='desc')
+        page = request.args.get('page', 1, type=int)
+        sort_by = request.args.get('sort', 'timestamp')
+        sort_dir = request.args.get('dir', 'desc')
+        search = request.args.get('search', '')
         
         db = get_db()
         cursor = db.cursor()
-        
-        # Get total count for pagination
-        if search:
-            cursor.execute('SELECT COUNT(*) FROM webhook_events WHERE event_type LIKE ?', (f'%{search}%',))
-        else:
-            cursor.execute('SELECT COUNT(*) FROM webhook_events')
-        total_records = cursor.fetchone()[0]
-        
-        # Calculate previous and next page numbers
-        prev_page = max(1, page - 1)
-        next_page = min(total_records, page + 1)
         
         # Modify queries to include search
         search_condition = "WHERE event_type LIKE ?" if search else ""
@@ -233,33 +190,20 @@ def hookdb():
         # Get all records for the table with their rowids
         if search:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, payload, signature 
+                SELECT rowid, timestamp, event_type, signature 
                 FROM webhook_events 
                 WHERE event_type LIKE ?
                 ORDER BY timestamp DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, payload, signature 
+                SELECT rowid, timestamp, event_type, signature 
                 FROM webhook_events 
                 ORDER BY timestamp DESC
             ''')
         
         table_records = cursor.fetchall()
         
-        # First pass: check if any records have actions
-        has_actions = False
-        for record in table_records:
-            try:
-                payload = record[3]  # Make sure payload is at index 3
-                if payload is not None:
-                    payload_json = json.loads(payload)
-                    if 'action' in payload_json:
-                        has_actions = True
-                        break
-            except (json.JSONDecodeError, KeyError, IndexError):
-                continue
-
         # Create event display HTML first
         event_display_html = ''
         if hook:
@@ -295,78 +239,24 @@ def hookdb():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Webhook Events</title>
+            <title>The Power Webhook Event Receiver</title>
             <style>
                 body {{
-                    font-family: Arial, sans-serif;
-                    margin: 20px 156px;
+                    font-family: Helvetica, Arial, sans-serif;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    color: #333333;
                 }}
-                table {{
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 20px;
-                    table-layout: fixed;
+                .container {{
+                    padding: 20px;
                 }}
-                table th {{
-                    padding: 8px 16px;
-                    text-align: left;
-                    background-color: #f5f5f5;
-                    border-bottom: 2px solid #ddd;
-                    cursor: pointer;
-                    position: sticky;
-                    top: 0;
-                    z-index: 1;
-                    background-color: #fff;
-                }}
-                table th:nth-child(2), table td:nth-child(2) {{
-                    padding-left: 4px;
-                }}
-                table td {{
-                    padding: 8px 16px;
-                    text-align: left;
-                    border-bottom: 1px solid #ddd;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 0;
-                }}
-                tr:hover {{
-                    background-color: #f5f5f5;
-                    cursor: pointer;
-                }}
-                tr.selected {{
-                    background-color: #e0e0e0;
-                }}
-                .sort-arrow {{
-                    margin-left: 5px;
-                    color: #999;
-                }}
-                .nav-buttons {{
-                    margin: 20px 0;
-                }}
-                .nav-buttons button {{
-                    padding: 8px 16px;
-                    cursor: pointer;
-                }}
-                .clear-button {{
-                    background-color: #ff4444;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                }}
-                .clear-button:hover {{
-                    background-color: #cc0000;
-                }}
-                .copy-button {{
-                    background-color: #006400;  /* Dark green */
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    padding: 4px 8px;
-                    cursor: pointer;
-                }}
-                .copy-button:hover {{
-                    background-color: #004d00;  /* Darker green on hover */
+                h1 {{
+                    font-weight: 500;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    color: #000000;
                 }}
                 .event-info {{
                     margin: 20px 0;
@@ -416,6 +306,19 @@ def hookdb():
                     color: #666666;
                     margin: 20px 0;
                     font-size: 14px;
+                }}
+                .copy-button {{
+                    float: right;
+                    padding: 5px 10px;
+                    background-color: #000000;
+                    color: white;
+                    border: none;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    font-family: Helvetica, Arial, sans-serif;
+                }}
+                .copy-button:hover {{
+                    background-color: #333333;
                 }}
                 .webhook-table {{
                     width: 100%;
@@ -469,6 +372,11 @@ def hookdb():
                     font-size: 18px;
                     margin: 20px 0;
                     color: #333;
+                }}
+                .sort-arrow {{
+                    display: inline-block;
+                    margin-left: 5px;
+                    color: #666;
                 }}
                 .search-container {{
                     margin: 20px 0;
@@ -576,12 +484,6 @@ def hookdb():
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }}
-                
-                .event-count {{
-                    margin: 20px 0;
-                    font-size: 16px;
-                    color: #666;
-                }}
             </style>
         </head>
         <body>
@@ -589,13 +491,50 @@ def hookdb():
                 <h1>The Power Webhook Event Receiver</h1>
                 <div class="page-info">Event {page} of {total_records}</div>
                 <div class="nav-buttons">
-                    <button onclick="window.location.href='/hookdb?page={prev_page}&search={search}'"{' disabled' if page <= 1 else ''}>Previous</button>
-                    <button onclick="window.location.href='/hookdb?page={next_page}&search={search}'"{' disabled' if page >= total_records else ''}>Next</button>
-                    <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
+        '''
+        
+        # Previous button
+        if page > 1:
+            prev_page = page - 1
+            html += f'<a href="/hookdb?page={prev_page}&search={search}" class="nav-button">Previous</a>'
+        else:
+            html += '<span class="nav-button disabled">Previous</span>'
+        
+        # Next button
+        if page < total_records:
+            next_page = page + 1
+            html += f'<a href="/hookdb?page={next_page}&search={search}" class="nav-button">Next</a>'
+        else:
+            html += '<span class="nav-button disabled">Next</span>'
+        
+        html += '</div>'
+        
+        if hook:
+            timestamp, event_type, payload, signature, headers = hook
+            html += f'''
+                <div class="event-info">
+                    <p>
+                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
+                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
+                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
+                    </p>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Headers:</span>
+                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
+                    </div>
+                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Payload:</span>
+                        <button class="copy-button" onclick="copyPayload()">Copy</button>
+                    </div>
+                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
                 </div>
-            </div>
-            
-            <div class="container">
+            '''
+        
+        # After the event info section, add the table:
+        html += f'''
                 <h2 class="table-title">Recent Webhooks</h2>
                 <div class="search-container">
                     <label class="search-label">Filter by Event Type:</label>
@@ -611,18 +550,12 @@ def hookdb():
                             <tr>
         '''
         
-        # Add table headers
-        html += '<table><tr>'
         sort_headers = [
             ('rowid', 'Event ID'),
-            ('event_type', 'Event Type')
-        ]
-        if has_actions:
-            sort_headers.append(('action', 'Action'))
-        sort_headers.extend([
             ('timestamp', 'Timestamp'),
+            ('event_type', 'Event Type'),
             ('signature', 'Signature')
-        ])
+        ]
         
         for col, label in sort_headers:
             arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
@@ -632,50 +565,33 @@ def hookdb():
                     {label}<span class="sort-arrow">{arrow}</span>
                 </th>
             '''
-        html += '</tr>'
-        
-        # Add table rows
-        for record in table_records:
-            try:
-                rowid = record[0]
-                timestamp = record[1]
-                event_type = record[2]
-                payload = record[3]
-                signature = record[4]
-                
-                # Extract action from payload
-                action = ''
-                has_action = False
-                try:
-                    if payload is not None:
-                        payload_json = json.loads(payload)
-                        if 'action' in payload_json:
-                            action = payload_json['action']
-                            has_action = True
-                except (json.JSONDecodeError, KeyError):
-                    pass
-                    
-                selected = 'selected' if page == rowid else ''
-                html += f'''
-                    <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
-                        <td>{rowid}</td>
-                        <td>{event_type}</td>'''
-                
-                if has_actions:
-                    html += f'''
-                        <td>{action if has_action else ""}</td>'''
-                        
-                html += f'''
-                        <td>{timestamp}</td>
-                        <td>{signature}</td>
-                    </tr>
-                '''
-            except IndexError as e:
-                app.logger.error(f"Error processing record: {record}, Error: {str(e)}")
-                continue
         
         html += '''
+                            </tr>
                         </thead>
+                        <tbody>
+        '''
+        
+        # Debug the values
+        app.logger.debug(f"Table records: {table_records}")
+        
+        for record in table_records:
+            rowid = record[0]
+            timestamp = record[1]
+            event_type = record[2]
+            signature = record[3]
+            selected = 'selected' if page == rowid else ''
+            html += f'''
+                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
+                    <td>{rowid}</td>
+                    <td>{timestamp}</td>
+                    <td>{event_type}</td>
+                    <td>{signature}</td>
+                </tr>
+            '''
+        
+        html += '''
+                        </tbody>
                     </table>
                 </div>
                 
