@@ -193,7 +193,7 @@ def view_hooks():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Webhook Events</title>
+            <title>The Power Webhook Events Receiver</title>
             <style>
                 body {{
                     font-family: Helvetica, Arial, sans-serif;
