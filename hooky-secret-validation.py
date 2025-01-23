@@ -393,11 +393,14 @@ def view_hooks():
                     <p><span class="label">Event Type:</span> {event_type}</p>
                     <p><span class="label">Signature:</span> {signature}</p>
                     
-                    <div class="section-header">Headers:</div>
-                    <pre class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
-                    
-                    <div class="section-header">Payload:</div>
                     <div class="header-row">
+                        <span class="section-header">Headers:</span>
+                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
+                    </div>
+                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Payload:</span>
                         <button class="copy-button" onclick="copyPayload()">Copy</button>
                     </div>
                     <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
@@ -481,10 +484,21 @@ def view_hooks():
                     }
                 }
                 
+                function copyHeaders() {
+                    const headers = document.getElementById('headers').textContent;
+                    navigator.clipboard.writeText(headers).then(function() {
+                        const button = event.target;
+                        button.textContent = 'Copied!';
+                        setTimeout(function() {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    });
+                }
+                
                 function copyPayload() {
                     const payload = document.getElementById('payload').textContent;
                     navigator.clipboard.writeText(payload).then(function() {
-                        const button = document.querySelector('.copy-button');
+                        const button = event.target;
                         button.textContent = 'Copied!';
                         setTimeout(function() {
                             button.textContent = 'Copy';
