@@ -74,16 +74,23 @@ def init_db():
     db = get_db()
     cursor = db.cursor()
     
-    # Create table for webhook events
+    # Create table for webhook events with headers column
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             event_type TEXT,
             payload TEXT,
-            signature TEXT
+            signature TEXT,
+            headers TEXT
         )
     ''')
+    
+    # Check if headers column exists, if not add it
+    cursor.execute("PRAGMA table_info(webhook_events)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'headers' not in columns:
+        cursor.execute('ALTER TABLE webhook_events ADD COLUMN headers TEXT')
     
     db.commit()
     app.logger.debug(f"Database initialized at {args.db_name}")
@@ -109,47 +116,28 @@ def slurphook():
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
         
-        # Store webhook data in database with more detailed logging
+        # Format headers for storage
+        headers_dict = dict(request.headers)
+        headers_formatted = json.dumps(headers_dict, indent=2)
+        
+        # Store webhook data in database
         try:
-            app.logger.debug(f"Attempting to connect to database: {args.db_name}")
-            conn = get_db()
-            cursor = conn.cursor()
-            
-            # Log the data we're about to insert
-            app.logger.debug(f"Preparing to insert - Event Type: {event_type}")
-            app.logger.debug(f"Signature: {signature_header}")
-            
-            insert_query = '''
-                INSERT INTO webhook_events (event_type, payload, signature)
-                VALUES (?, ?, ?)
-            '''
-            values = (
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute('''
+                INSERT INTO webhook_events (event_type, payload, signature, headers)
+                VALUES (?, ?, ?, ?)
+            ''', (
                 event_type,
                 json.dumps(request.json),
-                signature_header
-            )
-            
-            app.logger.debug("Executing insert query...")
-            cursor.execute(insert_query, values)
-            
-            app.logger.debug("Committing transaction...")
-            conn.commit()
-            
-            # Verify the insert worked
-            cursor.execute("SELECT COUNT(*) FROM webhook_events")
-            count = cursor.fetchone()[0]
-            app.logger.debug(f"Total records in database: {count}")
-            
-            app.logger.debug(f"Successfully stored webhook data in database: {args.db_name}")
+                signature_header,
+                headers_formatted
+            ))
+            db.commit()
+            app.logger.debug(f"Webhook data stored in database: {args.db_name}")
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
-            app.logger.error(f"Error type: {type(e)}")
-            # Re-raise the exception to see the full traceback in the logs
             raise
-        finally:
-            if 'conn' in locals():
-                conn.close()
-                app.logger.debug("Database connection closed")
             
         return ('status', args.status_code)
 
