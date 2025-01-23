@@ -151,9 +151,10 @@ def clear_events():
         db = get_db()
         cursor = db.cursor()
         
-        # Drop both tables to ensure a complete reset
+        # Drop both tables and vacuum the database
         cursor.execute('DROP TABLE IF EXISTS webhook_events')
         cursor.execute('DROP TABLE IF EXISTS sqlite_sequence')
+        cursor.execute('VACUUM')
         
         # Recreate the webhook_events table
         cursor.execute('''
@@ -167,9 +168,12 @@ def clear_events():
             )
         ''')
         
-        # SQLite will recreate sqlite_sequence automatically
-        
         db.commit()
+        
+        # Close and reopen the database connection
+        db.close()
+        db = get_db()
+        
         return jsonify({'status': 'success'})
     except Exception as e:
         app.logger.error(f"Failed to clear events: {str(e)}")
