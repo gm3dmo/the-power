@@ -151,8 +151,11 @@ def clear_events():
         db = get_db()
         cursor = db.cursor()
         
-        # Drop and recreate the table to ensure a complete reset
+        # Drop both tables to ensure a complete reset
         cursor.execute('DROP TABLE IF EXISTS webhook_events')
+        cursor.execute('DROP TABLE IF EXISTS sqlite_sequence')
+        
+        # Recreate the webhook_events table
         cursor.execute('''
             CREATE TABLE webhook_events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -163,6 +166,8 @@ def clear_events():
                 headers TEXT
             )
         ''')
+        
+        # SQLite will recreate sqlite_sequence automatically
         
         db.commit()
         return jsonify({'status': 'success'})
