@@ -17,7 +17,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort
+from flask import Flask, request, abort, g
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -50,31 +50,50 @@ def verify_signature(payload_body, secret_token, signature_header):
         app.logger.debug("-" * 21)
 
 
+# Create Flask app first
+app = Flask(__name__)
+
+# Then define database functions
+def get_db():
+    if 'db' not in g:
+        g.db = sqlite3.connect(args.db_name)
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+@app.teardown_appcontext
+def close_db(error):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
+
+
 def init_db():
     """Initialize the SQLite database and create tables if they don't exist."""
     app.logger.debug("Initializing database...")
     
-    db_path = Path(args.db_name)
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
+    db = get_db()
+    cursor = db.cursor()
     
-    # Create table for webhook events
+    # Create table for webhook events with headers column
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             event_type TEXT,
             payload TEXT,
-            signature TEXT
+            signature TEXT,
+            headers TEXT
         )
     ''')
     
-    conn.commit()
-    conn.close()
-    app.logger.debug(f"Database initialized at {db_path.absolute()}")
-
-
-app = Flask(__name__)
+    # Check if headers column exists, if not add it
+    cursor.execute("PRAGMA table_info(webhook_events)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'headers' not in columns:
+        cursor.execute('ALTER TABLE webhook_events ADD COLUMN headers TEXT')
+    
+    db.commit()
+    app.logger.debug(f"Database initialized at {args.db_name}")
 
 
 @app.route('/webhook', methods=['POST'])
@@ -97,47 +116,28 @@ def slurphook():
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
         
-        # Store webhook data in database with more detailed logging
+        # Format headers for storage
+        headers_dict = dict(request.headers)
+        headers_formatted = json.dumps(headers_dict, indent=2)
+        
+        # Store webhook data in database
         try:
-            app.logger.debug(f"Attempting to connect to database: {args.db_name}")
-            conn = sqlite3.connect(args.db_name)
-            cursor = conn.cursor()
-            
-            # Log the data we're about to insert
-            app.logger.debug(f"Preparing to insert - Event Type: {event_type}")
-            app.logger.debug(f"Signature: {signature_header}")
-            
-            insert_query = '''
-                INSERT INTO webhook_events (event_type, payload, signature)
-                VALUES (?, ?, ?)
-            '''
-            values = (
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute('''
+                INSERT INTO webhook_events (event_type, payload, signature, headers)
+                VALUES (?, ?, ?, ?)
+            ''', (
                 event_type,
                 json.dumps(request.json),
-                signature_header
-            )
-            
-            app.logger.debug("Executing insert query...")
-            cursor.execute(insert_query, values)
-            
-            app.logger.debug("Committing transaction...")
-            conn.commit()
-            
-            # Verify the insert worked
-            cursor.execute("SELECT COUNT(*) FROM webhook_events")
-            count = cursor.fetchone()[0]
-            app.logger.debug(f"Total records in database: {count}")
-            
-            app.logger.debug(f"Successfully stored webhook data in database: {args.db_name}")
+                signature_header,
+                headers_formatted
+            ))
+            db.commit()
+            app.logger.debug(f"Webhook data stored in database: {args.db_name}")
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
-            app.logger.error(f"Error type: {type(e)}")
-            # Re-raise the exception to see the full traceback in the logs
             raise
-        finally:
-            if 'conn' in locals():
-                conn.close()
-                app.logger.debug("Database connection closed")
             
         return ('status', args.status_code)
 
@@ -148,16 +148,21 @@ def view_hooks():
         page = request.args.get('page', 1, type=int)
         sort_by = request.args.get('sort', 'timestamp')
         sort_dir = request.args.get('dir', 'desc')
+        search = request.args.get('search', '')
         
-        conn = sqlite3.connect(args.db_name)
-        cursor = conn.cursor()
+        db = get_db()
+        cursor = db.cursor()
         
-        cursor.execute('SELECT COUNT(*) FROM webhook_events')
+        # Modify queries to include search
+        search_condition = "WHERE event_type LIKE ?" if search else ""
+        search_param = (f"%{search}%",) if search else ()
+        
+        cursor.execute(f'SELECT COUNT(*) FROM webhook_events {search_condition}', search_param)
         total_records = cursor.fetchone()[0]
         
         # Get current record for main display using ID instead of offset
         cursor.execute('''
-            SELECT timestamp, event_type, payload, signature 
+            SELECT timestamp, event_type, payload, signature, headers 
             FROM webhook_events 
             WHERE rowid = ?
         ''', (page,))
@@ -165,28 +170,30 @@ def view_hooks():
         hook = cursor.fetchone()
         if not hook:  # If no record found, get the first one
             cursor.execute('''
-                SELECT timestamp, event_type, payload, signature 
+                SELECT timestamp, event_type, payload, signature, headers 
                 FROM webhook_events 
                 ORDER BY timestamp DESC
                 LIMIT 1
             ''')
             hook = cursor.fetchone()
         
-        # Get 8 records for the table with their rowids
+        # Get 8 records for the table with their rowids, including search filter
         cursor.execute(f'''
-            SELECT rowid, timestamp, event_type, signature 
+            SELECT rowid, timestamp, event_type, signature, headers 
             FROM webhook_events 
+            {search_condition}
             ORDER BY {sort_by} {sort_dir}
             LIMIT 8
-        ''')
+        ''', search_param)
         
         table_records = cursor.fetchall()
         
+        # Start HTML with all styles defined first
         html = f'''
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Webhook Events</title>
+            <title>The Power: Webhook Events Receiver</title>
             <style>
                 body {{
                     font-family: Helvetica, Arial, sans-serif;
@@ -322,38 +329,93 @@ def view_hooks():
                     margin-left: 5px;
                     color: #666;
                 }}
+                .search-container {{
+                    margin: 20px 0;
+                    text-align: right;
+                }}
+                
+                .search-box {{
+                    padding: 8px;
+                    width: 200px;
+                    border: 1px solid #e1e1e1;
+                    border-radius: 3px;
+                    font-family: Helvetica, Arial, sans-serif;
+                }}
+                
+                .search-box:focus {{
+                    outline: none;
+                    border-color: #000000;
+                }}
+                
+                .search-label {{
+                    margin-right: 10px;
+                    color: #666666;
+                }}
+                
+                .headers-box {{
+                    background-color: #f8f8f8;
+                    padding: 15px;
+                    border-radius: 3px;
+                    overflow-x: auto;
+                    font-family: monospace;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    border: 1px solid #e1e1e1;
+                    margin: 10px 0;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    font-size: 14px;
+                }}
+                
+                .section-header {{
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    font-weight: bold;
+                    color: #000000;
+                }}
+                
+                pre#payload {{
+                    max-height: 300px;
+                }}
             </style>
         </head>
         <body>
             <div class="container">
-                <h1>Webhook Events</h1>
+                <h1>The Power: Webhook Events Receiver</h1>
                 <div class="page-info">Event {page} of {total_records}</div>
         '''
         
         if hook:
-            timestamp, event_type, payload, signature = hook
+            timestamp, event_type, payload, signature, headers = hook
             html += f'''
                 <div class="event-info">
                     <p><span class="label">Timestamp:</span> {timestamp}</p>
                     <p><span class="label">Event Type:</span> {event_type}</p>
                     <p><span class="label">Signature:</span> {signature}</p>
+                    
                     <div class="header-row">
-                        <span class="label">Payload:</span>
+                        <span class="section-header">Headers:</span>
+                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
+                    </div>
+                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
+                    
+                    <div class="header-row">
+                        <span class="section-header">Payload:</span>
                         <button class="copy-button" onclick="copyPayload()">Copy</button>
                     </div>
                     <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
                 </div>
                 
                 <div class="nav-buttons">
-        '''
+            '''
         
         if page > 1:
-            html += f'<a href="/hookdb?page={page-1}" class="nav-button">Previous</a>'
+            html += f'<a href="/hookdb?page={page-1}&search={search}" class="nav-button">Previous</a>'
         else:
             html += '<span class="nav-button disabled">Previous</span>'
             
         if page < total_records:
-            html += f'<a href="/hookdb?page={page+1}" class="nav-button">Next</a>'
+            html += f'<a href="/hookdb?page={page+1}&search={search}" class="nav-button">Next</a>'
         else:
             html += '<span class="nav-button disabled">Next</span>'
             
@@ -361,12 +423,21 @@ def view_hooks():
                 </div>
                 
                 <h2 class="table-title">Recent Webhooks</h2>
+                <div class="search-container">
+                    <label class="search-label">Filter by Event Type:</label>
+                    <input type="text" 
+                           class="search-box" 
+                           placeholder="Search event types... (press Enter to search)"
+                           onkeydown="handleSearch(event)"
+                           value="''' + search + '''">
+                </div>
                 <div class="table-container">
                     <table class="webhook-table">
                         <thead>
                             <tr>
         '''
         
+        # Modify sort headers to include search parameter
         sort_headers = [
             ('timestamp', 'Timestamp'),
             ('event_type', 'Event Type'),
@@ -377,7 +448,7 @@ def view_hooks():
             arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
             new_dir = 'asc' if sort_by == col and sort_dir == 'desc' else 'desc'
             html += f'''
-                <th onclick="window.location.href='/hookdb?page={page}&sort={col}&dir={new_dir}'">
+                <th onclick="window.location.href='/hookdb?page={page}&sort={col}&dir={new_dir}&search={search}'">
                     {label}<span class="sort-arrow">{arrow}</span>
                 </th>
             '''
@@ -388,10 +459,10 @@ def view_hooks():
                         <tbody>
         '''
         
-        for rowid, timestamp, event_type, signature in table_records:
+        for rowid, timestamp, event_type, signature, headers in table_records:
             selected = 'selected' if page == rowid else ''
             html += f'''
-                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}'">
+                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
                     <td>{timestamp}</td>
                     <td>{event_type}</td>
                     <td>{signature}</td>
@@ -404,10 +475,30 @@ def view_hooks():
                 </div>
             </div>
             <script>
+                function handleSearch(event) {
+                    if (event.key === 'Enter') {
+                        const searchValue = event.target.value;
+                        const currentUrl = new URL(window.location.href);
+                        currentUrl.searchParams.set('search', searchValue);
+                        window.location.href = currentUrl.toString();
+                    }
+                }
+                
+                function copyHeaders() {
+                    const headers = document.getElementById('headers').textContent;
+                    navigator.clipboard.writeText(headers).then(function() {
+                        const button = event.target;
+                        button.textContent = 'Copied!';
+                        setTimeout(function() {
+                            button.textContent = 'Copy';
+                        }, 2000);
+                    });
+                }
+                
                 function copyPayload() {
                     const payload = document.getElementById('payload').textContent;
                     navigator.clipboard.writeText(payload).then(function() {
-                        const button = document.querySelector('.copy-button');
+                        const button = event.target;
                         button.textContent = 'Copied!';
                         setTimeout(function() {
                             button.textContent = 'Copy';
@@ -439,7 +530,6 @@ def view_hooks():
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -468,9 +558,10 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
-
-    # Initialize the database before starting the app
-    init_db()
+    
+    # Create app context before initializing database
+    with app.app_context():
+        init_db()
     
     app.config['DEBUG'] = True
     app.run(host='localhost', port=8000)
