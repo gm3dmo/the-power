@@ -70,23 +70,20 @@ def init_db():
     db = get_db()
     cursor = db.cursor()
     
-    # Create table for webhook events with headers column
+    # Drop and recreate the table to ensure correct schema
+    cursor.execute('DROP TABLE IF EXISTS webhook_events')
+    
+    # Create table for webhook events with all required columns
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS webhook_events (
+        CREATE TABLE webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            timestamp TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime')),
             event_type TEXT,
             payload TEXT,
             signature TEXT,
             headers TEXT
         )
     ''')
-    
-    # Check if headers column exists, if not add it
-    cursor.execute("PRAGMA table_info(webhook_events)")
-    columns = [column[1] for column in cursor.fetchall()]
-    if 'headers' not in columns:
-        cursor.execute('ALTER TABLE webhook_events ADD COLUMN headers TEXT')
     
     db.commit()
     app.logger.debug(f"Database initialized at {args.db_name}")
@@ -193,14 +190,20 @@ def view_hooks():
             hook = None
             page = 0
         
-        # Get 8 records for the table with their rowids, including search filter
-        cursor.execute(f'''
-            SELECT rowid, timestamp, event_type, signature, headers 
-            FROM webhook_events 
-            {search_condition}
-            ORDER BY {sort_by} {sort_dir}
-            LIMIT 8
-        ''', search_param)
+        # Get all records for the table with their rowids
+        if search:
+            cursor.execute('''
+                SELECT rowid, timestamp, event_type, signature 
+                FROM webhook_events 
+                WHERE event_type LIKE ?
+                ORDER BY timestamp DESC
+            ''', (f'%{search}%',))
+        else:
+            cursor.execute('''
+                SELECT rowid, timestamp, event_type, signature 
+                FROM webhook_events 
+                ORDER BY timestamp DESC
+            ''')
         
         table_records = cursor.fetchall()
         
@@ -362,10 +365,11 @@ def view_hooks():
                     color: #000000;
                 }}
                 .table-container {{
-                    margin: 40px 0;
+                    max-height: 300px;
+                    overflow-y: auto;
+                    margin: 20px 0;
                     border: 1px solid #e1e1e1;
                     border-radius: 3px;
-                    overflow: hidden;
                 }}
                 .table-title {{
                     font-size: 18px;
@@ -454,6 +458,35 @@ def view_hooks():
                     display: inline-block;
                     margin-right: 50px;
                 }}
+                
+                .webhook-table thead {{
+                    position: sticky;
+                    top: 0;
+                    background-color: white;
+                    z-index: 1;
+                }}
+                
+                .webhook-table th:first-child,
+                .webhook-table td:first-child {{
+                    width: 80px;
+                    min-width: 80px;
+                    max-width: 80px;
+                }}
+                
+                .webhook-table th:nth-child(2),
+                .webhook-table td:nth-child(2) {{
+                    width: 180px;
+                    min-width: 180px;
+                    max-width: 180px;
+                }}
+                
+                .webhook-table td {{
+                    padding: 10px;
+                    border-bottom: 1px solid #e1e1e1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }}
             </style>
         </head>
         <body>
@@ -521,6 +554,7 @@ def view_hooks():
         '''
         
         sort_headers = [
+            ('rowid', 'Event ID'),
             ('timestamp', 'Timestamp'),
             ('event_type', 'Event Type'),
             ('signature', 'Signature')
@@ -552,6 +586,7 @@ def view_hooks():
             selected = 'selected' if page == rowid else ''
             html += f'''
                 <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
+                    <td>{rowid}</td>
                     <td>{timestamp}</td>
                     <td>{event_type}</td>
                     <td>{signature}</td>
