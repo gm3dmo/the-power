@@ -190,20 +190,33 @@ def view_hooks():
         # Get all records for the table with their rowids
         if search:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, signature 
+                SELECT rowid, timestamp, event_type, payload, signature 
                 FROM webhook_events 
                 WHERE event_type LIKE ?
                 ORDER BY timestamp DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, signature 
+                SELECT rowid, timestamp, event_type, payload, signature 
                 FROM webhook_events 
                 ORDER BY timestamp DESC
             ''')
         
         table_records = cursor.fetchall()
         
+        # First pass: check if any records have actions
+        has_actions = False
+        for record in table_records:
+            try:
+                payload = record[3]  # Make sure payload is at index 3
+                if payload is not None:
+                    payload_json = json.loads(payload)
+                    if 'action' in payload_json:
+                        has_actions = True
+                        break
+            except (json.JSONDecodeError, KeyError, IndexError):
+                continue
+
         # Create event display HTML first
         event_display_html = ''
         if hook:
@@ -550,12 +563,16 @@ def view_hooks():
                             <tr>
         '''
         
+        # Add table headers
+        html += '<table><tr>'
         sort_headers = [
             ('rowid', 'Event ID'),
             ('timestamp', 'Timestamp'),
-            ('event_type', 'Event Type'),
-            ('signature', 'Signature')
+            ('event_type', 'Event Type')
         ]
+        if has_actions:
+            sort_headers.append(('action', 'Action'))
+        sort_headers.append(('signature', 'Signature'))
         
         for col, label in sort_headers:
             arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
@@ -565,33 +582,50 @@ def view_hooks():
                     {label}<span class="sort-arrow">{arrow}</span>
                 </th>
             '''
+        html += '</tr>'
         
-        html += '''
-                            </tr>
-                        </thead>
-                        <tbody>
-        '''
-        
-        # Debug the values
-        app.logger.debug(f"Table records: {table_records}")
-        
+        # Add table rows
         for record in table_records:
-            rowid = record[0]
-            timestamp = record[1]
-            event_type = record[2]
-            signature = record[3]
-            selected = 'selected' if page == rowid else ''
-            html += f'''
-                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
-                    <td>{rowid}</td>
-                    <td>{timestamp}</td>
-                    <td>{event_type}</td>
-                    <td>{signature}</td>
-                </tr>
-            '''
+            try:
+                rowid = record[0]
+                timestamp = record[1]
+                event_type = record[2]
+                payload = record[3]
+                signature = record[4]
+                
+                # Extract action from payload
+                action = ''
+                has_action = False
+                try:
+                    if payload is not None:
+                        payload_json = json.loads(payload)
+                        if 'action' in payload_json:
+                            action = payload_json['action']
+                            has_action = True
+                except (json.JSONDecodeError, KeyError):
+                    pass
+                    
+                selected = 'selected' if page == rowid else ''
+                html += f'''
+                    <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
+                        <td>{rowid}</td>
+                        <td>{timestamp}</td>
+                        <td>{event_type}</td>'''
+                
+                if has_actions:
+                    html += f'''
+                        <td>{action if has_action else ""}</td>'''
+                        
+                html += f'''
+                        <td>{signature}</td>
+                    </tr>
+                '''
+            except IndexError as e:
+                app.logger.error(f"Error processing record: {record}, Error: {str(e)}")
+                continue
         
         html += '''
-                        </tbody>
+                        </thead>
                     </table>
                 </div>
                 
