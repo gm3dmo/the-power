@@ -154,8 +154,8 @@ def clear_events():
         # Drop the events table
         cursor.execute('DROP TABLE IF EXISTS webhook_events')
         
-        # Reset the sequence explicitly
-        cursor.execute('UPDATE sqlite_sequence SET seq = 0 WHERE name = "webhook_events"')
+        # Reset the sequence using exact syntax
+        cursor.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='webhook_events'")
         
         # Recreate the webhook_events table
         cursor.execute('''
