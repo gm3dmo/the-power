@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect
+from flask import Flask, request, abort, g, redirect, jsonify
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -143,6 +143,25 @@ def truncate_events():
     except Exception as e:
         app.logger.error(f"Failed to truncate events: {str(e)}")
         return f'Error: {str(e)}', 500
+
+
+@app.route('/clear', methods=['POST'])
+def clear_events():
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # Delete all events
+        cursor.execute('DELETE FROM webhook_events')
+        
+        # Reset the sequence
+        cursor.execute('DELETE FROM sqlite_sequence WHERE name="webhook_events"')
+        
+        db.commit()
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        app.logger.error(f"Failed to clear events: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 @app.route('/hookdb', methods=['GET'])
