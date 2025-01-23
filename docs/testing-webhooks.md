@@ -5,25 +5,29 @@
 - Python >=3.9
 
 ## Setup
+### Setup a webserver with reverse proxy
 
 You'll need an endpoint for your hook to deliver to. I like to use a cheap virtual host and install the [Caddy](https://caddyserver.com/docs/) webserver for it's automated SSL cert management.
 
-
+### Setup a python virtual environment
+Create a python virtual environment called *pwrhook*:
 ```shell
 python -m venv pwrhook
 ```
 
+Activate the *pwrhook* virtual environment:
 ```shell
 source pwrhook/bin/activate
+```
+
+Install piptools and packages in the *pwrhook* virtual environment:
+```shell
 pip install piptools
 pip-compile requirements-pwrhook.in
 pip install -r requirements-pwrhook.txt
 ```
 
-## Repo setup
-Running `create-webhook-with-secret.sh` will create a repository webhook with a secret, set to `repo_webhook_secret` defined in `.gh-api-examples.conf`
-
-## Running the hook receiver
+## Run the hook receiver script `hooky-secret-validation.py`
 The tmux program is useful if this is going to be a long running test.
 
 Activate your virtual environment:
@@ -32,7 +36,7 @@ Activate your virtual environment:
 source pwrhook/bin/activate
 ```
 
-Start the hook receiver (remember in production environments you need to take great care of the hook secret and be very careful not to spill it:
+Start the hook receiver:
 
 ```shell
 python hooky-secret-validation.py --secret YOUR_HOOK_SECRET
