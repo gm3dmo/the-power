@@ -559,6 +559,12 @@ def view_hooks():
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }}
+                
+                .event-count {{
+                    margin: 20px 0;
+                    font-size: 16px;
+                    color: #666;
+                }}
             </style>
         </head>
         <body>
@@ -566,50 +572,13 @@ def view_hooks():
                 <h1>The Power Webhook Event Receiver</h1>
                 <div class="page-info">Event {page} of {total_records}</div>
                 <div class="nav-buttons">
-        '''
-        
-        # Previous button
-        if page > 1:
-            prev_page = page - 1
-            html += f'<a href="/hookdb?page={prev_page}&search={search}" class="nav-button">Previous</a>'
-        else:
-            html += '<span class="nav-button disabled">Previous</span>'
-        
-        # Next button
-        if page < total_records:
-            next_page = page + 1
-            html += f'<a href="/hookdb?page={next_page}&search={search}" class="nav-button">Next</a>'
-        else:
-            html += '<span class="nav-button disabled">Next</span>'
-        
-        html += '</div>'
-        
-        if hook:
-            timestamp, event_type, payload, signature, headers = hook
-            html += f'''
-                <div class="event-info">
-                    <p>
-                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
-                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
-                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
-                    </p>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Headers:</span>
-                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
-                    </div>
-                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Payload:</span>
-                        <button class="copy-button" onclick="copyPayload()">Copy</button>
-                    </div>
-                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
+                    <button onclick="window.location.href='/hookdb?page={prev_page}&search={search}'"{' disabled' if page <= 1 else ''}>Previous</button>
+                    <button onclick="window.location.href='/hookdb?page={next_page}&search={search}'"{' disabled' if page >= total_records else ''}>Next</button>
+                    <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
                 </div>
-            '''
-        
-        # After the event info section, add the table:
-        html += f'''
+            </div>
+            
+            <div class="container">
                 <h2 class="table-title">Recent Webhooks</h2>
                 <div class="search-container">
                     <label class="search-label">Filter by Event Type:</label>
