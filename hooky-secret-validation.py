@@ -171,16 +171,27 @@ def clear_events():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
-@app.route('/hookdb', methods=['GET'])
-def view_hooks():
+@app.route('/hookdb')
+def hookdb():
     try:
-        page = request.args.get('page', 1, type=int)
-        sort_by = request.args.get('sort', 'timestamp')
-        sort_dir = request.args.get('dir', 'desc')
-        search = request.args.get('search', '')
+        page = request.args.get('page', type=int, default=1)
+        search = request.args.get('search', default='')
+        sort_by = request.args.get('sort', default='timestamp')
+        sort_dir = request.args.get('dir', default='desc')
         
         db = get_db()
         cursor = db.cursor()
+        
+        # Get total count for pagination
+        if search:
+            cursor.execute('SELECT COUNT(*) FROM webhook_events WHERE event_type LIKE ?', (f'%{search}%',))
+        else:
+            cursor.execute('SELECT COUNT(*) FROM webhook_events')
+        total_records = cursor.fetchone()[0]
+        
+        # Calculate previous and next page numbers
+        prev_page = max(1, page - 1)
+        next_page = min(total_records, page + 1)
         
         # Modify queries to include search
         search_condition = "WHERE event_type LIKE ?" if search else ""
