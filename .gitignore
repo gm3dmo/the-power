@@ -148,3 +148,5 @@ actions-runner
 environment.json
 
 shell-profile
+
+hooks.db
