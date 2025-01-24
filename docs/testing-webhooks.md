@@ -40,9 +40,18 @@ source pwrhook/bin/activate
 Start the hook receiver:
 
 ```shell
-python hook-receiver.py --secret YOUR_HOOK_SECRET
+python hook-receiver.py 
 
 ```
+
+Or to [validate webhook deliveries](https://docs.github.com/en/enterprise-cloud@latest/webhooks/using-webhooks/validating-webhook-deliveries) using a secret. If the webhook is setup with the power using a secret:
+
+```shell
+python hook-receiver.py --secret pwr-repo-webhook-secret
+
+```
+
+Check the `repo_webhook_secret` value in `.gh-api-examples.conf`
 
 The response should look similar to:
 
@@ -59,11 +68,8 @@ Press CTRL+C to quit
 
 ```
 
-Create an event that triggers the hook:
+Create an event that triggers the webhook such as creating an issue or commenting an issue on the GitHub User interface or use a script in the power like create-issue-comment.sh:
 
-```
+```shell
 ./create-issue-comment.sh
 ```
-
-
-
