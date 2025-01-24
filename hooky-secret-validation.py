@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect
+from flask import Flask, request, abort, g, redirect, render_template
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -145,520 +145,105 @@ def truncate_events():
         return f'Error: {str(e)}', 500
 
 
-@app.route('/hookdb', methods=['GET'])
-def view_hooks():
+@app.route('/hookdb')
+def hookdb():
     try:
-        page = request.args.get('page', 1, type=int)
-        sort_by = request.args.get('sort', 'timestamp')
-        sort_dir = request.args.get('dir', 'desc')
-        search = request.args.get('search', '')
-        
+        # Get 'search' param for filtering
+        search = request.args.get('search', default='')
+
+        # Get 'id' param for selecting a single record's details
+        record_id = request.args.get('id', type=int)
+
         db = get_db()
         cursor = db.cursor()
-        
-        # Modify queries to include search
-        search_condition = "WHERE event_type LIKE ?" if search else ""
-        search_param = (f"%{search}%",) if search else ()
-        
-        cursor.execute(f'SELECT COUNT(*) FROM webhook_events {search_condition}', search_param)
-        total_records = cursor.fetchone()[0]
-        
-        # Only try to get a record if we have any
-        if total_records > 0:
-            cursor.execute('''
-                SELECT timestamp, event_type, payload, signature, headers 
-                FROM webhook_events 
-                WHERE rowid = ?
-            ''', (page,))
-            
-            hook = cursor.fetchone()
-            if not hook:  # If requested page doesn't exist, get first record
-                cursor.execute('''
-                    SELECT timestamp, event_type, payload, signature, headers
-                    FROM webhook_events 
-                    ORDER BY timestamp DESC
-                    LIMIT 1
-                ''')
-                hook = cursor.fetchone()
-                if hook:  # If we got a record, update page to match its rowid
-                    cursor.execute('SELECT rowid FROM webhook_events ORDER BY timestamp DESC LIMIT 1')
-                    page = cursor.fetchone()[0]
-        else:
-            hook = None
-            page = 0
-        
-        # Get all records for the table with their rowids
+
+        # Build our SELECT query. If 'search' is set, filter by event_type
         if search:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, signature 
-                FROM webhook_events 
+                SELECT id, timestamp, event_type, payload, signature, headers
+                FROM webhook_events
                 WHERE event_type LIKE ?
                 ORDER BY timestamp DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT rowid, timestamp, event_type, signature 
-                FROM webhook_events 
+                SELECT id, timestamp, event_type, payload, signature, headers
+                FROM webhook_events
                 ORDER BY timestamp DESC
             ''')
-        
-        table_records = cursor.fetchall()
-        
-        # Create event display HTML first
-        event_display_html = ''
-        if hook:
-            timestamp, event_type, payload, signature, headers = hook
-            event_display_html = f'''
-                <div class="event-info">
-                    <p>
-                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
-                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
-                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
-                    </p>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Headers:</span>
-                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
-                    </div>
-                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Payload:</span>
-                        <button class="copy-button" onclick="copyPayload()">Copy</button>
-                    </div>
-                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
-                </div>
-            '''
-        
-        # Get total count and max rowid
-        cursor.execute('SELECT MAX(rowid) FROM webhook_events')
-        max_rowid = cursor.fetchone()[0]
-        total_records = max_rowid if max_rowid else 0
-        
-        html = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>The Power Webhook Event Receiver</title>
-            <style>
-                body {{
-                    font-family: Helvetica, Arial, sans-serif;
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #ffffff;
-                    color: #333333;
-                }}
-                .container {{
-                    padding: 20px;
-                }}
-                h1 {{
-                    font-weight: 500;
-                    text-align: center;
-                    margin-bottom: 30px;
-                    color: #000000;
-                }}
-                .event-info {{
-                    margin: 20px 0;
-                    padding: 20px;
-                    border: 1px solid #e1e1e1;
-                    border-radius: 3px;
-                }}
-                .event-info p {{
-                    margin: 10px 0;
-                    line-height: 1.5;
-                }}
-                .nav-buttons {{
-                    text-align: center;
-                    margin: 20px 0;
-                }}
-                .nav-button {{
-                    display: inline-block;
-                    padding: 8px 16px;
-                    margin: 0 10px;
-                    background-color: #000000;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 3px;
-                }}
-                .nav-button:hover {{
-                    background-color: #333333;
-                }}
-                .nav-button.disabled {{
-                    background-color: #cccccc;
-                    cursor: not-allowed;
-                }}
-                pre {{
-                    background-color: #f8f8f8;
-                    padding: 15px;
-                    border-radius: 3px;
-                    overflow-x: auto;
-                    font-family: monospace;
-                    max-height: 400px;
-                    overflow-y: auto;
-                    border: 1px solid #e1e1e1;
-                    margin: 10px 0;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }}
-                .page-info {{
-                    text-align: center;
-                    color: #666666;
-                    margin: 20px 0;
-                    font-size: 14px;
-                }}
-                .copy-button {{
-                    float: right;
-                    padding: 5px 10px;
-                    background-color: #000000;
-                    color: white;
-                    border: none;
-                    border-radius: 3px;
-                    cursor: pointer;
-                    font-family: Helvetica, Arial, sans-serif;
-                }}
-                .copy-button:hover {{
-                    background-color: #333333;
-                }}
-                .webhook-table {{
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 20px 0;
-                    font-size: 14px;
-                }}
-                .webhook-table th, .webhook-table td {{
-                    padding: 12px;
-                    text-align: left;
-                    border-bottom: 1px solid #e1e1e1;
-                }}
-                .webhook-table th {{
-                    cursor: pointer;
-                    padding: 10px;
-                    text-align: left;
-                    border-bottom: 1px solid #e1e1e1;
-                    font-weight: bold;
-                }}
-                .webhook-table th:hover {{
-                    background-color: #eaeaea;
-                }}
-                .webhook-table tr {{
-                    cursor: pointer;
-                    transition: background-color 0.2s;
-                }}
-                .webhook-table tr:hover {{
-                    background-color: #f8f8f8;
-                }}
-                .webhook-table tr.selected {{
-                    background-color: #f0f0f0;
-                }}
-                .header-row {{
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 10px;
-                }}
-                .label {{
-                    font-weight: bold;
-                    color: #000000;
-                }}
-                .table-container {{
-                    max-height: 300px;
-                    overflow-y: auto;
-                    margin: 20px 0;
-                    border: 1px solid #e1e1e1;
-                    border-radius: 3px;
-                }}
-                .table-title {{
-                    font-size: 18px;
-                    margin: 20px 0;
-                    color: #333;
-                }}
-                .sort-arrow {{
-                    display: inline-block;
-                    margin-left: 5px;
-                    color: #666;
-                }}
-                .search-container {{
-                    margin: 20px 0;
-                    text-align: right;
-                }}
-                
-                .search-box {{
-                    padding: 8px;
-                    width: 200px;
-                    border: 1px solid #e1e1e1;
-                    border-radius: 3px;
-                    font-family: Helvetica, Arial, sans-serif;
-                }}
-                
-                .search-box:focus {{
-                    outline: none;
-                    border-color: #000000;
-                }}
-                
-                .search-label {{
-                    margin-right: 10px;
-                    color: #666666;
-                }}
-                
-                .headers-box {{
-                    background-color: #f8f8f8;
-                    padding: 15px;
-                    border-radius: 3px;
-                    overflow-x: auto;
-                    font-family: monospace;
-                    max-height: 200px;
-                    overflow-y: auto;
-                    border: 1px solid #e1e1e1;
-                    margin: 10px 0;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                    font-size: 14px;
-                }}
-                
-                .section-header {{
-                    margin-top: 20px;
-                    margin-bottom: 10px;
-                    font-weight: bold;
-                    color: #000000;
-                }}
-                
-                pre#payload {{
-                    max-height: 300px;
-                }}
-                
-                .danger-zone {{
-                    position: fixed;
-                    bottom: 20px;
-                    right: 20px;
-                    text-align: right;
-                }}
-                
-                .danger-button {{
-                    font-family: Helvetica, Arial, sans-serif;
-                    padding: 10px 20px;
-                    background-color: #ff3b30;
-                    color: white;
-                    border: none;
-                    border-radius: 3px;
-                    cursor: pointer;
-                    transition: background-color 0.2s;
-                    font-size: 14px;
-                    font-weight: 500;
-                }}
-                
-                .danger-button:hover {{
-                    background-color: #dc352b;
-                }}
-                
-                .info-item {{
-                    display: inline-block;
-                    margin-right: 50px;
-                }}
-                
-                .webhook-table thead {{
-                    position: sticky;
-                    top: 0;
-                    background-color: white;
-                    z-index: 1;
-                }}
-                
-                .webhook-table th:first-child,
-                .webhook-table td:first-child {{
-                    width: 80px;
-                    min-width: 80px;
-                    max-width: 80px;
-                }}
-                
-                .webhook-table th:nth-child(2),
-                .webhook-table td:nth-child(2) {{
-                    width: 180px;
-                    min-width: 180px;
-                    max-width: 180px;
-                }}
-                
-                .webhook-table td {{
-                    padding: 10px;
-                    border-bottom: 1px solid #e1e1e1;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>The Power Webhook Event Receiver</h1>
-                <div class="page-info">Event {page} of {total_records}</div>
-                <div class="nav-buttons">
-        '''
-        
-        # Previous button
-        if page > 1:
-            prev_page = page - 1
-            html += f'<a href="/hookdb?page={prev_page}&search={search}" class="nav-button">Previous</a>'
-        else:
-            html += '<span class="nav-button disabled">Previous</span>'
-        
-        # Next button
-        if page < total_records:
-            next_page = page + 1
-            html += f'<a href="/hookdb?page={next_page}&search={search}" class="nav-button">Next</a>'
-        else:
-            html += '<span class="nav-button disabled">Next</span>'
-        
-        html += '</div>'
-        
-        if hook:
-            timestamp, event_type, payload, signature, headers = hook
-            html += f'''
-                <div class="event-info">
-                    <p>
-                        <span class="info-item"><span class="label">ID:</span> {page} <span class="label">Timestamp:</span> {timestamp}</span>
-                        <span class="info-item"><span class="label">Event Type:</span> {event_type}</span>
-                        <span class="info-item"><span class="label">Signature:</span> {signature}</span>
-                    </p>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Headers:</span>
-                        <button class="copy-button" onclick="copyHeaders()">Copy</button>
-                    </div>
-                    <pre id="headers" class="headers-box">{json.dumps(json.loads(headers) if headers else {}, indent=2)}</pre>
-                    
-                    <div class="header-row">
-                        <span class="section-header">Payload:</span>
-                        <button class="copy-button" onclick="copyPayload()">Copy</button>
-                    </div>
-                    <pre id="payload">{json.dumps(json.loads(payload), indent=2)}</pre>
-                </div>
-            '''
-        
-        # After the event info section, add the table:
-        html += f'''
-                <h2 class="table-title">Recent Webhooks</h2>
-                <div class="search-container">
-                    <label class="search-label">Filter by Event Type:</label>
-                    <input type="text" 
-                           class="search-box" 
-                           placeholder="Search event types... (press Enter to search)"
-                           onkeydown="handleSearch(event)"
-                           value="{search}">
-                </div>
-                <div class="table-container">
-                    <table class="webhook-table">
-                        <thead>
-                            <tr>
-        '''
-        
-        sort_headers = [
-            ('rowid', 'Event ID'),
-            ('timestamp', 'Timestamp'),
-            ('event_type', 'Event Type'),
-            ('signature', 'Signature')
-        ]
-        
-        for col, label in sort_headers:
-            arrow = '↓' if sort_by == col and sort_dir == 'desc' else '↑' if sort_by == col else ''
-            new_dir = 'asc' if sort_by == col and sort_dir == 'desc' else 'desc'
-            html += f'''
-                <th onclick="window.location.href='/hookdb?page={page}&sort={col}&dir={new_dir}&search={search}'">
-                    {label}<span class="sort-arrow">{arrow}</span>
-                </th>
-            '''
-        
-        html += '''
-                            </tr>
-                        </thead>
-                        <tbody>
-        '''
-        
-        # Debug the values
-        app.logger.debug(f"Table records: {table_records}")
-        
-        for record in table_records:
-            rowid = record[0]
-            timestamp = record[1]
-            event_type = record[2]
-            signature = record[3]
-            selected = 'selected' if page == rowid else ''
-            html += f'''
-                <tr class="{selected}" onclick="window.location.href='/hookdb?page={rowid}&search={search}'">
-                    <td>{rowid}</td>
-                    <td>{timestamp}</td>
-                    <td>{event_type}</td>
-                    <td>{signature}</td>
-                </tr>
-            '''
-        
-        html += '''
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="danger-zone">
-                    <form id="truncateForm" action="/truncate" method="POST" onsubmit="return confirmTruncate()">
-                        <button type="submit" class="danger-button">Clear All Events</button>
-                    </form>
-                </div>
-            </div>
-            
-            <script>
-                function handleSearch(event) {
-                    if (event.key === 'Enter') {
-                        const searchValue = event.target.value;
-                        const currentUrl = new URL(window.location.href);
-                        currentUrl.searchParams.set('search', searchValue);
-                        window.location.href = currentUrl.toString();
-                    }
-                }
-                
-                function copyHeaders() {
-                    const headers = document.getElementById('headers').textContent;
-                    navigator.clipboard.writeText(headers).then(function() {
-                        const button = event.target;
-                        button.textContent = 'Copied!';
-                        setTimeout(function() {
-                            button.textContent = 'Copy';
-                        }, 2000);
-                    });
-                }
-                
-                function copyPayload() {
-                    const payload = document.getElementById('payload').textContent;
-                    navigator.clipboard.writeText(payload).then(function() {
-                        const button = event.target;
-                        button.textContent = 'Copied!';
-                        setTimeout(function() {
-                            button.textContent = 'Copy';
-                        }, 2000);
-                    });
-                }
-                
-                function confirmTruncate() {
-                    return confirm('Are you sure you want to delete ALL webhook events? This cannot be undone.');
-                }
-                
-                document.addEventListener('DOMContentLoaded', function() {
-                    const container = document.querySelector('.container');
-                    container.style.opacity = '0';
-                    container.style.transition = 'opacity 0.5s ease-in';
-                    setTimeout(function() {
-                        container.style.opacity = '1';
-                    }, 100);
-                });
-            </script>
-        </body>
-        </html>
-        '''
-        
-        return html
-        
+
+        raw_records = cursor.fetchall()
+
+        # Build a new list that includes an "action" field if found
+        table_rows = []
+        for record in raw_records:
+            (rec_id, rec_timestamp, rec_event_type, rec_payload, rec_signature, rec_headers) = record
+            action_val = ''
+
+            # Attempt to parse JSON payload, and extract 'action' if present
+            if rec_payload:
+                try:
+                    rec_payload_json = json.loads(rec_payload)
+                    if 'action' in rec_payload_json:
+                        action_val = rec_payload_json['action']
+                except json.JSONDecodeError:
+                    pass
+
+            # We'll store each row as a tuple with 7 items:
+            # 0=id, 1=timestamp, 2=event_type, 3=payload, 4=signature, 5=headers, 6=extracted action
+            table_rows.append((
+                rec_id, 
+                rec_timestamp,
+                rec_event_type,
+                rec_payload,
+                rec_signature,
+                rec_headers,
+                action_val
+            ))
+
+        # Prepare details for a selected record if an id was specified
+        selected_record = None
+        formatted_payload = ''
+        formatted_headers = ''
+        if record_id:
+            cursor.execute('SELECT * FROM webhook_events WHERE id = ?', (record_id,))
+            selected_record = cursor.fetchone()
+            if selected_record:
+                try:
+                    payload_json = json.loads(selected_record[3])
+                    formatted_payload = json.dumps(payload_json, indent=2)
+                except (json.JSONDecodeError, TypeError):
+                    formatted_payload = selected_record[3] or ''
+                try:
+                    headers_json = json.loads(selected_record[5])
+                    formatted_headers = json.dumps(headers_json, indent=2)
+                except (json.JSONDecodeError, TypeError):
+                    formatted_headers = selected_record[5] or ''
+
+        return render_template(
+            'hookdb.html',
+            search=search,
+            table_records=table_rows,
+            selected_record=selected_record,
+            formatted_payload=formatted_payload,
+            formatted_headers=formatted_headers
+        )
+
     except Exception as e:
-        app.logger.error(f"Failed to retrieve webhook data: {str(e)}")
-        return f'<h1>Error</h1><p>{str(e)}</p>', 500
-    finally:
-        if 'conn' in locals():
-            conn.close()
+        app.logger.error(f"Failed to load webhook events: {str(e)}")
+        return f"Failed to load webhook events: {str(e)}", 500
+
+
+@app.route('/clear', methods=['POST'])
+def clear_events():
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('DELETE FROM webhook_events')
+        db.commit()
+        return {'status': 'success'}, 200
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}, 500
 
 
 if __name__ == '__main__':
