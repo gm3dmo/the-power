@@ -28,7 +28,7 @@ pip-compile requirements-pwrhook.in
 pip install -r requirements-pwrhook.txt
 ```
 
-## Run the hook receiver script `hooky-secret-validation.py`
+## Run the hook receiver script `hooky-receiver.py`
 The tmux program is useful if this is going to be a long running test.
 
 Activate your virtual environment:
