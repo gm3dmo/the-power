@@ -12,6 +12,7 @@ You'll need an endpoint for your hook to deliver to. I like to use a cheap virtu
 ### Setup a python virtual environment
 Create a python virtual environment called *pwrhook*:
 ```shell
+cd hook-receiver
 python -m venv pwrhook
 ```
 
@@ -22,7 +23,7 @@ source pwrhook/bin/activate
 
 Install piptools and packages in the *pwrhook* virtual environment:
 ```shell
-pip install piptools
+pip install pip-tools
 pip-compile requirements-pwrhook.in
 pip install -r requirements-pwrhook.txt
 ```
@@ -39,7 +40,8 @@ source pwrhook/bin/activate
 Start the hook receiver:
 
 ```shell
-python hooky-secret-validation.py --secret YOUR_HOOK_SECRET
+python hook-receiver.py --secret YOUR_HOOK_SECRET
+
 ```
 
 The response should look similar to:
