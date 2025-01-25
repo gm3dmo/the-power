@@ -51,7 +51,7 @@ app = Flask(__name__)
 
 # Then define database functions
 def get_db():
-    conn = sqlite3.connect('webhook_events.db')
+    conn = sqlite3.connect(args.db_name)
     return conn
 
 @app.teardown_appcontext
