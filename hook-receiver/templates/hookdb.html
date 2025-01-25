@@ -29,22 +29,24 @@
         .copy-button:hover {
             background-color: #004d00;
         }
-        /* Same green style as "copy-button" for the search submit */
+        /* Make both the text input and the submit button match the .clear-button size */
+        input[type="text"].search-field {
+            font-weight: bold;
+            padding: 8px 16px;  /* same vertical/horizontal padding as clear-button */
+            border-radius: 4px;
+            border: 1px solid #ccc; 
+            margin-right: 8px;       /* small gap between input and button */
+        }
         input[type="submit"].search-button {
             background-color: #006400;
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 4px 8px;
+            padding: 8px 16px;       /* same size as clear-button */
             cursor: pointer;
         }
         input[type="submit"].search-button:hover {
             background-color: #004d00;
-        }
-
-        /* Make the search input text bold */
-        input[type="text"].search-field {
-            font-weight: bold;
         }
 
         .table-container {
@@ -102,11 +104,18 @@
             width: 96px;
             height: 96px;
         }
+        /* Flex container for "All Events", search box, and Clear button */
         .events-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             margin-top: 20px;
+        }
+        /* Let the search form sit in the middle, pushing Clear button to the right */
+        .search-form-inline {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            margin-right: auto;
         }
     </style>
 </head>
@@ -118,15 +127,13 @@
         The Power Hook Receiver
     </h1>
 
-    <!-- Search form -->
-    <form action="/hookdb" method="get">
-        <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search events...">
-        <input type="submit" class="search-button" value="Search">
-    </form>
-
-    <!-- Title and Clear button in one row -->
+    <!-- Title, inline search form, and Clear button in one row -->
     <div class="events-header">
         <h2>All Events</h2>
+        <form action="/hookdb" method="get" class="search-form-inline">
+            <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search events...">
+            <input type="submit" class="search-button" value="Search">
+        </form>
         <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
     </div>
 
