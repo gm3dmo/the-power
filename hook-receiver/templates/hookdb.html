@@ -7,9 +7,6 @@
             font-family: Arial, sans-serif;
             margin: 20px 156px;
         }
-        .nav-buttons {
-            margin: 20px 0;
-        }
         .clear-button {
             background-color: #ff4444;
             color: white;
@@ -32,6 +29,7 @@
         .copy-button:hover {
             background-color: #004d00;
         }
+        /* Keeps the table near 6 rows high, with scrolling */
         .table-container {
             margin-top: 20px;
             height: 250px;
@@ -55,12 +53,12 @@
         table th {
             background-color: #f5f5f5;
             border-bottom: 2px solid #ddd;
-            position: sticky; /* Keep headers pinned when scrolling */
+            position: sticky; /* Keep table headers pinned when scrolling */
             top: 0;
             z-index: 1;
         }
         .selected-row {
-            background-color: #e6ffcc; /* Light greenish background indicates selection */
+            background-color: #e6ffcc; /* highlight row with a light greenish background */
         }
         .details {
             margin-top: 20px;
@@ -78,34 +76,46 @@
             max-height: 400px;
             max-width: 100%;
         }
+        /* Hook title styling */
         .hook-title {
             display: inline-flex;
             align-items: center;
         }
+        /* Hook icon is 96px by 96px from the previous request */
         .hook-icon {
             margin-right: 8px;
             width: 96px;
             height: 96px;
         }
+        /* New container to align "All Events" title and "Clear All Events" button on the same row */
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
+
     <h1 class="hook-title">
         <img src="{{ url_for('static', filename='images/hook.svg') }}"
              class="hook-icon" alt="Hook Icon" />
         The Power Hook Receiver
     </h1>
 
+    <!-- Search form -->
     <form action="/hookdb" method="get">
         <input type="text" name="search" value="{{ search }}" placeholder="Search events...">
         <input type="submit" value="Search">
     </form>
 
-    <div class="nav-buttons">
+    <!-- Title and Clear button in one row -->
+    <div class="events-header">
+        <h2>All Events</h2>
         <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
     </div>
 
-    <h2>All Events</h2>
     <div class="table-container">
         <table>
             <tr>
@@ -132,13 +142,19 @@
 
     {% if selected_record %}
     <div class="details">
-        <h3>Payload 
-            <button class="copy-button" onclick="copyToClipboard(this, `{{ formatted_payload.replace('`', '\\`') }}`)">Copy</button>
+        <h3>Payload
+            <button class="copy-button"
+                    onclick="copyToClipboard(this, `{{ formatted_payload.replace('`', '\\`') }}`)">
+                Copy
+            </button>
         </h3>
         <pre>{{ formatted_payload }}</pre>
 
-        <h3>Headers 
-            <button class="copy-button" onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">Copy</button>
+        <h3>Headers
+            <button class="copy-button"
+                    onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
+                Copy
+            </button>
         </h3>
         <pre>{{ formatted_headers }}</pre>
     </div>
@@ -162,6 +178,7 @@
                     });
             }
         }
+
         function copyToClipboard(button, text) {
             navigator.clipboard.writeText(text).then(() => {
                 button.textContent = 'Copied!';
