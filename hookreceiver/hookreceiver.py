@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect, render_template
+from flask import Flask, request, abort, g, redirect, render_template, url_for
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -51,10 +51,8 @@ app = Flask(__name__)
 
 # Then define database functions
 def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(args.db_name)
-        g.db.row_factory = sqlite3.Row
-    return g.db
+    conn = sqlite3.connect('webhook_events.db')
+    return conn
 
 @app.teardown_appcontext
 def close_db(error):
@@ -147,91 +145,85 @@ def truncate_events():
 
 @app.route('/hookdb')
 def hookdb():
+    search = request.args.get('search', default='')
+    record_id = request.args.get('id', type=int)
+
     try:
-        # Get 'search' param for filtering
-        search = request.args.get('search', default='')
-
-        # Get 'id' param for selecting a single record's details
-        record_id = request.args.get('id', type=int)
-
         db = get_db()
         cursor = db.cursor()
 
-        # Build our SELECT query. If 'search' is set, filter by event_type
         if search:
             cursor.execute('''
-                SELECT id, timestamp, event_type, payload, signature, headers
-                FROM webhook_events
+                SELECT * FROM webhook_events
                 WHERE event_type LIKE ?
-                ORDER BY timestamp DESC
+                ORDER BY id DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT id, timestamp, event_type, payload, signature, headers
-                FROM webhook_events
-                ORDER BY timestamp DESC
+                SELECT * FROM webhook_events
+                ORDER BY id DESC
             ''')
 
-        raw_records = cursor.fetchall()
+        table_rows = cursor.fetchall()
 
-        # Build a new list that includes an "action" field if found
-        table_rows = []
-        for record in raw_records:
-            (rec_id, rec_timestamp, rec_event_type, rec_payload, rec_signature, rec_headers) = record
-            action_val = ''
-
-            # Attempt to parse JSON payload, and extract 'action' if present
-            if rec_payload:
-                try:
-                    rec_payload_json = json.loads(rec_payload)
-                    if 'action' in rec_payload_json:
-                        action_val = rec_payload_json['action']
-                except json.JSONDecodeError:
-                    pass
-
-            # We'll store each row as a tuple with 7 items:
-            # 0=id, 1=timestamp, 2=event_type, 3=payload, 4=signature, 5=headers, 6=extracted action
-            table_rows.append((
-                rec_id, 
-                rec_timestamp,
-                rec_event_type,
-                rec_payload,
-                rec_signature,
-                rec_headers,
-                action_val
-            ))
-
-        # Prepare details for a selected record if an id was specified
         selected_record = None
-        formatted_payload = ''
+        headers_data = None
         formatted_headers = ''
+        formatted_payload = ''
+
         if record_id:
-            cursor.execute('SELECT * FROM webhook_events WHERE id = ?', (record_id,))
+            # Query the single record
+            cursor.execute('SELECT * FROM webhook_events WHERE id=?', (record_id,))
             selected_record = cursor.fetchone()
+
             if selected_record:
+                # For debugging, print the entire row:
+                print("DEBUG - selected_record:", selected_record)
+
+                # Typically:
+                #  selected_record[0]: id
+                #  selected_record[1]: timestamp
+                #  selected_record[2]: event_type
+                #  selected_record[3]: payload
+                #  selected_record[4]: signature
+                #  selected_record[5]: headers
+                #  selected_record[6]: action_type  (depends on your DB schema)
+
+                raw_headers = selected_record[5]  # verify this matches your schema
+                raw_payload = selected_record[3]
+
+                # Print the raw headers for debugging
+                print("DEBUG - raw_headers value:", raw_headers)
+
+                # Attempt to parse headers as JSON
                 try:
-                    payload_json = json.loads(selected_record[3])
-                    formatted_payload = json.dumps(payload_json, indent=2)
-                except (json.JSONDecodeError, TypeError):
-                    formatted_payload = selected_record[3] or ''
+                    headers_data = json.loads(raw_headers)
+                    # For fallback or display in <pre>
+                    formatted_headers = json.dumps(headers_data, indent=2)
+                except (json.JSONDecodeError, TypeError) as e:
+                    print("DEBUG - JSON decode error for headers:", e)
+                    headers_data = None
+                    formatted_headers = raw_headers or "No headers found"
+
+                # Attempt to parse payload as JSON
                 try:
-                    headers_json = json.loads(selected_record[5])
-                    formatted_headers = json.dumps(headers_json, indent=2)
-                except (json.JSONDecodeError, TypeError):
-                    formatted_headers = selected_record[5] or ''
+                    payload_data = json.loads(raw_payload)
+                    formatted_payload = json.dumps(payload_data, indent=2)
+                except (json.JSONDecodeError, TypeError) as e:
+                    print("DEBUG - JSON decode error for payload:", e)
+                    formatted_payload = raw_payload or "No payload found"
 
         return render_template(
             'hookdb.html',
             search=search,
             table_records=table_rows,
             selected_record=selected_record,
-            formatted_payload=formatted_payload,
-            formatted_headers=formatted_headers
+            headers_data=headers_data,
+            formatted_headers=formatted_headers,
+            formatted_payload=formatted_payload
         )
-
     except Exception as e:
-        app.logger.error(f"Failed to load webhook events: {str(e)}")
-        return f"Failed to load webhook events: {str(e)}", 500
+        return f"Error loading events: {e}", 500
 
 
 @app.route('/clear', methods=['POST'])

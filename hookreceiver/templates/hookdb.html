@@ -117,6 +117,20 @@
             margin-left: 20px;
             margin-right: auto;
         }
+        /* A small button for each header value in the table */
+        .copy-value-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .copy-value-button:hover {
+            background-color: #004d00;
+        }
     </style>
 </head>
 <body>
@@ -129,17 +143,19 @@
 
     <!-- A paragraph of Lorem with a link below the title! -->
     <p>
-        This is a simple webhook receiver for 
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Pellentesque et velit a nibh porttitor ultricies. 
+        For more information, please visit 
         <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/about-webhooks" target="_blank">
-        GitHub Webhooks</a>.
-        This tool is for testing and learning about webhooks and is not intended for production use.
+            this page
+        </a>.
     </p>
 
     <!-- Title, inline search form, and Clear button in one row -->
     <div class="events-header">
-        <h2>Hooks Received</h2>
+        <h2>All Events</h2>
         <form action="/hookdb" method="get" class="search-form-inline">
-            <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search Event Type...">
+            <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search events...">
             <input type="submit" class="search-button" value="Search">
         </form>
         <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
@@ -179,13 +195,30 @@
         </h3>
         <pre>{{ formatted_payload }}</pre>
 
-        <h3>Headers
-            <button class="copy-button"
-                    onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
-                Copy
-            </button>
-        </h3>
-        <pre>{{ formatted_headers }}</pre>
+        <h3>Headers</h3>
+        {% if headers_data %}
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                {% for key, val in headers_data.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>
+                        {{ val }}
+                        <button class="copy-value-button" 
+                                onclick="copyToClipboard(this, '{{ val|escape }}')">
+                            Copy
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <!-- Fall back on plain JSON if we have no parsed data -->
+            <pre>{{ formatted_headers }}</pre>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -218,4 +251,4 @@
         }
     </script>
 </body>
-t</html> 
+</html> 
