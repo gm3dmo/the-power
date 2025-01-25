@@ -1,0 +1,29 @@
+[Unit]
+Description=Hook Receiver Webhook Service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=azureuser
+Group=azureuser
+WorkingDirectory=/home/azureuser/the-power/hookreceiver
+Environment="WEBHOOK_SECRET=your-secret-here"
+Environment="DB_NAME=/home/azureuser/the-power/hookreceiver/hooks.db"
+
+# Path to your virtual environment
+ExecStart=/home/azureuser/the-power/hookreceiver/venv/bin/gunicorn \
+    --config /home/azureuser/the-power/hookreceiver/gunicorn_config.py \
+    hookreceiver:app
+
+Restart=always
+RestartSec=5
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
