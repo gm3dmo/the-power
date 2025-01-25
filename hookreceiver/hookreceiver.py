@@ -13,7 +13,7 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect, render_template
+from flask import Flask, request, abort, g, redirect, render_template, url_for
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
@@ -49,12 +49,21 @@ def verify_signature(payload_body, secret_token, signature_header):
 # Create Flask app first
 app = Flask(__name__)
 
+# Add configuration class
+class Config:
+    def __init__(self):
+        # Get values from environment variables first, fall back to defaults
+        self.hook_secret = os.environ.get('WEBHOOK_SECRET')
+        self.status_code = int(os.environ.get('STATUS_CODE', '200'))
+        self.db_name = os.environ.get('DB_NAME', 'hooks.db')
+
+# Create config instance
+config = Config()
+
 # Then define database functions
 def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(args.db_name)
-        g.db.row_factory = sqlite3.Row
-    return g.db
+    conn = sqlite3.connect(config.db_name)
+    return conn
 
 @app.teardown_appcontext
 def close_db(error):
@@ -70,7 +79,7 @@ def init_db():
     db = get_db()
     cursor = db.cursor()
     
-    # Create table only if it doesn't exist
+    # Ensure table includes an "action_type" column
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,12 +87,20 @@ def init_db():
             event_type TEXT,
             payload TEXT,
             signature TEXT,
-            headers TEXT
+            headers TEXT,
+            action_type TEXT
         )
     ''')
     
+    # If the table already existed before "action_type" was introduced,
+    # optionally try an ALTER TABLE here:
+    try:
+        cursor.execute('ALTER TABLE webhook_events ADD COLUMN action_type TEXT')
+    except sqlite3.OperationalError:
+        pass  # Column already exists or cannot be added because it already exists
+
     db.commit()
-    app.logger.debug(f"Database initialized at {args.db_name}")
+    app.logger.debug(f"Database initialized at {config.db_name}")
 
 
 @app.route('/webhook', methods=['POST'])
@@ -101,35 +118,39 @@ def slurphook():
         app.logger.debug("-" * 21)
         app.logger.debug(f"JSON payload:\n\n{json.dumps(request.json, indent=4)}")
         
-        if signature_header and args.hook_secret:
-            verify_signature(request.data, args.hook_secret, signature_header)
+        if signature_header and config.hook_secret:
+            verify_signature(request.data, config.hook_secret, signature_header)
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
         
         # Format headers for storage
         headers_dict = dict(request.headers)
         headers_formatted = json.dumps(headers_dict, indent=2)
+
+        # Extract action from the JSON, if available
+        action_value = request.json.get('action')
         
         # Store webhook data in database
         try:
             db = get_db()
             cursor = db.cursor()
             cursor.execute('''
-                INSERT INTO webhook_events (event_type, payload, signature, headers)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO webhook_events (event_type, payload, signature, headers, action_type)
+                VALUES (?, ?, ?, ?, ?)
             ''', (
                 event_type,
                 json.dumps(request.json),
                 signature_header,
-                headers_formatted
+                headers_formatted,
+                action_value
             ))
             db.commit()
-            app.logger.debug(f"Webhook data stored in database: {args.db_name}")
+            app.logger.debug(f"Webhook data stored in database: {config.db_name}")
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
             
-        return ('status', args.status_code)
+        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])
@@ -147,91 +168,96 @@ def truncate_events():
 
 @app.route('/hookdb')
 def hookdb():
+    search = request.args.get('search', default='')
+    record_id = request.args.get('id', type=int)
+
     try:
-        # Get 'search' param for filtering
-        search = request.args.get('search', default='')
-
-        # Get 'id' param for selecting a single record's details
-        record_id = request.args.get('id', type=int)
-
         db = get_db()
         cursor = db.cursor()
 
-        # Build our SELECT query. If 'search' is set, filter by event_type
+        # First, update action_type from stored payloads
+        cursor.execute('''
+            UPDATE webhook_events 
+            SET action_type = json_extract(payload, '$.action')
+            WHERE action_type IS NULL
+            AND json_valid(payload)
+            AND json_extract(payload, '$.action') IS NOT NULL
+        ''')
+        db.commit()
+
+        # Then proceed with the existing query logic
         if search:
             cursor.execute('''
-                SELECT id, timestamp, event_type, payload, signature, headers
-                FROM webhook_events
+                SELECT * FROM webhook_events
                 WHERE event_type LIKE ?
-                ORDER BY timestamp DESC
+                ORDER BY id DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT id, timestamp, event_type, payload, signature, headers
-                FROM webhook_events
-                ORDER BY timestamp DESC
+                SELECT * FROM webhook_events
+                ORDER BY id DESC
             ''')
 
-        raw_records = cursor.fetchall()
+        table_rows = cursor.fetchall()
 
-        # Build a new list that includes an "action" field if found
-        table_rows = []
-        for record in raw_records:
-            (rec_id, rec_timestamp, rec_event_type, rec_payload, rec_signature, rec_headers) = record
-            action_val = ''
-
-            # Attempt to parse JSON payload, and extract 'action' if present
-            if rec_payload:
-                try:
-                    rec_payload_json = json.loads(rec_payload)
-                    if 'action' in rec_payload_json:
-                        action_val = rec_payload_json['action']
-                except json.JSONDecodeError:
-                    pass
-
-            # We'll store each row as a tuple with 7 items:
-            # 0=id, 1=timestamp, 2=event_type, 3=payload, 4=signature, 5=headers, 6=extracted action
-            table_rows.append((
-                rec_id, 
-                rec_timestamp,
-                rec_event_type,
-                rec_payload,
-                rec_signature,
-                rec_headers,
-                action_val
-            ))
-
-        # Prepare details for a selected record if an id was specified
         selected_record = None
-        formatted_payload = ''
+        headers_data = None
         formatted_headers = ''
+        formatted_payload = ''
+
         if record_id:
-            cursor.execute('SELECT * FROM webhook_events WHERE id = ?', (record_id,))
+            # Query the single record
+            cursor.execute('SELECT * FROM webhook_events WHERE id=?', (record_id,))
             selected_record = cursor.fetchone()
+
             if selected_record:
+                # For debugging, print the entire row:
+                print("DEBUG - selected_record:", selected_record)
+
+                # Typically:
+                #  selected_record[0]: id
+                #  selected_record[1]: timestamp
+                #  selected_record[2]: event_type
+                #  selected_record[3]: payload
+                #  selected_record[4]: signature
+                #  selected_record[5]: headers
+                #  selected_record[6]: action_type  (depends on your DB schema)
+
+                raw_headers = selected_record[5]  # verify this matches your schema
+                raw_payload = selected_record[3]
+
+                # Print the raw headers for debugging
+                print("DEBUG - raw_headers value:", raw_headers)
+
+                # Attempt to parse headers as JSON
                 try:
-                    payload_json = json.loads(selected_record[3])
-                    formatted_payload = json.dumps(payload_json, indent=2)
-                except (json.JSONDecodeError, TypeError):
-                    formatted_payload = selected_record[3] or ''
+                    headers_data = json.loads(raw_headers)
+                    # For fallback or display in <pre>
+                    formatted_headers = json.dumps(headers_data, indent=2)
+                except (json.JSONDecodeError, TypeError) as e:
+                    print("DEBUG - JSON decode error for headers:", e)
+                    headers_data = None
+                    formatted_headers = raw_headers or "No headers found"
+
+                # Attempt to parse payload as JSON
                 try:
-                    headers_json = json.loads(selected_record[5])
-                    formatted_headers = json.dumps(headers_json, indent=2)
-                except (json.JSONDecodeError, TypeError):
-                    formatted_headers = selected_record[5] or ''
+                    payload_data = json.loads(raw_payload)
+                    formatted_payload = json.dumps(payload_data, indent=2)
+                except (json.JSONDecodeError, TypeError) as e:
+                    print("DEBUG - JSON decode error for payload:", e)
+                    formatted_payload = raw_payload or "No payload found"
 
         return render_template(
             'hookdb.html',
             search=search,
             table_records=table_rows,
             selected_record=selected_record,
-            formatted_payload=formatted_payload,
-            formatted_headers=formatted_headers
+            headers_data=headers_data,
+            formatted_headers=formatted_headers,
+            formatted_payload=formatted_payload
         )
-
     except Exception as e:
-        app.logger.error(f"Failed to load webhook events: {str(e)}")
-        return f"Failed to load webhook events: {str(e)}", 500
+        return f"Error loading events: {e}", 500
 
 
 @app.route('/clear', methods=['POST'])
@@ -247,6 +273,7 @@ def clear_events():
 
 
 if __name__ == '__main__':
+    # Keep command line argument support for direct Python execution
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -273,8 +300,12 @@ if __name__ == '__main__':
         help="The name of the database to store hooks",
     )
 
-
     args = parser.parse_args()
+    
+    # Override config with command line arguments
+    config.hook_secret = args.hook_secret
+    config.status_code = args.status_code
+    config.db_name = args.db_name
     
     # Create app context before initializing database
     with app.app_context():

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webhook Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px 156px;
+        }
+        .clear-button {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .clear-button:hover {
+            background-color: #cc0000;
+        }
+        /* "copy" button style for the Payload copy button */
+        .copy-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        .copy-button:hover {
+            background-color: #004d00;
+        }
+        /*
+         Make the Copy JSON button the same size as the
+         smaller table copy buttons, i.e. 2px 6px
+        */
+        .copy-json-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .copy-json-button:hover {
+            background-color: #004d00;
+        }
+        input[type="text"].search-field {
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 8px; /* space between text field & button */
+        }
+        input[type="submit"].search-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        input[type="submit"].search-button:hover {
+            background-color: #004d00;
+        }
+        .table-container {
+            margin-top: 20px;
+            height: 250px;
+            overflow-y: auto;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: auto;
+        }
+        table th,
+        table td {
+            padding: 8px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+            vertical-align: top;
+        }
+        table th {
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            position: sticky; /* Keep table headers pinned when scrolling */
+            top: 0;
+            z-index: 1;
+        }
+        .selected-row {
+            background-color: #e6ffcc;
+        }
+        .details {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        .details pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+            white-space: pre;
+            max-height: 400px;
+            max-width: 100%;
+        }
+        .hook-title {
+            display: inline-flex;
+            align-items: center;
+        }
+        .hook-icon {
+            margin-right: 8px;
+            width: 96px;
+            height: 96px;
+        }
+        .events-header {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .search-form-inline {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            margin-right: auto;
+        }
+        /* A small button for each header value in the table */
+        .copy-value-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .copy-value-button:hover {
+            background-color: #004d00;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="hook-title">
+        <img src="{{ url_for('static', filename='images/hook.svg') }}"
+             class="hook-icon" alt="Hook Icon From Dicky Prayudawanto on https://thenounproject.com/creator/prayuda1to/" />
+        The Power Hook Receiver
+    </h1>
+    
+    <p>
+        Use this app to receive
+        <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/about-webhooks" target="_blank">
+        GitHub Webhooks</a>.
+        It's a testing tool and not something for production.
+        Use the "search events" box to filter on <b>Event Type</b>. See the GitHub documentation for 
+        <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/webhook-events-and-payloads" target="_blank">webhook events and payloads</a>.
+        Click on an <b>Event ID</b> to view the payload and headers for the event.   
+    </p>
+
+    <div class="events-header">
+        <h2>All Events</h2>
+        <form action="/hookdb" method="get" class="search-form-inline">
+            <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search events...">
+            <input type="submit" class="search-button" value="Search">
+        </form>
+        <button class="clear-button" onclick="clearEvents()">Clear All Events</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Event ID</th>
+                <th>Timestamp</th>
+                <th>Event Type</th>
+                <th>Action</th>
+                <th>Signature</th>
+            </tr>
+            {% for row in table_records %}
+            <tr
+                onclick="window.location.href='/hookdb?id={{ row[0] }}&search={{ search }}'"
+                class="{% if selected_record and selected_record[0] == row[0] %}selected-row{% endif %}"
+            >
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[6] if row[6] and row[6] != 'None' else '' }}</td>
+                <td>{{ row[4] if row[4] and row[4] != 'None' else '' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% if selected_record %}
+    <div class="details">
+        <h3>Payload
+            <button class="copy-button"
+                    onclick="copyToClipboard(this, `{{ formatted_payload.replace('`', '\\`') }}`)">
+                Copy
+            </button>
+        </h3>
+        <pre>{{ formatted_payload }}</pre>
+
+        <h3>Headers
+            <button class="copy-button"
+                    onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
+                Copy
+            </button>
+        </h3>
+        {% if headers_data %}
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th></th>
+                </tr>
+                {% for key, val in headers_data.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ val }}</td>
+                    <td>
+                        <button class="copy-value-button" 
+                                onclick="copyToClipboard(this, '{{ val|escape }}')">
+                            Copy
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <pre>{{ formatted_headers }}</pre>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <script>
+        function clearEvents() {
+            if (confirm('Are you sure you want to clear all events?')) {
+                fetch('/clear', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to clear events');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to clear events');
+                    });
+            }
+        }
+
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    if (button.className.includes('copy-json-button')) {
+                        button.textContent = 'Copy JSON';
+                    } else {
+                        button.textContent = 'Copy';
+                    }
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html> 

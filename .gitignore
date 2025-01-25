@@ -150,3 +150,6 @@ environment.json
 shell-profile
 
 hooks.db
+
+requirements-pwrhook.txt
+
