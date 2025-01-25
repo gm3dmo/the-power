@@ -78,13 +78,24 @@
             max-height: 400px;
             max-width: 100%;
         }
+        .hook-title {
+            display: inline-flex;
+            align-items: center;
+        }
+        .hook-icon {
+            margin-right: 8px;
+            width: 96px;
+            height: 96px;
+        }
     </style>
 </head>
 <body>
-    <!-- Top-level title -->
-    <h1>The Power Hook Receiver</h1>
+    <h1 class="hook-title">
+        <img src="{{ url_for('static', filename='images/hook.svg') }}"
+             class="hook-icon" alt="Hook Icon" />
+        The Power Hook Receiver
+    </h1>
 
-    <!-- Search form for filtering events -->
     <form action="/hookdb" method="get">
         <input type="text" name="search" value="{{ search }}" placeholder="Search events...">
         <input type="submit" value="Search">
