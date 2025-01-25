@@ -157,7 +157,7 @@
     
     <p>
         Use this app to receive <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/about-webhooks" target="_blank">
-           GitHub Webhooks</a>. It's a testing tool and not something for production. Use the search box to filter <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/webhook-events-and-payloads" target="_blank">events</a>.
+           GitHub Webhooks</a>. It's a testing tool and not something for production. Use the search box to filter <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/webhook-events-and-payloads" target="_blank">events</a>. Click on an event id to see the payload and headers.   
     </p>
 
     <div class="events-header">
@@ -204,7 +204,7 @@
         <pre>{{ formatted_payload }}</pre>
 
         <h3>Headers
-            <button class="copy-json-button"
+            <button class="copy-button"
                     onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
                 Copy
             </button>
