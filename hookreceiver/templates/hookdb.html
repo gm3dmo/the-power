@@ -18,6 +18,7 @@
         .clear-button:hover {
             background-color: #cc0000;
         }
+        /* "copy" button style for the Payload copy button */
         .copy-button {
             background-color: #006400;
             color: white;
@@ -29,26 +30,41 @@
         .copy-button:hover {
             background-color: #004d00;
         }
-        /* Make both the text input and the submit button match the .clear-button size */
+        /*
+         Make the Copy JSON button the same size as the
+         smaller table copy buttons, i.e. 2px 6px
+        */
+        .copy-json-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .copy-json-button:hover {
+            background-color: #004d00;
+        }
         input[type="text"].search-field {
             font-weight: bold;
-            padding: 8px 16px;  /* same vertical/horizontal padding as clear-button */
+            padding: 8px 16px;
             border-radius: 4px;
-            border: 1px solid #ccc; 
-            margin-right: 8px;       /* small gap between input and button */
+            border: 1px solid #ccc;
+            margin-right: 8px; /* space between text field & button */
         }
         input[type="submit"].search-button {
             background-color: #006400;
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 8px 16px;       /* same size as clear-button */
+            padding: 8px 16px;
             cursor: pointer;
         }
         input[type="submit"].search-button:hover {
             background-color: #004d00;
         }
-
         .table-container {
             margin-top: 20px;
             height: 250px;
@@ -77,7 +93,7 @@
             z-index: 1;
         }
         .selected-row {
-            background-color: #e6ffcc; /* highlight row with a light greenish background */
+            background-color: #e6ffcc;
         }
         .details {
             margin-top: 20px;
@@ -104,13 +120,11 @@
             width: 96px;
             height: 96px;
         }
-        /* Flex container for "All Events", search box, and Clear button */
         .events-header {
             display: flex;
             align-items: center;
             margin-top: 20px;
         }
-        /* Let the search form sit in the middle, pushing Clear button to the right */
         .search-form-inline {
             display: flex;
             align-items: center;
@@ -140,18 +154,15 @@
              class="hook-icon" alt="Hook Icon" />
         The Power Hook Receiver
     </h1>
-
-    <!-- A paragraph of Lorem with a link below the title! -->
+    
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Pellentesque et velit a nibh porttitor ultricies. 
-        For more information, please visit 
+        Use this app to receive 
         <a href="https://docs.github.com/en/enterprise-cloud@latest/webhooks/about-webhooks" target="_blank">
-            this page
+           GitHub Webhooks
         </a>.
+        It's a testing tool and not something for production use.
     </p>
 
-    <!-- Title, inline search form, and Clear button in one row -->
     <div class="events-header">
         <h2>All Events</h2>
         <form action="/hookdb" method="get" class="search-form-inline">
@@ -195,18 +206,24 @@
         </h3>
         <pre>{{ formatted_payload }}</pre>
 
-        <h3>Headers</h3>
+        <h3>Headers
+            <button class="copy-json-button"
+                    onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
+                Copy
+            </button>
+        </h3>
         {% if headers_data %}
             <table>
                 <tr>
                     <th>Key</th>
                     <th>Value</th>
+                    <th></th>
                 </tr>
                 {% for key, val in headers_data.items() %}
                 <tr>
                     <td>{{ key }}</td>
+                    <td>{{ val }}</td>
                     <td>
-                        {{ val }}
                         <button class="copy-value-button" 
                                 onclick="copyToClipboard(this, '{{ val|escape }}')">
                             Copy
@@ -216,7 +233,6 @@
                 {% endfor %}
             </table>
         {% else %}
-            <!-- Fall back on plain JSON if we have no parsed data -->
             <pre>{{ formatted_headers }}</pre>
         {% endif %}
     </div>
@@ -245,7 +261,11 @@
             navigator.clipboard.writeText(text).then(() => {
                 button.textContent = 'Copied!';
                 setTimeout(() => {
-                    button.textContent = 'Copy';
+                    if (button.className.includes('copy-json-button')) {
+                        button.textContent = 'Copy JSON';
+                    } else {
+                        button.textContent = 'Copy';
+                    }
                 }, 2000);
             });
         }
