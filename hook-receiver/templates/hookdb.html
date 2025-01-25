@@ -29,7 +29,24 @@
         .copy-button:hover {
             background-color: #004d00;
         }
-        /* Keeps the table near 6 rows high, with scrolling */
+        /* Same green style as "copy-button" for the search submit */
+        input[type="submit"].search-button {
+            background-color: #006400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        input[type="submit"].search-button:hover {
+            background-color: #004d00;
+        }
+
+        /* Make the search input text bold */
+        input[type="text"].search-field {
+            font-weight: bold;
+        }
+
         .table-container {
             margin-top: 20px;
             height: 250px;
@@ -76,18 +93,15 @@
             max-height: 400px;
             max-width: 100%;
         }
-        /* Hook title styling */
         .hook-title {
             display: inline-flex;
             align-items: center;
         }
-        /* Hook icon is 96px by 96px from the previous request */
         .hook-icon {
             margin-right: 8px;
             width: 96px;
             height: 96px;
         }
-        /* New container to align "All Events" title and "Clear All Events" button on the same row */
         .events-header {
             display: flex;
             justify-content: space-between;
@@ -106,8 +120,8 @@
 
     <!-- Search form -->
     <form action="/hookdb" method="get">
-        <input type="text" name="search" value="{{ search }}" placeholder="Search events...">
-        <input type="submit" value="Search">
+        <input type="text" name="search" class="search-field" value="{{ search }}" placeholder="Search events...">
+        <input type="submit" class="search-button" value="Search">
     </form>
 
     <!-- Title and Clear button in one row -->
