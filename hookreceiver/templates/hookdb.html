@@ -191,8 +191,8 @@
                 <td>{{ row[0] }}</td>
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
-                <td>{{ row[6] }}</td>
-                <td>{{ row[4] }}</td>
+                <td>{{ row[6] if row[6] and row[6] != 'None' else '' }}</td>
+                <td>{{ row[4] if row[4] and row[4] != 'None' else '' }}</td>
             </tr>
             {% endfor %}
         </table>
