@@ -68,7 +68,7 @@ def init_db():
     db = get_db()
     cursor = db.cursor()
     
-    # Create table only if it doesn't exist
+    # Ensure table includes an "action_type" column
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS webhook_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,10 +76,18 @@ def init_db():
             event_type TEXT,
             payload TEXT,
             signature TEXT,
-            headers TEXT
+            headers TEXT,
+            action_type TEXT
         )
     ''')
     
+    # If the table already existed before "action_type" was introduced,
+    # optionally try an ALTER TABLE here:
+    try:
+        cursor.execute('ALTER TABLE webhook_events ADD COLUMN action_type TEXT')
+    except sqlite3.OperationalError:
+        pass  # Column already exists or cannot be added because it already exists
+
     db.commit()
     app.logger.debug(f"Database initialized at {args.db_name}")
 
@@ -107,19 +115,23 @@ def slurphook():
         # Format headers for storage
         headers_dict = dict(request.headers)
         headers_formatted = json.dumps(headers_dict, indent=2)
+
+        # Extract action from the JSON, if available
+        action_value = request.json.get('action')
         
         # Store webhook data in database
         try:
             db = get_db()
             cursor = db.cursor()
             cursor.execute('''
-                INSERT INTO webhook_events (event_type, payload, signature, headers)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO webhook_events (event_type, payload, signature, headers, action_type)
+                VALUES (?, ?, ?, ?, ?)
             ''', (
                 event_type,
                 json.dumps(request.json),
                 signature_header,
-                headers_formatted
+                headers_formatted,
+                action_value
             ))
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {args.db_name}")
@@ -152,6 +164,17 @@ def hookdb():
         db = get_db()
         cursor = db.cursor()
 
+        # First, update action_type from stored payloads
+        cursor.execute('''
+            UPDATE webhook_events 
+            SET action_type = json_extract(payload, '$.action')
+            WHERE action_type IS NULL
+            AND json_valid(payload)
+            AND json_extract(payload, '$.action') IS NOT NULL
+        ''')
+        db.commit()
+
+        # Then proceed with the existing query logic
         if search:
             cursor.execute('''
                 SELECT * FROM webhook_events
