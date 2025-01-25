@@ -49,9 +49,20 @@ def verify_signature(payload_body, secret_token, signature_header):
 # Create Flask app first
 app = Flask(__name__)
 
+# Add configuration class
+class Config:
+    def __init__(self):
+        # Get values from environment variables first, fall back to defaults
+        self.hook_secret = os.environ.get('WEBHOOK_SECRET')
+        self.status_code = int(os.environ.get('STATUS_CODE', '200'))
+        self.db_name = os.environ.get('DB_NAME', 'hooks.db')
+
+# Create config instance
+config = Config()
+
 # Then define database functions
 def get_db():
-    conn = sqlite3.connect(args.db_name)
+    conn = sqlite3.connect(config.db_name)
     return conn
 
 @app.teardown_appcontext
@@ -89,7 +100,7 @@ def init_db():
         pass  # Column already exists or cannot be added because it already exists
 
     db.commit()
-    app.logger.debug(f"Database initialized at {args.db_name}")
+    app.logger.debug(f"Database initialized at {config.db_name}")
 
 
 @app.route('/webhook', methods=['POST'])
@@ -107,8 +118,8 @@ def slurphook():
         app.logger.debug("-" * 21)
         app.logger.debug(f"JSON payload:\n\n{json.dumps(request.json, indent=4)}")
         
-        if signature_header and args.hook_secret:
-            verify_signature(request.data, args.hook_secret, signature_header)
+        if signature_header and config.hook_secret:
+            verify_signature(request.data, config.hook_secret, signature_header)
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
         
@@ -134,12 +145,12 @@ def slurphook():
                 action_value
             ))
             db.commit()
-            app.logger.debug(f"Webhook data stored in database: {args.db_name}")
+            app.logger.debug(f"Webhook data stored in database: {config.db_name}")
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
             
-        return ('status', args.status_code)
+        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])
@@ -262,6 +273,7 @@ def clear_events():
 
 
 if __name__ == '__main__':
+    # Keep command line argument support for direct Python execution
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -288,8 +300,12 @@ if __name__ == '__main__':
         help="The name of the database to store hooks",
     )
 
-
     args = parser.parse_args()
+    
+    # Override config with command line arguments
+    config.hook_secret = args.hook_secret
+    config.status_code = args.status_code
+    config.db_name = args.db_name
     
     # Create app context before initializing database
     with app.app_context():
