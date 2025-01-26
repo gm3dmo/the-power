@@ -52,7 +52,17 @@
                 <td>{{ row[2] }}</td>
                 <td>{{ row[6] if row[6] and row[6] != 'None' else '' }}</td>
                 <td>{{ headers.get('X-Github-Hook-Installation-Target-Type', '') }}</td>
-                <td>{{ row[4] if row[4] and row[4] != 'None' else '' }}</td>
+                <td>
+                    {% if row[4] is none %}
+                        <span class="signature-missing">&#x2B1C;</span>
+                    {% elif row[4] != 'None' %}
+                        <span class="signature-present">&#x2612;</span>
+                        <span class="signature-valid">&#x2714;</span>
+                    {% else %}
+                        <span class="signature-present">&#x2612;</span>
+                        <span class="signature-invalid">&#x2716;</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </table>

@@ -157,3 +157,19 @@ table th {
 .copy-value-button:hover {
     background-color: #004d00;
 }
+
+.signature-present {
+    color: black;
+}
+
+.signature-missing {
+    color: #888;
+}
+
+.signature-valid {
+    color: green;
+}
+
+.signature-invalid {
+    color: red;
+}
