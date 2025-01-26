@@ -82,6 +82,7 @@ github_api_version=${github_api_version}
 org="${org}"
 owner="${org}"
 org_secret_name="ORGANIZATION_SECRET_001"
+org_webhook_url=${webhook_url}
 org_webhook_secret="PWR-ORG-WEBHOOK-SECRET"
 org_owner="${org_owner}"
 org_members="${org_members}"
@@ -100,6 +101,7 @@ repo_secret_name="REPOSITORY_SECRET_001"
 repo_secret_value="repository_secret_string"
 # webhook url is also used by the organization
 webhook_url=${webhook_url}
+repo_webhook_url=${webhook_url}
 repo_webhook_secret="pwr-repo-webhook-secret"
 has_issues=true
 has_wiki=true
