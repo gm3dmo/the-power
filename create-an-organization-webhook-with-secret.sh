@@ -16,10 +16,10 @@ jq -n \
         --arg name "web" \
         --arg webhook_url "${webhook_url}" \
         --arg content "json" \
-        --arg scret "" \
+        --arg secret "${org_webhook_secret}" \
         '{
            name: $name,
-           secret: $name,
+           secret: $secret,
            active: true,
            events: [
              "organization",
