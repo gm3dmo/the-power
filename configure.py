@@ -82,6 +82,7 @@ github_api_version=${github_api_version}
 org="${org}"
 owner="${org}"
 org_secret_name="ORGANIZATION_SECRET_001"
+org_webhook_secret="PWR-ORG-WEBHOOK-SECRET"
 org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
@@ -664,7 +665,7 @@ if __name__ == "__main__":
         "--primer",
         action="store",
         dest="primer",
-        default="pwr-get-octocat.sh",
+        default="list-user.sh",
         help="The name of a primer script which will be executed when configuration is complete",
     )
     parser.add_argument(

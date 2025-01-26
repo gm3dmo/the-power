@@ -49,6 +49,13 @@ def verify_signature(payload_body, secret_token, signature_header):
 # Create Flask app first
 app = Flask(__name__)
 
+# Add the JSON filter
+@app.template_filter('from_json')
+def from_json(value):
+    if value:
+        return json.loads(value)
+    return {}
+
 # Add configuration class
 class Config:
     def __init__(self):

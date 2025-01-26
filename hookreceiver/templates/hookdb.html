@@ -38,9 +38,11 @@
                 <th>Timestamp</th>
                 <th>Event Type</th>
                 <th>Action</th>
+                <th>Hook Type</th>
                 <th>Signature</th>
             </tr>
             {% for row in table_records %}
+            {% set headers = row[5]|from_json %}
             <tr
                 onclick="window.location.href='/hookdb?id={{ row[0] }}&search={{ search }}'"
                 class="{% if selected_record and selected_record[0] == row[0] %}selected-row{% endif %}"
@@ -49,6 +51,7 @@
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
                 <td>{{ row[6] if row[6] and row[6] != 'None' else '' }}</td>
+                <td>{{ headers.get('X-Github-Hook-Installation-Target-Type', '') }}</td>
                 <td>{{ row[4] if row[4] and row[4] != 'None' else '' }}</td>
             </tr>
             {% endfor %}
