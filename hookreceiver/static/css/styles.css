@@ -94,6 +94,7 @@ th {
     cursor: pointer;
     user-select: none;
     z-index: 2;
+    text-align: left;  /* Left justify the header text */
 }
 
 td {
@@ -106,8 +107,12 @@ tr {
     height: 43px;  /* Fixed height for consistent row sizing */
 }
 
-.selected-row {
-    background-color: #ffdd00;
+tr.selected-row {
+    background-color: #ffdd00 !important;  /* Correct yellow background */
+}
+
+tr.selected-row td {
+    background-color: #ffdd00 !important;  /* Ensure td background matches */
 }
 
 .details {
