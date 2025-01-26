@@ -128,6 +128,24 @@
                 }, 2000);
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the selected row if any
+            const selectedRow = document.querySelector('.selected-row');
+            if (selectedRow) {
+                // Get the table container
+                const container = document.querySelector('.table-container');
+                
+                // Calculate the row height (including padding and borders)
+                const rowHeight = selectedRow.offsetHeight;
+                
+                // Calculate the scroll position to center the selected row
+                const scrollPosition = selectedRow.offsetTop - (container.clientHeight / 2) + (rowHeight / 2);
+                
+                // Scroll the container
+                container.scrollTop = scrollPosition;
+            }
+        });
     </script>
 </body>
 </html> 

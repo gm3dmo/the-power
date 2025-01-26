@@ -67,10 +67,11 @@ input[type="submit"].search-button:hover {
 
 .table-container {
     margin-top: 20px;
-    height: 250px;
+    height: 400px;
     overflow-y: auto;
     width: 100%;
     border: 1px solid #ddd;
+    scroll-behavior: smooth;
 }
 
 table {
