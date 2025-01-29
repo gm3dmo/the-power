@@ -257,4 +257,44 @@ tr:hover {
 
 .script-box code {
     font-family: 'Courier New', Courier, monospace;
+}
+
+.script-item {
+    margin: 0;
+}
+
+.script-item a {
+    text-decoration: none;
+    color: #24292e;
+    display: block;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.script-item a:hover {
+    background-color: #f6f8fa;
+}
+
+.script-item a.selected {
+    background-color: #fff3b0;
+}
+
+.execute-button {
+    background-color: #2ea44f;
+    color: white;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.execute-button:hover {
+    background-color: #2c974b;
+}
+
+.execute-button:active {
+    background-color: #298e46;
 } 
