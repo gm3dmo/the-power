@@ -168,4 +168,66 @@ tr:hover {
 
 .copy-button:hover {
     background-color: #d1d5da;
+}
+
+.script-tabs {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #586069;
+}
+
+.tab-button:hover {
+    color: #24292e;
+}
+
+.tab-button.active {
+    color: #24292e;
+    border-bottom: 2px solid #0366d6;
+}
+
+.tab-content {
+    margin-top: 15px;
+}
+
+.script-boxes {
+    margin-top: 20px;
+}
+
+.script-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.script-box-header h4 {
+    margin: 0;
+}
+
+.script-box {
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.script-box pre {
+    margin: 0;
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.script-box code {
+    font-family: 'Courier New', Courier, monospace;
 } 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import os
 import glob
+import string
 
 app = Flask(__name__)
 
@@ -20,7 +21,9 @@ def read_config():
                 # Split on first occurrence of '=' and store in config dict
                 if '=' in line:
                     key, value = line.split('=', 1)
-                    config[key.strip()] = value.strip()
+                    # Strip quotes and whitespace from value
+                    value = value.strip().strip('"\'')
+                    config[key.strip()] = value
     except Exception as e:
         print(f"Error reading config file: {str(e)}")
     
@@ -36,6 +39,16 @@ def get_shell_scripts():
     shell_scripts = glob.glob(os.path.join(parent_dir, '*.sh'))
     # Extract just the filenames from the full paths
     return [os.path.basename(script) for script in shell_scripts]
+
+def render_script_with_variables(content, config_dict):
+    try:
+        # Create a template from the content
+        template = string.Template(content)
+        # Substitute variables from config
+        rendered_content = template.safe_substitute(config_dict)
+        return rendered_content
+    except Exception as e:
+        return f"Error rendering script: {str(e)}"
 
 def get_script_content(filename):
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,17 +74,20 @@ def index():
         scripts = [script for script in scripts if search_query in script.lower()]
     
     script_content = ''
+    rendered_content = ''
     doc_url = ''
     if selected_script:
         script_content, doc_url = get_script_content(selected_script)
+        rendered_content = render_script_with_variables(script_content, config)
     
     return render_template('index.html', 
                          scripts=scripts, 
                          search_query=search_query,
                          selected_script=selected_script,
                          script_content=script_content,
+                         rendered_content=rendered_content,
                          doc_url=doc_url,
                          config=config)
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True, host='0.0.0.0', port=5000) 
