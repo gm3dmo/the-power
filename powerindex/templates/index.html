@@ -10,31 +10,6 @@
     <div class="container">
         <h1>The Power Viewer</h1>
         
-        <div class="config-table">
-            <h2>Configuration</h2>
-            <input type="text" 
-                   id="configSearch" 
-                   class="config-search" 
-                   placeholder="Search configuration..."
-                   onkeyup="searchConfig()">
-            <table id="configTable">
-                <thead>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for key, value in config.items() %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td>{{ value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
         <form method="GET" action="/" class="search-form">
             <input type="text" 
                    name="search" 
@@ -47,7 +22,8 @@
             <ul class="script-list">
                 {% for script in scripts %}
                     <li>
-                        <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                           {% if script == selected_script %}class="selected"{% endif %}>
                             {{ script }}
                         </a>
                     </li>
@@ -82,6 +58,31 @@
                 </div>
             </div>
             {% endif %}
+        </div>
+
+        <div class="config-table">
+            <h2>Configuration</h2>
+            <input type="text" 
+                   id="configSearch" 
+                   class="config-search" 
+                   placeholder="Search configuration..."
+                   onkeyup="searchConfig()">
+            <table id="configTable">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in config.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
