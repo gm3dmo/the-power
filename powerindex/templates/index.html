@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Power Index</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        {{ highlight_style }}
+    </style>
 </head>
 <body>
     <div class="container">
@@ -47,7 +50,9 @@
                             <h4>Original Script</h4>
                             <button class="copy-button" onclick="copyScriptContent('original-script')">Copy</button>
                         </div>
-                        <pre><code id="original-script">{{ script_content }}</code></pre>
+                        <div class="highlight-wrapper">
+                            {{ highlighted_content | safe }}
+                        </div>
                     </div>
                 </div>
                 <div class="script-boxes">
@@ -162,7 +167,12 @@
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('stdout').textContent = data.stdout || '';
+            const stdoutElement = document.getElementById('stdout');
+            if (data.is_json) {
+                stdoutElement.innerHTML = data.stdout;  // Use innerHTML for highlighted JSON
+            } else {
+                stdoutElement.textContent = data.stdout || '';
+            }
             document.getElementById('stderr').textContent = data.stderr || '';
             button.textContent = 'Execute';
             button.disabled = false;

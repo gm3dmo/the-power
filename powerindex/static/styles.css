@@ -332,4 +332,22 @@ tr:hover {
 .execute-button:disabled {
     background-color: #94d3a2;
     cursor: not-allowed;
+}
+
+.output-box .highlight {
+    background: transparent;
+    margin: 0;
+}
+
+.output-box .highlight pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Ensure JSON strings are properly wrapped */
+.output-box .highlight span {
+    white-space: pre-wrap;
+    word-wrap: break-word;
 } 
