@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        {{ highlight_style }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Power Viewer</h1>
+        
+        <form method="GET" action="/" class="search-form">
+            <input type="text" 
+                   name="search" 
+                   placeholder="Search scripts..."
+                   value="{{ search_query }}"
+                   autofocus>
+            <button type="submit">Search</button>
+        </form>
+        <div class="content-wrapper">
+            <ul class="script-list">
+                {% for script in scripts %}
+                    <li class="script-item">
+                        <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                           {% if script == selected_script %}class="selected"{% endif %}>
+                            {{ script }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if script_content %}
+            <div class="script-content">
+                <div class="script-header">
+                    <h3>{{ selected_script }}</h3>
+                    <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
+                </div>
+                {% if doc_url %}
+                <div class="doc-url">
+                    <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ doc_url }}</a>
+                    <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">Copy</button>
+                </div>
+                {% endif %}
+                <div class="script-boxes">
+                    <div class="script-box">
+                        <div class="script-box-header">
+                            <h4>Original Script</h4>
+                            <button class="copy-button" onclick="copyScriptContent('original-script')">Copy</button>
+                        </div>
+                        <div class="highlight-wrapper">
+                            {{ highlighted_content | safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="script-boxes">
+                    <div class="script-box">
+                        <div class="script-box-header">
+                            <h4>Rendered Script</h4>
+                            <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
+                        </div>
+                        <div class="highlight-wrapper">
+                            {{ rendered_content | safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="output-boxes">
+                    <div class="output-box">
+                        <div class="output-header">
+                            <h4>Standard Output</h4>
+                            <input type="text" 
+                                   id="stdoutSearch" 
+                                   class="output-search" 
+                                   placeholder="Search output..."
+                                   onkeyup="searchOutput('stdout')">
+                        </div>
+                        <pre id="stdout"></pre>
+                    </div>
+                    <div class="output-box">
+                        <h4>Standard Error</h4>
+                        <pre id="stderr"></pre>
+                    </div>
+                    <div class="output-box">
+                        <div class="output-header">
+                            <h4>Headers</h4>
+                            <input type="text" 
+                                   id="headersSearch" 
+                                   class="output-search" 
+                                   placeholder="Search headers..."
+                                   onkeyup="searchOutput('headers')">
+                        </div>
+                        <pre id="headers"></pre>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="config-table">
+            <h2>Configuration</h2>
+            <input type="text" 
+                   id="configSearch" 
+                   class="config-search" 
+                   placeholder="Search configuration..."
+                   onkeyup="searchConfig()">
+            <table id="configTable">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in config.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    function searchConfig() {
+        const input = document.getElementById('configSearch');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('configTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {  // Start from 1 to skip header
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
+            const key = cells[0].textContent || cells[0].innerText;
+            const value = cells[1].textContent || cells[1].innerText;
+            
+            if (key.toLowerCase().indexOf(filter) > -1 || 
+                value.toLowerCase().indexOf(filter) > -1) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    function copyScriptContent(elementId) {
+        const content = document.getElementById(elementId).textContent;
+        navigator.clipboard.writeText(content).then(function() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    function searchOutput(elementId) {
+        const searchText = document.getElementById(elementId + 'Search').value.toLowerCase();
+        const outputElement = document.getElementById(elementId);
+        let content = outputElement.textContent;  // Use textContent instead of innerHTML for initial content
+
+        // Clear any existing highlights
+        content = content.replace(/<mark class="highlight-search">/g, '')
+                        .replace(/<\/mark>/g, '');
+
+        if (!searchText) {
+            outputElement.innerHTML = content;
+            return;
+        }
+
+        // Simple text replacement with highlighting
+        const regex = new RegExp(searchText, 'gi');
+        content = content.replace(regex, match => 
+            `<mark class="highlight-search">${match}</mark>`
+        );
+
+        outputElement.innerHTML = content;
+    }
+
+    function executeScript(scriptName) {
+        const button = document.querySelector('.execute-button');
+        button.disabled = true;
+        button.textContent = 'Executing...';
+
+        // Clear both search boxes when executing new script
+        document.getElementById('stdoutSearch').value = '';
+        document.getElementById('headersSearch').value = '';
+
+        fetch('/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ script: scriptName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const stdoutElement = document.getElementById('stdout');
+            const headersElement = document.getElementById('headers');
+            
+            if (data.is_json) {
+                stdoutElement.innerHTML = data.stdout;
+            } else {
+                stdoutElement.textContent = data.stdout || '';
+            }
+            
+            // Always use innerHTML for headers as it contains highlighted JSON
+            headersElement.innerHTML = data.headers || '';
+            
+            document.getElementById('stderr').textContent = data.stderr || '';
+            button.textContent = 'Execute';
+            button.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('stderr').textContent = 'Error executing script: ' + error;
+            button.textContent = 'Execute';
+            button.disabled = false;
+        });
+    }
+    </script>
+</body>
+</html> 
