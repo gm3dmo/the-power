@@ -33,7 +33,7 @@
             <div class="script-content">
                 <div class="script-header">
                     <h3>{{ selected_script }}</h3>
-                    <button class="execute-button">Execute</button>
+                    <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
                 </div>
                 {% if doc_url %}
                 <div class="doc-url">
@@ -57,6 +57,16 @@
                             <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
                         </div>
                         <pre><code id="rendered-script">{{ rendered_content }}</code></pre>
+                    </div>
+                </div>
+                <div class="output-boxes">
+                    <div class="output-box">
+                        <h4>Standard Output</h4>
+                        <pre id="stdout"></pre>
+                    </div>
+                    <div class="output-box">
+                        <h4>Standard Error</h4>
+                        <pre id="stderr"></pre>
                     </div>
                 </div>
             </div>
@@ -135,6 +145,33 @@
             }, 2000);
         }).catch(function(err) {
             console.error('Failed to copy text: ', err);
+        });
+    }
+
+    function executeScript(scriptName) {
+        const button = document.querySelector('.execute-button');
+        button.disabled = true;
+        button.textContent = 'Executing...';
+
+        fetch('/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ script: scriptName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('stdout').textContent = data.stdout || '';
+            document.getElementById('stderr').textContent = data.stderr || '';
+            button.textContent = 'Execute';
+            button.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('stderr').textContent = 'Error executing script: ' + error;
+            button.textContent = 'Execute';
+            button.disabled = false;
         });
     }
     </script>

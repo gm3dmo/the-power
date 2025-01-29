@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 import glob
 import string
 import re
+import subprocess
 
 app = Flask(__name__)
 
@@ -102,6 +103,39 @@ def index():
                          rendered_content=rendered_content,
                          doc_url=doc_url,
                          config=config)
+
+@app.route('/execute', methods=['POST'])
+def execute_script():
+    script = request.json.get('script')
+    if not script:
+        return jsonify({'error': 'No script specified'}), 400
+    
+    # Get parent directory path and construct full script path
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    script_path = os.path.join(parent_dir, script)
+    
+    # Verify the script exists and is within the parent directory
+    if not os.path.exists(script_path) or not script_path.startswith(parent_dir):
+        return jsonify({'error': 'Invalid script path'}), 400
+    
+    try:
+        # Run the script from parent directory
+        process = subprocess.Popen(
+            ['bash', script_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=parent_dir,
+            text=True
+        )
+        stdout, stderr = process.communicate()
+        
+        return jsonify({
+            'stdout': stdout,
+            'stderr': stderr,
+            'returncode': process.returncode
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000) 

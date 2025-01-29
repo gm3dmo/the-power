@@ -297,4 +297,39 @@ tr:hover {
 
 .execute-button:active {
     background-color: #298e46;
+}
+
+.output-boxes {
+    margin-top: 20px;
+}
+
+.output-box {
+    margin-bottom: 20px;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.output-box h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #24292e;
+}
+
+.output-box pre {
+    margin: 0;
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    border: 1px solid #eaecef;
+    min-height: 50px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.execute-button:disabled {
+    background-color: #94d3a2;
+    cursor: not-allowed;
 } 
