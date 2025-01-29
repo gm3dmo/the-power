@@ -10,7 +10,7 @@ def scrub_github_token(value):
     """Helper function to scrub GitHub tokens"""
     # Look for both ghX_ and github_pat_ patterns
     gh_pattern = r'(gh[a-zA-Z]_[a-zA-Z0-9]+)'
-    pat_pattern = r'(github_pat_[a-zA-Z0-9]+)'
+    pat_pattern = r'(github_pat_[a-zA-Z0-9_]+)'
     
     # Check for ghX_ pattern
     value = re.sub(gh_pattern, lambda m: f"{m.group(1)[:3]}_***{m.group(1)[-8:]}", value)
