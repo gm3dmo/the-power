@@ -8,15 +8,16 @@ app = Flask(__name__)
 
 def scrub_github_token(value):
     """Helper function to scrub GitHub tokens"""
-    # Look for GitHub token pattern anywhere in the string
-    pattern = r'(gh[a-zA-Z]_[a-zA-Z0-9]+)'
-    match = re.search(pattern, value)
-    if match:
-        token = match.group(1)
-        token_type = token[:3]
-        scrubbed_token = f"{token_type}_***{token[-8:]}"
-        # Replace the token in the original string
-        return value.replace(token, scrubbed_token)
+    # Look for both ghX_ and github_pat_ patterns
+    gh_pattern = r'(gh[a-zA-Z]_[a-zA-Z0-9]+)'
+    pat_pattern = r'(github_pat_[a-zA-Z0-9]+)'
+    
+    # Check for ghX_ pattern
+    value = re.sub(gh_pattern, lambda m: f"{m.group(1)[:3]}_***{m.group(1)[-8:]}", value)
+    
+    # Check for github_pat_ pattern
+    value = re.sub(pat_pattern, lambda m: f"github_pat_***{m.group(1)[-8:]}", value)
+    
     return value
 
 def read_config():
