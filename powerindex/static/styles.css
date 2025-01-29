@@ -1,3 +1,7 @@
+:root {
+    --govuk-yellow: #ffdd00;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -276,7 +280,7 @@ tr:hover {
 }
 
 .script-item a.selected {
-    background-color: #fff3b0;
+    background-color: var(--govuk-yellow);
 }
 
 .execute-button {
@@ -350,4 +354,38 @@ tr:hover {
 .output-box .highlight span {
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.output-header h4 {
+    margin: 0;
+}
+
+.output-search {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 200px;
+}
+
+.output-search:focus {
+    outline: none;
+    border-color: #0366d6;
+    box-shadow: 0 0 0 2px rgba(3,102,214,0.2);
+}
+
+.highlight-search {
+    background-color: var(--govuk-yellow) !important;
+}
+
+/* Make sure no other styles are overriding our highlight */
+#headers mark.highlight-search {
+    background-color: var(--govuk-yellow) !important;
 } 

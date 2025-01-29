@@ -1,13 +1,39 @@
-from flask import Flask, render_template, request, jsonify
 import os
 import glob
 import string
 import re
 import subprocess
+from flask import Flask, render_template, request, jsonify
 from pygments import highlight
 from pygments.lexers import BashLexer, JsonLexer
 from pygments.formatters import HtmlFormatter
 import json
+
+def update_curl_flags():
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    config_path = os.path.join(parent_dir, '.gh-api-examples.conf')
+    
+    old_flag = 'curl_custom_flags="--fail-with-body --no-progress-meter"'
+    new_flag = 'curl_custom_flags="--fail-with-body --no-progress-meter --write-out %output{a.txt}%{json}%output{b.txt}%{header_json}"'
+    
+    try:
+        # Read the current content
+        with open(config_path, 'r') as file:
+            content = file.read()
+        
+        # Replace the line if it exists
+        if old_flag in content:
+            content = content.replace(old_flag, new_flag)
+            
+            # Write the updated content back
+            with open(config_path, 'w') as file:
+                file.write(content)
+            print("Updated curl flags in config file")
+    except Exception as e:
+        print(f"Error updating config file: {str(e)}")
+
+# Run the update immediately
+update_curl_flags()
 
 app = Flask(__name__)
 
@@ -74,20 +100,34 @@ def get_script_content(filename):
             lines = content.split('\n')
             doc_url = lines[2].strip('# ') if len(lines) > 2 and lines[2].startswith('# http') else ''
             
-            # Highlight the shell script
+            # Highlight the original script
             highlighted_content = highlight(content, BashLexer(), HtmlFormatter())
             
             return content, doc_url, highlighted_content
     except Exception as e:
         return f"Error reading file: {str(e)}", '', ''
 
-def render_script_with_variables(content, config_dict):
+def render_script_with_variables(content, config):
+    """Replace variables in script content with their values from config"""
+    if not content:
+        return ''
+    
+    # Replace each config variable in the content
+    rendered = content
+    for key, value in config.items():
+        if key == 'GITHUB_API_BASE_URL':
+            rendered = rendered.replace('"${' + key + '}"', value)
+            rendered = rendered.replace('${' + key + '}', value)
+        else:
+            rendered = rendered.replace('${' + key + '}', value)
+    
+    # Apply syntax highlighting to the rendered script
     try:
-        template = string.Template(content)
-        rendered_content = template.safe_substitute(config_dict)
-        return rendered_content
+        highlighted = highlight(rendered, BashLexer(), HtmlFormatter())
+        return highlighted
     except Exception as e:
-        return f"Error rendering script: {str(e)}"
+        print(f"Error highlighting rendered script: {str(e)}")
+        return rendered
 
 @app.route('/', methods=['GET'])
 def index():
@@ -100,9 +140,9 @@ def index():
         scripts = [script for script in scripts if search_query in script.lower()]
     
     script_content = ''
-    rendered_content = ''
-    highlighted_content = ''
     doc_url = ''
+    highlighted_content = ''
+    rendered_content = ''
     if selected_script:
         script_content, doc_url, highlighted_content = get_script_content(selected_script)
         rendered_content = render_script_with_variables(script_content, config)
@@ -123,12 +163,11 @@ def execute_script():
     if not script:
         return jsonify({'error': 'No script specified'}), 400
     
-    # Get parent directory path and construct full script path
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     script_path = os.path.join(parent_dir, script)
     
     try:
-        # Run the script from parent directory
+        # Run the script
         process = subprocess.Popen(
             ['bash', script_path],
             stdout=subprocess.PIPE,
@@ -138,20 +177,33 @@ def execute_script():
         )
         stdout, stderr = process.communicate()
         
-        # Try to parse and highlight stdout if it's JSON
+        # Try to read and highlight headers from b.txt
+        headers_path = os.path.join(parent_dir, 'b.txt')
+        headers_content = ''
+        if os.path.exists(headers_path):
+            with open(headers_path, 'r') as f:
+                headers_content = f.read()
+                try:
+                    # Parse and format as JSON
+                    headers_json = json.loads(headers_content)
+                    headers_content = json.dumps(headers_json, indent=2)
+                    headers_content = highlight(headers_content, JsonLexer(), HtmlFormatter())
+                except json.JSONDecodeError:
+                    # If not valid JSON, leave as is
+                    pass
+
+        # Handle stdout JSON highlighting as before
         try:
-            # Check if output is JSON by attempting to parse it
             json_obj = json.loads(stdout)
-            # If successful, pretty print and highlight as JSON
             formatted_json = json.dumps(json_obj, indent=2)
             highlighted_stdout = highlight(formatted_json, JsonLexer(), HtmlFormatter())
         except json.JSONDecodeError:
-            # If not JSON, return as plain text
             highlighted_stdout = stdout
 
         return jsonify({
             'stdout': highlighted_stdout,
             'stderr': stderr,
+            'headers': headers_content,
             'returncode': process.returncode,
             'is_json': True if 'highlighted_stdout' in locals() else False
         })
@@ -159,4 +211,4 @@ def execute_script():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8001) 
+    app.run(debug=True, host='0.0.0.0', port=8001) 

@@ -61,17 +61,37 @@
                             <h4>Rendered Script</h4>
                             <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
                         </div>
-                        <pre><code id="rendered-script">{{ rendered_content }}</code></pre>
+                        <div class="highlight-wrapper">
+                            {{ rendered_content | safe }}
+                        </div>
                     </div>
                 </div>
                 <div class="output-boxes">
                     <div class="output-box">
-                        <h4>Standard Output</h4>
+                        <div class="output-header">
+                            <h4>Standard Output</h4>
+                            <input type="text" 
+                                   id="stdoutSearch" 
+                                   class="output-search" 
+                                   placeholder="Search output..."
+                                   onkeyup="searchOutput('stdout')">
+                        </div>
                         <pre id="stdout"></pre>
                     </div>
                     <div class="output-box">
                         <h4>Standard Error</h4>
                         <pre id="stderr"></pre>
+                    </div>
+                    <div class="output-box">
+                        <div class="output-header">
+                            <h4>Headers</h4>
+                            <input type="text" 
+                                   id="headersSearch" 
+                                   class="output-search" 
+                                   placeholder="Search headers..."
+                                   onkeyup="searchOutput('headers')">
+                        </div>
+                        <pre id="headers"></pre>
                     </div>
                 </div>
             </div>
@@ -153,10 +173,37 @@
         });
     }
 
+    function searchOutput(elementId) {
+        const searchText = document.getElementById(elementId + 'Search').value.toLowerCase();
+        const outputElement = document.getElementById(elementId);
+        let content = outputElement.textContent;  // Use textContent instead of innerHTML for initial content
+
+        // Clear any existing highlights
+        content = content.replace(/<mark class="highlight-search">/g, '')
+                        .replace(/<\/mark>/g, '');
+
+        if (!searchText) {
+            outputElement.innerHTML = content;
+            return;
+        }
+
+        // Simple text replacement with highlighting
+        const regex = new RegExp(searchText, 'gi');
+        content = content.replace(regex, match => 
+            `<mark class="highlight-search">${match}</mark>`
+        );
+
+        outputElement.innerHTML = content;
+    }
+
     function executeScript(scriptName) {
         const button = document.querySelector('.execute-button');
         button.disabled = true;
         button.textContent = 'Executing...';
+
+        // Clear both search boxes when executing new script
+        document.getElementById('stdoutSearch').value = '';
+        document.getElementById('headersSearch').value = '';
 
         fetch('/execute', {
             method: 'POST',
@@ -168,11 +215,17 @@
         .then(response => response.json())
         .then(data => {
             const stdoutElement = document.getElementById('stdout');
+            const headersElement = document.getElementById('headers');
+            
             if (data.is_json) {
-                stdoutElement.innerHTML = data.stdout;  // Use innerHTML for highlighted JSON
+                stdoutElement.innerHTML = data.stdout;
             } else {
                 stdoutElement.textContent = data.stdout || '';
             }
+            
+            // Always use innerHTML for headers as it contains highlighted JSON
+            headersElement.innerHTML = data.headers || '';
+            
             document.getElementById('stderr').textContent = data.stderr || '';
             button.textContent = 'Execute';
             button.disabled = false;
