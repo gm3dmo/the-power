@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Shell Scripts</h1>
+        
+        <div class="config-table">
+            <h2>Configuration</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in config.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <form method="GET" action="/" class="search-form">
+            <input type="text" 
+                   name="search" 
+                   placeholder="Search scripts..."
+                   value="{{ search_query }}"
+                   autofocus>
+            <button type="submit">Search</button>
+        </form>
+        <div class="content-wrapper">
+            <ul class="script-list">
+                {% for script in scripts %}
+                    <li>
+                        <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                            {{ script }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if script_content %}
+            <div class="script-content">
+                <h3>{{ selected_script }}</h3>
+                {% if doc_url %}
+                <div class="doc-url">
+                    <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ doc_url }}</a>
+                    <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">
+                        Copy
+                    </button>
+                </div>
+                {% endif %}
+                <pre><code>{{ script_content }}</code></pre>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+    </script>
+</body>
+</html> 
