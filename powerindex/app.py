@@ -2,8 +2,22 @@ from flask import Flask, render_template, request
 import os
 import glob
 import string
+import re
 
 app = Flask(__name__)
+
+def scrub_github_token(value):
+    """Helper function to scrub GitHub tokens"""
+    # Look for GitHub token pattern anywhere in the string
+    pattern = r'(gh[a-zA-Z]_[a-zA-Z0-9]+)'
+    match = re.search(pattern, value)
+    if match:
+        token = match.group(1)
+        token_type = token[:3]
+        scrubbed_token = f"{token_type}_***{token[-8:]}"
+        # Replace the token in the original string
+        return value.replace(token, scrubbed_token)
+    return value
 
 def read_config():
     config = {}
@@ -21,9 +35,14 @@ def read_config():
                 # Split on first occurrence of '=' and store in config dict
                 if '=' in line:
                     key, value = line.split('=', 1)
+                    key = key.strip()
                     # Strip quotes and whitespace from value
                     value = value.strip().strip('"\'')
-                    config[key.strip()] = value
+                    
+                    # Scrub any GitHub tokens in the value
+                    value = scrub_github_token(value)
+                    
+                    config[key] = value
     except Exception as e:
         print(f"Error reading config file: {str(e)}")
     
@@ -33,22 +52,9 @@ def read_config():
 config = read_config()
 
 def get_shell_scripts():
-    # Get the parent directory path
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # Find all .sh files in the parent directory
     shell_scripts = glob.glob(os.path.join(parent_dir, '*.sh'))
-    # Extract just the filenames from the full paths
     return [os.path.basename(script) for script in shell_scripts]
-
-def render_script_with_variables(content, config_dict):
-    try:
-        # Create a template from the content
-        template = string.Template(content)
-        # Substitute variables from config
-        rendered_content = template.safe_substitute(config_dict)
-        return rendered_content
-    except Exception as e:
-        return f"Error rendering script: {str(e)}"
 
 def get_script_content(filename):
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -56,12 +62,19 @@ def get_script_content(filename):
     try:
         with open(file_path, 'r') as file:
             content = file.read()
-            # Get the third line and check if it's a URL comment
             lines = content.split('\n')
             doc_url = lines[2].strip('# ') if len(lines) > 2 and lines[2].startswith('# http') else ''
             return content, doc_url
     except Exception as e:
         return f"Error reading file: {str(e)}", ''
+
+def render_script_with_variables(content, config_dict):
+    try:
+        template = string.Template(content)
+        rendered_content = template.safe_substitute(config_dict)
+        return rendered_content
+    except Exception as e:
+        return f"Error rendering script: {str(e)}"
 
 @app.route('/', methods=['GET'])
 def index():
