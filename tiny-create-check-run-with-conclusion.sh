@@ -23,10 +23,7 @@ check_run_conclusion="action_required"
 check_run_status="queued"
 
 
-GITHUB_APP_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
-
 json_file=tmp/create-check-run.json
-
 jq -n \
        --arg name "${check_run_name}" \
        --arg head_sha "${head_sha}" \
@@ -34,10 +31,11 @@ jq -n \
        --arg conclusion "${check_run_conclusion}" \
        '{ head_sha: $head_sha, status: $status, name: $name, conclusion: $conclusion }' > ${json_file}
 
+GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
+
 curl ${curl_custom_flags} \
      -X POST \
-     -H "Authorization: Bearer ${GITHUB_APP_TOKEN}"  \
+     -H "Authorization: Bearer ${GITHUB_TOKEN_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.antiope-preview+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs \
-        --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs" --data @${json_file}
+

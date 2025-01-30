@@ -12,7 +12,7 @@ if [ -z "$1" ]
     username=$1
 fi
 
-json_file="tmp/add-user-access-restrictions"
+json_file="tmp/add-user-access-restrictions.json"
 
 jq -n \
            --arg username "${username}" \
@@ -25,9 +25,6 @@ cat $json_file | jq -r
 
 branch=${protected_branch_name}
 
-
-
-set -x
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \

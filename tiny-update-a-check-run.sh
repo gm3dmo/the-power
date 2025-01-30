@@ -48,6 +48,5 @@ curl ${curl_custom_flags} \
      -X PATCH \
      -H "Authorization: Bearer ${GITHUB_APP_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.antiope-preview+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs/${check_run_id} \
-        --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs/${check_run_id}" --data @${json_file}
+

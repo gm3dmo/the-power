@@ -3,10 +3,9 @@
 # https://docs.github.com/en/enterprise-server@3.10/rest/orgs/members?apiVersion=2022-11-28#set-organization-membership-for-a-user 
 # PUT /orgs/{org}/memberships/{username}
 
-json_file=tmp/set-organization-membership-for-a-user.json
-
 role="member"
 
+json_file=tmp/set-organization-membership-for-a-user.json
 jq -n \
            --arg role "${role}" \
            '{

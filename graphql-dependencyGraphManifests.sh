@@ -72,7 +72,6 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.hawkgirl-preview+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
 

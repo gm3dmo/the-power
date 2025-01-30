@@ -1,10 +1,8 @@
 .  ./.gh-api-examples.conf
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/pulls/pulls?apiVersion=2022-11-28
-# 
+# GET /repos/{owner}/{repo}/pulls/{pull_number}
 
-# DEPRECATE
-# this change in the docs to get-a-pull-request so get-a-pull-request.sh was created
 
 if [ -z "$1" ]
   then

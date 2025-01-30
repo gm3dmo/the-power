@@ -1,6 +1,6 @@
 .   ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/apps#remove-a-repository-from-an-app-installation
+# https://docs.github.com/en/enterprise-cloud@latest/rest/apps/installations?apiVersion=2022-11-28#remove-a-repository-from-an-app-installation
 # DELETE /user/installations/{installation_id}/repositories/{repository_id}
 
 repository_name=${1:-testrepo}
@@ -10,6 +10,6 @@ installation_id=${2:-1}
 curl ${curl_custom_flags} \
      -X DELETE \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.machine-man-preview+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/user/installations/${installation_id}/repositories/${repository_id}
+        "${GITHUB_API_BASE_URL}/user/installations/${installation_id}/repositories/${repository_id}"
+
