@@ -34,8 +34,8 @@
             </ul>
             {% if script_content %}
             <div class="script-content">
-                <div class="script-header">
-                    <h3>{{ selected_script }}</h3>
+                <div class="script-header" style="display: flex; align-items: center; justify-content: space-between;">
+                    <h3 style="margin: 0;">{{ selected_script }}</h3>
                     <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
                 </div>
                 {% if doc_url %}
@@ -47,7 +47,7 @@
                 <div class="script-boxes">
                     <div class="script-box">
                         <div class="script-box-header">
-                            <h4>Original Script</h4>
+                            <h4>Original Script [{{ selected_script }}]</h4>
                             <button class="copy-button" onclick="copyScriptContent('original-script')">Copy</button>
                         </div>
                         <div class="highlight-wrapper">
