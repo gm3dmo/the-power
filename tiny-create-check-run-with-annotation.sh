@@ -29,7 +29,7 @@ GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 curl ${curl_custom_flags} \
      -X POST \
-     -H "Authorization: Bearer ${GITHUB_TOKEN_TOKEN}"  \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}"  \
      -H "Accept: application/vnd.github.v3+json" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-runs"  --data @${json_file}
 
