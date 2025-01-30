@@ -9,5 +9,5 @@ do
        -X PUT \
        -H "Accept: application/vnd.github.v3+json" \
        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-           ${GITHUB_API_BASE_URL}/orgs/${org}/memberships/${user} --data '{"role": "admin"}'
+           "${GITHUB_API_BASE_URL}/orgs/${org}/memberships/${user}" --data '{"role": "admin"}'
 done

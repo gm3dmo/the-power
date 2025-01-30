@@ -19,9 +19,7 @@ fi
 
 GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
-set -x
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     -H "Accept: application/vnd.github.machine-man-preview+json" \
         "${GITHUB_API_BASE_URL}/apps/${app_slug}"
 

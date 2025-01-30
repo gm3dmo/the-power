@@ -10,5 +10,6 @@ do
   echo "======================== ${team_member} ==========================" >&2
   curl --silent ${curl_custom_flags} \
       -X PUT \
-      -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_member}
+      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+         "${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_member}"
 done

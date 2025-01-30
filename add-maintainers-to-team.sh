@@ -8,4 +8,4 @@ team_id=$(curl ${curl_custom_flags} -H "Authorization: Bearer ${GITHUB_TOKEN}" $
          -X PUT \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_admin} --data '{ "role": "maintainer"}'
+            "${GITHUB_API_BASE_URL}/teams/${team_id}/memberships/${team_admin}" --data '{ "role": "maintainer"}'
