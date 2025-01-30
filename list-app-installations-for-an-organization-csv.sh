@@ -6,7 +6,7 @@
 
 if [ -z "$1" ]
   then
-    org=$org
+    org=${org}
   else
     org=$1
 fi

@@ -9,4 +9,3 @@ curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/orgs/${org}/installations" > tmp/list-app-installations-for-an-organization.json
 
-

@@ -24,6 +24,6 @@ set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-suites/${check_suite_id}/check-runs
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-suites/${check_suite_id}/check-runs"
 
 
