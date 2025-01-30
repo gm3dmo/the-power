@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server@3.1/rest/reference/enterprise-admin#create-a-pre-receive-hook
+# https://docs.github.com/en/enterprise-server/rest/enterprise-admin/pre-receive-hooks?apiVersion=2022-11-28#create-a-pre-receive-hook
 # POST /admin/pre-receive-hooks
+
 
 json_file=tmp/pre-receive-hook-details.json
 
@@ -22,8 +23,8 @@ jq -n \
                 allow_downstream_configuration: $allow_downstream_configuration | test("true")
              }' > ${json_file}
 
+
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H "Accept: application/vnd.github.eye-scream-preview" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/admin/pre-receive-hooks --data @${json_file}
+        "${GITHUB_API_BASE_URL}/admin/pre-receive-hooks" --data @${json_file}

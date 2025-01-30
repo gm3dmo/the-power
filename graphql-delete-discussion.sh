@@ -33,7 +33,6 @@ GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H 'Accept: application/vnd.github.audit-log-preview+json' \
      -H "Authorization: token ${GITHUB_TOKEN}" \
         "${GITHUB_APIV4_BASE_URL}" -d @${json_file} | jq
 

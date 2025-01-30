@@ -2,6 +2,7 @@
 
 # https://docs.github.com/en/graphql/reference/mutations#mergepullrequest
 
+
 pull_request_id=$1
 email_address=test@example.com
 commit_headline="this is the commit_headline"
@@ -32,7 +33,6 @@ jq -n \
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
-     -H 'Accept: application/vnd.github.audit-log-preview+json' \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
 
