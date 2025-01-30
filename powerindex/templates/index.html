@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         {{ highlight_style }}
+        #configTable tr.selected {
+            outline: 3px solid #ffdd00;
+            outline-offset: 0;
+            background-color: #ffdd00;
+        }
+        
+        .script-list a.selected {
+            outline: 3px solid #ffdd00;
+            outline-offset: 0;
+            background-color: #ffdd00;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +156,23 @@
             }
         }
     }
+
+    // Add new function to handle row selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.getElementById('configTable');
+        const rows = table.getElementsByTagName('tr');
+        
+        for (let i = 1; i < rows.length; i++) {
+            rows[i].addEventListener('click', function() {
+                // Remove selected class from all rows
+                for (let j = 1; j < rows.length; j++) {
+                    rows[j].classList.remove('selected');
+                }
+                // Add selected class to clicked row
+                this.classList.add('selected');
+            });
+        }
+    });
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
