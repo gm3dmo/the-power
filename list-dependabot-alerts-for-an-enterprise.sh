@@ -4,7 +4,6 @@
 # GET /enterprises/{enterprise}/dependabot/alerts
 
 
-
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \

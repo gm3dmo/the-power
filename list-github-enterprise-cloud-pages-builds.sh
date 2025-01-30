@@ -6,7 +6,7 @@
 
 if [ -z "$1" ]
   then
-    repo=$repo
+    repo=${repo}
   else
     repo=$1
 fi

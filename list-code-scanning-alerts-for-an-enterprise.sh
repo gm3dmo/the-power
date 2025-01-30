@@ -7,7 +7,7 @@
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    enterprise=$enterprise
+    enterprise=${enterprise}
   else
     enterprise=$1
 fi

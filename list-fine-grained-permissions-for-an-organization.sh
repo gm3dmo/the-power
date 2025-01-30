@@ -6,7 +6,7 @@
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    org=$org
+    org=${org}
   else
     org=$1
 fi

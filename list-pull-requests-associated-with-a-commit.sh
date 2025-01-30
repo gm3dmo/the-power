@@ -10,4 +10,4 @@ curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.groot-preview+json" \
      -H "Accept: application/vnd.github.shadow-cat-preview+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/commits/${commit_sha}/pulls
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/commits/${commit_sha}/pulls"

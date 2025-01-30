@@ -6,7 +6,7 @@
 
 if [ -z "$1" ]
   then
-    org=$org
+    org=${org}
   else
     org=$1
 fi
@@ -14,4 +14,5 @@ fi
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/orgs/${org}/pre-receive-hooks
+        "${GITHUB_API_BASE_URL}/orgs/${org}/pre-receive-hooks"
+
