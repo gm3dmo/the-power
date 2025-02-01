@@ -4,9 +4,15 @@
 # GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls
 
 
-commit_sha=$1
+if [ -z "$1" ]
+  then
+    commit_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${branch_name} | jq -r '.object.sha')
+  else
+    commit_sha=$1
+fi
 
-curl -v ${curl_custom_flags} \
+
+curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/commits/${commit_sha}/pulls"
