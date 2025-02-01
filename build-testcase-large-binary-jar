@@ -71,7 +71,7 @@ size = \(.content.size)
 content_sha = \(.content.sha)
 commit_sha = \(.commit.sha)"' tmp/create-commit-jarfile-output.json
 
-content_sha=$(jq -r '.content.sha' n.json)
+content_sha=$(jq -r '.content.sha' tmp/create-commit-jarfile-output.json)
 
 ./clone-default-repo.sh 2>/dev/null
 
