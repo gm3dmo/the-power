@@ -45,11 +45,9 @@ export GIT_CURL_VERBOSE
 # https://x-access-token:TOKEN@github.com/owner/repo.git".
 
 TOKEN_FRST3=${GITHUB_TOKEN:0:3}
-echo ${TOKEN_FRST3}
 
 cd src
 rm -rf ${repo}
-
 
 # You may need to use a flag like this in rare cases:
 # git -c http.sslVerify=false
