@@ -147,8 +147,9 @@
     }
 
     function copyToClipboard(text) {
+        const evt  = event;
         navigator.clipboard.writeText(text).then(function() {
-            const button = event.target;
+            const button = evt.target;
             const originalText = button.textContent;
             button.textContent = 'Copied!';
             setTimeout(() => {
@@ -160,9 +161,10 @@
     }
 
     function copyScriptContent(elementId) {
+        const evt = event;
         const content = document.getElementById(elementId).textContent;
         navigator.clipboard.writeText(content).then(function() {
-            const button = event.target;
+            const button = evt.target;
             const originalText = button.textContent;
             button.textContent = 'Copied!';
             setTimeout(() => {
