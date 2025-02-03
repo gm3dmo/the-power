@@ -50,7 +50,7 @@
                             <h4>Original Script</h4>
                             <button class="copy-button" onclick="copyScriptContent('original-script')">Copy</button>
                         </div>
-                        <div class="highlight-wrapper">
+                        <div class="highlight-wrapper" id="original-script">
                             {{ highlighted_content | safe }}
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                             <h4>Rendered Script</h4>
                             <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
                         </div>
-                        <div class="highlight-wrapper">
+                        <div class="highlight-wrapper" id="rendered-script">
                             {{ rendered_content | safe }}
                         </div>
                     </div>
