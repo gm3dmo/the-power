@@ -7,8 +7,6 @@ A=$1
 wanted=${A:=nopreview}
 
 json_file=tmp/project-details.json
-rm -f ${json_file}
-
 DATA=$(jq -n \
                   --arg nm "${repo}-project" \
                   --arg bd "${repo} things to manage." \
@@ -30,7 +28,6 @@ else
          -H "Accept: application/vnd.github.v3+json" \
          -H "Content-Type: application/json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/projects --data @${json_file}
+            "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/projects" --data @${json_file}
 fi
 
-rm -f ${json_file}

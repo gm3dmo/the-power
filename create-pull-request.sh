@@ -3,8 +3,6 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
 # POST /repos/{owner}/{repo}/pulls
 
-json_file=tmp/create-pull-request.json
-rm -f ${json_file}
 
 timestamp=$(date +%s)
 title="Amazing new feature PR: $timestamp"
@@ -15,6 +13,7 @@ lorem_text=$(cat ${lorem_file})
 # Set draft_pull_request to true here for override:
 #draft_pull_request="true"
 
+json_file=tmp/create-a-pull-request.json
 jq -n \
   --arg title "${title}" \
   --arg body "${lorem_text} see research by: @${default_committer}" \
@@ -32,4 +31,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls" --data @${json_file}
+

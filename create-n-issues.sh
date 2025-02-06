@@ -3,6 +3,7 @@
 # https://docs.github.com/en/rest/reference/issues#create-an-issue
 # POST /repos/:owner/:repo/issues
 
+
 raw_text="/README.md @${org}/${team_slug}" 
 base64_string=$(echo ${raw_text} | ./base64encode.py)
 content=${base64_string}
@@ -14,7 +15,6 @@ do
     sleep 2
     timestamp=$(date +%s)
     json_file=tmp/create-repo-issue.json
-    rm -f ${json_file}
     jq -n \
             --arg title "Found a bug ($timestamp)  ${i}" \
             --arg body "test commit message" \
@@ -26,7 +26,7 @@ do
     curl ${curl_custom_flags} \
          -H "Accept: application/vnd.github.v3+json_file" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/issues --data @${json_file}
+            "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/issues" --data @${json_file}
 
-    rm -f ${json_file}
 done
+

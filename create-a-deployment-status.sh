@@ -10,11 +10,9 @@ if [ -z "$1" ]
     deployment_id=$1
 fi
 
-json_file=tmp/deployment.json
-rm -f ${json_file}
-
 state="success"
 
+json_file=tmp/deployment.json
 jq -n \
            --arg state "${state}" \
            --arg target_url "http://example.com/target-url" \
@@ -29,7 +27,9 @@ jq -n \
              environment: $environment
            }' > ${json_file}
 
+
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/deployments/${deployment_id}/statuses --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/deployments/${deployment_id}/statuses" --data @${json_file}
+

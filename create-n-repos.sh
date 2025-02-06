@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-an-organization-repository
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#create-an-organization-repository
 # POST /orgs/{org}/repos
 
 
@@ -39,7 +39,6 @@ for repo_number in $(seq 1 ${number_of_repos_to_create})
 do
    fw=$(printf %05d ${repo_number})
    json_file=tmp/create-n-repo-details.json
-   rm -f ${json_file}
    DATA=$(jq -n \
                 --arg name "${repo_name_prefix}-${fw}" \
                 --arg private "${private}" \
@@ -47,11 +46,9 @@ do
                 '{name : $name, private: $private | test("true"), visibility: $visibility  }' )
 
    echo ${DATA} > ${json_file}
-   cat $json_file | jq -r >&2
 
    curl ${curl_custom_flags} \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-           ${GITHUB_API_BASE_URL}/orgs/${org}/repos --data @${json_file} | jq -r '"\(.id),\(.full_name)"'
+           "${GITHUB_API_BASE_URL}/orgs/${org}/repos" --data @${json_file} | jq -r '"\(.id),\(.full_name)"'
 done
-rm -f ${json_file}

@@ -3,9 +3,8 @@
 # https://docs.github.com/en/rest/reference/teams#create-a-team
 # POST /orgs/:org/teams
 
-json_file=tmp/teamData
-rm -f ${json_file}
 
+json_file=tmp/teamData
 DATA=$( jq -n \
                 --arg nm "legacy-${team}" \
                 --arg ds  "something something." \
@@ -18,6 +17,5 @@ echo $DATA > ${json_file}
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/orgs/${org}/teams --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${org}/teams" --data @${json_file}
 
-rm -f ${json_file}

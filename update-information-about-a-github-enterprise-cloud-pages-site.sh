@@ -15,7 +15,8 @@ fi
 
 public="false"
 
-json_file=tmp/skeleton.json
+json_file=tmp/update-information-about-a-github-enterprise-cloud-pages-site
+
 jq -n \
            --arg public "${public}" \
            '{
@@ -29,3 +30,4 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/pages"  --data @${json_file}
+

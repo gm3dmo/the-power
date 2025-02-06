@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/issues#create-a-label
+# 
 # POST /repos/:owner/:repo/labels
 
 _bug_color=FF0018
@@ -18,10 +18,9 @@ for i in _bug,'its a bug' _duplicate,'this is a duplicate' _enhancement,'enhance
   description=${i#*,};
   c=${nm}_color
   color=${!c}
-  json_file=tmp/label.json
-  rm -f ${json_file}
 
-  jq -n \
+ json_file=tmp/label.json
+ jq -n \
      --arg nm "$nm" \
      --arg description "$description" \
      --arg color "${color}" \
@@ -32,10 +31,10 @@ for i in _bug,'its a bug' _duplicate,'this is a duplicate' _enhancement,'enhance
        }' > ${json_file}
      cat ${json_file}
 
-    curl ${curl_custom_flags} \
+ curl ${curl_custom_flags} \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Content-Type: application/json" \
-            ${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels --data @${json_file}
-    rm -f ${json_file}
+            "${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels" --data @${json_file}
 done
+

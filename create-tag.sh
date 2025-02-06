@@ -1,18 +1,15 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/git#create-a-tag-object
-# POST /repos/:owner/:repo/git/tags
+# https://docs.github.com/en/enterprise-cloud@latest/rest/git/tags?apiVersion=2022-11-28
+# POST /repos/{owner}/{repo}/git/tags
+
 
 sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/ref/heads/${base_branch} | jq -r '.object.sha')
-
-json_file=tmp/create-tag.json
-
 date_of_tag=$(date +'%Y-%m-%dT%H:%M:%S-00:00')
-
 tag=$(date +%s)
 
-rm -f ${json_file}
 
+json_file=tmp/create-tag.json
 jq -n \
                 --arg tag "tag_${tag}" \
                 --arg message "this is tag (${tag})" \
@@ -27,6 +24,4 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/tags --data @${json_file}
-
-rm -f ${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/tags" --data @${json_file}

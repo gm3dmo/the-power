@@ -7,7 +7,6 @@
 name=${org_self_hosted_runner_group_name:-org_runner_group}
 
 json_file=tmp/create-a-self-hosted-runner-group-for-an-organization.json
-
 jq -n \
            --arg name "${name}" \
            '{

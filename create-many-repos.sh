@@ -4,9 +4,8 @@ p=false
 
 for reponame in $(cat tmp/long-list-of-repos.txt)
 do
-json_file=tmp/many-repo-details.json
-rm -f ${json_file}
 
+json_file=tmp/many-repo-details.json
 DATA=$(jq -n \
                   --arg nm "${reponame}" \
                   --arg hp "${repohomepage}" \
@@ -20,6 +19,6 @@ echo ${DATA} > $json_file
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
-        ${GITHUB_API_BASE_URL}/orgs/${org}/repos --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${org}/repos" --data @${json_file}
 done
-rm -f ${json_file}
+

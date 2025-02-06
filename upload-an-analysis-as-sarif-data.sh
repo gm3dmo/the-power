@@ -15,8 +15,7 @@ file ${sarif_b64_file}
 sarif_b64_string=$(cat ${sarif_b64_file})
 tool_name="the-power-sarif-upload-test"
 
-json_file=tmp/sarif-upload.json
-rm -f ${json_file}
+json_file=tmp/upload-an-analysis-as-sarif-data.json
 
 
 commit_sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/ref/heads/${base_branch}| jq -r '.object.sha')
@@ -38,4 +37,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/code-scanning/sarifs  --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/code-scanning/sarifs"  --data @${json_file}
+

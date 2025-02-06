@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/issues#update-a-label
-# PATCH /repos/:owner/:repo/labels/:name
+# https://docs.github.com/en/enterprise-cloud@latest/rest/issues/labels?apiVersion=2022-11-28#update-a-label
+# PATCH /repos/{owner}/{repo}/labels/{name}
+
 
 # https://www.respectability.org/2022/07/disability-pride-flag/
 # https://www.urevolution.com/blogs/magazine/disability-pride-flag
@@ -43,9 +44,7 @@ do
      color=${!c}
   fi
 
-  json_file=tmp/label.json
-  rm -f ${json_file}
-
+  json_file=tmp/update-a-label.json
   jq -n \
      --arg nm "$name_to_update" \
      --arg color "${color}" \
@@ -58,6 +57,5 @@ do
          -X PATCH \
          -H "Content-Type: application/json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            ${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels/${name_to_update_url} --data @${json_file}
-    rm -f ${json_file}
+            "${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels/${name_to_update_url}" --data @${json_file}
 done

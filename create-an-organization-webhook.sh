@@ -5,14 +5,12 @@
 
 if [ -z "$1" ]
   then
-    org=$org
+    org=${org}
   else
     org=$1
 fi
 
 json_file=tmp/create-an-organization-webhook.json
-rm -f ${json_file}
-
 jq -n \
         --arg name "web" \
         --arg webhook_url "${webhook_url}" \
@@ -30,8 +28,10 @@ jq -n \
            }
          }' > ${json_file}
 
+
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Content-Type: application/json" \
-     ${GITHUB_API_BASE_URL}/orgs/${org}/hooks --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${org}/hooks" --data @${json_file}
+
