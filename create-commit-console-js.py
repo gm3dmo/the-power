@@ -29,7 +29,7 @@ def main(args):
 
     p = Path('test-data/console-js.template')
     json_file = f"""tmp/create-commit-console-js.json"""
-    filename_in_repo = f"""console.js"""
+    filename_in_repo = f"""index.js"""
     with open(p, 'rb') as ct:
        t = {}
        chapter_content = ct.read()

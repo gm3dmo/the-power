@@ -11,7 +11,7 @@ if [ -z "$1" ]
 fi
 
 python3 create-commit-console-js.py
-filename_in_repo="console.js"
+filename_in_repo="index.js"
 json_file=tmp/create-commit-console-js.json
 
 curl ${curl_custom_flags} \
