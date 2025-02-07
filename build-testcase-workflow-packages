@@ -1,0 +1,38 @@
+# Create a repository and setup a simple workflow 
+# Prior to running this, make any needed modifications to test-data/workflow-simple.yml_
+# that are needed for the testcase.
+# The "as delivered" version of workflow-simple.yml_ will trigger the workflow
+# with dispatch event
+#
+
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+yellow=$(tput setaf 3)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+==================================================
+$0
+==================================================
+Implements: https://docs.github.com/en/enterprise-cloud@latest/packages/quickstart
+
+EOF
+
+printf "${normal}"
+                                                   
+
+printf "${highlight} - Creating repo: ${normal}"
+ ./create-repo.sh | jq -r '.name'
+
+printf "${highlight} - Committing workflow file: ${normal}"
+ ./create-commit-workflow-packages.sh | jq -r '.content.path'
+
+
