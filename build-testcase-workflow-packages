@@ -30,9 +30,14 @@ printf "${normal}"
                                                    
 
 printf "${highlight} - Creating repo: ${normal}"
- ./create-repo.sh | jq -r '.name'
+ ./create-repo-testrepo.sh | jq -r '.name'
 
 printf "${highlight} - Committing workflow file: ${normal}"
  ./create-commit-workflow-packages.sh | jq -r '.content.path'
 
+printf "${highlight} - Committing console.js file: ${normal}"
+ ./create-commit-console-js.sh | jq -r '.content.html_url'
+
+printf "${highlight} - Create release to trigger package build workflow: ${normal}"
+ ./create-release.sh | jq -r '.html_url'
 
