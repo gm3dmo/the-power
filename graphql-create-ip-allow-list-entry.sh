@@ -15,7 +15,6 @@ fi
 owner_id=$(bash graphql-list-ip-allow-list-entries.sh | jq -r '.data.organization.id')
 
 graphql_query=tmp/graphql_query.txt
-rm -f ${graphql_query}
 
 cat <<EOF >$graphql_query
 mutation {
@@ -42,7 +41,6 @@ mutation {
 EOF
 
 json_file=tmp/graphql-payload.json
-rm -f ${json_file}
 
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
@@ -52,7 +50,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
+        "${GITHUB_APIV4_BASE_URL}" -d @${json_file} 
 
-rm -f ${graphql_query}
-rm -f ${json_file}

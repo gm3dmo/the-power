@@ -6,15 +6,11 @@ echo "Audit log entry: action:ip_allow_list_entry.create" >&2
 
 
 ip_address=$(curl -s ifconfig.me/ip)
-
-
 enterpriseId=$(./graphql-list-enterprise-id.sh | jq -r '.data.enterprise.id')
 name=test1
-
 owner_id=$enterpriseId
 
 graphql_query=tmp/graphql_query.txt
-rm -f ${graphql_query}
 
 cat <<EOF >$graphql_query
 mutation {
@@ -38,7 +34,6 @@ mutation {
 EOF
 
 json_file=tmp/graphql-payload.json
-rm -f ${json_file}
 
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \

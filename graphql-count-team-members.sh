@@ -12,11 +12,8 @@ cat <<EOF >$graphql_query
 query { organization(login: "$org") { teams( first :1 query:"$team_slug" )  { edges { node{ members(first:1){ edges{ node{ login organizationVerifiedDomainEmails(login:"$org") } role } pageInfo { endCursor hasNextPage } totalCount } } } } } }
 EOF
 
-cat >&2 $graphql_query
 
 json_file=tmp/graphql-payload.json
-rm -f ${json_file}
-
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
   '{query: $graphql_query}' > ${json_file}
