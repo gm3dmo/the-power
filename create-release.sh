@@ -33,11 +33,9 @@ jq -n \
         --arg body "A release created by The Power." \
               '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, draft: $draft | test("true"), prerelease: $prerelease | test("true"), discussion_category_name: $discussion_category_name}'  > ${json_file}
 
-#cat $json_file | jq -r >&2
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases" --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases" --data @${json_file} 
 
-rm -f ${json_file}

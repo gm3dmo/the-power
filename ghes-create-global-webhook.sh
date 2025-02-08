@@ -10,8 +10,6 @@ fi
 
 
 json_file=tmp/ghes-create-global-webhook.json
-rm -f ${json_file}
-
 jq -n \
         --arg name "web" \
         --arg webhook_url "${global_webhook_url}" \
@@ -32,10 +30,9 @@ jq -n \
            }
          }' > ${json_file}
 
-cat $json_file | jq -r
 
 
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/hooks --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/hooks" --data @${json_file}

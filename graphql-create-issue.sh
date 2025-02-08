@@ -11,7 +11,6 @@ fi
 # This will get you the node id
 
 graphql_query=tmp/graphql_query.txt
-rm -f ${graphql_query}
 
 cat <<EOF >$graphql_query
 mutation CreateIssue {
@@ -25,8 +24,6 @@ mutation CreateIssue {
 EOF
 
 json_file=tmp/graphql-payload.json
-rm -f ${json_file}
-
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
   '{query: $graphql_query}' > ${json_file}
@@ -35,9 +32,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
-
-
-
-
+        "${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
 

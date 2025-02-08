@@ -48,8 +48,7 @@ do
      color=${!c}
   fi
 
-  json_file=tmp/label.json
-  rm -f ${json_file}
+  json_file=tmp/update-a-label.json
 
   jq -n \
      --arg nm "$name_to_update" \
@@ -64,5 +63,4 @@ do
          -H "Content-Type: application/json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             ${GITHUB_API_BASE_URL}/repos/$org/${repo}/labels/${name_to_update_url} --data @${json_file}
-    rm -f ${json_file}
 done

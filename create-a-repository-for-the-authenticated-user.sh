@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/repos/repos#create-a-repository-for-the-authenticated-user
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#create-a-repository-for-the-authenticated-user
 # POST /user/repos
 
 
@@ -19,10 +19,7 @@ else
     p="false"
 fi
 
-
 json_file=tmp/create-a-repository-for-the-authenticated-user.json
-rm -f ${json_file}
-
 jq -n \
            --arg name "${repo}" \
            --arg private $p \
@@ -34,9 +31,8 @@ jq -n \
            }' > ${json_file}
 
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/user/repos --data @${json_file}
+        "${GITHUB_API_BASE_URL}/user/repos" --data @${json_file}
 

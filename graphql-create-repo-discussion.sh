@@ -2,6 +2,7 @@
 
 # https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions
 
+
 repository_id=$(./list-repo.sh | jq '.node_id')
 category_id=$(./graphql-discussion-categories.sh | jq -r '.data.repository.discussionCategories.nodes[] | select(.name == "General") | .id')
 ts=$(date +%s)

@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-or-update-file-contents
-# PUT /repos/:owner/:repo/contents/:path
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
+# PUT /repos/{owner}/{repo}/contents/{path}
+
 
 if [ -z "$1" ]
   then
@@ -26,13 +27,10 @@ fi
 template_file=$(printf "${filename_in_repo}%s" "_")
 base64_string=$(./base64encode.py ${template_file})
 comment="Adding ${filename_in_repo}"
-json_file="tmp/create-commit.json"
-
-rm ${json_file}
 
 content="woo"
 
-
+json_file="tmp/create-commit.json"
 jq -n \
                 --arg nm "${default_committer}" \
                 --arg ms  "${comment}" \
@@ -44,4 +42,5 @@ curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename_in_repo} --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/contents/${filename_in_repo}" --data @${json_file}
+

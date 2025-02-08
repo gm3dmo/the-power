@@ -13,13 +13,10 @@ fi
 
 base_tree=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/ref/heads/${base_branch} | jq -r '.object.sha')
 timestamp=$(date +%s)
-
-
 content="lorem ipsum"
 
-json_file=tmp/create-tree.json
-rm -f ${json_file}
 
+json_file=tmp/create-tree.json
 jq -n \
         --arg base_tree "${base_tree}" \
         --arg path "pre-commit-hook.sh" \
@@ -27,13 +24,10 @@ jq -n \
         --arg sha "${sha}" \
 '{ "base_tree" : $base_tree, "tree" : [ { "path": $path, "mode": "100755", type: "blob", content: $content }]}'  > ${json_file}
 
-cat $json_file | jq -r
-exit
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/trees --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/trees" --data @${json_file}
 
-rm -f ${json_file}

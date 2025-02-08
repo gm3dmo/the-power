@@ -8,8 +8,6 @@ shopt -s -o nounset
 A=$1
 wanted=${A:=nopreview}
 
-json_file=tmp/projectcolumns.json
-rm -f ${json_file}
 
 all_column_names=(To\ do In\ progress Done)
 
@@ -23,6 +21,7 @@ done
 echo $item
 project_id=${item}
 
+json_file=tmp/projectcolumns.json
 for ((i = 0; i < ${#all_column_names[@]}; i++))
 do
     jq -n \
@@ -32,7 +31,5 @@ do
     curl ${curl_custom_flags} \
          -H "Accept: application/vnd.github.v3+json" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-          ${GITHUB_API_BASE_URL}/projects/${project_id}/columns --data @${json_file}
-    cat ${json_file}
+            "${GITHUB_API_BASE_URL}/projects/${project_id}/columns" --data @${json_file}
 done
-rm -f ${json_file}

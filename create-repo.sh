@@ -1,8 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#create-an-organization-repository
-# POST /orgs/:org/repos
-
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#create-an-organization-repository
+# POST /orgs/{org}/repos
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
@@ -21,8 +20,6 @@ if [ ${default_repo_visibility} = "private" ]
 fi
 
 json_file=tmp/repo-details.json
-rm -f ${json_file}
-
 jq -n \
            --arg name "${repo}" \
            --arg private $p \
@@ -39,5 +36,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-     ${GITHUB_API_BASE_URL}/orgs/${org}/repos --data @${json_file}
+        "${GITHUB_API_BASE_URL}/orgs/${org}/repos" --data @${json_file}
 

@@ -27,5 +27,5 @@ graphql_script="$(echo ${graphql_script//\"/\\\"})"
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_APIV4_BASE_URL} -d "{ \"query\": \"$graphql_script\"}"
+        "${GITHUB_APIV4_BASE_URL}" -d "{ \"query\": \"$graphql_script\"}"
 

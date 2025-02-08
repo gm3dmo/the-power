@@ -3,6 +3,7 @@
 # https://docs.github.com/en/rest/webhooks/repos?apiVersion=2022-11-28#create-a-repository-webhook
 # POST /repos/{owner}/{repo}/hooks
 
+
 # Events: https://docs.github.com/en/webhooks/webhook-events-and-payloads
 
 
@@ -13,9 +14,7 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-json_file=tmp/webhook.json
-rm -f ${json_file}
-
+json_file=tmp/create-a-repository-webhook.json
 jq -n \
         --arg name "web" \
         --arg webhook_url "${webhook_url}" \

@@ -3,6 +3,7 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/permissions?apiVersion=2022-11-28#set-github-actions-permissions-for-a-repository
 # PUT /repos/{owner}/{repo}/actions/permissions
 
+
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
@@ -30,3 +31,4 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/actions/permissions"  --data @${json_file}
+
