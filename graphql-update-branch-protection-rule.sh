@@ -11,8 +11,6 @@ else
 fi
 
 graphql_query=tmp/graphql_query.txt
-rm -f ${graphql_query}
-
 cat <<EOF >$graphql_query
 mutation {
     updateBranchProtectionRule(
@@ -45,13 +43,13 @@ mutation {
 EOF
 
 json_file=tmp/graphql-payload.json
-rm -f ${json_file}
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
   '{query: $graphql_query}' > ${json_file}
 
+
 curl  ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_APIV4_BASE_URL} -d @${json_file}
+        "${GITHUB_APIV4_BASE_URL}" -d @${json_file}
 

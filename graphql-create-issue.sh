@@ -11,7 +11,6 @@ fi
 # This will get you the node id
 
 graphql_query=tmp/graphql_query.txt
-rm -f ${graphql_query}
 
 cat <<EOF >$graphql_query
 mutation CreateIssue {

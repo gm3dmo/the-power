@@ -41,7 +41,6 @@ mutation {
 EOF
 
 json_file=tmp/graphql-payload.json
-
 jq -n \
   --arg graphql_query "$(cat $graphql_query)" \
   '{query: $graphql_query}' > ${json_file}
