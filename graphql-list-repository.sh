@@ -4,7 +4,7 @@
 
 read -r -d '' graphql_script <<- EOF
 {
-search(type: REPOSITORY, query: "repo:$org/$repo", first: 100) {
+search(type: REPOSITORY, query: "repo:$org/$repo", first: 1) {
     nodes {
       ... on Repository {
         id
@@ -13,6 +13,14 @@ search(type: REPOSITORY, query: "repo:$org/$repo", first: 100) {
         createdAt
         isSecurityPolicyEnabled
         isArchived
+        rulesets(first: 100) {
+          totalCount
+          nodes {
+            name
+            target
+            enforcement
+          }
+        }
         repositoryTopics(first: 100) {
           totalCount
           nodes {
@@ -45,6 +53,7 @@ graphql_script="$(echo ${graphql_script//\"/\\\"})"
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
+     -H 'Accept: application/vnd.github.audit-log-preview+json' \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_APIV4_BASE_URL}" -d "{ \"query\": \"$graphql_script\"}"
+        ${GITHUB_APIV4_BASE_URL} -d "{ \"query\": \"$graphql_script\"}"
 
