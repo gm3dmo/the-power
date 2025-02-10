@@ -3,26 +3,27 @@
 # https://docs.github.com/en/enterprise-server/rest/enterprise-admin/manage-ghes?apiVersion=2022-11-28#set-a-new-ssh-key
 # POST /manage/v1/access/ssh
 
+# Note that the Content-Type: application/json is needed in 3.14, 3.14 as at January 2025. This may not be documented above.
+
 
 ts=$(date +%s)
-ssh_key_file=tmp/ed25519_${ts}
-ssh_public_key_file=tmp/ed25519_${ts}.pub
+ssh_key_file=tmp/key_${ts}
+ssh_public_key_file=tmp/key_${ts}.pub
 rm -f ${ssh_key_file} ${ssh_public_key_file}
 
-ssh-keygen -t ed25519 -f ${ssh_key_file} -q -N '' -C "github-pwr-admin-${ts}"
+ssh-keygen -t rsa -b 2048 -f ${ssh_key_file} -q -N '' -C 'gm3dmo@gmail.com'
 ssh-keygen -l -v -f ${ssh_public_key_file}
 public_key=$(cat ${ssh_public_key_file})
 
 
-json_file=tmp/create-a-deploy-key.json
+json_file=tmp/set-a-new-ssh-key.json
 jq -n \
               --arg key "${public_key}" \
                     '{key: $key}' > ${json_file}
 
-
-curl -v -L \
+curl -L \
      -H "Accept: application/vnd.github.v3+json" \
-     -u "api_key:${mgmt_password}" \
      -H "Content-Type: application/json" \
-        "${hostname}/manage/v1/access/ssh" --data @${json_file}
+     -u "api_key:${mgmt_password}" \
+        "https://${hostname}:${mgmt_port}/manage/v1/access/ssh" --data @${json_file}
 
