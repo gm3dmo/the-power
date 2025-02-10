@@ -9,7 +9,7 @@ ssh_key_file=tmp/ed25519_${ts}
 ssh_public_key_file=tmp/ed25519_${ts}.pub
 rm -f ${ssh_key_file} ${ssh_public_key_file}
 
-ssh-keygen -t ed25519 -f ${ssh_key_file} -q -N '' -C "github-app-${default_app_id}"
+ssh-keygen -t ed25519 -f ${ssh_key_file} -q -N '' -C "github-pwr-admin-${ts}"
 ssh-keygen -l -v -f ${ssh_public_key_file}
 public_key=$(cat ${ssh_public_key_file})
 
