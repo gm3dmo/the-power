@@ -10,8 +10,9 @@ ts=$(date +%s)
 ssh_key_file=tmp/key_${ts}
 ssh_public_key_file=tmp/key_${ts}.pub
 rm -f ${ssh_key_file} ${ssh_public_key_file}
+key_type=rsa
 
-ssh-keygen -t rsa -b 2048 -f ${ssh_key_file} -q -N '' -C 'gm3dmo@gmail.com'
+ssh-keygen -t ${key_type}  -f ${ssh_key_file} -q -N '' -C "pwr-admin-ssh-${ts}"
 ssh-keygen -l -v -f ${ssh_public_key_file}
 public_key=$(cat ${ssh_public_key_file})
 
@@ -21,9 +22,10 @@ jq -n \
               --arg key "${public_key}" \
                     '{key: $key}' > ${json_file}
 
+
 curl -L \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Content-Type: application/json" \
      -u "api_key:${mgmt_password}" \
         "https://${hostname}:${mgmt_port}/manage/v1/access/ssh" --data @${json_file}
-
+        
