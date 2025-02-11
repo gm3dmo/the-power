@@ -25,12 +25,13 @@ jq -n \
            --arg user_dismissable "${user_dismissable}" \
            '{
              announcement: $announcement,
+             user_dismissable: "true",
              expires_at: $expires_at,
-             user_dismissable: $user_dismissable | test("true")
            }' > ${json_file}
 
 cat $json_file | jq -r
 
+#             user_dismissable: $user_dismissable | test("true")
 
 curl -L ${curl_custom_flags} \
      -X PATCH \
