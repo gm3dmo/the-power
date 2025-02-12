@@ -220,6 +220,7 @@ default_package_type="container"
 # https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-deployment-activity-for-your-repository
 default_deployment_id=1
 
+### [Enterprise Apps](https://docs.github.com/en/enterprise-cloud@latest/admin/managing-your-enterprise-account/creating-github-apps-for-your-enterprise)
 
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
 # https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps
