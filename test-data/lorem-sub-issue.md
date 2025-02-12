@@ -1,0 +1,10 @@
+- IT resources that are virtualized through the use of Infrastructure as a Service (IaaS).
+- Tools and a development platform are provided via Platform as a Service (PaaS).
+- Software as a Service (SaaS) refers to software applications that are ready for use.
+- Options for deploying in public, private, and hybrid clouds.
+- Scalability allows for simple demand-driven adjustments to computer resources.
+- Worldwide accessibility, enabling anyone to access materials from any location.
+- Capabilities for disaster recovery, backup, and data storage.
+- Affordable pay-as-you-go pricing schemes.
+- Multi-tenancy for effective use of shared resources.
+- Identity management and encryption are examples of security mechanisms.
