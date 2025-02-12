@@ -222,12 +222,13 @@ default_deployment_id=1
 
 ### [Enterprise Apps](https://docs.github.com/en/enterprise-cloud@latest/admin/managing-your-enterprise-account/creating-github-apps-for-your-enterprise)
 #
-ent_github_app_name="my-enterprise_app_name"
+ent_github_app_name=${ent_app_name}
 ent_app_id=${ent_app_id}
 ent_app_client_id=${ent_app_client_id}
 ent_app_public_link=${ent_app_public_link}
 ent_app_client_secret=${ent_app_client_secret}
 ent_app_private_pem=${ent_app_private_pem}
+ent_app_installation_id=${ent_app_installation_id}
 
 
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
@@ -526,7 +527,8 @@ pool_size=10
         "ent_app_client_secret": args.ent_app_client_secret,
         "ent_app_public_link": args.ent_app_public_link,
         "ent_app_client_secret": args.ent_app_client_secret,
-        "ent_app_private_pem": args.ent_app_private_pem
+        "ent_app_private_pem": args.ent_app_private_pem,
+        "ent_app_installation_id": args.ent_installation_id
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -713,24 +715,27 @@ if __name__ == "__main__":
         default="enterprise-app-name",
         help="The name of an enterprise app.",
     )
-
     parser.add_argument(
-        "--enterprise-client-id",
+        "--enterprise-app-client-id",
         action="store",
         dest="ent_app_client_id",
         default="enterprise-app-client-id",
         help="The client id of an enterprise app.",
     )
-
     parser.add_argument(
-        "--enterprise-client-secret",
+        "--enterprise-app-client-secret",
         action="store",
         dest="ent_app_client_secret",
         default="ent_app_client_secret",
         help="An enterprise app client secret.",
     )
-
-
+    parser.add_argument(
+        "--enterprise-app-installation-id",
+        action="store",
+        dest="ent_installation_id",
+        default="0",
+        help="",
+    )
     parser.add_argument(
         "--enterprise-app-id",
         action="store",
