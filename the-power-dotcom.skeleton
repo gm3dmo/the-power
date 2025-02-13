@@ -21,7 +21,7 @@ webhook=<your webhook url>
 team_members="<space separated list of github usernames>"
 team_admin="<github username of team admin>"
 default_committer="<github username of your default committer>"
-pr_approver_token=aPAT
+pr_approver_token=a_fine_grained_PAT
 pr_approver_name=aUserName
 default_repo_visibility=private
 
