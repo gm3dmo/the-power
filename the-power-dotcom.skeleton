@@ -21,9 +21,17 @@ webhook=<your webhook url>
 team_members="<space separated list of github usernames>"
 team_admin="<github username of team admin>"
 default_committer="<github username of your default committer>"
-pr_approver_token=aPAT
+pr_approver_token=a_fine_grained_PAT
 pr_approver_name=aUserName
 default_repo_visibility=private
+
+ent_github_app_name="ent_app_name"
+ent_app_id=app_id_integer
+ent_app_client_id=ent_app_client_id
+ent_app_public_link=https://example.com/ent-app01-public-link
+ent_app_client_secret=dummy_replace_with_ent_app_client_secret
+ent_app_private_pem=~/Downloads/ent-app01.2025-02-12.private-key.pem
+ent_app_installation_id=0
 
 # Used on GHES appliances for org creation.
 number_of_orgs=5

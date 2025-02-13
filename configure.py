@@ -220,6 +220,16 @@ default_package_type="container"
 # https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-deployment-activity-for-your-repository
 default_deployment_id=1
 
+### [Enterprise Apps](https://docs.github.com/en/enterprise-cloud@latest/admin/managing-your-enterprise-account/creating-github-apps-for-your-enterprise)
+#
+ent_github_app_name=${ent_app_name}
+ent_app_id=${ent_app_id}
+ent_app_client_id=${ent_app_client_id}
+ent_app_public_link=${ent_app_public_link}
+ent_app_client_secret=${ent_app_client_secret}
+ent_app_private_pem=${ent_app_private_pem}
+ent_app_installation_id=${ent_app_installation_id}
+
 
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
 # https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps
@@ -337,6 +347,8 @@ pool_size=10
     args.org_owner = "mona"
     args.org_members = "mona"
     token_validation ="strict"
+ 
+    args.ent_app_public_link = "https://example.com/ent-app-public-link"
 
     # use "\" for these so that they get written to the conf
     # file including quotes:
@@ -509,6 +521,14 @@ pool_size=10
         "http_protocol": args.http_protocol,
         "x_client_id": args.x_client_id,
         "x_client_secret": args.x_client_secret,
+        "ent_app_id": args.ent_app_id,
+        "ent_app_name": args.ent_app_name,
+        "ent_app_client_id": args.ent_app_client_id,
+        "ent_app_client_secret": args.ent_app_client_secret,
+        "ent_app_public_link": args.ent_app_public_link,
+        "ent_app_client_secret": args.ent_app_client_secret,
+        "ent_app_private_pem": args.ent_app_private_pem,
+        "ent_app_installation_id": args.ent_installation_id
     }
 
     out_filename = ".gh-api-examples.conf"
@@ -680,6 +700,48 @@ if __name__ == "__main__":
         dest="private_pem_file",
         default="",
         help="The location of the apps private key (pem) file.",
+    )
+    parser.add_argument(
+        "--enterprise-app-pem",
+        action="store",
+        dest="ent_app_private_pem",
+        default="~/Downloads/ent-app-private-key.pem",
+        help="The location of an enterprise app private key pem file.",
+    )
+    parser.add_argument(
+        "--enterprise-app-name",
+        action="store",
+        dest="ent_app_name",
+        default="enterprise-app-name",
+        help="The name of an enterprise app.",
+    )
+    parser.add_argument(
+        "--enterprise-app-client-id",
+        action="store",
+        dest="ent_app_client_id",
+        default="enterprise-app-client-id",
+        help="The client id of an enterprise app.",
+    )
+    parser.add_argument(
+        "--enterprise-app-client-secret",
+        action="store",
+        dest="ent_app_client_secret",
+        default="ent_app_client_secret",
+        help="An enterprise app client secret.",
+    )
+    parser.add_argument(
+        "--enterprise-app-installation-id",
+        action="store",
+        dest="ent_installation_id",
+        default="0",
+        help="",
+    )
+    parser.add_argument(
+        "--enterprise-app-id",
+        action="store",
+        dest="ent_app_id",
+        default="0",
+        help="",
     )
     parser.add_argument(
         "--number-of-orgs",
