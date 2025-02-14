@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/search#search-code
+# https://docs.github.com/en/enterprise-cloud@latest/rest/search/search?apiVersion=2022-11-28#search-code
 # GET /search/code
+
 
 search_string="addClass"
 language="js"
@@ -13,7 +14,6 @@ repo="jquery"
 search_query="${search_string}+in:file+language:${language}+repo:${org}/${repo}"
 
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \

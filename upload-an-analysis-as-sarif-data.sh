@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/code-scanning#upload-an-analysis-as-sarif-data
+# https://docs.github.com/en/enterprise-cloud@latest/rest/code-scanning/code-scanning?apiVersion=2022-11-28#upload-an-analysis-as-sarif-data
 # POST /repos/{owner}/{repo}/code-scanning/sarifs
 
 # Data sourced from:
