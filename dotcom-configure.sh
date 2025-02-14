@@ -38,8 +38,9 @@ python3 configure.py --hostname "${hostname}" \
                      --x-client-secret "${x_client_secret:-an_oauth_client_secret}" \
                      --enterprise-app-name "${ent_app_name:-an_enterprise_app_name}" \
                      --enterprise-app-id "${ent_app_id:-an_enterprise_app_id}" \
+                     --enterprise-app-pem "${ent_app_private_pem=:-an_enterprise_app_pem}" \
                      --enterprise-app-installation-id "${ent_app_installation_id:-an_enterprise_app_installation_id}" \
                      --enterprise-app-client-id "${ent_app_client_id:-an_enterprise_app_client_id}" \
                      --enterprise-app-client-secret "${ent_app_client_secret:-an_enterprise_app_client_secret}" \
-                     --curl_custom_flags "--fail-with-body --no-progress-meter" \
+                     --curl_custom_flags "--fail-with-body --no-progress-meter" 
 
