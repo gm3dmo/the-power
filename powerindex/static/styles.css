@@ -119,8 +119,8 @@ button:hover {
 
 .script-list li {
     background: white;
-    margin: 8px 0;
-    padding: 12px;
+    margin: 2px 0;
+    padding: 4px 12px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -131,6 +131,7 @@ button:hover {
     display: block;
     padding: 8px;
     border-radius: 4px;
+    font-family: var(--monospace-font);
 }
 
 .script-list li a:hover {
@@ -138,7 +139,7 @@ button:hover {
 }
 
 .script-list li a.selected {
-    background-color: #fff3b0;
+    background-color: var(--govuk-yellow);
 }
 
 .script-content {
@@ -153,6 +154,20 @@ button:hover {
     margin-top: 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--govuk-yellow);
+    border-radius: 4px;
+    padding: 4px;
+    font-family: var(--monospace-font);
+    justify-content: space-between;
+}
+
+.script-content h3 .execute-button {
+    order: 2;
+    margin-left: 10px;
+    flex-shrink: 0;
 }
 
 .script-content pre {
@@ -327,8 +342,9 @@ tr:hover {
     text-decoration: none;
     color: #24292e;
     display: block;
-    padding: 8px;
+    padding: 4px;
     border-radius: 4px;
+    margin-bottom: 2px;
 }
 
 .script-item a:hover {
@@ -337,6 +353,8 @@ tr:hover {
 
 .script-item a.selected {
     background-color: var(--govuk-yellow);
+    color: var(--govuk-black);
+    font-weight: bold;
 }
 
 .execute-button {

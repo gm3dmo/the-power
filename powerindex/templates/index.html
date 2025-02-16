@@ -34,10 +34,10 @@
             </ul>
             {% if script_content %}
             <div class="script-content">
-                <div class="script-header">
-                    <h3>{{ selected_script }}</h3>
+                <h3>
                     <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
-                </div>
+                    {{ selected_script }}
+                </h3>
                 {% if doc_url %}
                 <div class="doc-url">
                     <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ doc_url }}</a>
