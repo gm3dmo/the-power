@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/pulls#create-a-review-comment-for-a-pull-request
+# https://docs.github.com/en/enterprise-cloud@latest/rest/pulls/comments?apiVersion=2022-11-28#create-a-review-comment-for-a-pull-request
 # POST /repos/{owner}/{repo}/pulls/{pull_number}/comments
 
 
@@ -45,16 +45,16 @@ event_body="${body}"
 
 
 json_file="tmp/create-pull-request-review.json"
-
 jq -n \
        --arg commit_id "$commit_id" \
        --arg event "$event" \
        --arg body "$body" \
              '{event: $event, body: $body}' > ${json_file}
 
-cat ${json_file}
 
 curl -v ${curl_custom_flags} \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews --data @${json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/reviews" --data @${json_file}
+

@@ -1,9 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/pulls#create-a-pull-request
-# POST /repos/:owner/:repo/pulls
+# https://docs.github.com/en/enterprise-cloud@latest/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+# POST /repos/{owner}/{repo}/pulls
 
-json_file="tmp/create-pull-request.json"
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
@@ -27,6 +26,8 @@ for head_branch in $(cat /tmp/head_branches)
 do
     title="Great new PR from ${head_branch} merge it for the win."
     body=$(cat lorem-pull-request.md)
+
+    json_file="tmp/create-pull-request.json"
     jq -n \
            --arg title "${title}" \
            --arg body "${body}" \
@@ -40,7 +41,8 @@ do
            }' > ${json_file}
 
     curl ${curl_custom_flags} \
+         -H "X-GitHub-Api-Version: ${github_api_version}" \
          -H "Authorization: Bearer ${GITHUB_TOKEN}" \
          -H "Accept: application/vnd.github.v3+json" \
-            ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls --data @${json_file}
+            "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls" --data @${json_file}
 done
