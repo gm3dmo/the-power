@@ -37,7 +37,7 @@
             </ul>
             {% if script_content %}
             <div class="script-content">
-                <h3>
+                <h3 data-script-name="{{ selected_script }}">
                     <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
                     {{ selected_script }}
                 </h3>
@@ -97,33 +97,31 @@
                         <pre id="headers"></pre>
                     </div>
                 </div>
+                
+                <h2>Configuration</h2>
+                <input type="text" 
+                       id="configSearch" 
+                       class="config-search" 
+                       placeholder="Search configuration..."
+                       onkeyup="searchConfig()">
+                <table id="configTable">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in config.items() %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             {% endif %}
-        </div>
-
-        <div class="config-table">
-            <h2>Configuration</h2>
-            <input type="text" 
-                   id="configSearch" 
-                   class="config-search" 
-                   placeholder="Search configuration..."
-                   onkeyup="searchConfig()">
-            <table id="configTable">
-                <thead>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for key, value in config.items() %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td>{{ value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
 
