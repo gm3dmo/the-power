@@ -66,7 +66,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 95%;
     margin: 0 auto;
     padding: 20px;
 }
@@ -92,7 +92,7 @@ input[type="text"] {
 button {
     padding: 8px 16px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: var(--govuk-green);
     color: white;
     border: none;
     border-radius: 4px;
@@ -101,7 +101,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #005a30;
 }
 
 .content-wrapper {
@@ -120,7 +120,7 @@ button:hover {
 .script-list li {
     background: white;
     margin: 2px 0;
-    padding: 4px 12px;
+    padding: 0 8px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -342,9 +342,9 @@ tr:hover {
     text-decoration: none;
     color: #24292e;
     display: block;
-    padding: 4px;
+    padding: 2px;
     border-radius: 4px;
-    margin-bottom: 2px;
+    font-family: var(--monospace-font);
 }
 
 .script-item a:hover {
@@ -358,7 +358,7 @@ tr:hover {
 }
 
 .execute-button {
-    background-color: #2ea44f;
+    background-color: var(--govuk-green);
     color: white;
     border: 1px solid rgba(27, 31, 35, 0.15);
     border-radius: 6px;
@@ -370,11 +370,11 @@ tr:hover {
 }
 
 .execute-button:hover {
-    background-color: #2c974b;
+    background-color: #005a30;
 }
 
 .execute-button:active {
-    background-color: #298e46;
+    background-color: #004424;
 }
 
 .output-boxes {

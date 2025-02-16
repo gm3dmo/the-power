@@ -134,7 +134,7 @@ def index():
     global config
     search_query = request.args.get('search', '').lower()
     selected_script = request.args.get('script', '')
-    scripts = get_shell_scripts()
+    scripts = sorted(get_shell_scripts())  # Sort the scripts alphabetically
     
     if search_query:
         scripts = [script for script in scripts if search_query in script.lower()]
@@ -148,7 +148,7 @@ def index():
         rendered_content = render_script_with_variables(script_content, config)
     
     return render_template('index.html', 
-                         scripts=scripts, 
+                         scripts=scripts,
                          search_query=search_query,
                          selected_script=selected_script,
                          script_content=script_content,
