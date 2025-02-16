@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/actions#list-repository-workflows
+# https://docs.github.com/en/enterprise-cloud@latest/rest/actions/workflows?apiVersion=2022-11-28
 # GET /repos/{owner}/{repo}/actions/workflows
 
 
@@ -12,7 +12,9 @@ if [ -z "$1" ]
     repo=$1
 fi
 
+
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/actions/workflows
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/actions/workflows"
+

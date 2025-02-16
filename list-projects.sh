@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/projects#list-organization-projects
-# GET /orgs/:org/projects
+# https://docs.github.com/en/enterprise-cloud@latest/rest/projects/projects?apiVersion=2022-11-28#list-organization-projects
+# GET /orgs/{org}/projects
 
 A=$1
 wanted="preview"
