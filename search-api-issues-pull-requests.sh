@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/search#search-issues-and-pull-requests
+# https://docs.github.com/en/enterprise-cloud@latest/rest/search/search?apiVersion=2022-11-28#search-issues-and-pull-requests
 # GET /search/issues
 
 
@@ -14,7 +14,6 @@ repo="jquery"
 search_query="${search_string}+in:file+language:${language}+repo:${org}/${repo}"
 
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \

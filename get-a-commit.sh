@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+# https://docs.github.com/en/enterprise-cloud@latest/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
 # GET /repos/{owner}/{repo}/commits/{ref}
 
 ref=$1

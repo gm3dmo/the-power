@@ -10,11 +10,12 @@ if [ -z "$1" ]
     sha=$1
 fi
 
-json_file=tmp/update-a-reference.json
 
+json_file=tmp/update-a-reference.json
 jq -n \
        --arg sha "${sha}" \
               '{ sha: $sha }' > ${json_file}
+
 
 curl ${curl_custom_flags} \
      -X PATCH \

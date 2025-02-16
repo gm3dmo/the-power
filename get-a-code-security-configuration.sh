@@ -4,10 +4,9 @@
 # GET /orgs/{org}/code-security/configurations/{configuration_id}
 
 
-# If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    org=$org
+    org=${org}
   else
     org=$1
 fi
@@ -21,3 +20,4 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/orgs/${org}/code-security/configurations/${configuration_id}"
+

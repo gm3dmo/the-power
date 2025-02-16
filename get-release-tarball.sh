@@ -1,7 +1,8 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#get-a-release-asset
-# GET /repos/:owner/:repo/releases/assets/:asset_id
+# https://docs.github.com/en/enterprise-cloud@latest/rest/releases/assets?apiVersion=2022-11-28#get-a-release-asset
+# GET /repos/{owner}/{repo}/releases/assets/{asset_id}
+
 
 release_tarball_name=$(./list-releases.sh | jq -r '.[] | .tarball_url')
 
@@ -11,4 +12,5 @@ curl ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${release_tarball_name} --output ${output_file}
+        "${release_tarball_name}" --output ${output_file}
+
