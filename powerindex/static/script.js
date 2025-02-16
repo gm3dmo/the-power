@@ -1,3 +1,21 @@
+function toggleTheme() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Add click handler to logo
+    const logo = document.querySelector('.title-logo');
+    if (logo) {
+        logo.addEventListener('click', toggleTheme);
+    }
+});
+
 function searchConfig() {
     const input = document.getElementById('configSearch');
     const filter = input.value.toLowerCase();

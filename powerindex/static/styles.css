@@ -1,5 +1,8 @@
 :root {
-
+    /* Light mode colors */
+    --background-color: #f0f0f0;
+    --text-color: #333;
+    
     /* Text colours */
     --govuk-text-colour: #0b0c0c;
     --govuk-secondary-text-colour: #505a5f;
@@ -32,10 +35,6 @@
     --sans-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
     /* Existing variables */
-    --background-color: #f0f0f0;
-    --text-color: #333;
-
-    /* GOV.UK colours */
     --govuk-red: #d4351c;
     --govuk-yellow: #ffdd00;
     --govuk-green: #00703c;
@@ -58,11 +57,45 @@
     --govuk-turquoise: #28a197;
 }
 
+[data-theme="dark"] {
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --govuk-text-colour: #ffffff;
+    --govuk-secondary-text-colour: #b1b4b6;
+    --govuk-border-colour: #2e2e2e;
+    --govuk-input-border-colour: #666666;
+    --dark-background: #2e2e2e;  /* Added this variable for consistency */
+    
+    /* Adjust other colors for dark mode */
+    --govuk-focus-colour: #ffdd00;
+    --govuk-focus-text-colour: #ffffff;
+    --govuk-brand-colour: #1d70b8;
+}
+
+/* Update dark mode backgrounds */
+[data-theme="dark"] .script-list li,
+[data-theme="dark"] .script-content,
+[data-theme="dark"] .script-box,
+[data-theme="dark"] .output-box,
+[data-theme="dark"] .config-table {
+    background: var(--dark-background);
+}
+
+[data-theme="dark"] pre,
+[data-theme="dark"] th {
+    background-color: #1a1a1a;
+}
+
+[data-theme="dark"] tr:hover {
+    background-color: #3a3a3a;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .container {
@@ -121,7 +154,7 @@ button:hover {
 }
 
 .script-list li {
-    background: white;
+    background: var(--govuk-white);
     margin: 2px 0;
     padding: 0 8px;
     border-radius: 4px;
@@ -147,7 +180,7 @@ button:hover {
 
 .script-content {
     flex: 1;
-    background: white;
+    background: var(--govuk-white);
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -264,15 +297,19 @@ tr:hover {
 .copy-button {
     padding: 4px 8px;
     font-size: 12px;
-    background-color: #e1e4e8;
-    color: #24292e;
-    border: 1px solid #d1d5da;
-    border-radius: 3px;
+    background-color: var(--govuk-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 .copy-button:hover {
-    background-color: #d1d5da;
+    background-color: #005a30;
+}
+
+.copy-button:active {
+    background-color: #004424;
 }
 
 .script-tabs {
@@ -323,14 +360,14 @@ tr:hover {
     background: #f8f8f8;
     padding: 15px;
     border-radius: 4px;
+    overflow: hidden;
 }
 
 .script-box pre {
     margin: 0;
-    background: white;
     padding: 15px;
-    border-radius: 4px;
-    overflow-x: auto;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 .script-box code {
@@ -402,7 +439,7 @@ tr:hover {
     background: white;
     padding: 15px;
     border-radius: 4px;
-    overflow-x: auto;
+    overflow: hidden;
     font-family: 'Courier New', Courier, monospace;
     border: 1px solid #eaecef;
     min-height: 50px;
@@ -418,6 +455,9 @@ tr:hover {
 .output-box .highlight {
     background: transparent;
     margin: 0;
+    padding: 0;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 .output-box .highlight pre {
@@ -478,4 +518,110 @@ tr:hover {
 .title-logo {
     height: 100px;
     width: auto;
-} 
+    cursor: pointer;  /* Add cursor pointer to indicate clickable */
+}
+
+/* Add dark mode styles for other elements */
+[data-theme="dark"] .script-box,
+[data-theme="dark"] .output-box {
+    background: #2e2e2e;
+}
+
+[data-theme="dark"] pre {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .config-table {
+    background: #2e2e2e;
+}
+
+[data-theme="dark"] th {
+    background-color: #1a1a1a;
+}
+
+[data-theme="dark"] tr:hover {
+    background-color: #3a3a3a;
+}
+
+[data-theme="dark"] .script-box pre,
+[data-theme="dark"] .output-box pre {
+    background-color: var(--dark-background);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .script-item a {
+    color: #e0e0e0;  /* Light gray color for better readability in dark mode */
+}
+
+[data-theme="dark"] .script-item a.selected {
+    color: var(--govuk-black);  /* Keep the selected item text dark against yellow background */
+}
+
+[data-theme="dark"] .script-item a:hover {
+    background-color: #000000;  /* Changed to pure black for hover */
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .script-item a.selected:hover {
+    color: var(--govuk-black);
+    background-color: var(--govuk-yellow);  /* Keep yellow background for selected items */
+}
+
+[data-theme="dark"] .script-content h3 {
+    background-color: var(--govuk-yellow);  /* Keep the yellow background */
+    color: var(--govuk-black);  /* Keep text dark for contrast against yellow */
+}
+
+[data-theme="dark"] .script-content h3 .execute-button {
+    background-color: var(--govuk-green);
+    color: white;
+}
+
+[data-theme="dark"] .doc-url {
+    background: #2e2e2e;  /* Same dark gray as other containers */
+}
+
+[data-theme="dark"] .doc-url a {
+    color: var(--govuk-yellow);  /* Yellow text for the URL */
+}
+
+[data-theme="dark"] .doc-url a:hover {
+    color: var(--govuk-yellow);  /* Maintain yellow color on hover */
+    opacity: 0.8;  /* Slight dimming effect on hover */
+}
+
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] .config-search,
+[data-theme="dark"] .output-search {
+    background-color: #2e2e2e;
+    color: #e0e0e0;  /* Light gray text */
+    border-color: #666666;  /* Slightly lighter border for definition */
+}
+
+[data-theme="dark"] input[type="text"]:focus,
+[data-theme="dark"] .config-search:focus,
+[data-theme="dark"] .output-search:focus {
+    border-color: var(--govuk-yellow);  /* Yellow border on focus */
+    outline: none;
+}
+
+/* Pygments dark theme optimization */
+[data-theme="dark"] .highlight {
+    background: var(--dark-background);
+}
+
+[data-theme="dark"] .highlight .w { color: #d0d0d0; } /* Text whitespace */
+[data-theme="dark"] .highlight .c1 { color: #75715e; } /* Comment */
+[data-theme="dark"] .highlight .nv { color: #66d9ef; } /* Name.Variable */
+[data-theme="dark"] .highlight .o { color: #f92672; } /* Operator */
+[data-theme="dark"] .highlight .k { color: #66d9ef; } /* Keyword */
+[data-theme="dark"] .highlight .p { color: #f8f8f2; } /* Punctuation */
+[data-theme="dark"] .highlight .s1 { color: #a6e22e; } /* String.Single */
+[data-theme="dark"] .highlight .s2 { color: #a6e22e; } /* String.Double */
+[data-theme="dark"] .highlight .si { color: #e6db74; } /* String.Interpol */
+[data-theme="dark"] .highlight .se { color: #ae81ff; } /* String.Escape */
+
+[data-theme="dark"] .config-table h2 {
+    color: #ffffff;  /* White text in dark mode */
+}
