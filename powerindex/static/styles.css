@@ -465,4 +465,17 @@ tr:hover {
 /* Make sure no other styles are overriding our highlight */
 #headers mark.highlight-search {
     background-color: var(--govuk-yellow) !important;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.title-logo {
+    height: 100px;
+    width: auto;
 } 

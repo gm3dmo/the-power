@@ -11,7 +11,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>The Power Viewer</h1>
+        <div class="title-container">
+            <img src="{{ url_for('static', filename='noun-aardvark.svg') }}" alt="Aardvark logo" class="title-logo">
+            <h1>The Power Viewer</h1>
+        </div>
         
         <form method="GET" action="/" class="search-form">
             <input type="text" 
