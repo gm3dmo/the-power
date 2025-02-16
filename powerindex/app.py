@@ -54,6 +54,14 @@ def scrub_github_token(value):
     
     return value
 
+def scrub_password(key, value):
+    """Helper function to scrub password values with specific replacements"""
+    password_replacements = {
+        'admin_password': 'an_admin_password',
+        'mgmt_password': 'an_mgmt_password'
+    }
+    return password_replacements.get(key, value)
+
 def read_config():
     config = {}
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,8 +82,12 @@ def read_config():
                     # Strip quotes and whitespace from value
                     value = value.strip().strip('"\'')
                     
-                    # Scrub any GitHub tokens in the value
-                    value = scrub_github_token(value)
+                    # Scrub passwords with specific replacements
+                    if key in ['admin_password', 'mgmt_password']:
+                        value = scrub_password(key, value)
+                    else:
+                        # Scrub any GitHub tokens in the value
+                        value = scrub_github_token(value)
                     
                     config[key] = value
     except Exception as e:
