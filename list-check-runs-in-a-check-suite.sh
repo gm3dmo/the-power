@@ -1,7 +1,7 @@
 
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/checks/runs#list-check-runs-in-a-check-suite
+# https://docs.github.com/en/enterprise-cloud@latest/rest/checks/runs?apiVersion=2022-11-28#list-check-runs-in-a-check-suite
 # GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
 
 
@@ -14,16 +14,9 @@ if [ -z "$1" ]
 fi
 
 
-# Check suite_id is obtained from:
-
-
 GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
-
-
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/check-suites/${check_suite_id}/check-runs"
-
 
