@@ -54,6 +54,14 @@ def scrub_github_token(value):
     
     return value
 
+def scrub_password(key, value):
+    """Helper function to scrub password values with specific replacements"""
+    password_replacements = {
+        'admin_password': 'an_admin_password',
+        'mgmt_password': 'an_mgmt_password'
+    }
+    return password_replacements.get(key, value)
+
 def read_config():
     config = {}
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,8 +82,12 @@ def read_config():
                     # Strip quotes and whitespace from value
                     value = value.strip().strip('"\'')
                     
-                    # Scrub any GitHub tokens in the value
-                    value = scrub_github_token(value)
+                    # Scrub passwords with specific replacements
+                    if key in ['admin_password', 'mgmt_password']:
+                        value = scrub_password(key, value)
+                    else:
+                        # Scrub any GitHub tokens in the value
+                        value = scrub_github_token(value)
                     
                     config[key] = value
     except Exception as e:
@@ -134,7 +146,7 @@ def index():
     global config
     search_query = request.args.get('search', '').lower()
     selected_script = request.args.get('script', '')
-    scripts = get_shell_scripts()
+    scripts = sorted(get_shell_scripts())  # Sort the scripts alphabetically
     
     if search_query:
         scripts = [script for script in scripts if search_query in script.lower()]
@@ -148,7 +160,7 @@ def index():
         rendered_content = render_script_with_variables(script_content, config)
     
     return render_template('index.html', 
-                         scripts=scripts, 
+                         scripts=scripts,
                          search_query=search_query,
                          selected_script=selected_script,
                          script_content=script_content,
@@ -211,4 +223,4 @@ def execute_script():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8001) 
+    app.run(debug=True, host='localhost', port=8001) 
