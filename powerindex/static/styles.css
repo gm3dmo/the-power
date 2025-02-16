@@ -569,8 +569,12 @@ tr:hover {
 }
 
 [data-theme="dark"] .script-content h3 {
-    background-color: var(--govuk-yellow);  /* Keep the yellow background */
-    color: var(--govuk-black);  /* Keep text dark for contrast against yellow */
+    background-color: var(--govuk-yellow);
+    color: var(--govuk-black);
+    border: none;
+    border-bottom: none;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 [data-theme="dark"] .script-content h3 .execute-button {
