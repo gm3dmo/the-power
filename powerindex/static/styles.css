@@ -108,12 +108,15 @@ button:hover {
     display: flex;
     gap: 20px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .script-list {
     list-style: none;
     padding: 0;
     flex: 0 0 300px;
+    min-width: 200px;
+    max-width: 400px;
     margin: 0;
 }
 
