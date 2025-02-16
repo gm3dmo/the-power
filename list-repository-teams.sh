@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/rest/repos/repos#list-repository-teams
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#list-repository-teams
 # GET /repos/{owner}/{repo}/teams
 
 
@@ -12,8 +12,6 @@ if [ -z "$1" ]
     repo=$1
 fi
 
-
-json_file=tmp/list-repository-teams.json
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
