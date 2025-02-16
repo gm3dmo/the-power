@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/activity#list-stargazers
+# https://docs.github.com/en/enterprise-cloud@latest/rest/activity/starring?apiVersion=2022-11-28#list-stargazers
 # GET /repos/{owner}/{repo}/stargazers
 
 
