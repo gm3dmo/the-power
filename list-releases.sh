@@ -1,9 +1,12 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#list-releases
-# GET /repos/:owner/:repo/releases
+# https://docs.github.com/en/enterprise-cloud@latest/rest/releases/releases?apiVersion=2022-11-28
+# GET /repos/{owner}/{repo}/releases 
+
 
 curl ${curl_custom_flags} \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/releases"
+

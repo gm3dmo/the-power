@@ -1,5 +1,61 @@
 :root {
+
+    /* Text colours */
+    --govuk-text-colour: #0b0c0c;
+    --govuk-secondary-text-colour: #505a5f;
+
+    /* Link colours */
+    --govuk-link-colour: #1d70b8;
+    --govuk-link-hover-colour: #003078;
+    --govuk-link-visited-colour: #4c2c92;
+    --govuk-link-active-colour: #0b0c0c;
+
+    /* Border colours */
+    --govuk-border-colour: #b1b4b6;
+    --govuk-input-border-colour: #0b0c0c;
+
+    /* Focus state */
+    --govuk-focus-colour: #ffdd00;  /* For keyboard focus indication */
+    --govuk-focus-text-colour: #0b0c0c;
+
+    /* Error state */
+    --govuk-error-colour: #d4351c;  /* For error messages */
+
+    /* Success state */
+    --govuk-success-colour: #00703c;  /* For success messages */
+
+    /* Brand colour */
+    --govuk-brand-colour: #1d70b8;
+
+    /* Font families */
+    --monospace-font: monospace;
+    --sans-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    /* Existing variables */
+    --background-color: #f0f0f0;
+    --text-color: #333;
+
+    /* GOV.UK colours */
+    --govuk-red: #d4351c;
     --govuk-yellow: #ffdd00;
+    --govuk-green: #00703c;
+    --govuk-blue: #1d70b8;
+    --govuk-dark-blue: #003078;
+    --govuk-light-blue: #5694ca;
+    --govuk-purple: #4c2c92;
+    --govuk-black: #0b0c0c;
+    --govuk-dark-grey: #505a5f;
+    --govuk-mid-grey: #b1b4b6;
+    --govuk-light-grey: #f3f2f1;
+    --govuk-white: #ffffff;
+    --govuk-light-purple: #6f72af;
+    --govuk-bright-purple: #912b88;
+    --govuk-pink: #d53880;
+    --govuk-light-pink: #f499be;
+    --govuk-orange: #f47738;
+    --govuk-brown: #b58840;
+    --govuk-light-green: #85994b;
+    --govuk-turquoise: #28a197;
 }
 
 body {
