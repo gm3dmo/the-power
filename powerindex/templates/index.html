@@ -39,19 +39,13 @@
             <div class="script-content">
                 <h3 data-script-name="{{ selected_script }}">
                     <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
-                    {{ selected_script }}
+                    <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">Copy Docs URL</button>
+                    <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ selected_script }}</a>
                 </h3>
-                {% if doc_url %}
-                <div class="doc-url">
-                    <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ doc_url }}</a>
-                    <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">Copy</button>
-                </div>
-                {% endif %}
                 <div class="script-boxes">
                     <div class="script-box">
                         <div class="script-box-header">
                             <h4>Original Script</h4>
-                            <button class="copy-button" onclick="copyScriptContent('original-script')">Copy</button>
                         </div>
                         <div class="highlight-wrapper" id="original-script">
                             {{ highlighted_content | safe }}
