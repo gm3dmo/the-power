@@ -1,3 +1,16 @@
+html {
+    visibility: hidden;
+    background-color: #1a1a1a;  /* Dark mode background color */
+}
+
+html.ready {
+    visibility: visible;
+}
+
+[data-theme="light"] {
+    background-color: #f0f0f0;  /* Light mode background */
+}
+
 :root {
     /* Light mode colors */
     --background-color: #f0f0f0;
@@ -385,6 +398,19 @@ tr:hover {
     padding: 2px;
     border-radius: 4px;
     font-family: var(--monospace-font);
+    -webkit-tap-highlight-color: transparent;
+    transition: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;  /* Disable callout on iOS */
+    outline: none !important;  /* Remove outline */
+}
+
+.script-item a:active,
+.script-item a:focus {
+    background-color: transparent !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 .script-item a:hover {
@@ -551,21 +577,21 @@ tr:hover {
 }
 
 [data-theme="dark"] .script-item a {
-    color: #e0e0e0;  /* Light gray color for better readability in dark mode */
-}
-
-[data-theme="dark"] .script-item a.selected {
-    color: var(--govuk-black);  /* Keep the selected item text dark against yellow background */
-}
-
-[data-theme="dark"] .script-item a:hover {
-    background-color: #000000;  /* Changed to pure black for hover */
     color: #e0e0e0;
+    transition: none !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-[data-theme="dark"] .script-item a.selected:hover {
-    color: var(--govuk-black);
-    background-color: var(--govuk-yellow);  /* Keep yellow background for selected items */
+[data-theme="dark"] .script-item a:active,
+[data-theme="dark"] .script-item a:focus {
+    background-color: #000000 !important;
+    color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .script-item a.selected:active,
+[data-theme="dark"] .script-item a.selected:focus {
+    background-color: var(--govuk-yellow) !important;
+    color: var(--govuk-black) !important;
 }
 
 [data-theme="dark"] .script-content h3 {
