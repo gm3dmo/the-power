@@ -1,7 +1,7 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server/rest/reference/enterprise-admin#list-pre-receive-hooks-for-an-organization
-# GET /admin/pre-receive-hooks/:pre_receive_hook_id
+# https://docs.github.com/en/enterprise-server@3.15/rest/enterprise-admin/pre-receive-hooks?apiVersion=2022-11-28#get-a-pre-receive-hook
+# GET /admin/pre-receive-hooks/{pre_receive_hook_id}
 
 if [ -z "$1" ]
   then
@@ -11,6 +11,8 @@ if [ -z "$1" ]
 fi
 
 curl ${curl_custom_flags} \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/enterprise-admin/pre_receive_hooks/${pre_receive_hook_id}
+        "${GITHUB_API_BASE_URL}/enterprise-admin/pre_receive_hooks/${pre_receive_hook_id}"
+
