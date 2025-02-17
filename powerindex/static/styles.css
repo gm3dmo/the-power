@@ -588,10 +588,17 @@ tr:hover {
     color: #e0e0e0 !important;
 }
 
+[data-theme="dark"] .script-item a.selected {
+    background-color: var(--govuk-yellow);
+    color: var(--govuk-black);  /* Dark gray text for selected items */
+    font-weight: bold;
+}
+
+[data-theme="dark"] .script-item a.selected:hover,
 [data-theme="dark"] .script-item a.selected:active,
 [data-theme="dark"] .script-item a.selected:focus {
     background-color: var(--govuk-yellow) !important;
-    color: var(--govuk-black) !important;
+    color: var(--govuk-black) !important;  /* Maintain dark gray text in all states */
 }
 
 [data-theme="dark"] .script-content h3 {
