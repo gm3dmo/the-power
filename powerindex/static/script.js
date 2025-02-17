@@ -1,20 +1,23 @@
-function toggleTheme() {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-}
+// Initialize theme before DOM loads
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
+// Add ready class after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    
+    document.documentElement.classList.add('ready');
+
     // Add click handler to logo
     const logo = document.querySelector('.title-logo');
     if (logo) {
         logo.addEventListener('click', toggleTheme);
     }
 });
+
+function toggleTheme() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
 
 function searchConfig() {
     const input = document.getElementById('configSearch');
