@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/orgs/rules?apiVersion=2022-11-28#update-an-organization-repository-ruleset
+# https://docs.github.com/en/enterprise-cloud@latest/rest/orgs/rules?apiVersion=2022-11-28#update-an-organization-repository-ruleset
 # PUT /orgs/{org}/rulesets/{ruleset_id}
 
 json_file=tmp/update-an-organization-repository-ruleset.json
@@ -82,7 +82,6 @@ jq -n \
 ' > ${json_file}
 
 
-set -x
 curl ${curl_custom_flags} \
      -X PUT \
      -H "X-GitHub-Api-Version: ${github_api_version}" \

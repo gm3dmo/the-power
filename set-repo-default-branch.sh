@@ -19,8 +19,10 @@ jq -n \
             default_branch: $new_default_branch,
           }' > ${json_file}
 
+
 curl ${curl_custom_flags} \
      -X PATCH \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}" --data @${json_file}
