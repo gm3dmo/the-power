@@ -308,13 +308,15 @@ tr:hover {
 }
 
 .copy-button {
-    padding: 4px 8px;
+    padding: 4px 12px;  /* Increased horizontal padding */
+    min-width: 100px;   /* Set minimum width */
     font-size: 12px;
     background-color: var(--govuk-green);
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    white-space: nowrap;  /* Keep text on one line */
 }
 
 .copy-button:hover {
@@ -414,13 +416,21 @@ tr:hover {
 }
 
 .script-item a:hover {
-    background-color: #f6f8fa;
+    background-color: var(--govuk-dark-blue) !important;  /* Dark blue on hover in light mode */
+    color: #ffffff !important;  /* White text for contrast */
 }
 
 .script-item a.selected {
     background-color: var(--govuk-yellow);
     color: var(--govuk-black);
     font-weight: bold;
+}
+
+.script-item a.selected:hover,
+.script-item a.selected:active,
+.script-item a.selected:focus {
+    background-color: var(--govuk-yellow) !important;  /* Keep yellow for selected items */
+    color: var(--govuk-black) !important;
 }
 
 .execute-button {
@@ -582,23 +592,27 @@ tr:hover {
     -webkit-tap-highlight-color: transparent;
 }
 
+[data-theme="dark"] .script-item a:hover {
+    background-color: var(--govuk-dark-blue) !important;  /* Dark blue on hover */
+    color: #e0e0e0;
+}
+
 [data-theme="dark"] .script-item a:active,
 [data-theme="dark"] .script-item a:focus {
-    background-color: #000000 !important;
+    background-color: transparent !important;  /* Remove active/focus background */
     color: #e0e0e0 !important;
 }
 
 [data-theme="dark"] .script-item a.selected {
     background-color: var(--govuk-yellow);
-    color: var(--govuk-black);  /* Dark gray text for selected items */
-    font-weight: bold;
+    color: var(--govuk-black);
 }
 
 [data-theme="dark"] .script-item a.selected:hover,
 [data-theme="dark"] .script-item a.selected:active,
 [data-theme="dark"] .script-item a.selected:focus {
     background-color: var(--govuk-yellow) !important;
-    color: var(--govuk-black) !important;  /* Maintain dark gray text in all states */
+    color: var(--govuk-black) !important;
 }
 
 [data-theme="dark"] .script-content h3 {
