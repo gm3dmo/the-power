@@ -189,6 +189,9 @@ def execute_script():
         )
         stdout, stderr = process.communicate()
         
+        # Scrub sensitive data from stderr
+        stderr = scrub_github_token(stderr)
+        
         # Try to read and highlight headers from b.txt
         headers_path = os.path.join(parent_dir, 'b.txt')
         headers_content = ''
