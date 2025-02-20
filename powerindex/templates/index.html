@@ -70,7 +70,10 @@
                 <div class="output-boxes">
                     <div class="output-box">
                         <div class="output-header">
-                            <h4>Standard Output</h4>
+                            <div class="header-title">
+                                <h4>Standard Output</h4>
+                                <button class="copy-button stdout-copy" onclick="copyScriptContent('stdout')">Copy</button>
+                            </div>
                             <input type="text" 
                                    id="stdoutSearch" 
                                    class="output-search" 
@@ -89,15 +92,9 @@
                         </div>
                     </div>
                     <div class="output-box">
-                        <div class="output-header">
-                            <h4>Headers</h4>
-                            <input type="text" 
-                                   id="headersSearch" 
-                                   class="output-search" 
-                                   placeholder="Search headers..."
-                                   onkeyup="searchOutput('headers')">
-                        </div>
+                        <h4>Headers</h4>
                         <button class="copy-button headers-copy" onclick="copyScriptContent('headers')">Copy</button>
+                        <input type="text" id="headersSearch" onkeyup="searchOutput('headers')" placeholder="Search headers...">
                         <div class="highlight-wrapper">
                             <div class="highlight">
                                 <pre id="headers">{{ headers }}</pre>

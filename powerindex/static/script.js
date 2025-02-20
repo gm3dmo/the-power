@@ -114,6 +114,8 @@ function executeScript(scriptName) {
         const headersElement = document.getElementById('headers');
         const stderrElement = document.getElementById('stderr');
         const stderrCopyButton = document.querySelector('.stderr-copy');
+        const headersCopyButton = document.querySelector('.headers-copy');
+        const stdoutCopyButton = document.querySelector('.stdout-copy');
         
         if (data.is_json) {
             stdoutElement.innerHTML = data.stdout;
@@ -121,11 +123,15 @@ function executeScript(scriptName) {
             stdoutElement.textContent = data.stdout || '';
         }
         
+        // Show/hide copy buttons based on content
+        stdoutCopyButton.style.display = data.stdout ? 'block' : 'none';
+        stderrCopyButton.style.display = data.stderr ? 'block' : 'none';
+        headersCopyButton.style.display = data.headers ? 'block' : 'none';
+        
         // Always use innerHTML for headers as it contains highlighted JSON
         headersElement.innerHTML = data.headers || '';
         
         stderrElement.textContent = data.stderr || '';
-        stderrCopyButton.style.display = data.stderr ? 'block' : 'none';
         
         button.textContent = 'Execute';
         button.disabled = false;

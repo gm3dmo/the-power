@@ -517,14 +517,22 @@ tr:hover {
 }
 
 .output-header {
+    margin-bottom: 10px;
+}
+
+.header-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.output-header h4 {
+.header-title h4 {
     margin: 0;
+}
+
+.stdout-copy {
+    display: block;
 }
 
 .output-search {
@@ -708,4 +716,34 @@ html body #stderr .highlight-wrapper .highlight {
 
 [data-theme="dark"] .output-box h4 {
     color: white;
+}
+
+/* Move headers search box to the left */
+#headersSearch {
+    margin: 0 0 10px 0;
+    width: 200px;
+    height: 30px;
+    padding: 0 8px;
+}
+
+.headers-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.stderr-copy,
+.stdout-copy,
+.headers-copy {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+}
+
+#stdout {
+    border: none;
+    margin: 0;
+    padding: 0;
 }
