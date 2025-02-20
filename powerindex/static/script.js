@@ -112,6 +112,8 @@ function executeScript(scriptName) {
     .then(data => {
         const stdoutElement = document.getElementById('stdout');
         const headersElement = document.getElementById('headers');
+        const stderrElement = document.getElementById('stderr');
+        const stderrCopyButton = document.querySelector('.stderr-copy');
         
         if (data.is_json) {
             stdoutElement.innerHTML = data.stdout;
@@ -122,7 +124,9 @@ function executeScript(scriptName) {
         // Always use innerHTML for headers as it contains highlighted JSON
         headersElement.innerHTML = data.headers || '';
         
-        document.getElementById('stderr').textContent = data.stderr || '';
+        stderrElement.textContent = data.stderr || '';
+        stderrCopyButton.style.display = data.stderr ? 'block' : 'none';
+        
         button.textContent = 'Execute';
         button.disabled = false;
     })

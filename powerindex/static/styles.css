@@ -462,6 +462,13 @@ tr:hover {
     background: #f8f8f8;
     padding: 15px;
     border-radius: 4px;
+    position: relative;
+}
+
+.output-box .copy-button {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .output-box h4 {
@@ -726,4 +733,11 @@ tr:hover {
 .script-item a .highlight {
     color: inherit;
     text-decoration: inherit;
+}
+
+.stderr-copy {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
 }

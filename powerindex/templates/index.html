@@ -81,7 +81,8 @@
                     </div>
                     <div class="output-box">
                         <h4>Standard Error</h4>
-                        <pre id="stderr"></pre>
+                        <button class="copy-button stderr-copy" onclick="copyScriptContent('stderr')">Copy</button>
+                        <pre id="stderr">{{ stderr }}</pre>
                     </div>
                     <div class="output-box">
                         <div class="output-header">
