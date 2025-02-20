@@ -684,92 +684,28 @@ tr:hover {
     color: #ffffff;  /* White text in dark mode */
 }
 
+/* Override the base highlight class */
 .highlight {
-    background-color: #ffd000 !important;
-    padding: 0 2px;
-    border-radius: 2px;
-    color: inherit;
+    background-color: transparent !important;
 }
 
+/* Restore orange highlight only for script items */
 .script-item a .highlight {
-    color: inherit;
-    text-decoration: inherit;
-}
-
-.dark-mode .highlight,
-.dark-mode .script-item a .highlight {
     background-color: #cc5500 !important;
-    padding: 0 2px;
-    border-radius: 2px;
-    color: inherit;
 }
 
-@media (prefers-color-scheme: dark) {
-    .highlight {
-        background-color: #cc5500 !important;
-    }
-
-    .script-item a .highlight {
-        background-color: #cc5500 !important;
-    }
-}
-
-[data-theme="light"] .highlight,
-[data-theme="light"] .script-item a .highlight {
-    background-color: #ffd000 !important;
-    padding: 0 2px;
-    border-radius: 2px;
-    color: inherit;
-}
-
-[data-theme="dark"] .highlight,
-[data-theme="dark"] .script-item a .highlight {
-    background-color: #cc5500 !important;
-    padding: 0 2px;
-    border-radius: 2px;
-    color: inherit;
-}
-
-.script-item a .highlight {
-    color: inherit;
-    text-decoration: inherit;
-}
-
-.stderr-copy {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.highlight-wrapper #stderr {
-    margin: 0;
-    padding: 0;
-    border: none;
-    width: 100%;
-}
-
-/* Remove yellow background from all highlighted sections */
-.output-box .highlight-wrapper .highlight,
-.output-box .highlight-wrapper .highlight pre,
-#headers .highlight,
-#headers .highlight pre {
+/* Ensure output boxes stay transparent */
+html body .output-box .highlight-wrapper .highlight,
+html body #headers .highlight-wrapper .highlight,
+html body #stderr .highlight-wrapper .highlight {
     background: none !important;
+    background-color: transparent !important;
 }
 
-[data-theme="dark"] .output-box .highlight-wrapper .highlight,
-[data-theme="dark"] .output-box .highlight-wrapper .highlight pre,
-[data-theme="dark"] #headers .highlight,
-[data-theme="dark"] #headers .highlight pre {
-    background: none !important;
-}
-
-/* Headers title in dark mode */
 [data-theme="dark"] h4 {
     color: white;
 }
 
-/* Standard Error title in dark mode */
 [data-theme="dark"] .output-box h4 {
     color: white;
 }
