@@ -741,3 +741,25 @@ tr:hover {
     right: 0;
     top: 0;
 }
+
+.highlight-wrapper #stderr {
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 100%;
+}
+
+/* Remove yellow background from all highlighted sections */
+.output-box .highlight-wrapper .highlight,
+.output-box .highlight-wrapper .highlight pre,
+#headers .highlight,
+#headers .highlight pre {
+    background: none !important;
+}
+
+[data-theme="dark"] .output-box .highlight-wrapper .highlight,
+[data-theme="dark"] .output-box .highlight-wrapper .highlight pre,
+[data-theme="dark"] #headers .highlight,
+[data-theme="dark"] #headers .highlight pre {
+    background: none !important;
+}
