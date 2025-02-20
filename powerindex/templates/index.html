@@ -82,7 +82,11 @@
                     <div class="output-box">
                         <h4>Standard Error</h4>
                         <button class="copy-button stderr-copy" onclick="copyScriptContent('stderr')">Copy</button>
-                        <pre id="stderr">{{ stderr }}</pre>
+                        <div class="highlight-wrapper">
+                            <div class="highlight">
+                                <pre id="stderr">{{ stderr }}</pre>
+                            </div>
+                        </div>
                     </div>
                     <div class="output-box">
                         <div class="output-header">
@@ -93,7 +97,12 @@
                                    placeholder="Search headers..."
                                    onkeyup="searchOutput('headers')">
                         </div>
-                        <pre id="headers"></pre>
+                        <button class="copy-button headers-copy" onclick="copyScriptContent('headers')">Copy</button>
+                        <div class="highlight-wrapper">
+                            <div class="highlight">
+                                <pre id="headers">{{ headers }}</pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
