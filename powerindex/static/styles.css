@@ -763,3 +763,13 @@ tr:hover {
 [data-theme="dark"] #headers .highlight pre {
     background: none !important;
 }
+
+/* Headers title in dark mode */
+[data-theme="dark"] h4 {
+    color: white;
+}
+
+/* Standard Error title in dark mode */
+[data-theme="dark"] .output-box h4 {
+    color: white;
+}
