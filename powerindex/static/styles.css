@@ -734,3 +734,10 @@ tr:hover {
     color: inherit;
     text-decoration: inherit;
 }
+
+.stderr-copy {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
