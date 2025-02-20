@@ -222,5 +222,12 @@ def execute_script():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.template_filter('highlight_search')
+def highlight_search(text, search):
+    if not search:
+        return text
+    pattern = re.compile(f'({re.escape(search)})', re.IGNORECASE)
+    return pattern.sub(r'<span class="highlight">\1</span>', text)
+
 if __name__ == '__main__':
     app.run(debug=False , host='localhost', port=8001) 
