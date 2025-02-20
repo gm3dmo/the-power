@@ -676,3 +676,54 @@ tr:hover {
 [data-theme="dark"] .config-table h2 {
     color: #ffffff;  /* White text in dark mode */
 }
+
+.highlight {
+    background-color: #ffd000 !important;
+    padding: 0 2px;
+    border-radius: 2px;
+    color: inherit;
+}
+
+.script-item a .highlight {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.dark-mode .highlight,
+.dark-mode .script-item a .highlight {
+    background-color: #cc5500 !important;
+    padding: 0 2px;
+    border-radius: 2px;
+    color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+    .highlight {
+        background-color: #cc5500 !important;
+    }
+
+    .script-item a .highlight {
+        background-color: #cc5500 !important;
+    }
+}
+
+[data-theme="light"] .highlight,
+[data-theme="light"] .script-item a .highlight {
+    background-color: #ffd000 !important;
+    padding: 0 2px;
+    border-radius: 2px;
+    color: inherit;
+}
+
+[data-theme="dark"] .highlight,
+[data-theme="dark"] .script-item a .highlight {
+    background-color: #cc5500 !important;
+    padding: 0 2px;
+    border-radius: 2px;
+    color: inherit;
+}
+
+.script-item a .highlight {
+    color: inherit;
+    text-decoration: inherit;
+}

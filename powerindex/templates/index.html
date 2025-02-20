@@ -30,7 +30,11 @@
                     <li class="script-item">
                         <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}"
                            {% if script == selected_script %}class="selected"{% endif %}>
-                            {{ script }}
+                            {% if search_query %}
+                                {{ script | highlight_search(search_query) | safe }}
+                            {% else %}
+                                {{ script }}
+                            {% endif %}
                         </a>
                     </li>
                 {% endfor %}
