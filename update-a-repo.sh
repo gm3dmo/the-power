@@ -1,6 +1,6 @@
 . ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#update-a-repository
+# https://docs.github.com/en/enterprise-cloud@latest/rest/repos/repos?apiVersion=2022-11-28#update-a-repository
 # PATCH /repos/{owner}/{repo}
 
 json_file=tmp/update-a-repo.json

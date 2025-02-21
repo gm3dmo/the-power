@@ -2,8 +2,9 @@
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/actions/oidc#set-the-opt-in-flag-of-an-oidc-subject-claim-customization-for-a-repository
 # PUT /repos/{owner}/{repo}/actions/oidc/customization/sub
-# You must authenticate using an access token with the repo scope to use this endpoint.
 
+
+# You must authenticate using an access token with the repo scope to use this endpoint.
 
 if [ -z "$1" ]
   then
@@ -20,12 +21,14 @@ if [ "$use_default" != "true" ] && [ "$use_default" != "false" ]; then
 fi
 
 json_file=tmp/set-opt-in-flag-of-an-oidc-subject-claim.json
-
 jq -n \
   --argjson use_default true '{"use_default": $use_default}' > ${json_file}
 
+
 curl ${curl_custom_flags} \
      -X PUT \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/actions/oidc/customization/sub" -d @${json_file}
+

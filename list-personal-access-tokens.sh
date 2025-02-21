@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/enterprise-server@3.0/rest/reference/enterprise-admin#list-personal-access-tokens
+# https://docs.github.com/en/enterprise-server@3.15/rest/enterprise-admin?apiVersion=2022-11-28#list-personal-access-tokens
 # GET /admin/tokens
 
 curl ${curl_custom_flags} \

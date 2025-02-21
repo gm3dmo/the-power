@@ -15,13 +15,11 @@ fi
 branch=${protected_branch_name}
 
 json_file=tmp/skeleton.json
-
 jq -n \
            --arg team_slug "${team_slug}" \
            '{
              teams: [ $team_slug ]
            }' > ${json_file}
-
 
 
 curl ${curl_custom_flags} \

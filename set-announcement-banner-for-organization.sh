@@ -29,8 +29,6 @@ jq -n \
              expires_at: $expires_at,
            }' > ${json_file}
 
-cat $json_file | jq -r
-
 #             user_dismissable: $user_dismissable | test("true")
 
 curl -L ${curl_custom_flags} \

@@ -1,12 +1,13 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/repos#get-a-commit
-# GET /repos/:owner/:repo/commits/:ref
+# https://docs.github.com/en/enterprise-cloud@latest/rest/commits/commits?apiVersion=2022-11-28
+# GET /repos/{owner}/{repo}/commits
 
-repo=${1}
-ref=${2}
+ref=${1}
 
 curl ${curl_custom_flags} \
+     -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/commits/${ref}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/commits/${ref}"
+
