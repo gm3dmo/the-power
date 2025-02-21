@@ -3,7 +3,7 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/secret-scanning/secret-scanning?apiVersion=2022-11-28#create-a-push-protection-bypass
 # POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses
 
-# Use create-blob.sh to get a placeholder_id (for programmatic) or use the placeholder ids from the list when doing git push.
+# Use create-a-blob.sh to get a placeholder_id (for programmatic) or use the placeholder ids from the list when doing git push.
 
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
