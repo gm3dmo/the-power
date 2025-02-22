@@ -20,7 +20,6 @@ read x
 
 # GET the list of repos in the organization:
 
-set -x
 rm -rf testrepo
 git clone https://ghe-admin:${GITHUB_TOKEN}@${hostname}/${org}/${repo}.git
 cat testrepo/docs/README.md

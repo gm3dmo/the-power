@@ -20,7 +20,6 @@ echo
 
 cat ${json_file} | jq -r
 
-set -x
 curl -L ${curl_custom_flags} \
      -u "api_key:${mgmt_password}" \
         "https://${hostname}:${mgmt_port}/manage/v1/maintenance" --data @${json_file}

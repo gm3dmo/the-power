@@ -13,7 +13,6 @@ tag_name=$(cat "$response_file" | jq -r '.tag_name')
 
 download_url=$tarball_url
 
-set -x
 curl ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \

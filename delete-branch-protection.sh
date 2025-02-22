@@ -14,7 +14,6 @@ fi
 
 branch=${protected_branch_name}
 
-set -x
 curl ${curl_custom_flags} \
      -X DELETE \
      -H "X-GitHub-Api-Version: ${github_api_version}" \

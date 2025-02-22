@@ -4,7 +4,6 @@
 # PUT /user/installations/{installation_id}/repositories/{repository_id}
 
 
-set -x
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then

@@ -21,7 +21,6 @@ if [ -z "$2" ]
 fi
 
 
-set -x
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \

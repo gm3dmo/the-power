@@ -11,7 +11,6 @@ discussion_id="D_kwDON4cfxc4AeWL9"
 discussion_title="The Power Discussion ${ts} 💬"
 discussion_comment_body="A discussion comment 🍇🦴"
 
-set -x
 read -r -d '' graphql_script <<- EOF
 mutation { addDiscussionComment(input: {discussionId: \"${discussion_id}\", body: \"${discussion_comment_body}\"}) { comment { id } } }
 EOF

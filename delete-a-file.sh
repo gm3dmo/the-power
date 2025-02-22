@@ -24,7 +24,6 @@ jq -n \
 
 
 
-set -x
 curl -v ${curl_custom_flags} \
      -X DELETE \
      -H "X-GitHub-Api-Version: ${github_api_version}" \

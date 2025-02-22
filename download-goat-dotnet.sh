@@ -8,7 +8,6 @@ goat_repo=webgoat_dotnet_7
 
 goat_archive=${goat_repo}.archive.zip
 
-set -x
 curl -v ${curl_custom_flags} \
      -L \
      -H "Accept: application/vnd.github.v3+json" \

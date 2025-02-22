@@ -10,7 +10,6 @@ json_file_to_upload="tmp/README.json"
 contents_path="contents/${filename_in_repo}"
 
 
-set -x
 curl ${curl_custom_flags} \
      -X PUT \
      -H "Accept: application/vnd.github.v3+json" \

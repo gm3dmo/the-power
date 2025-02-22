@@ -24,7 +24,6 @@ jq -n \
              "value_type":"single_select","required":true,"default_value":"production","description":"Prod or dev environment","allowed_values":["production","development", "the-power"]
            }' > ${json_file}
 
-set -x
 
 curl ${curl_custom_flags} \
      -X PUT \
