@@ -20,7 +20,6 @@ if [ -z "$2" ]
     ref="refs/heads/$2"
 fi
 
-set -x
 curl ${curl_custom_flags} \
      -X DELETE \
      -H "Accept: application/vnd.github.v3+json" \

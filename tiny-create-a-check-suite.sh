@@ -28,7 +28,6 @@ cat $json_file | jq -r
 # Only GitHub Apps may use the checks api so we override the token
 GITHUB_TOKEN=$(./tiny-call-get-installation-token.sh | jq -r '.token')
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \

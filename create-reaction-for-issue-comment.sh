@@ -15,7 +15,6 @@ fi
 
 echo $comment_id
 
-set -x
 
 curl -v ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \

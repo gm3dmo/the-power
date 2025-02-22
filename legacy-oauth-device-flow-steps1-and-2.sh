@@ -33,7 +33,6 @@ fi
 echo "========== Step 1: Deliver json file to /login/device/code ============="
 echo 
 
-set -x
 curl ${curl_custom_flags} \
      -H "Content-type: application/json" \
      -H "Accept: application/vnd.github.v3+json" \

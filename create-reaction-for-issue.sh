@@ -11,7 +11,6 @@ if [ -z "$1" ]
     issue_number=$1
 fi
 
-set -x
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \

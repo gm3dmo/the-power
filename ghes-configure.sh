@@ -15,7 +15,6 @@ if [ ! -z "$2" ]
     repo=testrepo
 fi
 
-set -x
 python3 configure.py --hostname ${hostname} \
                      --enterprise-name ${enterprise_name} \
                      --org ${org} \

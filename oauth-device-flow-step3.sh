@@ -44,7 +44,6 @@ fi
 echo "========== Step 3: POST step 3 device flow file to /login/oauth/access_token ======================="
 echo
 echo
-set -x
 curl  ${curl_custom_flags} \
      -H "Content-type: application/json" \
      -H "Accept: application/vnd.github.v3+json" \

@@ -44,7 +44,6 @@ fi
 echo "========== Step 3: POST step 3 device flow file to /login/oauth/access_token ======================="
 echo
 echo
-set -x
 curl  ${curl_custom_flags} \
      -H "Content-type: application/json" \
      -H "Accept: application/vnd.github.v3+json" \
@@ -69,7 +68,6 @@ OAUTH_TOKEN=$(cat ${step3_response_file} | jq -r '.access_token')
 echo ${OAUTH_TOKEN}
 GITHUB_TOKEN=${OAUTH_TOKEN}
 
-set -x
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \

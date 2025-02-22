@@ -11,7 +11,6 @@ registration_token=$(./create-a-registration-token-for-a-repository.sh | jq -r '
 # tag name looks like: v2.299.1
 # we use the ##v shell built-in to strip the v off that.
 
-set -x
 
 tag_name=$(./list-runner-latest-release.sh)
 runner_version=${tag_name##v}
