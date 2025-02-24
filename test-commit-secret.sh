@@ -34,8 +34,18 @@ fi
 function github_pat () { 
     gh1=ghp_9
     gh2=gDO8kvREKK9toy7CsUunZEY77XvGA1pNv5F
+    export gh1 gh2
     echo "Commit: GitHub PAT"
     echo export GITHUB_TOKEN=${gh1}${gh2} >github.token.compromised.secret.txt
+}
+
+function github_pat_base64 () { 
+    # https://github.blog/changelog/2025-02-14-secret-scanning-detects-base64-encoded-github-tokens/
+    gh1=ghp_9
+    gh2=gDO8kvREKK9toy7CsUunZEY77XvGA1pNv5F
+    echo "Commit: GitHub PAT Base64"
+    pat_base64=$(echo ${gh1}${gh2} | ../../base64encode.py)
+    echo export ${pat_base64} >github.token.base64.compromised.secret.txt
 }
 
 function entra_1 () {
@@ -166,8 +176,11 @@ case ${keyname} in
  datadog_api_key)
      datadog_api_key
      ;;
- github)
+ github_pat)
     github_pat
+    ;;
+ github_pat_base64)
+    github_pat_base64
     ;;
  google_api_key)
     google_api_key 
@@ -183,6 +196,7 @@ case ${keyname} in
     ;;
  all)
     github_pat
+    github_pat_base64
     gh_app_installation
     google_api_key
     azure_storage
@@ -198,7 +212,7 @@ case ${keyname} in
     ;;
  *)
    echo 
-   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key, firebase entra_1, entra_2 ]"
+   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key, firebase entra_1, entra_2, github_pat_base64 ]"
    echo 
    ;;
 esac
