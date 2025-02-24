@@ -8,7 +8,7 @@
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
-    check_suite_id=1
+    check_suite_id=$(./list-check-suites-for-a-git-reference.sh | jq '[.check_suites[].id] | min')
   else
     check_suite_id=$1
 fi
