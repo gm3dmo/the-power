@@ -1,6 +1,9 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/graphql/reference/objects#repository
+# https://docs.github.com/en/enterprise-cloud@latest/graphql/reference/objects#releaseasset
+# https://docs.github.com/en/enterprise-cloud@latest/graphql/reference/objects#release
+
+# Copilot generated this script in a few seconds.
 
 read -r -d '' graphql_script <<- EOF
 {
