@@ -3,6 +3,7 @@ import glob
 import string
 import re
 import subprocess
+import sqlite3
 from flask import Flask, render_template, request, jsonify
 from pygments import highlight
 from pygments.lexers import BashLexer, JsonLexer
@@ -34,6 +35,27 @@ def update_curl_flags():
 
 # Run the update immediately
 update_curl_flags()
+
+# Initialize the database
+def init_db():
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'the-power.db')
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    # Create FTS5 table
+    cursor.execute('''
+        CREATE VIRTUAL TABLE IF NOT EXISTS scripts_fts USING fts5(
+            script,
+            body
+        )
+    ''')
+    
+    conn.commit()
+    conn.close()
+    print(f"Database initialized at {db_path}")
+
+# Add database initialization before Flask app creation
+init_db()
 
 app = Flask(__name__)
 

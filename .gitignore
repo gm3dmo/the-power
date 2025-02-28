@@ -149,7 +149,7 @@ environment.json
 
 shell-profile
 
-hooks.db
+*.db
 
 requirements-pwrhook.txt
 
