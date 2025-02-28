@@ -50,6 +50,23 @@ def init_db():
         )
     ''')
     
+    # Clear existing entries
+    cursor.execute('DELETE FROM scripts_fts')
+    
+    # Load all scripts into the database
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    shell_scripts = glob.glob(os.path.join(parent_dir, '*.sh'))
+    
+    for script_path in shell_scripts:
+        script_name = os.path.basename(script_path)
+        try:
+            with open(script_path, 'r') as file:
+                content = file.read()
+                cursor.execute('INSERT INTO scripts_fts (script, body) VALUES (?, ?)',
+                             (script_name, content))
+        except Exception as e:
+            print(f"Error loading script {script_name}: {str(e)}")
+    
     conn.commit()
     conn.close()
     print(f"Database initialized at {db_path}")
