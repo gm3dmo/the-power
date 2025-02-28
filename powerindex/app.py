@@ -271,5 +271,29 @@ def highlight_search(text, search):
     pattern = re.compile(f'({re.escape(search)})', re.IGNORECASE)
     return pattern.sub(r'<span class="highlight">\1</span>', text)
 
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('q', '')
+    results = []
+    
+    if query:
+        # Use the same database path as init_db()
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'the-power.db')
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Use FTS5 match to find results and highlight matching text
+        cursor.execute('''
+            SELECT script, snippet(scripts_fts, 1, '<mark>', '</mark>', '...', 50) 
+            FROM scripts_fts 
+            WHERE body MATCH ? 
+            ORDER BY rank
+        ''', (query,))
+        
+        results = cursor.fetchall()
+        conn.close()
+    
+    return render_template('search.html', query=query, results=results)
+
 if __name__ == '__main__':
     app.run(debug=False , host='localhost', port=8001) 

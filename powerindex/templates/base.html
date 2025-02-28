@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Power Index{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Check and set dark mode before anything renders
+        (function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title-container">
+                <button class="title-link" onclick="toggleDarkMode(event)" style="cursor: pointer; border: none; background: none; padding: 0; display: flex; align-items: center;">
+                    <img src="{{ url_for('static', filename='noun-aardvark.svg') }}" alt="Power Logo" class="title-logo">
+                    <h1>{% block header %}Power Index{% endblock %}</h1>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    {% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.documentElement.classList.add('ready');
+        });
+
+        function toggleDarkMode(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('darkMode', !isDark);
+            return false;
+        }
+    </script>
+    {% endblock %}
+</body>
+</html> 

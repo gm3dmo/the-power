@@ -1,135 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power Index</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        {{ highlight_style }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="title-container">
-            <img src="{{ url_for('static', filename='noun-aardvark.svg') }}" alt="Aardvark logo" class="title-logo">
-            <h1>The Power Viewer</h1>
-        </div>
-        
-        <form method="GET" action="/" class="search-form">
-            <input type="text" 
-                   name="search" 
-                   placeholder="Search scripts..."
-                   value="{{ search_query }}"
-                   autofocus>
-            <button type="submit">Search</button>
-        </form>
-        <div class="content-wrapper">
-            <ul class="script-list">
-                {% for script in scripts %}
-                    <li class="script-item">
-                        <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}"
-                           {% if script == selected_script %}class="selected"{% endif %}>
-                            {% if search_query %}
-                                {{ script | highlight_search(search_query) | safe }}
-                            {% else %}
-                                {{ script }}
-                            {% endif %}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-            {% if script_content %}
-            <div class="script-content">
-                <h3 data-script-name="{{ selected_script }}">
-                    <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
-                    <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">Copy Docs URL</button>
-                    <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ selected_script }}</a>
-                </h3>
-                <div class="script-boxes">
-                    <div class="script-box">
-                        <div class="script-box-header">
-                            <h4>Original Script</h4>
-                        </div>
-                        <div class="highlight-wrapper" id="original-script">
-                            {{ highlighted_content | safe }}
-                        </div>
-                    </div>
-                </div>
-                <div class="script-boxes">
-                    <div class="script-box">
-                        <div class="script-box-header">
-                            <h4>Rendered Script</h4>
-                            <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
-                        </div>
-                        <div class="highlight-wrapper" id="rendered-script">
-                            {{ rendered_content | safe }}
-                        </div>
-                    </div>
-                </div>
-                <div class="output-boxes">
-                    <div class="output-box">
-                        <div class="output-header">
-                            <div class="header-title">
-                                <h4>Standard Output</h4>
-                                <button class="copy-button stdout-copy" onclick="copyScriptContent('stdout')">Copy</button>
-                            </div>
-                            <input type="text" 
-                                   id="stdoutSearch" 
-                                   class="output-search" 
-                                   placeholder="Search output..."
-                                   onkeyup="searchOutput('stdout')">
-                        </div>
-                        <pre id="stdout"></pre>
-                    </div>
-                    <div class="output-box">
-                        <h4>Standard Error</h4>
-                        <button class="copy-button stderr-copy" onclick="copyScriptContent('stderr')">Copy</button>
-                        <div class="highlight-wrapper">
-                            <div class="highlight">
-                                <pre id="stderr">{{ stderr }}</pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="output-box">
-                        <h4>Headers</h4>
-                        <button class="copy-button headers-copy" onclick="copyScriptContent('headers')">Copy</button>
-                        <input type="text" id="headersSearch" onkeyup="searchOutput('headers')" placeholder="Search headers...">
-                        <div class="highlight-wrapper">
-                            <div class="highlight">
-                                <pre id="headers">{{ headers }}</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <h2>Configuration</h2>
-                <input type="text" 
-                       id="configSearch" 
-                       class="config-search" 
-                       placeholder="Search configuration..."
-                       onkeyup="searchConfig()">
-                <table id="configTable">
-                    <thead>
-                        <tr>
-                            <th>Key</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for key, value in config.items() %}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td>{{ value }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% endif %}
-        </div>
-    </div>
+{% extends "base.html" %}
 
+{% block title %}The Power Viewer{% endblock %}
+
+{% block header %}The Power Viewer{% endblock %}
+
+{% block content %}
+    <form method="GET" action="/" class="search-form">
+        <input type="text" 
+               name="search" 
+               placeholder="Search scripts..."
+               value="{{ search_query }}"
+               autofocus>
+        <button type="submit">Search</button>
+    </form>
+    <div class="content-wrapper">
+        <ul class="script-list">
+            {% for script in scripts %}
+                <li class="script-item">
+                    <a href="/?script={{ script }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                       {% if script == selected_script %}class="selected"{% endif %}>
+                        {% if search_query %}
+                            {{ script | highlight_search(search_query) | safe }}
+                        {% else %}
+                            {{ script }}
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if script_content %}
+        <div class="script-content">
+            <h3 data-script-name="{{ selected_script }}">
+                <button class="execute-button" onclick="executeScript('{{ selected_script }}')">Execute</button>
+                <button class="copy-button" onclick="copyToClipboard('{{ doc_url }}')">Copy Docs URL</button>
+                <a href="{{ doc_url }}" target="_blank" rel="noopener noreferrer">{{ selected_script }}</a>
+            </h3>
+            <div class="script-boxes">
+                <div class="script-box">
+                    <div class="script-box-header">
+                        <h4>Original Script</h4>
+                    </div>
+                    <div class="highlight-wrapper" id="original-script">
+                        {{ highlighted_content | safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="script-boxes">
+                <div class="script-box">
+                    <div class="script-box-header">
+                        <h4>Rendered Script</h4>
+                        <button class="copy-button" onclick="copyScriptContent('rendered-script')">Copy</button>
+                    </div>
+                    <div class="highlight-wrapper" id="rendered-script">
+                        {{ rendered_content | safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="output-boxes">
+                <div class="output-box">
+                    <div class="output-header">
+                        <div class="header-title">
+                            <h4>Standard Output</h4>
+                            <button class="copy-button stdout-copy" onclick="copyScriptContent('stdout')">Copy</button>
+                        </div>
+                        <input type="text" 
+                               id="stdoutSearch" 
+                               class="output-search" 
+                               placeholder="Search output..."
+                               onkeyup="searchOutput('stdout')">
+                    </div>
+                    <pre id="stdout"></pre>
+                </div>
+                <div class="output-box">
+                    <h4>Standard Error</h4>
+                    <button class="copy-button stderr-copy" onclick="copyScriptContent('stderr')">Copy</button>
+                    <div class="highlight-wrapper">
+                        <div class="highlight">
+                            <pre id="stderr">{{ stderr }}</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="output-box">
+                    <h4>Headers</h4>
+                    <button class="copy-button headers-copy" onclick="copyScriptContent('headers')">Copy</button>
+                    <input type="text" id="headersSearch" onkeyup="searchOutput('headers')" placeholder="Search headers...">
+                    <div class="highlight-wrapper">
+                        <div class="highlight">
+                            <pre id="headers">{{ headers }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Configuration</h2>
+            <input type="text" 
+                   id="configSearch" 
+                   class="config-search" 
+                   placeholder="Search configuration..."
+                   onkeyup="searchConfig()">
+            <table id="configTable">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in config.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html> 
+{% endblock %} 
