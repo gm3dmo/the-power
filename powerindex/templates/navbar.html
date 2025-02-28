@@ -1,0 +1,6 @@
+<nav class="navbar">
+    <div class="nav-links" style="display: flex; justify-content: center; gap: 20px;">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Index</a>
+        <a href="{{ url_for('search') }}" class="nav-link {% if request.endpoint == 'search' %}active{% endif %}">Full Text Search</a>
+    </div>
+</nav>

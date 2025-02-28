@@ -3,6 +3,7 @@ import glob
 import string
 import re
 import subprocess
+import sqlite3
 from flask import Flask, render_template, request, jsonify
 from pygments import highlight
 from pygments.lexers import BashLexer, JsonLexer
@@ -34,6 +35,44 @@ def update_curl_flags():
 
 # Run the update immediately
 update_curl_flags()
+
+# Initialize the database
+def init_db():
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'the-power.db')
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    # Create FTS5 table
+    cursor.execute('''
+        CREATE VIRTUAL TABLE IF NOT EXISTS scripts_fts USING fts5(
+            script,
+            body
+        )
+    ''')
+    
+    # Clear existing entries
+    cursor.execute('DELETE FROM scripts_fts')
+    
+    # Load all scripts into the database
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    shell_scripts = glob.glob(os.path.join(parent_dir, '*.sh'))
+    
+    for script_path in shell_scripts:
+        script_name = os.path.basename(script_path)
+        try:
+            with open(script_path, 'r') as file:
+                content = file.read()
+                cursor.execute('INSERT INTO scripts_fts (script, body) VALUES (?, ?)',
+                             (script_name, content))
+        except Exception as e:
+            print(f"Error loading script {script_name}: {str(e)}")
+    
+    conn.commit()
+    conn.close()
+    print(f"Database initialized at {db_path}")
+
+# Add database initialization before Flask app creation
+init_db()
 
 app = Flask(__name__)
 
@@ -231,6 +270,30 @@ def highlight_search(text, search):
         return text
     pattern = re.compile(f'({re.escape(search)})', re.IGNORECASE)
     return pattern.sub(r'<span class="highlight">\1</span>', text)
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('q', '')
+    results = []
+    
+    if query:
+        # Use the same database path as init_db()
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'the-power.db')
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Use FTS5 match to find results and highlight matching text
+        cursor.execute('''
+            SELECT script, snippet(scripts_fts, 1, '<mark>', '</mark>', '...', 50) 
+            FROM scripts_fts 
+            WHERE body MATCH ? 
+            ORDER BY rank
+        ''', (query,))
+        
+        results = cursor.fetchall()
+        conn.close()
+    
+    return render_template('search.html', query=query, results=results)
 
 if __name__ == '__main__':
     app.run(debug=False , host='localhost', port=8001) 

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Power Index - Full Text Search{% endblock %}
+
+{% block header %}Full Text Search{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search scripts..." class="form-control">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+{% if query %}
+    <div class="search-results">
+        <h2>Results for "{{ query }}"</h2>
+        {% if results %}
+            {% for script, snippet in results %}
+            <div class="search-result">
+                <h3>{{ script }}</h3>
+                <div class="snippet">{{ snippet | safe }}</div>
+                <div class="actions">
+                    <a href="{{ url_for('index', script=script) }}" class="btn btn-sm btn-outline-primary">View Full Script</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %} 
