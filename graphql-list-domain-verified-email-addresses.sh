@@ -1,9 +1,9 @@
 .  ./.gh-api-examples.conf
 
-# Wrap a graphql script for use with curl
-# Permissions needed for GitHub App: Read access to members
+# https://docs.github.com/en/graphql/reference/objects 
+# organizationVerifiedDomainEmails
+# https://github.blog/changelog/2020-05-19-api-support-for-viewing-organization-members-verified-email-addresses/
 
-# Use a bash "here" document and shell variables will be available:
 
 read -r -d '' graphql_script <<- EOF
 {
@@ -18,7 +18,6 @@ organization(login:"$org"){
 }
 EOF
 
-# Escape quotes and reformat script to a single line
 graphql_script="$(echo ${graphql_script//\"/\\\"})"
 
 
