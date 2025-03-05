@@ -147,11 +147,16 @@ def slurphook():
             ))
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
+            
+            # Add debug logging and ensure message is sent
+            app.logger.debug("Sending refresh message to event queue")
+            event_queue.put("refresh")
+            app.logger.debug("Refresh message sent")
+            
+            return ('status', config.status_code)
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
-            
-        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])

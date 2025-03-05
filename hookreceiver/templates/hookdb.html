@@ -256,7 +256,6 @@
                         console.error('Error:', error);
                         alert('Failed to clear events');
                     });
-            }
         }
 
         function copyToClipboard(button, text) {
@@ -272,20 +271,26 @@
             });
         }
 
+        console.log("Setting up EventSource connection...");
         let eventSource = new EventSource('/stream');
         
+        eventSource.onopen = function(e) {
+            console.log("EventSource connection established");
+        };
+        
         eventSource.onmessage = function(e) {
-            console.log("Received message:", e.data);  // Debug log
+            console.log("Received message:", e.data);
             if (e.data === "refresh") {
+                console.log("Refreshing page...");
                 window.location.reload();
             }
         };
 
         eventSource.onerror = function(e) {
-            console.log("EventSource failed:", e);  // Debug log
+            console.log("EventSource error:", e);
             eventSource.close();
-            // Attempt to reconnect after a brief delay
             setTimeout(() => {
+                console.log("Attempting to reconnect...");
                 eventSource = new EventSource('/stream');
             }, 1000);
         };
