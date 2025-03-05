@@ -13,12 +13,13 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect, render_template, url_for
+from flask import Flask, request, abort, g, redirect, render_template, url_for, Response
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
 import sqlite3
 from pathlib import Path
+import queue
 
 
 def verify_signature(payload_body, secret_token, signature_header):
@@ -103,6 +104,9 @@ def init_db():
     app.logger.debug(f"Database initialized at {config.db_name}")
 
 
+# Add near the top with other global variables
+event_queue = queue.Queue()
+
 @app.route('/webhook', methods=['POST'])
 def slurphook():
     if request.method == 'POST':
@@ -146,11 +150,14 @@ def slurphook():
             ))
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
+            
+            # After successfully storing the webhook, notify listeners
+            event_queue.put("refresh")
+            
+            return ('status', config.status_code)
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
-            
-        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])
@@ -270,6 +277,19 @@ def clear_events():
         return {'status': 'success'}, 200
     except Exception as e:
         return {'status': 'error', 'message': str(e)}, 500
+
+
+# Add new route for SSE
+@app.route('/stream')
+def stream():
+    def event_stream():
+        while True:
+            try:
+                message = event_queue.get()
+                yield f"data: {message}\n\n"
+            except:
+                break
+    return Response(event_stream(), mimetype="text/event-stream")
 
 
 if __name__ == '__main__':

@@ -271,6 +271,13 @@
                 }, 2000);
             });
         }
+
+        const eventSource = new EventSource('/stream');
+        eventSource.onmessage = function(e) {
+            if (e.data === "refresh") {
+                window.location.reload();
+            }
+        };
     </script>
 </body>
 </html> 
