@@ -150,12 +150,17 @@ def slurphook():
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
             
-            # Add debug logging and ensure message is sent
-            app.logger.debug("Sending refresh message to event queue")
-            event_queue.put("refresh")
-            app.logger.debug("Refresh message sent")
+            # Ensure the event queue message is sent
+            try:
+                event_queue.put_nowait("refresh")
+                app.logger.debug("Refresh message sent to event queue")
+            except queue.Full:
+                app.logger.warning("Event queue is full, clearing and resending")
+                while not event_queue.empty():
+                    event_queue.get_nowait()
+                event_queue.put_nowait("refresh")
             
-            return ('status', config.status_code)
+            return ('', config.status_code)
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
@@ -285,14 +290,26 @@ def stream():
     def event_stream():
         while True:
             try:
-                message = event_queue.get()
+                # Add a timeout to prevent blocking forever
+                message = event_queue.get(timeout=20)
+                app.logger.debug(f"Sending SSE message: {message}")
                 yield f"data: {message}\n\n"
-            except:
+            except queue.Empty:
+                # Send a keep-alive comment to prevent connection timeout
+                yield ": keep-alive\n\n"
+            except Exception as e:
+                app.logger.error(f"Error in event stream: {e}")
                 break
-    return Response(event_stream(), mimetype="text/event-stream", headers={
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
-    })
+    
+    return Response(
+        event_stream(),
+        mimetype="text/event-stream",
+        headers={
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'X-Accel-Buffering': 'no'  # Disable proxy buffering
+        }
+    )
 
 
 if __name__ == '__main__':

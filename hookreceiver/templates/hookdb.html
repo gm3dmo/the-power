@@ -241,6 +241,40 @@
     {% endif %}
 
     <script>
+        function setupEventSource() {
+            console.log("Setting up EventSource connection...");
+            let eventSource = new EventSource('/stream');
+            
+            eventSource.onopen = function(e) {
+                console.log("EventSource connection established");
+            };
+            
+            eventSource.onmessage = function(e) {
+                console.log("Received message:", e.data);
+                if (e.data === "refresh") {
+                    console.log("Refreshing page...");
+                    window.location.reload();
+                }
+            };
+            
+            eventSource.onerror = function(e) {
+                console.log("EventSource error:", e);
+                eventSource.close();
+                // Attempt to reconnect after a delay
+                setTimeout(setupEventSource, 1000);
+            };
+
+            // Add window unload handler to properly close the connection
+            window.addEventListener('unload', function() {
+                eventSource.close();
+            });
+
+            return eventSource;
+        }
+
+        // Initialize the EventSource connection
+        let eventSource = setupEventSource();
+
         function clearEvents() {
             if (confirm('Are you sure you want to clear all events?')) {
                 fetch('/clear', { method: 'POST' })
@@ -271,30 +305,6 @@
                 }, 2000);
             });
         }
-
-        console.log("Setting up EventSource connection...");
-        let eventSource = new EventSource('/stream');
-        
-        eventSource.onopen = function(e) {
-            console.log("EventSource connection established");
-        };
-        
-        eventSource.onmessage = function(e) {
-            console.log("Received message:", e.data);
-            if (e.data === "refresh") {
-                console.log("Refreshing page...");
-                window.location.reload();
-            }
-        };
-
-        eventSource.onerror = function(e) {
-            console.log("EventSource error:", e);
-            eventSource.close();
-            setTimeout(() => {
-                console.log("Attempting to reconnect...");
-                eventSource = new EventSource('/stream');
-            }, 1000);
-        };
     </script>
 </body>
 </html> 
