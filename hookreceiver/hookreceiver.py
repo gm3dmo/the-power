@@ -312,6 +312,15 @@ def stream():
     )
 
 
+def clear_event_queue():
+    """Clear all messages from the event queue."""
+    while not event_queue.empty():
+        try:
+            event_queue.get_nowait()
+        except queue.Empty:
+            break
+
+
 if __name__ == '__main__':
     # Keep command line argument support for direct Python execution
     parser = argparse.ArgumentParser()
@@ -346,6 +355,10 @@ if __name__ == '__main__':
     config.hook_secret = args.hook_secret
     config.status_code = args.status_code
     config.db_name = args.db_name
+    
+    # Clear the event queue on startup
+    clear_event_queue()
+    app.logger.debug("Event queue cleared on startup")
     
     # Create app context before initializing database
     with app.app_context():
