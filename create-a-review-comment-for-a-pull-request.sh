@@ -41,9 +41,9 @@ jq -n \
 
 
 GITHUB_TOKEN=${pr_approver_token}
-curl -v ${curl_custom_flags} \
+curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/comments --data @${json_file}"
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/pulls/${pull_number}/comments" --data @${json_file}
 
