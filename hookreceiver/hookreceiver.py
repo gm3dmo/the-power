@@ -150,17 +150,12 @@ def slurphook():
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
             
-            # Ensure the event queue message is sent
-            try:
-                event_queue.put_nowait("refresh")
-                app.logger.debug("Refresh message sent to event queue")
-            except queue.Full:
-                app.logger.warning("Event queue is full, clearing and resending")
-                while not event_queue.empty():
-                    event_queue.get_nowait()
-                event_queue.put_nowait("refresh")
+            # Clear queue and send refresh message
+            clear_event_queue()
+            event_queue.put("refresh")
+            app.logger.debug("Refresh message sent to event queue")
             
-            return ('', config.status_code)
+            return '', config.status_code
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
@@ -288,28 +283,34 @@ def clear_events():
 @app.route('/stream')
 def stream():
     def event_stream():
+        app.logger.debug("New client connected to event stream")
         while True:
             try:
-                # Add a timeout to prevent blocking forever
-                message = event_queue.get(timeout=20)
+                message = event_queue.get(timeout=5)  # Reduced timeout
                 app.logger.debug(f"Sending SSE message: {message}")
                 yield f"data: {message}\n\n"
+                app.logger.debug("SSE message sent successfully")
             except queue.Empty:
-                # Send a keep-alive comment to prevent connection timeout
                 yield ": keep-alive\n\n"
+                app.logger.debug("Sent keep-alive message")
+            except GeneratorExit:
+                app.logger.debug("Client disconnected from event stream")
+                break
             except Exception as e:
                 app.logger.error(f"Error in event stream: {e}")
                 break
     
-    return Response(
+    response = Response(
         event_stream(),
         mimetype="text/event-stream",
         headers={
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-cache, no-transform',
             'Connection': 'keep-alive',
-            'X-Accel-Buffering': 'no'  # Disable proxy buffering
+            'X-Accel-Buffering': 'no',
+            'Access-Control-Allow-Origin': '*'
         }
     )
+    return response
 
 
 def clear_event_queue():

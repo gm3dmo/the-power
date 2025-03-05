@@ -241,55 +241,70 @@
     {% endif %}
 
     <script>
+        let eventSource = null;
+
         function setupEventSource() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
             console.log("Setting up EventSource connection...");
-            let eventSource = new EventSource('/stream');
+            eventSource = new EventSource('/stream');
             
             eventSource.onopen = function(e) {
                 console.log("EventSource connection established");
             };
             
             eventSource.onmessage = function(e) {
-                console.log("Received message:", e.data);
+                console.log("Received SSE message:", e.data);
                 if (e.data === "refresh") {
                     console.log("Refreshing page...");
-                    window.location.reload();
+                    location.reload(true);  // Force reload from server
                 }
             };
             
             eventSource.onerror = function(e) {
-                console.log("EventSource error:", e);
-                eventSource.close();
-                // Attempt to reconnect after a delay
-                setTimeout(setupEventSource, 1000);
+                console.error("EventSource error:", e);
+                if (eventSource.readyState === EventSource.CLOSED) {
+                    console.log("Connection closed, attempting to reconnect...");
+                    setTimeout(setupEventSource, 1000);
+                }
             };
 
-            // Add window unload handler to properly close the connection
-            window.addEventListener('unload', function() {
-                eventSource.close();
+            // Clean up on page unload
+            window.addEventListener('beforeunload', function() {
+                if (eventSource) {
+                    console.log("Closing EventSource connection");
+                    eventSource.close();
+                }
             });
-
-            return eventSource;
         }
 
-        // Initialize the EventSource connection
-        let eventSource = setupEventSource();
+        // Initialize EventSource when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventSource();
+        });
 
         function clearEvents() {
             if (confirm('Are you sure you want to clear all events?')) {
-                fetch('/clear', { method: 'POST' })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            window.location.reload();
-                        } else {
-                            alert('Failed to clear events');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                fetch('/clear', { 
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        location.reload(true);
+                    } else {
                         alert('Failed to clear events');
-                    });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to clear events');
+                });
             }
         }
 
