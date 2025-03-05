@@ -21,6 +21,8 @@ import sqlite3
 from pathlib import Path
 import queue
 
+# Create a global event queue for SSE notifications
+event_queue = queue.Queue()
 
 def verify_signature(payload_body, secret_token, signature_header):
     """
