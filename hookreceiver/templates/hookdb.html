@@ -202,7 +202,7 @@
     <div class="details">
         <h3>Payload
             <button class="copy-button"
-                    onclick="copyToClipboard(this, `{{ formatted_payload.replace('`', '\\`') }}`)">
+                    onclick="copyToClipboard(this, '{{ formatted_payload|escape }}')">
                 Copy
             </button>
         </h3>
@@ -210,7 +210,7 @@
 
         <h3>Headers
             <button class="copy-button"
-                    onclick="copyToClipboard(this, `{{ formatted_headers.replace('`', '\\`') }}`)">
+                    onclick="copyToClipboard(this, '{{ formatted_headers|escape }}')">
                 Copy
             </button>
         </h3>
@@ -241,21 +241,70 @@
     {% endif %}
 
     <script>
+        let eventSource = null;
+
+        function setupEventSource() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            console.log("Setting up EventSource connection...");
+            eventSource = new EventSource('/stream');
+            
+            eventSource.onopen = function(e) {
+                console.log("EventSource connection established");
+            };
+            
+            eventSource.onmessage = function(e) {
+                console.log("Received SSE message:", e.data);
+                if (e.data === "refresh") {
+                    console.log("Refreshing page...");
+                    location.reload(true);  // Force reload from server
+                }
+            };
+            
+            eventSource.onerror = function(e) {
+                console.error("EventSource error:", e);
+                if (eventSource.readyState === EventSource.CLOSED) {
+                    console.log("Connection closed, attempting to reconnect...");
+                    setTimeout(setupEventSource, 1000);
+                }
+            };
+
+            // Clean up on page unload
+            window.addEventListener('beforeunload', function() {
+                if (eventSource) {
+                    console.log("Closing EventSource connection");
+                    eventSource.close();
+                }
+            });
+        }
+
+        // Initialize EventSource when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventSource();
+        });
+
         function clearEvents() {
             if (confirm('Are you sure you want to clear all events?')) {
-                fetch('/clear', { method: 'POST' })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            window.location.reload();
-                        } else {
-                            alert('Failed to clear events');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                fetch('/clear', { 
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        location.reload(true);
+                    } else {
                         alert('Failed to clear events');
-                    });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to clear events');
+                });
             }
         }
 

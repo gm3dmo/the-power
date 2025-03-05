@@ -13,13 +13,16 @@ import sys
 import json
 import string
 import time
-from flask import Flask, request, abort, g, redirect, render_template, url_for
+from flask import Flask, request, abort, g, redirect, render_template, url_for, Response
 import hashlib
 import hmac
 from werkzeug.exceptions import HTTPException  # Add this import
 import sqlite3
 from pathlib import Path
+import queue
 
+# Create a global event queue for SSE notifications
+event_queue = queue.Queue()
 
 def verify_signature(payload_body, secret_token, signature_header):
     """
@@ -146,11 +149,16 @@ def slurphook():
             ))
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
+            
+            # Clear queue and send refresh message
+            clear_event_queue()
+            event_queue.put("refresh")
+            app.logger.debug("Refresh message sent to event queue")
+            
+            return '', config.status_code
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
-            
-        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])
@@ -272,6 +280,48 @@ def clear_events():
         return {'status': 'error', 'message': str(e)}, 500
 
 
+@app.route('/stream')
+def stream():
+    def event_stream():
+        app.logger.debug("New client connected to event stream")
+        while True:
+            try:
+                message = event_queue.get(timeout=5)  # Reduced timeout
+                app.logger.debug(f"Sending SSE message: {message}")
+                yield f"data: {message}\n\n"
+                app.logger.debug("SSE message sent successfully")
+            except queue.Empty:
+                yield ": keep-alive\n\n"
+                app.logger.debug("Sent keep-alive message")
+            except GeneratorExit:
+                app.logger.debug("Client disconnected from event stream")
+                break
+            except Exception as e:
+                app.logger.error(f"Error in event stream: {e}")
+                break
+    
+    response = Response(
+        event_stream(),
+        mimetype="text/event-stream",
+        headers={
+            'Cache-Control': 'no-cache, no-transform',
+            'Connection': 'keep-alive',
+            'X-Accel-Buffering': 'no',
+            'Access-Control-Allow-Origin': '*'
+        }
+    )
+    return response
+
+
+def clear_event_queue():
+    """Clear all messages from the event queue."""
+    while not event_queue.empty():
+        try:
+            event_queue.get_nowait()
+        except queue.Empty:
+            break
+
+
 if __name__ == '__main__':
     # Keep command line argument support for direct Python execution
     parser = argparse.ArgumentParser()
@@ -306,6 +356,10 @@ if __name__ == '__main__':
     config.hook_secret = args.hook_secret
     config.status_code = args.status_code
     config.db_name = args.db_name
+    
+    # Clear the event queue on startup
+    clear_event_queue()
+    app.logger.debug("Event queue cleared on startup")
     
     # Create app context before initializing database
     with app.app_context():
