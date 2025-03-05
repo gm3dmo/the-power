@@ -272,11 +272,22 @@
             });
         }
 
-        const eventSource = new EventSource('/stream');
+        let eventSource = new EventSource('/stream');
+        
         eventSource.onmessage = function(e) {
+            console.log("Received message:", e.data);  // Debug log
             if (e.data === "refresh") {
                 window.location.reload();
             }
+        };
+
+        eventSource.onerror = function(e) {
+            console.log("EventSource failed:", e);  // Debug log
+            eventSource.close();
+            // Attempt to reconnect after a brief delay
+            setTimeout(() => {
+                eventSource = new EventSource('/stream');
+            }, 1000);
         };
     </script>
 </body>

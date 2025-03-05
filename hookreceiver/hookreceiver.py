@@ -104,9 +104,6 @@ def init_db():
     app.logger.debug(f"Database initialized at {config.db_name}")
 
 
-# Add near the top with other global variables
-event_queue = queue.Queue()
-
 @app.route('/webhook', methods=['POST'])
 def slurphook():
     if request.method == 'POST':
@@ -150,14 +147,11 @@ def slurphook():
             ))
             db.commit()
             app.logger.debug(f"Webhook data stored in database: {config.db_name}")
-            
-            # After successfully storing the webhook, notify listeners
-            event_queue.put("refresh")
-            
-            return ('status', config.status_code)
         except Exception as e:
             app.logger.error(f"Failed to store webhook data: {str(e)}")
             raise
+            
+        return ('status', config.status_code)
 
 
 @app.route('/truncate', methods=['POST'])
@@ -279,7 +273,6 @@ def clear_events():
         return {'status': 'error', 'message': str(e)}, 500
 
 
-# Add new route for SSE
 @app.route('/stream')
 def stream():
     def event_stream():
@@ -289,7 +282,10 @@ def stream():
                 yield f"data: {message}\n\n"
             except:
                 break
-    return Response(event_stream(), mimetype="text/event-stream")
+    return Response(event_stream(), mimetype="text/event-stream", headers={
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    })
 
 
 if __name__ == '__main__':
