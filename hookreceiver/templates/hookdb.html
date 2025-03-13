@@ -183,6 +183,8 @@
                 <th>Timestamp</th>
                 <th>Event Type</th>
                 <th>Action</th>
+                <th>Target Type</th>
+                <th>Hook ID</th>
                 <th>Signature</th>
             </tr>
             {% for row in table_records %}
@@ -194,6 +196,8 @@
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
                 <td>{{ row[6] if row[6] and row[6] != 'None' else '' }}</td>
+                <td>{{ row[7] if row[7] and row[7] != 'None' else '' }}</td>
+                <td>{{ row[8] if row[8] and row[8] != 'None' else '' }}</td>
                 <td>{{ row[4] if row[4] and row[4] != 'None' else '' }}</td>
             </tr>
             {% endfor %}
