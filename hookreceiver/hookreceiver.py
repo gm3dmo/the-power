@@ -196,13 +196,19 @@ def hookdb():
         # Then proceed with the existing query logic
         if search:
             cursor.execute('''
-                SELECT * FROM webhook_events
+                SELECT id, timestamp, event_type, payload, signature, headers, action_type,
+                       json_extract(headers, '$.X-Github-Hook-Installation-Target-Type') as target_type,
+                       json_extract(headers, '$.X-Github-Hook-Id') as hook_id
+                FROM webhook_events
                 WHERE event_type LIKE ?
                 ORDER BY id DESC
             ''', (f'%{search}%',))
         else:
             cursor.execute('''
-                SELECT * FROM webhook_events
+                SELECT id, timestamp, event_type, payload, signature, headers, action_type,
+                       json_extract(headers, '$.X-Github-Hook-Installation-Target-Type') as target_type,
+                       json_extract(headers, '$.X-Github-Hook-Id') as hook_id
+                FROM webhook_events
                 ORDER BY id DESC
             ''')
 
