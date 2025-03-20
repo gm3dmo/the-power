@@ -120,19 +120,29 @@ def slurphook():
         app.logger.debug("-" * 21)
         app.logger.debug(f"Headers: {request.headers}")
         app.logger.debug("-" * 21)
-        app.logger.debug(f"JSON payload:\n\n{json.dumps(request.json, indent=4)}")
+        
+        # Get the raw request data for signature verification
+        payload_data = request.data
+        
+        # Try to parse as JSON, but don't fail if it's not valid JSON
+        try:
+            payload_json = request.json
+            app.logger.debug(f"JSON payload:\n\n{json.dumps(payload_json, indent=4)}")
+            action_value = payload_json.get('action')
+        except:
+            # Handle non-JSON payloads (like plain text)
+            payload_json = {'raw_content': payload_data.decode('utf-8')}
+            app.logger.debug(f"Non-JSON payload:\n\n{payload_data.decode('utf-8')}")
+            action_value = None
         
         if signature_header and config.hook_secret:
-            verify_signature(request.data, config.hook_secret, signature_header)
+            verify_signature(payload_data, config.hook_secret, signature_header)
         else:
             app.logger.debug("Skipping signature verification - no signature header or secret provided")
         
         # Format headers for storage
         headers_dict = dict(request.headers)
         headers_formatted = json.dumps(headers_dict, indent=2)
-
-        # Extract action from the JSON, if available
-        action_value = request.json.get('action')
         
         # Store webhook data in database
         try:
@@ -143,7 +153,7 @@ def slurphook():
                 VALUES (?, ?, ?, ?, ?)
             ''', (
                 event_type,
-                json.dumps(request.json),
+                json.dumps(payload_json),
                 signature_header,
                 headers_formatted,
                 action_value
