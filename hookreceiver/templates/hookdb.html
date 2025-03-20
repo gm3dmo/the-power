@@ -208,7 +208,7 @@
     <div class="details">
         <h3>Payload
             <button class="copy-button"
-                    onclick="copyToClipboard(this, '{{ formatted_payload|escape }}')">
+                    onclick="copyToClipboard(this, document.querySelector('.details pre').textContent)">
                 Copy
             </button>
         </h3>
@@ -216,7 +216,7 @@
 
         <h3>Headers
             <button class="copy-button"
-                    onclick="copyToClipboard(this, '{{ formatted_headers|escape }}')">
+                    onclick="copyHeadersContent(this)">
                 Copy
             </button>
         </h3>
@@ -325,6 +325,40 @@
                     }
                 }, 2000);
             });
+        }
+
+        function copyHeadersContent(button) {
+            // If we have a pre element for headers
+            const headersPre = document.querySelectorAll('.details pre')[1];
+            if (headersPre) {
+                navigator.clipboard.writeText(headersPre.textContent).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                });
+                return;
+            }
+            
+            // If we have a table for headers
+            const headersTable = document.querySelector('.details table');
+            if (headersTable) {
+                let headerText = '';
+                const rows = headersTable.querySelectorAll('tr');
+                // Skip the first row (header row)
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].querySelectorAll('td');
+                    if (cells.length >= 2) {
+                        headerText += `${cells[0].textContent}: ${cells[1].textContent}\n`;
+                    }
+                }
+                navigator.clipboard.writeText(headerText).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                });
+            }
         }
     </script>
 </body>
