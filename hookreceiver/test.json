@@ -1,0 +1,26 @@
+{
+  "event_type": "push",
+  "repository": {
+    "name": "test-repo",
+    "owner": {
+      "login": "user123"
+    },
+    "url": "https://github.com/user123/test-repo"
+  },
+  "commits": [
+    {
+      "id": "abc123",
+      "message": "Update documentation",
+      "timestamp": "2023-09-10T14:32:15Z",
+      "author": {
+        "name": "Test User",
+        "email": "testuser@example.com"
+      }
+    }
+  ],
+  "sender": {
+    "login": "user123",
+    "id": 12345
+  },
+  "timestamp": "2023-09-10T14:32:20Z"
+} 
