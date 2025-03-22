@@ -1,4 +1,4 @@
-# Using The Power to test webhooks
+# Using The Power to test Webhooks
 
 ## Requirements
 
@@ -73,3 +73,12 @@ Create an event that triggers the webhook such as creating an issue or commentin
 ./create-issue-comment.sh
 
 ```
+
+## Notes on GitHub Documentation
+The document [Validating webhook deliveries](https://docs.github.com/en/enterprise-cloud@latest/webhooks/using-webhooks/validating-webhook-deliveries) contains a section titled [Testing the webhook payload validation](https://docs.github.com/en/enterprise-cloud@latest/webhooks/using-webhooks/validating-webhook-deliveries#testing-the-webhook-payload-validation) which explains in prose about the SECRET, PLAIN_PAYLOAD and EXPECTED_SIGNATURE, the  [verify_signature.sh](https://github.com/gm3dmo/the-power/blob/main/hookreceiver/verify_signature.sh) script is a demonstration of this using bash/openssl to derive `CALCULATED_SIGNATURE`:
+
+```
+CALCULATED_SIGNATURE=$(echo -n "$PLAIN_PAYLOAD" | openssl dgst -sha256 -hmac "$SECRET" | awk '{print $2}')
+```
+
+There are suggestions by AI tools that do this incorrectly.
