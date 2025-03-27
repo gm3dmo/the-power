@@ -5,8 +5,17 @@
 # GET /orgs/{org}/personal-access-tokens
 
 
+if [ -z "$1" ]
+  then
+    org=$org
+  else
+    org=$1
+fi
+
+
 GITHUB_TOKEN=$(./ent-call-get-installation-token.sh | jq -r '.token')
 
+set -x
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
