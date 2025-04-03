@@ -3,8 +3,6 @@
 # https://docs.github.com/en/rest/repos/webhooks?apiVersion=2022-11-28#list-repository-webhooks
 # GET /repos/{owner}/{repo}/hooks
 
-## This shell script is deprecated from the power
-
 
 curl --silent ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
