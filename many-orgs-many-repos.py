@@ -16,10 +16,12 @@ import http
 import thepower
 from pathlib import Path
 from datetime import datetime
+from tqdm import tqdm
 
-def create_orgs(args, conn, headers):
+def create_orgs(args, conn, headers, logger):
     """Create multiple organizations"""
-    for i in range(args.number_of_orgs):
+    org_names = []
+    for i in tqdm(range(args.number_of_orgs), desc="Creating organizations"):
         org_name = f"""{args.org_prefix}-{i:07}"""
         logger.debug(f"creating {org_name}")
         params = {
@@ -33,11 +35,12 @@ def create_orgs(args, conn, headers):
         conn.request('POST', url, params, headers=headers)
         r1 = conn.getresponse()
         logger.debug(r1.read())
-        return org_name
+        org_names.append(org_name)
+    return org_names
 
-def create_repos(args, conn, headers, org_name):
+def create_repos(args, conn, headers, org_name, logger):
     """Create multiple repositories in an organization"""
-    for i in range(args.number_of_repos):
+    for i in tqdm(range(args.number_of_repos), desc=f"Creating repos in {org_name}"):
         repo_name = f"""{args.repo_prefix}-{i:07}"""
         params = {
                "name": repo_name,
@@ -74,8 +77,10 @@ def main(args):
         str(power_config.get('dummy_section','repo_prefix').strip('\"'))
     
     # Handle number of orgs and repos
-    args.number_of_orgs = int(args.number_of_orgs) or int(power_config.get('dummy_section','number_of_orgs').strip('\"'))
-    args.number_of_repos = int(args.number_of_repos) or int(power_config.get('dummy_section','number_of_repos').strip('\"'))
+    args.number_of_orgs = int(args.number_of_orgs) if args.number_of_orgs else \
+        int(power_config.get('dummy_section','number_of_orgs').strip('\"'))
+    args.number_of_repos = int(args.number_of_repos) if args.number_of_repos else \
+        int(power_config.get('dummy_section','number_of_repos').strip('\"'))
 
     conn = http.client.HTTPSConnection(args.hostname)
     token = f"""Bearer {args.GITHUB_TOKEN}"""
@@ -85,10 +90,10 @@ def main(args):
               }
 
     # Create orgs and repos
-    for org_num in range(args.number_of_orgs):
-        org_name = create_orgs(args, conn, headers)
+    org_names = create_orgs(args, conn, headers, logger)
+    for org_name in org_names:
         if args.number_of_repos > 0:
-            create_repos(args, conn, headers, org_name)
+            create_repos(args, conn, headers, org_name, logger)
 
     conn.close()
 
@@ -101,14 +106,12 @@ if __name__ == "__main__":
         "--orgs",
         action="store",
         dest="number_of_orgs",
-        default=1,
         help="The number of orgs to create.",
     )
     parser.add_argument(
         "--repos",
         action="store",
         dest="number_of_repos",
-        default=0,
         help="The number of repos to create in each org.",
     )
     parser.add_argument(
