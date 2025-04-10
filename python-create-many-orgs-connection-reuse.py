@@ -97,7 +97,7 @@ if __name__ == "__main__":
         "--debug",
         action="store_const",
         dest="loglevel",
-        const=logging.INFO,
+        const=logging.DEBUG,
         default=logging.INFO,
         help="debug(-d, --debug, etc)",
     )
