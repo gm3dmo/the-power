@@ -36,7 +36,8 @@ def main(args):
     args.path_prefix = power_config.get('dummy_section','path_prefix')
     args.GITHUB_TOKEN = power_config.get('dummy_section','GITHUB_TOKEN')
     args.admin_user = str(args.admin_user) or str(power_config.get('dummy_section','admin_user').strip('\"'))
-    args.org_prefix = str(args.org_prefix) or str(power_config.get('dummy_section','org_prefix').strip('\"'))
+    args.org_prefix = str(args.org_prefix) if args.org_prefix else \
+        str(power_config.get('dummy_section','org_prefix').strip('\"'))
     args.number_of_orgs = int(args.number_of_orgs) or int(power_config.get('dummy_section','number_of_orgs').strip('\"'))
 
     conn =http.client.HTTPSConnection(args.hostname)
@@ -81,7 +82,7 @@ if __name__ == "__main__":
         "--prefix",
         action="store",
         dest="org_prefix",
-        default=False,
+        default='test-org',
         help="the prefix for the org name.",
     )
     parser.add_argument(
