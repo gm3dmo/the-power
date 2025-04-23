@@ -143,6 +143,7 @@ function openssh_private_key () {
     s2=" OPENSSH PRIVATE KEY----- b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW QyNTUxOQAAACCt0L6OdOQg9AnbZVOLirmGGiBoJZ6K1HjgjSAi4HxNuwAAAJjjjD6u44w+ rgAAAAtzc2gtZWQyNTUxOQAAACCt0L6OdOQg9AnbZVOLirmGGiBoJZ6K1HjgjSAi4HxNuw AAAEB+4hAfRjYpcaMLFpAECj+15+LioEB8gPEzDKEwOPa/dq3Qvo505CD0CdtlU4uKuYYa IGglnorUeOCNICLgfE27AAAAEWdpdGh1Yi1hcHAtMjEzNDk3AQIDBA== -----END OPENSSH PRIVATE KEY-----"
     echo "Commit: openssh_private_key"
     echo "${s1}${s2}" >openssh_private_key.txt
+    echo "This will show up in the results from: list-code-scanning-alerts-generic-type-openssh-private-key-for-a-repository.sh"
 }
 
 
