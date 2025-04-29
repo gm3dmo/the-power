@@ -138,12 +138,14 @@ function mongodb_connection_string () {
     echo "${s1}${s2}" >mongodb-connection-string.txt
 }
 
-function ssh_private_key () {
+function openssh_private_key () {
     s1="-----BEGIN"
     s2=" OPENSSH PRIVATE KEY----- b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW QyNTUxOQAAACCt0L6OdOQg9AnbZVOLirmGGiBoJZ6K1HjgjSAi4HxNuwAAAJjjjD6u44w+ rgAAAAtzc2gtZWQyNTUxOQAAACCt0L6OdOQg9AnbZVOLirmGGiBoJZ6K1HjgjSAi4HxNuw AAAEB+4hAfRjYpcaMLFpAECj+15+LioEB8gPEzDKEwOPa/dq3Qvo505CD0CdtlU4uKuYYa IGglnorUeOCNICLgfE27AAAAEWdpdGh1Yi1hcHAtMjEzNDk3AQIDBA== -----END OPENSSH PRIVATE KEY-----"
-    echo "Commit: ssh_private_key"
-    echo "${s1}${s2}" >ssh_private_key.txt
+    echo "Commit: openssh_private_key"
+    echo "${s1}${s2}" >openssh_private_key.txt
+    echo "This will show up in the results from: list-code-scanning-alerts-generic-type-openssh-private-key-for-a-repository.sh"
 }
+
 
 function azure_storage () {
     azure_storage_1="e6ZZx75Z6095KHJvBZIDOD9kCLt3KjHx/"
@@ -186,8 +188,8 @@ function datadog_api_key () {
 
 
 case ${keyname} in 
- ssh_private_key )
-    ssh_private_key
+ openssh_private_key )
+    openssh_private_key
      ;;
  mongodb_connection_string )
      mongodb_connection_string
@@ -232,7 +234,7 @@ case ${keyname} in
     ;;
  *)
    echo 
-   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key, firebase entra_1, entra_2, github_pat_base64, mongodb_connection_string, ssh_private_key ]"
+   echo "Please pass a name of token to compromise: [ azure_storage, github, google_api_key, npm_granular, gh_app_installation, aws_access_key_id, aws_secret_access_key, aws_secret_access_key_id_combo, datadog_api_key, firebase entra_1, entra_2, github_pat_base64, mongodb_connection_string, openssh_private_key ]"
    echo 
    ;;
 esac
