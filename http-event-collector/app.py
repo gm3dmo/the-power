@@ -271,19 +271,10 @@ if __name__ == '__main__':
     # Initialize the database
     init_db()
     
-    print("Starting HEC event receiver on https://hooky.seyosh.org:443")
-    print("Send events to: https://hooky.seyosh.org:443/services/collector")
-    print("Search events at: https://hooky.seyosh.org:443/")
-    print("API search at: https://hooky.seyosh.org:443/search?q=your_search_term")
+    print("Starting HEC event receiver on http://localhost:8000")
+    print("Send events to: http://localhost:8000/services/collector")
+    print("Search events at: http://localhost:8000/")
+    print("API search at: http://localhost:8000/search?q=your_search_term")
     print("Press Ctrl+C to stop")
     print("-" * 80)
-    
-    # SSL certificate paths - you'll need to provide these
-    ssl_context = ('cert.pem', 'key.pem')
-    
-    app.run(
-        debug=True,
-        host='0.0.0.0',
-        port=443,
-        ssl_context=ssl_context
-    )
+    app.run(debug=True, host='0.0.0.0', port=8000)
