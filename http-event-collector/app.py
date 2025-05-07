@@ -176,6 +176,11 @@ def search_events_db(query):
             print(f"ID: {event[0]}, Token: {event[1]}, Time: {event[2]}")
             print(f"Data: {event[3][:200]}...")  # Print first 200 chars of event data
         
+        # Escape special characters in the search query
+        # Replace dots and other special characters with spaces
+        safe_query = query.replace('.', ' ').replace(':', ' ').replace('"', ' ').replace("'", ' ')
+        print(f"Safe search query: {safe_query}")
+        
         # Perform the search
         search_query = f'''
             SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
@@ -185,8 +190,8 @@ def search_events_db(query):
             ORDER BY e.received_at DESC
             LIMIT 100
         '''
-        print(f"\nExecuting search query with term: {query}")
-        c.execute(search_query, (query,))
+        print(f"\nExecuting search query with term: {safe_query}")
+        c.execute(search_query, (safe_query,))
         
         results = []
         for row in c.fetchall():
