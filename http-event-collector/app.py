@@ -159,6 +159,7 @@ def search_page():
         format_json=lambda data: format_json(data, query)
     )
 
+@app.route('/services/collector', methods=['POST'])
 @app.route('/services/collector/event', methods=['POST'])
 def receive_hec_event():
     """
