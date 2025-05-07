@@ -13,6 +13,11 @@ app = Flask(__name__)
 # Database setup
 DB_PATH = 'hec_events.db'
 
+# Valid tokens for development
+VALID_TOKENS = {
+    'test-token-123',  # Test token from test-sender.py
+}
+
 def format_json(data, search_terms=None):
     """Format JSON data with syntax highlighting and search term highlighting"""
     json_str = json.dumps(data, indent=2)
@@ -158,19 +163,38 @@ def receive_hec_event():
     """
     Endpoint to receive HEC events and store them
     """
+    print("\nReceived request:")
+    print(f"Content-Type: {request.headers.get('Content-Type')}")
+    print(f"Authorization: {request.headers.get('Authorization')}")
+    print(f"Request data: {request.get_data()}")
+    
     if not request.is_json:
+        print("Error: Content-Type is not application/json")
         return jsonify({"error": "Content-Type must be application/json"}), 400
     
     # Get the authorization header
     auth_header = request.headers.get('Authorization', '')
     if not auth_header.startswith('Splunk '):
+        print("Error: Invalid authorization header format")
         return jsonify({"error": "Invalid authorization header"}), 401
     
     # Extract the token
     token = auth_header.split(' ')[1]
     
+    # Validate token
+    if token not in VALID_TOKENS:
+        print(f"Error: Invalid token: {token}")
+        return jsonify({"error": "Invalid token"}), 401
+    
     # Get the event data
-    event_data = request.get_json()
+    try:
+        event_data = request.get_json()
+        if not event_data:
+            print("Error: Empty JSON data")
+            return jsonify({"error": "Empty JSON data"}), 400
+    except Exception as e:
+        print(f"Error parsing JSON: {str(e)}")
+        return jsonify({"error": f"Invalid JSON data: {str(e)}"}), 400
     
     # Store the event
     success, result = store_event(token, event_data, request.remote_addr)
@@ -183,6 +207,7 @@ def receive_hec_event():
         print("-" * 80)
         return jsonify({"text": "Success", "code": 0})
     else:
+        print(f"Error storing event: {result}")
         return jsonify({"error": f"Failed to store event: {result}"}), 500
 
 @app.route('/search', methods=['GET'])
