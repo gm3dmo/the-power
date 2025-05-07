@@ -159,7 +159,7 @@ def search_page():
         format_json=lambda data: format_json(data, query)
     )
 
-@app.route('/services/collector', methods=['POST'])
+@app.route('/services/collector/event', methods=['POST'])
 def receive_hec_event():
     """
     Endpoint to receive HEC events and store them
@@ -168,10 +168,6 @@ def receive_hec_event():
     print(f"Content-Type: {request.headers.get('Content-Type')}")
     print(f"Authorization: {request.headers.get('Authorization')}")
     print(f"Request data: {request.get_data()}")
-    
-    # If request data is empty, return empty response (for GitHub webhook check)
-    if not request.get_data():
-        return '', 200
     
     if not request.is_json:
         print("Error: Content-Type is not application/json")
