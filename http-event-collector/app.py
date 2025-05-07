@@ -173,45 +173,74 @@ def receive_hec_event():
     # Get the authorization header
     auth_header = request.headers.get('Authorization', '')
     if not auth_header.startswith('Splunk '):
+        print("Error: No Splunk token in Authorization header")
         return {"text": "Token is required", "code": 2}, 401
     
     # Extract the token
     token = auth_header.split(' ')[1]
+    print(f"Extracted token: {token}")
     
     # Get source IP
     if request.headers.get('X-Real-IP'):
         source_ip = request.headers.get('X-Real-IP')
     else:
         source_ip = request.remote_addr
+    print(f"Source IP: {source_ip}")
     
     # Handle the request data
-    if request.headers.get('Content-Type') == "application/json":
+    content_type = request.headers.get('Content-Type', '')
+    print(f"Content-Type: {content_type}")
+    
+    if content_type == "application/json":
         if request.data == b'':
-            print("Empty request")
-            event_data = None
+            print("Empty request - returning success")
+            return {"text": "Success", "code": 0}
         else:
             try:
-                event_data = request.get_json()
+                # Split the request data into individual JSON objects
+                data_str = request.get_data().decode('utf-8')
+                json_objects = []
+                current_pos = 0
+                
+                while current_pos < len(data_str):
+                    try:
+                        # Find the next complete JSON object
+                        obj_end = data_str.find('}{', current_pos)
+                        if obj_end == -1:
+                            # Last object
+                            json_str = data_str[current_pos:]
+                        else:
+                            json_str = data_str[current_pos:obj_end + 1]
+                        
+                        # Parse the JSON object
+                        event_data = json.loads(json_str)
+                        json_objects.append(event_data)
+                        
+                        if obj_end == -1:
+                            break
+                        current_pos = obj_end + 1
+                    except json.JSONDecodeError as e:
+                        print(f"Error parsing JSON object at position {current_pos}: {str(e)}")
+                        return {"text": "Invalid JSON data", "code": 6}, 400
+                
+                # Store each event
+                for event_data in json_objects:
+                    success, result = store_event(token, event_data, source_ip)
+                    if not success:
+                        print(f"Error storing event: {result}")
+                        return {"text": f"Failed to store event: {result}", "code": 8}, 500
+                
+                print(f"\nStored {len(json_objects)} events with token: {token}")
+                print(f"\nReceived at: {datetime.now().isoformat()}")
+                print("-" * 80)
+                return {"text": "Success", "code": 0}
+                
             except Exception as e:
-                print(f"Error parsing JSON: {str(e)}")
+                print(f"Error processing request: {str(e)}")
                 return {"text": "Invalid JSON data", "code": 6}, 400
     else:
+        print(f"Invalid Content-Type: {content_type}")
         return {"text": "Content-Type must be application/json", "code": 5}, 400
-    
-    # Store the event
-    success, result = store_event(token, event_data, source_ip)
-    
-    if success:
-        print(f"\nStored event {result} with token: {token}")
-        if event_data:
-            print("\nEvent data:")
-            print(json.dumps(event_data, indent=2))
-        print(f"\nReceived at: {datetime.now().isoformat()}")
-        print("-" * 80)
-        return {"text": "Success", "code": 0}
-    else:
-        print(f"Error storing event: {result}")
-        return {"text": f"Failed to store event: {result}", "code": 8}, 500
 
 @app.route('/search', methods=['GET'])
 def search_events():
