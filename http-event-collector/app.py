@@ -40,10 +40,17 @@ def format_json(data, search_terms=None):
 def init_db():
     """Initialize the database with required tables"""
     print("\nInitializing database...")
+    
+    # Remove existing database file to start fresh
+    if os.path.exists(DB_PATH):
+        print(f"Removing existing database file: {DB_PATH}")
+        os.remove(DB_PATH)
+    
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
     try:
+        print("Creating events table...")
         # Create the main events table
         c.execute('''
             CREATE TABLE IF NOT EXISTS events (
@@ -55,6 +62,7 @@ def init_db():
             )
         ''')
         
+        print("Creating FTS5 virtual table...")
         # Create the FTS5 virtual table for full-text search
         c.execute('''
             CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
@@ -66,6 +74,7 @@ def init_db():
             )
         ''')
         
+        print("Creating triggers...")
         # Create triggers to maintain the FTS index
         c.execute('''
             CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
@@ -101,6 +110,7 @@ def init_db():
         print(f"Current event count: {count}")
         
         conn.commit()
+        print("Database initialization completed successfully")
     except Exception as e:
         print(f"Error initializing database: {str(e)}")
         raise
@@ -142,6 +152,14 @@ def search_events_db(query):
         count = c.fetchone()[0]
         print(f"Total events in database: {count}")
         
+        # Let's see what's in the database
+        c.execute("SELECT id, token, received_at, event_data FROM events LIMIT 3")
+        sample_events = c.fetchall()
+        print("\nSample events in database:")
+        for event in sample_events:
+            print(f"ID: {event[0]}, Token: {event[1]}, Time: {event[2]}")
+            print(f"Data: {event[3][:200]}...")  # Print first 200 chars of event data
+        
         # Perform the search
         search_query = f'''
             SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
@@ -151,7 +169,7 @@ def search_events_db(query):
             ORDER BY e.received_at DESC
             LIMIT 100
         '''
-        print(f"Executing query: {search_query}")
+        print(f"\nExecuting search query with term: {query}")
         c.execute(search_query, (query,))
         
         results = []
@@ -165,6 +183,9 @@ def search_events_db(query):
             })
         
         print(f"Found {len(results)} results")
+        if results:
+            print("First result preview:")
+            print(json.dumps(results[0], indent=2)[:200] + "...")
         return results
     except Exception as e:
         print(f"Error searching events: {str(e)}")
@@ -190,6 +211,24 @@ def search_page():
     
     print(f"\nSearch page accessed with query: {query}")
     
+    # Verify database connection
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM events")
+        count = c.fetchone()[0]
+        print(f"Database contains {count} events")
+        conn.close()
+    except Exception as e:
+        print(f"Database verification error: {str(e)}")
+        error = f"Database error: {str(e)}"
+        return render_template('search.html',
+            query=query,
+            results=None,
+            error=error,
+            format_json=lambda data: format_json(data, query)
+        )
+    
     if query:
         try:
             results = search_events_db(query)
@@ -197,6 +236,31 @@ def search_page():
         except Exception as e:
             error = f"Error searching events: {str(e)}"
             print(f"Search error: {error}")
+    else:
+        # If no query, show all events
+        try:
+            conn = sqlite3.connect(DB_PATH)
+            c = conn.cursor()
+            c.execute('''
+                SELECT id, token, received_at, event_data, source_ip
+                FROM events
+                ORDER BY received_at DESC
+                LIMIT 100
+            ''')
+            results = []
+            for row in c.fetchall():
+                results.append({
+                    'id': row[0],
+                    'token': row[1],
+                    'received_at': row[2],
+                    'event_data': json.loads(row[3]),
+                    'source_ip': row[4]
+                })
+            print(f"Showing all events: {len(results)} found")
+            conn.close()
+        except Exception as e:
+            error = f"Error fetching events: {str(e)}"
+            print(f"Error: {error}")
     
     return render_template('search.html',
         query=query,
