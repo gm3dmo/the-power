@@ -278,11 +278,15 @@ def search_page():
             error = f"Error fetching events: {str(e)}"
             print(f"Error: {error}")
     
+    # Create a formatter function that includes the search query
+    def format_with_query(data):
+        return format_json(data, query)
+    
     return render_template('search.html',
         query=query,
         results=results,
         error=error,
-        format_json=lambda data: format_json(data, query)
+        format_json=format_with_query
     )
 
 @app.route('/services/collector', methods=['POST'])
