@@ -1,48 +1,92 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/pygments.css') }}">
-{% endblock %}
+{% block title %}Search Events{% endblock %}
 
 {% block content %}
-<div class="search-container">
-    <h1>Audit Events Search</h1>
-    <form class="search-form" method="GET" action="/">
-        <input type="text" name="q" value="{{ query }}" placeholder="Enter search terms...">
-        <button type="submit">Search</button>
-    </form>
-</div>
-
-{% if error %}
-<div class="error">
-    {{ error }}
-</div>
-{% endif %}
-
-{% if results %}
-<div class="results">
-    <h2>Search Results</h2>
-    {% for event in results %}
-    <div class="event">
-        <div class="event-header">
-            <span>ID: {{ event.id }}</span>
-            <span>Token: {{ event.token }}</span>
-            <span>Received: {{ event.received_at }}</span>
-            <span>IP: {{ event.source_ip }}</span>
+<div class="container">
+    <h1>Search Events</h1>
+    
+    <form method="GET" action="{{ url_for('search_page') }}" class="search-form">
+        <div class="form-group">
+            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Enter search terms..." autofocus>
         </div>
-        <div class="event-data">
-            <div class="highlight">
-                {{ format_json(event.event_data) | safe }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <div class="results">
+        <h2>Results ({{ results|length }})</h2>
+        {% for result in results %}
+        <div class="event-card">
+            <div class="event-header">
+                <span class="event-id">#{{ result.id }}</span>
+                <span class="event-time">{{ result.received_at }}</span>
+                <span class="event-source">Source: {{ result.source_ip }}</span>
+            </div>
+            <div class="event-data">
+                <pre><code class="json">{{ format_json(result.event_data, query) }}</code></pre>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    {% elif query %}
+    <div class="no-results">
+        <p>No results found for "{{ query }}"</p>
+    </div>
+    {% endif %}
 </div>
-{% elif query %}
-<div class="no-results">
-    No events found matching "{{ query }}"
-</div>
-{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pygments.css') }}">
+<style>
+    .event-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .event-header {
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+    
+    .event-id {
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+    
+    .event-time {
+        margin-right: 1rem;
+    }
+    
+    .event-data {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+    }
+    
+    .event-data pre {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+    
+    .search-highlight {
+        background-color: #ffeb3b !important;
+        color: #000 !important;
+        padding: 2px 0;
+        border-radius: 2px;
+        font-weight: bold;
+    }
+</style>
 {% endblock %}
 
 {% block extra_js %}
