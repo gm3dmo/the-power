@@ -30,7 +30,7 @@
                 <span class="event-source">Source: {{ result.source_ip }}</span>
             </div>
             <div class="event-data">
-                <pre><code class="json">{{ format_json(result.event_data, query) }}</code></pre>
+                <pre><code class="json">{{ format_json(result.event_data) | safe }}</code></pre>
             </div>
         </div>
         {% endfor %}
