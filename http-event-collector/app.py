@@ -28,10 +28,13 @@ def format_json(data, search_terms=None):
     
     # Then, if we have search terms, highlight them
     if search_terms:
+        # Split search terms and remove empty strings
         terms = [term.strip() for term in search_terms.split() if term.strip()]
+        print(f"Highlighting search terms: {terms}")
+        
         for term in terms:
-            # Create a case-insensitive pattern
-            pattern = re.compile(f'({re.escape(term)})', re.IGNORECASE)
+            # Create a case-insensitive pattern that matches whole words
+            pattern = re.compile(r'\b(' + re.escape(term) + r')\b', re.IGNORECASE)
             # Replace matches with highlighted version
             highlighted = pattern.sub(r'<span class="search-highlight">\1</span>', highlighted)
     
@@ -41,73 +44,86 @@ def init_db():
     """Initialize the database with required tables"""
     print("\nInitializing database...")
     
-    # Remove existing database file to start fresh
-    if os.path.exists(DB_PATH):
-        print(f"Removing existing database file: {DB_PATH}")
-        os.remove(DB_PATH)
+    # Check if database exists
+    db_exists = os.path.exists(DB_PATH)
+    if db_exists:
+        print(f"Using existing database: {DB_PATH}")
+    else:
+        print(f"Creating new database: {DB_PATH}")
     
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
     try:
-        print("Creating events table...")
-        # Create the main events table
-        c.execute('''
-            CREATE TABLE IF NOT EXISTS events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                token TEXT,
-                received_at TIMESTAMP,
-                event_data JSON,
-                source_ip TEXT
-            )
-        ''')
-        
-        print("Creating FTS5 virtual table...")
-        # Create the FTS5 virtual table for full-text search
-        c.execute('''
-            CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
-            USING fts5(
-                token,
-                event_data,
-                content='events',
-                content_rowid='id'
-            )
-        ''')
-        
-        print("Creating triggers...")
-        # Create triggers to maintain the FTS index
-        c.execute('''
-            CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
-                INSERT INTO events_fts(rowid, token, event_data)
-                VALUES (new.id, new.token, new.event_data);
-            END
-        ''')
-        
-        c.execute('''
-            CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
-                INSERT INTO events_fts(events_fts, rowid, token, event_data)
-                VALUES('delete', old.id, old.token, old.event_data);
-            END
-        ''')
-        
-        c.execute('''
-            CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
-                INSERT INTO events_fts(events_fts, rowid, token, event_data)
-                VALUES('delete', old.id, old.token, old.event_data);
-                INSERT INTO events_fts(rowid, token, event_data)
-                VALUES (new.id, new.token, new.event_data);
-            END
-        ''')
-        
-        # Verify tables were created
+        # Check existing tables
         c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        tables = c.fetchall()
-        print("Created tables:", [table[0] for table in tables])
+        existing_tables = [table[0] for table in c.fetchall()]
+        print(f"Existing tables: {existing_tables}")
+        
+        if 'events' not in existing_tables:
+            print("Creating events table...")
+            # Create the main events table
+            c.execute('''
+                CREATE TABLE IF NOT EXISTS events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    token TEXT,
+                    received_at TIMESTAMP,
+                    event_data JSON,
+                    source_ip TEXT
+                )
+            ''')
+        
+        if 'events_fts' not in existing_tables:
+            print("Creating FTS5 virtual table...")
+            # Create the FTS5 virtual table for full-text search
+            c.execute('''
+                CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
+                USING fts5(
+                    token,
+                    event_data,
+                    content='events',
+                    content_rowid='id'
+                )
+            ''')
+            
+            print("Creating triggers...")
+            # Create triggers to maintain the FTS index
+            c.execute('''
+                CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
+                    INSERT INTO events_fts(rowid, token, event_data)
+                    VALUES (new.id, new.token, new.event_data);
+                END
+            ''')
+            
+            c.execute('''
+                CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
+                    INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                    VALUES('delete', old.id, old.token, old.event_data);
+                END
+            ''')
+            
+            c.execute('''
+                CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
+                    INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                    VALUES('delete', old.id, old.token, old.event_data);
+                    INSERT INTO events_fts(rowid, token, event_data)
+                    VALUES (new.id, new.token, new.event_data);
+                END
+            ''')
         
         # Check if we have any events
         c.execute("SELECT COUNT(*) FROM events")
         count = c.fetchone()[0]
         print(f"Current event count: {count}")
+        
+        if count > 0:
+            # Show sample events
+            c.execute("SELECT id, token, received_at, event_data FROM events LIMIT 3")
+            sample_events = c.fetchall()
+            print("\nSample events in database:")
+            for event in sample_events:
+                print(f"ID: {event[0]}, Token: {event[1]}, Time: {event[2]}")
+                print(f"Data: {event[3][:200]}...")  # Print first 200 chars of event data
         
         conn.commit()
         print("Database initialization completed successfully")
