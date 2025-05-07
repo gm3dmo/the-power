@@ -170,46 +170,48 @@ def receive_hec_event():
     print(f"Authorization: {request.headers.get('Authorization')}")
     print(f"Request data: {request.get_data()}")
     
-    # Handle GitHub's webhook delivery check
-    if not request.get_data():
-        return '', 200
-    
-    if not request.is_json:
-        print("Error: Content-Type is not application/json")
-        return jsonify({"error": "Content-Type must be application/json"}), 400
-    
     # Get the authorization header
     auth_header = request.headers.get('Authorization', '')
     if not auth_header.startswith('Splunk '):
-        print("Error: Invalid authorization header format")
-        return jsonify({"error": "Invalid authorization header"}), 401
+        return {"text": "Token is required", "code": 2}, 401
     
     # Extract the token
     token = auth_header.split(' ')[1]
     
-    # Get the event data
-    try:
-        event_data = request.get_json()
-        if not event_data:
-            print("Error: Empty JSON data")
-            return jsonify({"error": "Empty JSON data"}), 400
-    except Exception as e:
-        print(f"Error parsing JSON: {str(e)}")
-        return jsonify({"error": f"Invalid JSON data: {str(e)}"}), 400
+    # Get source IP
+    if request.headers.get('X-Real-IP'):
+        source_ip = request.headers.get('X-Real-IP')
+    else:
+        source_ip = request.remote_addr
+    
+    # Handle the request data
+    if request.headers.get('Content-Type') == "application/json":
+        if request.data == b'':
+            print("Empty request")
+            event_data = None
+        else:
+            try:
+                event_data = request.get_json()
+            except Exception as e:
+                print(f"Error parsing JSON: {str(e)}")
+                return {"text": "Invalid JSON data", "code": 6}, 400
+    else:
+        return {"text": "Content-Type must be application/json", "code": 5}, 400
     
     # Store the event
-    success, result = store_event(token, event_data, request.remote_addr)
+    success, result = store_event(token, event_data, source_ip)
     
     if success:
         print(f"\nStored event {result} with token: {token}")
-        print("\nEvent data:")
-        print(json.dumps(event_data, indent=2))
+        if event_data:
+            print("\nEvent data:")
+            print(json.dumps(event_data, indent=2))
         print(f"\nReceived at: {datetime.now().isoformat()}")
         print("-" * 80)
-        return jsonify({"text": "Success", "code": 0})
+        return {"text": "Success", "code": 0}
     else:
         print(f"Error storing event: {result}")
-        return jsonify({"error": f"Failed to store event: {result}"}), 500
+        return {"text": f"Failed to store event: {result}", "code": 8}, 500
 
 @app.route('/search', methods=['GET'])
 def search_events():
