@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pygments.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <h1>Audit Events Search</h1>
+    <form class="search-form" method="GET" action="/">
+        <input type="text" name="q" value="{{ query }}" placeholder="Enter search terms...">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+{% if error %}
+<div class="error">
+    {{ error }}
+</div>
+{% endif %}
+
+{% if results %}
+<div class="results">
+    <h2>Search Results</h2>
+    {% for event in results %}
+    <div class="event">
+        <div class="event-header">
+            <span>ID: {{ event.id }}</span>
+            <span>Token: {{ event.token }}</span>
+            <span>Received: {{ event.received_at }}</span>
+            <span>IP: {{ event.source_ip }}</span>
+        </div>
+        <div class="event-data">
+            <div class="highlight">
+                {{ format_json(event.event_data) | safe }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% elif query %}
+<div class="no-results">
+    No events found matching "{{ query }}"
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add copy button to each event data block
+        document.querySelectorAll('.event-data').forEach(eventData => {
+            const copyButton = document.createElement('button');
+            copyButton.textContent = 'Copy';
+            copyButton.className = 'copy-button';
+            copyButton.style.cssText = 'position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 12px;';
+            
+            eventData.style.position = 'relative';
+            eventData.appendChild(copyButton);
+
+            copyButton.addEventListener('click', function() {
+                const text = eventData.querySelector('.highlight').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+    });
+</script>
+{% endblock %} 
