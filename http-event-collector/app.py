@@ -170,6 +170,10 @@ def receive_hec_event():
     print(f"Authorization: {request.headers.get('Authorization')}")
     print(f"Request data: {request.get_data()}")
     
+    # Handle GitHub's webhook delivery check
+    if not request.get_data():
+        return '', 200
+    
     if not request.is_json:
         print("Error: Content-Type is not application/json")
         return jsonify({"error": "Content-Type must be application/json"}), 400
