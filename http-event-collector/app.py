@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect
 import json
 from datetime import datetime
 import sqlite3
@@ -136,6 +136,13 @@ def search_events_db(query):
         return results
     finally:
         conn.close()
+
+@app.route('/')
+def index():
+    """
+    Redirect root to auditdb
+    """
+    return redirect('/auditdb')
 
 @app.route('/auditdb')
 def search_page():
