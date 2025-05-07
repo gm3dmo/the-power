@@ -70,4 +70,13 @@
 .highlight .vc { color: #005cc5 } /* Name.Variable.Class */
 .highlight .vg { color: #005cc5 } /* Name.Variable.Global */
 .highlight .vi { color: #005cc5 } /* Name.Variable.Instance */
-.highlight .il { color: #005cc5 } /* Literal.Number.Integer.Long */ 
+.highlight .il { color: #005cc5 } /* Literal.Number.Integer.Long */
+
+/* Search highlight */
+.search-highlight {
+    background-color: #ffeb3b !important;
+    color: #000 !important;
+    padding: 2px 0;
+    border-radius: 2px;
+    font-weight: bold;
+} 
