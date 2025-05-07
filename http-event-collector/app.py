@@ -16,6 +16,7 @@ DB_PATH = 'hec_events.db'
 # Valid tokens for development
 VALID_TOKENS = {
     'test-token-123',  # Test token from test-sender.py
+    'token-123',       # GitHub's token
 }
 
 def format_json(data, search_terms=None):
@@ -168,6 +169,10 @@ def receive_hec_event():
     print(f"Authorization: {request.headers.get('Authorization')}")
     print(f"Request data: {request.get_data()}")
     
+    # If request data is empty, return empty response (for GitHub webhook check)
+    if not request.get_data():
+        return '', 200
+    
     if not request.is_json:
         print("Error: Content-Type is not application/json")
         return jsonify({"error": "Content-Type must be application/json"}), 400
@@ -180,11 +185,6 @@ def receive_hec_event():
     
     # Extract the token
     token = auth_header.split(' ')[1]
-    
-    # Validate token
-    if token not in VALID_TOKENS:
-        print(f"Error: Invalid token: {token}")
-        return jsonify({"error": "Invalid token"}), 401
     
     # Get the event data
     try:
@@ -232,14 +232,58 @@ def health_check():
     """
     return jsonify({"status": "healthy"})
 
+@app.route('/events', methods=['GET'])
+def list_events():
+    """
+    List all stored events
+    """
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    
+    try:
+        c.execute('''
+            SELECT id, token, received_at, event_data, source_ip
+            FROM events
+            ORDER BY received_at DESC
+            LIMIT 100
+        ''')
+        
+        results = []
+        for row in c.fetchall():
+            results.append({
+                'id': row[0],
+                'token': row[1],
+                'received_at': row[2],
+                'event_data': json.loads(row[3]),
+                'source_ip': row[4]
+            })
+        
+        return render_template('search.html',
+            query='',
+            results=results,
+            error=None,
+            format_json=lambda data: format_json(data)
+        )
+    finally:
+        conn.close()
+
 if __name__ == '__main__':
     # Initialize the database
     init_db()
     
-    print("Starting HEC event receiver on http://localhost:8002")
-    print("Send events to: http://localhost:8002/services/collector")
-    print("Search events at: http://localhost:8002/")
-    print("API search at: http://localhost:8002/search?q=your_search_term")
+    print("Starting HEC event receiver on https://hooky.seyosh.org:443")
+    print("Send events to: https://hooky.seyosh.org:443/services/collector")
+    print("Search events at: https://hooky.seyosh.org:443/")
+    print("API search at: https://hooky.seyosh.org:443/search?q=your_search_term")
     print("Press Ctrl+C to stop")
     print("-" * 80)
-    app.run(debug=True, host='0.0.0.0', port=8002)
+    
+    # SSL certificate paths - you'll need to provide these
+    ssl_context = ('cert.pem', 'key.pem')
+    
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=443,
+        ssl_context=ssl_context
+    )
