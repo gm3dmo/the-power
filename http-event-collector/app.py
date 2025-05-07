@@ -11,7 +11,7 @@ import re
 app = Flask(__name__)
 
 # Database setup
-DB_PATH = 'hec_events.db'
+DB_PATH = 'auditdb'
 
 # Valid tokens for development
 VALID_TOKENS = {
@@ -137,7 +137,7 @@ def search_events_db(query):
     finally:
         conn.close()
 
-@app.route('/')
+@app.route('/auditdb')
 def search_page():
     """
     Web interface for searching events
@@ -257,14 +257,7 @@ def search_events():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    """
-    Health check endpoint
-    """
-    return jsonify({"status": "healthy"})
-
-@app.route('/events', methods=['GET'])
+@app.route('/auditdb/events', methods=['GET'])
 def list_events():
     """
     List all stored events
@@ -305,7 +298,8 @@ if __name__ == '__main__':
     
     print("Starting HEC event receiver on http://localhost:8000")
     print("Send events to: http://localhost:8000/services/collector")
-    print("Search events at: http://localhost:8000/")
+    print("Search events at: http://localhost:8000/auditdb")
+    print("List all events at: http://localhost:8000/auditdb/events")
     print("API search at: http://localhost:8000/search?q=your_search_term")
     print("Press Ctrl+C to stop")
     print("-" * 80)
