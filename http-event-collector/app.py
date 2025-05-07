@@ -110,18 +110,33 @@ def store_event(token, event_data, source_ip):
 
 def search_events_db(query):
     """Search events in the database"""
+    print(f"\nSearching for: {query}")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
     try:
-        c.execute('''
+        # First check if the table exists
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='events'")
+        if not c.fetchone():
+            print("Events table does not exist!")
+            return []
+            
+        # Check if we have any events
+        c.execute("SELECT COUNT(*) FROM events")
+        count = c.fetchone()[0]
+        print(f"Total events in database: {count}")
+        
+        # Perform the search
+        search_query = f'''
             SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
             FROM events e
             JOIN events_fts fts ON e.id = fts.rowid
             WHERE events_fts MATCH ?
             ORDER BY e.received_at DESC
             LIMIT 100
-        ''', (query,))
+        '''
+        print(f"Executing query: {search_query}")
+        c.execute(search_query, (query,))
         
         results = []
         for row in c.fetchall():
@@ -133,7 +148,11 @@ def search_events_db(query):
                 'source_ip': row[4]
             })
         
+        print(f"Found {len(results)} results")
         return results
+    except Exception as e:
+        print(f"Error searching events: {str(e)}")
+        raise
     finally:
         conn.close()
 
@@ -153,11 +172,15 @@ def search_page():
     results = None
     error = None
     
+    print(f"\nSearch page accessed with query: {query}")
+    
     if query:
         try:
             results = search_events_db(query)
+            print(f"Search returned {len(results) if results else 0} results")
         except Exception as e:
             error = f"Error searching events: {str(e)}"
+            print(f"Search error: {error}")
     
     return render_template('search.html',
         query=query,
