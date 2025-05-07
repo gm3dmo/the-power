@@ -39,57 +39,73 @@ def format_json(data, search_terms=None):
 
 def init_db():
     """Initialize the database with required tables"""
+    print("\nInitializing database...")
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
-    # Create the main events table
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS events (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            token TEXT,
-            received_at TIMESTAMP,
-            event_data JSON,
-            source_ip TEXT
-        )
-    ''')
-    
-    # Create the FTS5 virtual table for full-text search
-    c.execute('''
-        CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
-        USING fts5(
-            token,
-            event_data,
-            content='events',
-            content_rowid='id'
-        )
-    ''')
-    
-    # Create triggers to maintain the FTS index
-    c.execute('''
-        CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
-            INSERT INTO events_fts(rowid, token, event_data)
-            VALUES (new.id, new.token, new.event_data);
-        END
-    ''')
-    
-    c.execute('''
-        CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
-            INSERT INTO events_fts(events_fts, rowid, token, event_data)
-            VALUES('delete', old.id, old.token, old.event_data);
-        END
-    ''')
-    
-    c.execute('''
-        CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
-            INSERT INTO events_fts(events_fts, rowid, token, event_data)
-            VALUES('delete', old.id, old.token, old.event_data);
-            INSERT INTO events_fts(rowid, token, event_data)
-            VALUES (new.id, new.token, new.event_data);
-        END
-    ''')
-    
-    conn.commit()
-    conn.close()
+    try:
+        # Create the main events table
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                token TEXT,
+                received_at TIMESTAMP,
+                event_data JSON,
+                source_ip TEXT
+            )
+        ''')
+        
+        # Create the FTS5 virtual table for full-text search
+        c.execute('''
+            CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
+            USING fts5(
+                token,
+                event_data,
+                content='events',
+                content_rowid='id'
+            )
+        ''')
+        
+        # Create triggers to maintain the FTS index
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
+                INSERT INTO events_fts(rowid, token, event_data)
+                VALUES (new.id, new.token, new.event_data);
+            END
+        ''')
+        
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
+                INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                VALUES('delete', old.id, old.token, old.event_data);
+            END
+        ''')
+        
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
+                INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                VALUES('delete', old.id, old.token, old.event_data);
+                INSERT INTO events_fts(rowid, token, event_data)
+                VALUES (new.id, new.token, new.event_data);
+            END
+        ''')
+        
+        # Verify tables were created
+        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = c.fetchall()
+        print("Created tables:", [table[0] for table in tables])
+        
+        # Check if we have any events
+        c.execute("SELECT COUNT(*) FROM events")
+        count = c.fetchone()[0]
+        print(f"Current event count: {count}")
+        
+        conn.commit()
+    except Exception as e:
+        print(f"Error initializing database: {str(e)}")
+        raise
+    finally:
+        conn.close()
 
 def store_event(token, event_data, source_ip):
     """Store an event in the database"""
@@ -326,7 +342,7 @@ if __name__ == '__main__':
     # Initialize the database
     init_db()
     
-    print("Starting HEC event receiver on http://localhost:8000")
+    print("\nStarting HEC event receiver on http://localhost:8000")
     print("Send events to: http://localhost:8000/services/collector")
     print("Search events at: http://localhost:8000/auditdb")
     print("List all events at: http://localhost:8000/auditdb/events")
