@@ -15,7 +15,6 @@ DB_PATH = 'auditdb'
 
 # Valid tokens for development
 VALID_TOKENS = {
-    'test-token-123',  # Test token from test-sender.py
     'token-123',       # GitHub's token
 }
 
@@ -431,11 +430,6 @@ if __name__ == '__main__':
     # Initialize the database
     init_db()
     
-    print("\nStarting HEC event receiver on http://localhost:8000")
-    print("Send events to: http://localhost:8000/services/collector")
-    print("Search events at: http://localhost:8000/auditdb")
-    print("List all events at: http://localhost:8000/auditdb/events")
-    print("API search at: http://localhost:8000/search?q=your_search_term")
     print("Press Ctrl+C to stop")
     print("-" * 80)
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=8001)
