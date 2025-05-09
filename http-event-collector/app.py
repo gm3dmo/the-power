@@ -329,10 +329,11 @@ def receive_hec_event():
     token = auth_header.split(' ')[1]
     print(f"Extracted token: {token}")
     
-    # Get source IP
-    if request.headers.get('X-Real-IP'):
-        source_ip = request.headers.get('X-Real-IP')
-    else:
+    # Get source IP with priority: X-Forwarded-For > X-Real-IP > remote_addr
+    source_ip = request.headers.get('X-Forwarded-For', '').split(',')[0].strip()
+    if not source_ip:
+        source_ip = request.headers.get('X-Real-IP', '')
+    if not source_ip:
         source_ip = request.remote_addr
     print(f"Source IP: {source_ip}")
     
