@@ -7,16 +7,25 @@ from pygments import highlight
 from pygments.lexers import JsonLexer
 from pygments.formatters import HtmlFormatter
 import re
+import argparse
 
 app = Flask(__name__)
 
 # Database setup
 DB_PATH = 'auditdb'
 
-# Valid tokens for development
-VALID_TOKENS = {
-    'token-123',       # GitHub's token
-}
+# Initialize empty set for valid tokens
+VALID_TOKENS = set()
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='HEC Event Collector')
+parser.add_argument('--token', help='Authentication token for the collector')
+args = parser.parse_args()
+
+# Add token if provided
+if args.token:
+    VALID_TOKENS.add(args.token)
+    print(f"Added token to valid tokens: {args.token}")
 
 def format_json(data, search_terms=None):
     """Format JSON data with syntax highlighting and search term highlighting"""
@@ -59,56 +68,66 @@ def init_db():
         existing_tables = [table[0] for table in c.fetchall()]
         print(f"Existing tables: {existing_tables}")
         
-        if 'events' not in existing_tables:
-            print("Creating events table...")
-            # Create the main events table
-            c.execute('''
-                CREATE TABLE IF NOT EXISTS events (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    token TEXT,
-                    received_at TIMESTAMP,
-                    event_data JSON,
-                    source_ip TEXT
-                )
-            ''')
+        # Truncate existing tables if they exist
+        for table in existing_tables:
+            if table == 'sqlite_sequence':
+                print("Resetting autoincrement counters")
+                c.execute("DELETE FROM sqlite_sequence")
+            elif table.startswith('events_fts'):
+                print(f"Skipping FTS table: {table}")
+                continue
+            else:
+                print(f"Truncating table: {table}")
+                c.execute(f"DELETE FROM {table}")
         
-        if 'events_fts' not in existing_tables:
-            print("Creating FTS5 virtual table...")
-            # Create the FTS5 virtual table for full-text search
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
-                USING fts5(
-                    token,
-                    event_data,
-                    content='events',
-                    content_rowid='id'
-                )
-            ''')
-            
-            print("Creating triggers...")
-            # Create triggers to maintain the FTS index
-            c.execute('''
-                CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
-                    INSERT INTO events_fts(rowid, token, event_data)
-                    VALUES (new.id, new.token, new.event_data);
-                END
-            ''')
-            
-            c.execute('''
-                CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
-                    INSERT INTO events_fts(events_fts, rowid, token, event_data)
-                    VALUES('delete', old.id, old.token, old.event_data);
-                END
-            ''')
-            
-            c.execute('''
-                CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
-                    INSERT INTO events_fts(events_fts, rowid, token, event_data)
-                    VALUES('delete', old.id, old.token, old.event_data);
-                    INSERT INTO events_fts(rowid, token, event_data)
-                    VALUES (new.id, new.token, new.event_data);
-                END
-            ''')
+        print("Creating events table...")
+        # Create the main events table
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                token TEXT,
+                received_at TIMESTAMP,
+                event_data JSON,
+                source_ip TEXT
+            )
+        ''')
+        
+        print("Creating FTS5 virtual table...")
+        # Create the FTS5 virtual table for full-text search
+        c.execute('''
+            CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
+            USING fts5(
+                token,
+                event_data,
+                content='events',
+                content_rowid='id'
+            )
+        ''')
+        
+        print("Creating triggers...")
+        # Create triggers to maintain the FTS index
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
+                INSERT INTO events_fts(rowid, token, event_data)
+                VALUES (new.id, new.token, new.event_data);
+            END
+        ''')
+        
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_ad AFTER DELETE ON events BEGIN
+                INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                VALUES('delete', old.id, old.token, old.event_data);
+            END
+        ''')
+        
+        c.execute('''
+            CREATE TRIGGER IF NOT EXISTS events_au AFTER UPDATE ON events BEGIN
+                INSERT INTO events_fts(events_fts, rowid, token, event_data)
+                VALUES('delete', old.id, old.token, old.event_data);
+                INSERT INTO events_fts(rowid, token, event_data)
+                VALUES (new.id, new.token, new.event_data);
+            END
+        ''')
         
         # Check if we have any events
         c.execute("SELECT COUNT(*) FROM events")
