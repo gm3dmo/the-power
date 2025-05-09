@@ -335,6 +335,15 @@ file_extension="c"
 # Dispatcher
 pool_size=10
 
+### Enterprise Audit Log
+# Stream 1
+stream1_azure_blob_sas_url="blob_sas_url"
+stream1_container="container"
+
+# Stream 2
+stream2_azure_blob_sas_url="blob_sas_url"
+stream2_container="container"
+
 
 
 """
