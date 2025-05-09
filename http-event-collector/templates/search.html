@@ -4,8 +4,6 @@
 
 {% block content %}
 <div class="container">
-    <h1>Search Events</h1>
-    
     <form method="GET" action="{{ url_for('search_page') }}" class="search-form">
         <div class="form-group">
             <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Enter search terms..." autofocus>

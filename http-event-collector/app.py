@@ -63,25 +63,16 @@ def init_db():
     c = conn.cursor()
     
     try:
-        # Check existing tables
-        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        existing_tables = [table[0] for table in c.fetchall()]
-        print(f"Existing tables: {existing_tables}")
+        # First, handle the events table
+        print("Handling events table...")
+        c.execute("DROP TABLE IF EXISTS events")
         
-        # Truncate existing tables if they exist
-        for table in existing_tables:
-            if table == 'sqlite_sequence':
-                print("Resetting autoincrement counters")
-                c.execute("DELETE FROM sqlite_sequence")
-            elif table.startswith('events_fts'):
-                print(f"Skipping FTS table: {table}")
-                continue
-            else:
-                print(f"Truncating table: {table}")
-                c.execute(f"DELETE FROM {table}")
+        # Reset autoincrement
+        print("Resetting autoincrement counters")
+        c.execute("DELETE FROM sqlite_sequence")
         
-        print("Creating events table...")
         # Create the main events table
+        print("Creating events table...")
         c.execute('''
             CREATE TABLE IF NOT EXISTS events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,8 +83,13 @@ def init_db():
             )
         ''')
         
+        # Then handle FTS tables
+        print("Handling FTS tables...")
+        for table in ['events_fts', 'events_fts_data', 'events_fts_idx', 'events_fts_docsize', 'events_fts_config']:
+            c.execute(f"DROP TABLE IF EXISTS {table}")
+        
+        # Create the FTS5 virtual table
         print("Creating FTS5 virtual table...")
-        # Create the FTS5 virtual table for full-text search
         c.execute('''
             CREATE VIRTUAL TABLE IF NOT EXISTS events_fts 
             USING fts5(
@@ -104,8 +100,8 @@ def init_db():
             )
         ''')
         
+        # Create triggers
         print("Creating triggers...")
-        # Create triggers to maintain the FTS index
         c.execute('''
             CREATE TRIGGER IF NOT EXISTS events_ai AFTER INSERT ON events BEGIN
                 INSERT INTO events_fts(rowid, token, event_data)
