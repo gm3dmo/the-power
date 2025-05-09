@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <form method="GET" action="{{ url_for('search_page') }}" class="mb-4">
+    <form method="GET" action="{{ url_for('search_page') }}" class="mb-2">
         <div class="input-group">
             <input type="text" name="q" class="form-control" placeholder="Enter search terms..." value="{{ query }}">
             <button type="submit" class="btn btn-primary">Search</button>
