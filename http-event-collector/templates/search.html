@@ -4,11 +4,11 @@
 
 {% block content %}
 <div class="container">
-    <form method="GET" action="{{ url_for('search_page') }}" class="search-form">
-        <div class="form-group">
-            <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Enter search terms..." autofocus>
+    <form method="GET" action="{{ url_for('search_page') }}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Enter search terms..." value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
     {% if error %}
@@ -19,23 +19,38 @@
 
     {% if results %}
     <div class="results">
-        <h2>Results ({{ results|length }})</h2>
+        <h5>Results ({{ results|length }})</h5>
         {% for result in results %}
-        <div class="event-card">
-            <div class="event-header">
-                <span class="event-id">#{{ result.id }}</span>
-                <span class="event-time">{{ result.received_at }}</span>
-                <span class="event-source">Source: {{ result.source_ip }}</span>
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>ID:</strong> {{ result.id }} |
+                    {% if result.event_data.event %}
+                    <strong>Action:</strong> {{ result.event_data.event.action }} |
+                    <strong>Actor:</strong> {{ result.event_data.event.actor }} |
+                    {% endif %}
+                    <strong>Token:</strong> {{ result.token }} |
+                    <strong>Received:</strong> {{ result.received_at }} |
+                    <strong>Source:</strong> {{ result.source_ip }}
+                </div>
+                <button class="btn btn-sm btn-outline-secondary toggle-event" data-bs-toggle="collapse" data-bs-target="#event-{{ result.id }}" aria-expanded="false">
+                    Show/Hide
+                </button>
             </div>
-            <div class="event-data">
-                <pre><code class="json">{{ format_json(result.event_data) | safe }}</code></pre>
+            <div class="collapse" id="event-{{ result.id }}">
+                <div class="card-body">
+                    <div class="event-data" style="position: relative;">
+                        <pre><code class="json">{{ format_json(result.event_data) | safe }}</code></pre>
+                        <button class="copy-button" style="position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 12px;">Copy</button>
+                    </div>
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
     {% elif query %}
-    <div class="no-results">
-        <p>No results found for "{{ query }}"</p>
+    <div class="alert alert-info">
+        No results found for "{{ query }}"
     </div>
     {% endif %}
 </div>
@@ -89,28 +104,21 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add copy button to each event data block
-        document.querySelectorAll('.event-data').forEach(eventData => {
-            const copyButton = document.createElement('button');
-            copyButton.textContent = 'Copy';
-            copyButton.className = 'copy-button';
-            copyButton.style.cssText = 'position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 12px;';
-            
-            eventData.style.position = 'relative';
-            eventData.appendChild(copyButton);
-
-            copyButton.addEventListener('click', function() {
-                const text = eventData.querySelector('.highlight').textContent;
-                navigator.clipboard.writeText(text).then(() => {
-                    const originalText = copyButton.textContent;
-                    copyButton.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyButton.textContent = originalText;
-                    }, 2000);
-                });
+document.addEventListener('DOMContentLoaded', function() {
+    // Copy button functionality
+    document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const codeBlock = this.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
             });
         });
     });
+});
 </script>
 {% endblock %} 
