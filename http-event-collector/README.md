@@ -4,25 +4,24 @@ This Flask application acts as a receiver for events and forwards them to Splunk
 
 ## Setup
 
-1. Install the required dependencies:
+Install the required dependencies:
 ```bash
 pip install -r requirements.txt
-```
-
-2. Create a `.env` file with your Splunk HEC configuration:
-```bash
-SPLUNK_HEC_URL=https://your-splunk-instance:8088/services/collector
-SPLUNK_HEC_TOKEN=your-token-here
 ```
 
 ## Running the Application
 
 Start the Flask application:
+
 ```bash
 python app.py --username admin --password mysecret --token mytoken
 ```
 
 The application will run on `http://localhost:8001`
+
+Use username and password in the web UI where you are proxying onto port 8001
+
+The token is the "token" field in your splunk audit log stream in GitHub.
 
 ## API Endpoints
 
