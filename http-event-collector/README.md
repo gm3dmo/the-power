@@ -19,10 +19,10 @@ SPLUNK_HEC_TOKEN=your-token-here
 
 Start the Flask application:
 ```bash
-python app.py
+python app.py --username admin --password mysecret --token mytoken
 ```
 
-The application will run on `http://localhost:8002`
+The application will run on `http://localhost:8001`
 
 ## API Endpoints
 

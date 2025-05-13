@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, session
 import json
 from datetime import datetime
 import sqlite3
@@ -8,8 +8,10 @@ from pygments.lexers import JsonLexer
 from pygments.formatters import HtmlFormatter
 import re
 import argparse
+from functools import wraps
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Required for session
 
 # Database setup
 DB_PATH = 'auditdb'
@@ -20,12 +22,45 @@ VALID_TOKENS = set()
 # Parse command line arguments
 parser = argparse.ArgumentParser(description='HEC Event Collector')
 parser.add_argument('--token', help='Authentication token for the collector')
+parser.add_argument('--username', help='Username for web interface authentication')
+parser.add_argument('--password', help='Password for web interface authentication')
 args = parser.parse_args()
 
 # Add token if provided
 if args.token:
     VALID_TOKENS.add(args.token)
     print(f"Added token to valid tokens: {args.token}")
+
+# Store web interface credentials
+WEB_USERNAME = args.username
+WEB_PASSWORD = args.password
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('authenticated'):
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == WEB_USERNAME and password == WEB_PASSWORD:
+            session['authenticated'] = True
+            return redirect('/auditdb')
+        else:
+            return render_template('login.html', error='Invalid credentials')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('authenticated', None)
+    return redirect('/login')
 
 def format_json(data, search_terms=None):
     """Format JSON data with syntax highlighting and search term highlighting"""
@@ -236,6 +271,7 @@ def index():
     return redirect('/auditdb')
 
 @app.route('/auditdb')
+@login_required
 def search_page():
     """
     Web interface for searching events
@@ -408,6 +444,7 @@ def search_events():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/auditdb/events', methods=['GET'])
+@login_required
 def list_events():
     """
     List all stored events
