@@ -4,7 +4,15 @@
 # GET /repos/{owner}/{repo}/releases/{release_id}/assets
 
 
-release_id=${1:-1}
+# If the script is passed an argument $1 use that as the name
+if [ -z "$1" ]
+  then
+    #release_id=$(./list-releases.sh | jq -r '.[] |.id | max')
+    release_id=$(./list-releases.sh |  jq '[.[].id] | max')
+  else
+    release_id=$1
+fi
+
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
