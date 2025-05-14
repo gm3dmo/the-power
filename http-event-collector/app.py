@@ -217,30 +217,32 @@ def search_events_db(query):
         count = c.fetchone()[0]
         print(f"Total events in database: {count}")
         
-        # Let's see what's in the database
-        c.execute("SELECT id, token, received_at, event_data FROM events LIMIT 3")
-        sample_events = c.fetchall()
-        print("\nSample events in database:")
-        for event in sample_events:
-            print(f"ID: {event[0]}, Token: {event[1]}, Time: {event[2]}")
-            print(f"Data: {event[3][:200]}...")  # Print first 200 chars of event data
-        
-        # Escape special characters in the search query
-        # Replace dots and other special characters with spaces
-        safe_query = query.replace('.', ' ').replace(':', ' ').replace('"', ' ').replace("'", ' ')
-        print(f"Safe search query: {safe_query}")
-        
-        # Perform the search
-        search_query = f'''
-            SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
-            FROM events e
-            JOIN events_fts fts ON e.id = fts.rowid
-            WHERE events_fts MATCH ?
-            ORDER BY e.received_at DESC
-            LIMIT 100
-        '''
-        print(f"\nExecuting search query with term: {safe_query}")
-        c.execute(search_query, (safe_query,))
+        # For exact string matches (like Base64), use LIKE instead of FTS
+        if any(char in query for char in '/+='): # Common Base64 characters
+            print("Detected Base64-like string, using LIKE query")
+            search_query = '''
+                SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
+                FROM events e
+                WHERE e.event_data LIKE ?
+                   OR e.token LIKE ?
+                ORDER BY e.received_at DESC
+                LIMIT 100
+            '''
+            search_pattern = f'%{query}%'
+            c.execute(search_query, (search_pattern, search_pattern))
+        else:
+            # Regular FTS search for non-Base64 queries
+            safe_query = ' '.join(query.split())  # Normalize spaces
+            print(f"Using FTS search with query: {safe_query}")
+            search_query = '''
+                SELECT e.id, e.token, e.received_at, e.event_data, e.source_ip
+                FROM events e
+                JOIN events_fts fts ON e.id = fts.rowid
+                WHERE events_fts MATCH ?
+                ORDER BY e.received_at DESC
+                LIMIT 100
+            '''
+            c.execute(search_query, (safe_query,))
         
         results = []
         for row in c.fetchall():
@@ -253,9 +255,6 @@ def search_events_db(query):
             })
         
         print(f"Found {len(results)} results")
-        if results:
-            print("First result preview:")
-            print(json.dumps(results[0], indent=2)[:200] + "...")
         return results
     except Exception as e:
         print(f"Error searching events: {str(e)}")
