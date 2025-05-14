@@ -1,17 +1,58 @@
-# Splunk HTTP Event Collector (HEC) Receiver
+# Send GitHub Audit Log Stream to Splunk HTTP Event Collector
 
-This Flask application acts as a receiver for events and forwards them to Splunk using the HTTP Event Collector (HEC). It's designed to be a middleware that can receive events from various sources and forward them to Splunk.
+Use this application to receive GitHub audit log stream events without a Splunk installation. See the GitHub guidance on [setting up streaming to Splunk](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise#setting-up-streaming-to-splunk) to configure the GitHub side.
 
 ## Setup
 
+### Clone the power:
+
+```bash
+git clone https://github.com/gm3dmo/the-power
+```
+
+### Create a virtual environment:
+
+```bash
+cd the-power/http-event-collector
+python -m venv .venv
+```
+
 Install the required dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
+### Proxy Configuration
+This is my `/etc/caddy/Caddfile` which is just enough proxy for me:
+
+```bash
+{
+ debug
+ servers {
+ protocols h2
+ protocols h1
+ }
+}
+
+hooky.seyosh.org {                                                                                                                    header Custom-Header "the-power-hooklistener"
+    root * /usr/share/caddy
+    file_server                                                                                                                           @http2only {
+    }
+    reverse_proxy 127.0.0.1:8000
+}                                                                                                                                 audit.seyosh.org {
+    header Custom-Header "the-power-http-event-collector"
+    root * /usr/share/caddy
+    file_server
+        @http2only {
+    }                                                                                                                                 reverse_proxy 127.0.0.1:8001
+}
+```
+Make sure your proxying web server is running.
+
 ## Running the Application
 
-Start the Flask application:
+Start the *http-event-collector* application:
 
 ```bash
 python app.py --username admin --password mysecret --token mytoken
