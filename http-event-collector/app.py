@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Required for session
 
 # Database setup
-DB_PATH = 'auditdb'
+DB_PATH = 'audit.db'
 
 # Initialize empty set for valid tokens
 VALID_TOKENS = set()
@@ -102,11 +102,7 @@ def init_db():
         print("Handling events table...")
         c.execute("DROP TABLE IF EXISTS events")
         
-        # Reset autoincrement
-        print("Resetting autoincrement counters")
-        c.execute("DELETE FROM sqlite_sequence")
-        
-        # Create the main events table
+        # Create the main events table first
         print("Creating events table...")
         c.execute('''
             CREATE TABLE IF NOT EXISTS events (
@@ -117,6 +113,10 @@ def init_db():
                 source_ip TEXT
             )
         ''')
+        
+        # Now reset autoincrement - sqlite_sequence will exist
+        print("Resetting autoincrement counters")
+        c.execute("DELETE FROM sqlite_sequence")
         
         # Then handle FTS tables
         print("Handling FTS tables...")
