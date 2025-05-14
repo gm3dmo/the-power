@@ -51,7 +51,7 @@ hooky.seyosh.org {                                                              
 ```
 Make sure your proxying web server is running.
 
-## Running the Application
+## Run the HTTP Collector App
 
 Start the *http-event-collector* application:
 
@@ -64,6 +64,25 @@ The application will run on `http://localhost:8001`
 Use username and password in the web UI where you are proxying onto port 8001
 
 The token is the "token" field in your splunk audit log stream in GitHub.
+
+## Send a test message
+
+```bash
+python test-sender.py --token mytoken
+```
+
+## Check the app
+
+### Login
+Login to the app with your username and password:
+
+<img width="1115" alt="event collector login" src="https://github.com/user-attachments/assets/53dd0769-5e8d-44aa-af5b-4434df7f2481" />
+
+### Check the search page
+Should contain an event. Press the Show/Hide button to see details of the test message:
+
+<img width="1260" alt="event collector search page" src="https://github.com/user-attachments/assets/e9915c22-a81e-438a-ab23-7d0694c0eb9d" />
+
 
 ## API Endpoints
 
