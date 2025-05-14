@@ -10,9 +10,11 @@ Use this application to receive GitHub audit log stream events without a Splunk 
 git clone https://github.com/gm3dmo/the-power
 ```
 
-### Create a virtual environment:
+### Create a virtual environment and activate it:
 
 ```bash
+cd the-power/http-event-collector
+python -m venv .venv
 cd the-power/http-event-collector
 python -m venv .venv
 ```
