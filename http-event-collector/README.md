@@ -15,11 +15,10 @@ git clone https://github.com/gm3dmo/the-power
 ```bash
 cd the-power/http-event-collector
 python -m venv .venv
-cd the-power/http-event-collector
-python -m venv .venv
+source .venv/bin/activate
 ```
 
-Install the required dependencies:
+Install the required dependencies in the virtual environment:
 
 ```bash
 pip install -r requirements.txt
