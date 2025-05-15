@@ -2,15 +2,19 @@
 
 Use this application to receive GitHub audit log stream events without a Splunk installation. See the GitHub guidance on [setting up streaming to Splunk](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise#setting-up-streaming-to-splunk) to configure the GitHub side.
 
-## Setup
 
+## Setup
+- Use [tmux](https://en.wikipedia.org/wiki/GNU_Screen) or [screen](https://en.wikipedia.org/wiki/Tmux) for sessions that can survive logout.
+- A small Virtual machine, [Azure](https://azure.microsoft.com/en-us/) is ideal.
+
+  
 ### Clone the power:
 
 ```bash
 git clone https://github.com/gm3dmo/the-power
 ```
 
-### Create a virtual environment and activate it:
+### Create a virtual environment ([venv](https://docs.python.org/3/library/venv.html)) and activate it:
 
 ```bash
 cd the-power/http-event-collector
@@ -18,14 +22,14 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Install the required dependencies in the virtual environment:
+### Install the required dependencies in the virtual environment:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Proxy Configuration
-This is my `/etc/caddy/Caddfile` which is just enough proxy for me:
+I'm using one called [Caddy](https://caddyserver.com/) but feel free to use one you prefer. This is my caddy configuration file `/etc/caddy/Caddyfile`:
 
 ```bash
 {
@@ -66,12 +70,13 @@ Use username and password in the web UI where you are proxying onto port 8001
 The token is the "token" field in your splunk audit log stream in GitHub.
 
 ## Send a test message
+Open a new window or tmux session (remember you need the virtualenv (.venv) activated
 
 ```bash
 python test-sender.py --token mytoken
 ```
 
-## Check the app
+## Login to the app and inspect the log
 
 ### Login
 Login to the app with your username and password:
