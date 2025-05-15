@@ -28,6 +28,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### Activate the virtual environment
+Once the setup is complete in future you'll only need to locate to the directory and activate the virtual environemnt (.venv):
+
+```bash
+cd the-power/http-event-collector
+source .venv/bin/activate
+```
+
 ### Proxy Configuration
 I'm using one called [Caddy](https://caddyserver.com/) but feel free to use one you prefer. This is my caddy configuration file `/etc/caddy/Caddyfile`:
 
@@ -38,14 +46,7 @@ I'm using one called [Caddy](https://caddyserver.com/) but feel free to use one 
  protocols h2
  protocols h1
  }
-}
-
-hooky.seyosh.org {                                                                                                                    header Custom-Header "the-power-hooklistener"
-    root * /usr/share/caddy
-    file_server                                                                                                                           @http2only {
-    }
-    reverse_proxy 127.0.0.1:8000
-}                                                                                                                                 audit.seyosh.org {
+}                                                                                                                             audit.seyosh.org {
     header Custom-Header "the-power-http-event-collector"
     root * /usr/share/caddy
     file_server
