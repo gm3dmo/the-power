@@ -1,13 +1,12 @@
 .  ./.gh-api-examples.conf
-# This script might damage an existing ssh config file
-# and you should probably not use it
+
+echo you probably should not need this script
 exit
 
 # https://docs.github.com/en/enterprise-cloud@latest/rest/deploy-keys/deploy-keys?apiVersion=2022-11-28#create-a-deploy-key
 # POST /repos/{owner}/{repo}/keys
 # As per the documentation the app will need at least "Administration" permission on the repository.
 
-set -x
 ts=$(date +%s)
 
 ssh_key_file=~/.ssh/ed25519
@@ -35,7 +34,8 @@ cat $json_file | jq -r
 
 # Set this if you are using an oauth token
 #GITHUB_TOKEN=
-echo "Sending with token: ${GITHUB_TOKEN}"
+echo "Sending with token ${GITHUB_TOKEN:0:4}...${GITHUB_TOKEN: -8}"
+
 
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
