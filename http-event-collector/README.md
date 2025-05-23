@@ -2,7 +2,10 @@
 
 Use this application to receive GitHub audit log stream events without a Splunk installation. See the GitHub guidance on [setting up streaming to Splunk](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise#setting-up-streaming-to-splunk) to configure the GitHub side. 
 
-Screencast for this at [Setup HTTP Event Collector for GitHub Audit Log Stream](https://youtu.be/37iLCxu3I90)
+#### Screencasts
+
+- [Setup HTTP Event Collector for GitHub Audit Log Stream](https://youtu.be/37iLCxu3I90)
+- [GitHub Enterprise Audit Log Streaming Setup](https://www.youtube.com/watch?v=XX8qZVvWcD0)
 
 
 ## Setup
