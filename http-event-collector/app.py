@@ -484,4 +484,5 @@ if __name__ == '__main__':
     
     print("Press Ctrl+C to stop")
     print("-" * 80)
-    app.run(debug=True, host='0.0.0.0', port=8001)
+    debug_mode = os.getenv('FLASK_DEBUG', '0') == '1'
+    app.run(debug=debug_mode, host='0.0.0.0', port=8001)
