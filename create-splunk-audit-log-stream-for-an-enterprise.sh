@@ -15,22 +15,20 @@ fi
 
 enabled=true
 stream_type="Splunk"
-domain="audit.seyosh.org"
+domain="audit.yourdomain.com"
 port=443
+token='mytoken'
+# SSL verification helps ensure your events are sent to your Splunk endpoint securely.
+ssl_verify=false
 
 # Key ID obtained from the audit log stream key endpoint used to encrypt secrets.
-
 audit_key_details="tmp/audit-log-stream-key.json"
 ./get-the-audit-log-stream-key-for-encrypting-secrets.sh > ${audit_key_details}
 key_id=$(jq -r '.key_id' ${audit_key_details})
 key=$(jq -r '.key' ${audit_key_details})
 
-token='mytoken'
-# Encrypted Token.
 encrypted_token=$(ruby create-enterprise-audit-log-stream-key.rb $key $token)
 
-# SSL verification helps ensure your events are sent to your Splunk endpoint securely.
-ssl_verify=false
 
 json_file=tmp/create-an-audit-log-streaming-configuration-for-an-enterprise.json
 jq -n \
@@ -53,12 +51,9 @@ jq -n \
              }
            }' > ${json_file}
 
-cat $json_file | jq -r
+curl -L \
+     -H "Accept: application/vnd.github+json" \
+     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+     -H "X-GitHub-Api-Version: $github_api_version" \
+        "$GITHUB_API_BASE_URL/enterprises/${enterprise}/audit-log/streams" --data @${json_file}
 
-
-set -x
-curl -v -L \
-  -H "Accept: application/vnd.github+json" \
-  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-  -H "X-GitHub-Api-Version: $github_api_version" \
-     "$GITHUB_API_BASE_URL/enterprises/${enterprise}/audit-log/streams" --data @${json_file}
