@@ -42,22 +42,22 @@ jq -n \
            --arg ssl_verify "$ssl_verify" \
            --arg enabled "$enabled" \
            '{
-             stream_type: $stream_type,
+             stream_type : $stream_type,
              enabled : $enabled | test("true"),
-             vendor_specific: { SplunkConfig : {
+             vendor_specific :  {
                domain : $domain,
                port : $port | tonumber,
                key_id : $key_id,
                encrypted_token : $encrypted_token,
                ssl_verify: $ssl_verify | test("true")
              }
-             }
            }' > ${json_file}
 
 cat $json_file | jq -r
 
 
-curl -L \
+set -x
+curl -v -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   -H "X-GitHub-Api-Version: $github_api_version" \
