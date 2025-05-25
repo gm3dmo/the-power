@@ -72,6 +72,16 @@ mail_domain="example.com"
 ### GitHub Enterprise
 enterprise="${enterprise_name}"
 
+# [Enterprise Audit Log Stream](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin/audit-log?apiVersion=2022-11-28#create-an-audit-log-streaming-configuration-for-an-enterprise)
+## Splunk Audit Log Stream
+stream_type="Splunk"
+enabled=true
+domain="audit.example.com"
+port=443
+token='mytoken'
+# SSL verification helps ensure your events are sent to your Splunk endpoint securely.
+ssl_verify=true
+
 
 ### GitHub API Version
 # https://docs.github.com/en/rest/overview/api-versions
