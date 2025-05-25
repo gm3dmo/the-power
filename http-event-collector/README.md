@@ -88,11 +88,16 @@ Should contain an event. Press the Show/Hide button to see details of the test m
 
 <img width="1260" alt="event collector search page" src="https://github.com/user-attachments/assets/e9915c22-a81e-438a-ab23-7d0694c0eb9d" />
 
-## Configure the splunk audit log stream in GitHub
+### Configure the splunk audit log stream in GitHub
 
 Follow the guidance at [setting up streaming to Splunk](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise#setting-up-streaming-to-splunk) 
 
 <img width="1374" alt="Picture of GitHub Splunk Audit Log Stream Setting page" src="https://github.com/user-attachments/assets/3ea42126-d3d7-4df8-a766-b6e8aa7e7658" />
+
+### Configure the splunk audit log stream using GitHub REST API [Create an audit log straming configuration for an enterprise](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin/audit-log?apiVersion=2022-11-28#create-an-audit-log-streaming-configuration-for-an-enterprise)
+
+- Set the appropriate values in the configuration file.
+- Execute [create-splunk-audit-log-stream-for-an-enterprise.sh](https://github.com/gm3dmo/the-power/blob/main/create-splunk-audit-log-stream-for-an-enterprise.sh)
 
 
 ## API Endpoints

@@ -12,21 +12,13 @@ if [ -z "$1" ]
     stream_no=$1
 fi
 
-
-enabled=true
-stream_type="Splunk"
-domain="audit.yourdomain.com"
-port=443
-token='mytoken'
-# SSL verification helps ensure your events are sent to your Splunk endpoint securely.
-ssl_verify=false
+# Configuration comes from the .gh-api-examples.conf file section "Splunk Audit Log Stream"
 
 # Key ID obtained from the audit log stream key endpoint used to encrypt secrets.
 audit_key_details="tmp/audit-log-stream-key.json"
 ./get-the-audit-log-stream-key-for-encrypting-secrets.sh > ${audit_key_details}
 key_id=$(jq -r '.key_id' ${audit_key_details})
 key=$(jq -r '.key' ${audit_key_details})
-
 encrypted_token=$(ruby create-enterprise-audit-log-stream-key.rb $key $token)
 
 
