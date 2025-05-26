@@ -19,7 +19,7 @@ audit_key_details="tmp/audit-log-stream-key.json"
 ./get-the-audit-log-stream-key-for-encrypting-secrets.sh > ${audit_key_details}
 key_id=$(jq -r '.key_id' ${audit_key_details})
 key=$(jq -r '.key' ${audit_key_details})
-encrypted_token=$(ruby create-enterprise-audit-log-stream-key.rb $key $token)
+encrypted_token=$(ruby create-enterprise-audit-log-stream-key.rb $key $splunk_token)
 
 
 json_file=tmp/create-an-audit-log-streaming-configuration-for-an-enterprise.json
