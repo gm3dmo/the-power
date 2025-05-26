@@ -78,7 +78,7 @@ stream_type="Splunk"
 enabled=true
 domain="audit.example.com"
 port=443
-token='mytoken'
+splunk_token='mytoken'
 # SSL verification helps ensure your events are sent to your Splunk endpoint securely.
 ssl_verify=true
 
