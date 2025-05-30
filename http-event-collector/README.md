@@ -43,12 +43,14 @@ I'm using one called [Caddy](https://caddyserver.com/) but feel free to use one 
  protocols h2
  protocols h1
  }
-}                                                                                                                          audit.seyosh.org {
+}
+audit.seyosh.org {
     header Custom-Header "the-power-http-event-collector"
     root * /usr/share/caddy
     file_server
         @http2only {
-    }                                                                                                                                 reverse_proxy 127.0.0.1:8001
+    }
+    reverse_proxy 127.0.0.1:8001
 }
 
 ```
