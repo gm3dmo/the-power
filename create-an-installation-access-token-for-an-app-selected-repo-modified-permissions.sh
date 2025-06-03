@@ -16,20 +16,18 @@ json_file=tmp/create-an-installation-access-token-for-an-app.json
 
 # Add any permissions you want here (must be valid json):
 permissions='{"contents": "write", "issues": "write"}'
+repositories="[$(printf '"%s"' "$repo")]"
 
-repositories='["testrepo"]'
 
 jq -n \
        --argjson permissions "${permissions}" \
        --argjson repositories "${repositories}" \
            '{
-             permissions :  $permissions,
-             repositories :  $repositories
+             permissions :   $permissions,
+             repositories :  $repositories 
            }' > ${json_file}
 
-echo ===================== >&2
-cat ${json_file} | jq -r >&2
-echo ===================== >&2
+cat ${json_file} | jq -r 
 
 
 curl ${curl_custom_flags} \
