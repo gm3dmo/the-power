@@ -146,6 +146,29 @@ function openssh_private_key () {
     echo "This will show up in the results from: list-code-scanning-alerts-generic-type-openssh-private-key-for-a-repository.sh"
 }
 
+function rsa_private_key() {
+    s1="-----BEGIN RSA PRIVATE KEY-----"
+    s2="MIICXQIBAAKBgQDAceP6BdZVBokFIqRqKHQfzuu7dCnVPfx/HNgo0KzOHBP0pbf/
+LYGsKj7cuV/wabx3cP5+K0mda3LYz7T01FVXtDRPu4geJymiBdVf4liYej0kOYBH
+hMf+WwxxSRmFkXYLxCfylBn1EwQML6IapaRVVi9kIp1re28m+FQq3vGgcQIDAQAB
+AoGBAIEe6Vuj9v7td5neeHpR0jhVWY1Yj4joIjYXYGFiQc+4vxry5dVs7whY//yQ
+1HI2P6HUSqzU1nus0E3wbvWmUetuiQqTrCisNXOfzx5MD5Go6WrxA16D7JGk2WAc
+tnRNYhjA4X7qS2pp7DzEWRuU/vcgcwpzPlzKllekVDCzOmDRAkEA+rcTGI16U4Jy
+nr3E2MxwiaCa0Fj/ZtUPupYR1eTSRbOsufXJtkM2rls/Hws7t/6YTKOuf8jNeWAt
+7h6d+fM7swJBAMSAX8vy/+dRlMQcKF/LL3V+3okvBBMsEhXiSCCFJycFVXOJI8qF
+F+0P+PVa884T9SnnHppfV0c6QFqlNUpG0UsCQQChcDFDphYWn/DedqPCViJA/MGz
+VxteQ+OU6f0iFe2wJDocpD/2tOEI9Ih4nOsfVzkKYHuEnPByL5RjuCNRR2YxAkBV
+eGkyst2wZgHJU14UXLKl7qspDHQ/SpoLPsOUsZYYGO/UM0CIJGAF0z68qfUGHBQ1
+R7w99V5nMuUvCFEnn6oFAkA+JnjjCMy5jeOYl2yiLlzEd3jPUMyyiAe/F/pq+O9+
+Ofj4YkR4rjqYiJ2BcBHn6DIYi/E7MVfmX8ky9eJNEUvA
+-----END RSA PRIVATE KEY-----"
+    echo "Commit: rsa_private_key"
+    echo "${s1}${s2}" >rsa_private_key.txt
+    echo "This will show up in the results from: list-code-scanning-alerts-generic-type-rsa-private-key-for-a-repository.sh"
+}
+
+
+
 
 function azure_storage () {
     azure_storage_1="e6ZZx75Z6095KHJvBZIDOD9kCLt3KjHx/"
@@ -188,6 +211,9 @@ function datadog_api_key () {
 
 
 case ${keyname} in 
+ rsa_private_key)
+    rsa_private_key
+     ;;
  openssh_private_key )
     openssh_private_key
      ;;
