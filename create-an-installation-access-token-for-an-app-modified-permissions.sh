@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/apps#create-an-installation-access-token-for-an-app
+# https://docs.github.com/en/enterprise-cloud@latest/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
 # POST /app/installations/{installation_id}/access_tokens
 
 # This script gets an access token which has less privilege than the GitHub App
