@@ -490,71 +490,11 @@ stream2_container="container"
     else:
         args.webhook_url = input(f"Enter webhook url: ")
 
-    values = {
-        "token": args.token,
-        "hostname": args.hostname,
-        "path_prefix": args.path_prefix,
-        "graphql_path_prefix": args.graphql_path_prefix,
-        "webhook_url": args.webhook_url,
-        "private_pem_file": args.private_pem_file,
-        "org": args.org,
-        "default_repo_visibility" : args.default_repo_visibility,
-        "enterprise_name": args.enterprise_name,
-        "base_branch": args.base_branch,
-        "delete_branch_on_merge": args.delete_branch_on_merge,
-        "pr_approver_token": args.pr_approver_token,
-        "pr_approver_name": args.pr_approver_name,
-        "default_app_id": args.app_id,
-        "default_app_name": args.default_app_name,
-        "default_installation_id": args.installation_id,
-        "private_key_pem_file": args.private_pem_file,
-        "client_id": args.client_id,
-        "app_client_secret": args.app_client_secret,
-        "admin_user": args.admin_user,
-        "admin_password": args.admin_password,
-        "mgmt_password": args.mgmt_password,
-        "mgmt_port": args.mgmt_port,
-        "team_name": args.team_name,
-        "team_slug": args.team_slug,
-        "team_members": args.team_members,
-        "team_admin": args.team_admin,
-        "org_owner": args.org_owner,
-        "org_members": args.org_members,
-        "default_committer": args.default_committer,
-        "repo_name": args.repo_name,
-        "number_of_users_to_create_on_ghes": args.number_of_users_to_create_on_ghes,
-        "runner_version": args.runner_version,
-        "runner_os": args.runner_os,
-        "runner_platform": args.runner_platform,
-        "number_of_orgs": args.number_of_orgs,
-        "number_of_repos": args.number_of_repos,
-        "number_of_teams": args.number_of_teams,
-        "number_of_branches": args.number_of_branches,
-        "curl_custom_flags": args.curl_custom_flags,
-        "allow_auto_merge": args.allow_auto_merge,
-        "preferred_client": args.preferred_client,
-        "preferred_browser": args.preferred_browser,
-        "preferred_browser_mode": args.preferred_browser_mode,
-        "chrome_profile": args.chrome_profile,
-        "github_api_version": args.github_api_version,
-        "http_protocol": args.http_protocol,
-        "x_client_id": args.x_client_id,
-        "x_client_secret": args.x_client_secret,
-        "ent_app_id": args.ent_app_id,
-        "ent_app_name": args.ent_app_name,
-        "ent_app_client_id": args.ent_app_client_id,
-        "ent_app_client_secret": args.ent_app_client_secret,
-        "ent_app_public_link": args.ent_app_public_link,
-        "ent_app_client_secret": args.ent_app_client_secret,
-        "ent_app_private_pem": args.ent_app_private_pem,
-        "ent_app_installation_id": args.ent_installation_id
-    }
-
     out_filename = ".gh-api-examples.conf"
 
     try:
         with open(out_filename, "w") as out_file:
-            out_file.write(t.substitute(values))
+            out_file.write(t.substitute(vars(args)))
             logger.info(
                 f"\n{bcolors.OKGREEN}Configuration run is complete. Created {out_filename}"
             )
@@ -833,6 +773,13 @@ if __name__ == "__main__":
         help="The name of your enterprise.",
     )
     parser.add_argument(
+        "--ent-app-id",
+        action="store",
+        dest="ent_app_installation_id",
+        default="1",
+        help="The id of your enterprise app installation.",
+    )
+    parser.add_argument(
         "--pr-approver-token",
         action="store",
         dest="pr_approver_token",
@@ -901,6 +848,27 @@ if __name__ == "__main__":
         dest="http_protocol",
         default="https",
         help="Mostly always https",
+    )
+    parser.add_argument(
+        "--private-key-pem-file",
+        action="store",
+        dest="private_key_pem_file",
+        default="bob.pem",
+        help="Path to an app pem file",
+    )
+    parser.add_argument(
+        "--default-app-id",
+        action="store",
+        dest="default_app_id",
+        default="1",
+        help="an app id",
+    )
+    parser.add_argument(
+        "--default-installation-id",
+        action="store",
+        dest="default_installation_id",
+        default="1",
+        help="an app installation id",
     )
 
     args = parser.parse_args()
