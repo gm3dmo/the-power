@@ -6,9 +6,10 @@
 
 # rate_limits: https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps
 
-JWT=$(./tiny-call-get-jwt.sh ${default_app_id} 2>/dev/null)
+JWT=$(./tiny-call-get-jwt.sh ${app_id} 2>/dev/null)
 
-installation_id=${default_installation_id}
+installation_id=${app_installation_id}
+
 
 curl --silent ${curl_custom_flags} \
      -X POST \

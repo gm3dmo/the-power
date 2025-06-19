@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-JWT=$(ruby tiny-get-jwt.rb ${private_pem_file} ${default_app_id})
+JWT=$(ruby tiny-get-jwt.rb ${app_private_pem} ${app_id})
 
 echo ""  >&2
 echo ""  >&2

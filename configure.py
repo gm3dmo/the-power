@@ -258,13 +258,11 @@ ent_app_installation_id=${ent_app_installation_id}
 app_private_pem=${app_private_pem}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
-# The App ID: value at https://github.com/organizations/<org>/settings/apps/<appname>
 app_name=${app_name}
 app_id=${app_id}
-# https://github.com/organizations/<org>/settings/installations/<installation_id>
-installation_id=${installation_id}
+app_installation_id=${app_installation_id}
 # The Client ID is used when using the device authentication flow
-app_client_id=${client_id}
+app_client_id=${app_client_id}
 app_client_secret=${app_client_secret}
 app_cert_secret_name=app_cert_secret
 
@@ -433,18 +431,18 @@ stream2_container="container"
         else:
             args.app_id = input(f"Enter App Id ({args.app_id}): ") or args.app_id
 
-        if args.installation_id != "":
-            logger.info(f"default_installation_id = {args.installation_id}")
+        if args.app_installation_id != "":
+            logger.info(f"app_installation_id = {args.app_installation_id}")
         else:
             args.installation_id = (
-                input(f"Enter Installation Id ({args.installation_id}): ")
+                input(f"Enter Installation Id ({args.app_installation_id}): ")
                 or args.installation_id
             )
 
-        if args.client_id != "":
-            logger.info(f"client_id = {args.client_id}")
+        if args.app_client_id != "":
+            logger.info(f"app_client_id = {args.app_client_id}")
         else:
-            args.client_id = input(f"Enter Client Id: ")
+            args.app_client_id = input(f"Enter App Client Id: ")
 
         # Private key
         if args.app_private_pem != "":
@@ -477,10 +475,11 @@ stream2_container="container"
         with open(out_filename, "w") as out_file:
             out_file.write(t.substitute(vars(args)))
             logger.info(
-                f"\n{bcolors.OKGREEN}Configuration run is complete. Created {out_filename}"
+                f"\n{bcolors.OKGREEN}Configuration is complete. Created {out_filename}"
             )
     except Exception as e:
-        logger.warn(f"\n{bcolors.WARNING}Configuration run failed. {e}")
+        logger.error(f"\n{bcolors.WARNING}Configuration run failed. {e}")
+        sys.exit(1)
 
     cmd = f"""./{args.primer}"""
     logger.info(f"\n{bcolors.OKGREEN}Launching primer command: {args.primer}")
@@ -495,28 +494,60 @@ stream2_container="container"
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--org", action="store", dest="org", default="acme")
+    parser.add_argument("--org", action="store", dest="org", default="acme")
     parser.add_argument(
         "-b", "--base_branch", action="store", dest="base_branch", default="main"
     )
+    # GitHub App
     parser.add_argument(
-        "-d",
-        "--configure-app",
+        "--app-configure",
         action="store",
         dest="configure_github_app",
         default="no",
     )
-    parser.add_argument("--app-id", action="store", dest="app_id", default=4)
-    parser.add_argument("--app-name", action="store", dest="app_name", default="the-power-app01")
     parser.add_argument(
-        "--installation-id", action="store", dest="installation_id", default=1
+        "--app-name",
+        action="store",
+        dest="app_name",
+        default="the-power-app01"
     )
     parser.add_argument(
-        "-e", "--client-id", action="store", dest="client_id", default="Iv1.app_client_id"
+        "--app-id",
+        action="store",
+        dest="app_id",
+        default="1",
+        help="an app id (integer)",
     )
     parser.add_argument(
-        "--app-client-secret", action="store", dest="app_client_secret", default="app_client_secret"
+        "--app-installation-id",
+        action="store",
+        dest="app_installation_id",
+        default="1",
+        help="an app installation id (integer)",
     )
+    parser.add_argument(
+        "--app-client-id",
+        action="store",
+         dest="app_client_id",
+         default="Iv1.app_client_id",
+        help="an app client_id (string)",
+    )
+    parser.add_argument(
+        "--app-client-secret",
+        action="store", 
+        dest="app_client_secret",
+        default="app_client_secret",
+        help="an app secret (string)",
+    )
+    parser.add_argument(
+        "--app-private-pem",
+        action="store",
+        dest="app_private_pem",
+        default="~/Downloads/app_name.YYYY-MM-DD.private-key.pem",
+        help="The location of a private key (pem) file for the app.",
+    )
+
+    # GHES management
     parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
     )
@@ -630,12 +661,28 @@ if __name__ == "__main__":
         default="Justice League",
         help="The name of a team to create.",
     )
+
+    # GitHub Enterprise App
     parser.add_argument(
-        "--app-private-pem",
+        "--enterprise-app-name",
         action="store",
-        dest="app_private_pem",
-        default="~/Downloads/app_name.YYYY-MM-DD.private-key.pem",
-        help="The location of a private key (pem) file for the app.",
+        dest="ent_app_name",
+        default="enterprise-app-name",
+        help="The name of an enterprise app.",
+    )
+    parser.add_argument(
+        "--enterprise-app-installation-id",
+        action="store",
+        dest="ent_app_installation_id",
+        default="0",
+        help="",
+    )
+    parser.add_argument(
+        "--enterprise-app-id",
+        action="store",
+        dest="ent_app_id",
+        default="0",
+        help="",
     )
     parser.add_argument(
         "--enterprise-app-pem",
@@ -643,13 +690,6 @@ if __name__ == "__main__":
         dest="ent_app_private_pem",
         default="~/Downloads/ent_app_name.YYYY-MM-DD.private-key.pem",
         help="The location of an enterprise app private key pem file.",
-    )
-    parser.add_argument(
-        "--enterprise-app-name",
-        action="store",
-        dest="ent_app_name",
-        default="enterprise-app-name",
-        help="The name of an enterprise app.",
     )
     parser.add_argument(
         "--enterprise-app-client-id",
@@ -665,20 +705,7 @@ if __name__ == "__main__":
         default="ent_app_client_secret",
         help="An enterprise app client secret.",
     )
-    parser.add_argument(
-        "--enterprise-app-installation-id",
-        action="store",
-        dest="ent_installation_id",
-        default="0",
-        help="",
-    )
-    parser.add_argument(
-        "--enterprise-app-id",
-        action="store",
-        dest="ent_app_id",
-        default="0",
-        help="",
-    )
+
     parser.add_argument(
         "--number-of-orgs",
         action="store",
@@ -712,14 +739,14 @@ if __name__ == "__main__":
         action="store",
         dest="team_members",
         default="mona hubot mario luigi",
-        help="The members of your team.",
+        help="Members embers of the team. Space separated list",
     )
     parser.add_argument(
         "--team-admin",
         action="store",
         dest="team_admin",
         default="mona",
-        help="The admin of your team.",
+        help="The team admin.",
     )
     parser.add_argument(
         "--default-committer",
@@ -747,14 +774,7 @@ if __name__ == "__main__":
         action="store",
         dest="enterprise_name",
         default="",
-        help="The name of your enterprise.",
-    )
-    parser.add_argument(
-        "--ent-app-id",
-        action="store",
-        dest="ent_app_installation_id",
-        default="1",
-        help="The id of your enterprise app installation.",
+        help="The name of the enterprise.",
     )
     parser.add_argument(
         "--pr-approver-token",
@@ -825,20 +845,6 @@ if __name__ == "__main__":
         dest="http_protocol",
         default="https",
         help="Mostly always https",
-    )
-    parser.add_argument(
-        "--default-app-id",
-        action="store",
-        dest="default_app_id",
-        default="1",
-        help="an app id",
-    )
-    parser.add_argument(
-        "--default-installation-id",
-        action="store",
-        dest="default_installation_id",
-        default="1",
-        help="an app installation id",
     )
 
     args = parser.parse_args()

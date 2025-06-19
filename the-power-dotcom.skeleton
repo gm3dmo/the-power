@@ -8,30 +8,35 @@
 # a GitHub Enterprise Server instance.
 #
 
-hostname=api.github.com
-enterprise_name=<your enterprise name>
-org=<your org name>
-repo=testrepo
-github_token=<your github token>
-app_id=<your app id>
-installation_id=<your app installation id>
-client_id=< your app client id>
-private_pem_file=Downloads/testapp.YYYY-MM-DD.private-key.pem
-webhook=<your webhook url>
+hostname="api.github.com"
+github_token="<your github token>"
+
+enterprise_name="<your enterprise name>"
+org="<your org name>"
+repo="testrepo"
+repo_webhook="<a webhook url>"
+
+app_id="<an app id>"
+app_installation_id="<an app installation id>"
+app_client_id="<an app client id>"
+app_client_secret="<an app client secret>"
+app_private_pem="Downloads/app_name.YYYY-MM-DD.private-key.pem"
+
 team_members="<space separated list of github usernames>"
 team_admin="<github username of team admin>"
-default_committer="<github username of your default committer>"
-pr_approver_token=a_fine_grained_PAT
-pr_approver_name=aUserName
-default_repo_visibility=private
+default_committer="<github username of a default committer>"
+repo_visibility="private"
 
-ent_github_app_name="ent_app_name"
-ent_app_id=app_id_integer
-ent_app_client_id=ent_app_client_id
-ent_app_public_link=https://example.com/ent-app01-public-link
-ent_app_client_secret=dummy_replace_with_ent_app_client_secret
-ent_app_private_pem=~/Downloads/ent-app01.2025-02-12.private-key.pem
-ent_app_installation_id=0
+pr_approver_token="a_fine_grained_PAT"
+pr_approver_name="a_github_username"
+
+ent_github_app_name="<an enterprise app name>"
+ent_app_id="<an app id integer> "
+ent_app_client_id="ent_app_client_id"
+ent_app_public_link="https://example.com/ent-app01-public-link"
+ent_app_client_secret="an ent_app_client_secret"
+ent_app_private_pem="~/Downloads/ent-app01.2025-02-12.private-key.pem"
+ent_app_installation_id="an enterprise installation id (integer)"
 
 # Used on GHES appliances for org creation.
 number_of_orgs=5
