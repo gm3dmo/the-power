@@ -255,16 +255,16 @@ ent_app_installation_id=${ent_app_installation_id}
 #   private_pem_file=/opt/the-power/testapp.YYYY-MM-DD.private-key.pem
 #   #=> The absolute path of the pem file is /opt/the-power/Downloads/testapp.YYYY-MM-DD.private-key.pem
 #
-private_pem_file=${private_key_pem_file}
+app_private_pem=${app_private_pem}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
 # The App ID: value at https://github.com/organizations/<org>/settings/apps/<appname>
-default_app_name=${default_app_name}
-default_app_id=${default_app_id}
+app_name=${app_name}
+app_id=${app_id}
 # https://github.com/organizations/<org>/settings/installations/<installation_id>
-default_installation_id=${default_installation_id}
+installation_id=${installation_id}
 # The Client ID is used when using the device authentication flow
-client_id=${client_id}
+app_client_id=${client_id}
 app_client_secret=${app_client_secret}
 app_cert_secret_name=app_cert_secret
 
@@ -466,8 +466,8 @@ stream2_container="container"
             args.client_id = input(f"Enter Client Id: ")
 
         # Private key
-        if args.private_pem_file != "":
-            logger.info(f"private_key_pem_file = {args.private_pem_file}")
+        if args.app_private_pem != "":
+            logger.info(f"app_private_pem = {args.app_private_pem}")
         else:
             args.private_key_pem_file = input(
                 f"Enter path relative from home to app private key: "
@@ -525,10 +525,10 @@ if __name__ == "__main__":
         dest="configure_github_app",
         default="no",
     )
-    parser.add_argument("-a", "--app-id", action="store", dest="app_id", default=4)
-    parser.add_argument("--app-name", action="store", dest="default_app_name", default="the-power-app01")
+    parser.add_argument("--app-id", action="store", dest="app_id", default=4)
+    parser.add_argument("--app-name", action="store", dest="app_name", default="the-power-app01")
     parser.add_argument(
-        "-i", "--installation-id", action="store", dest="installation_id", default=1
+        "--installation-id", action="store", dest="installation_id", default=1
     )
     parser.add_argument(
         "-e", "--client-id", action="store", dest="client_id", default=""
@@ -654,17 +654,17 @@ if __name__ == "__main__":
         help="The name of a team to create.",
     )
     parser.add_argument(
-        "--private-pem-file",
+        "--app-private-pem",
         action="store",
-        dest="private_pem_file",
-        default="",
-        help="The location of the apps private key (pem) file.",
+        dest="app_private_pem",
+        default="~/Downloads/app_name.YYYY-MM-DD.private-key.pem",
+        help="The location of a private key (pem) file for the app.",
     )
     parser.add_argument(
         "--enterprise-app-pem",
         action="store",
         dest="ent_app_private_pem",
-        default="~/Downloads/ent-app-private-key.pem",
+        default="~/Downloads/ent_app_name.YYYY-MM-DD.private-key.pem",
         help="The location of an enterprise app private key pem file.",
     )
     parser.add_argument(
@@ -848,13 +848,6 @@ if __name__ == "__main__":
         dest="http_protocol",
         default="https",
         help="Mostly always https",
-    )
-    parser.add_argument(
-        "--private-key-pem-file",
-        action="store",
-        dest="private_key_pem_file",
-        default="bob.pem",
-        help="Path to an app pem file",
     )
     parser.add_argument(
         "--default-app-id",
