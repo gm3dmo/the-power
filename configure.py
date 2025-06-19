@@ -91,7 +91,7 @@ github_api_version=${github_api_version}
 # https://docs.github.com/en/organizations
 org="${org}"
 owner="${org}"
-org_secret_name="ORGANIZATION_SECRET_001"
+org_secret_name="PWR_ORG_SECRET_001"
 org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
@@ -378,19 +378,19 @@ stream2_container="container"
         ghe_config["hostname"] = dotcom_config.get("dummy_section", "hostname")
         ghe_config["token"] = dotcom_config.get("dummy_section", "token")
         args.org = dotcom_config.get("dummy_section", "org")
-        args.default_app_id = dotcom_config.get("dummy_section", "default_app_id")
-        args.default_app_name = dotcom_config.get("dummy_section", "default_app_name")
-        args.default_installation_id = dotcom_config.get(
-            "dummy_section", "default_installation_id"
+        args.app_id = dotcom_config.get("dummy_section", "app_id")
+        args.app_name = dotcom_config.get("dummy_section", "app_name")
+        args.installation_id = dotcom_config.get(
+            "dummy_section", "installation_id"
         )
-        args.client_id = dotcom_config.get("dummy_section", "client_id")
+        args.app_client_id = dotcom_config.get("dummy_section", "app_client_id")
         args.app_client_secret = dotcom_config.get("dummy_section", "app_client_secret")
         args.team_members = dotcom_config.get("dummy_section", "team_members")
         args.team_admin = dotcom_config.get("dummy_section", "team_admin")
         args.org_owner = dotcom_config.get("dummy_section", "org_owner")
         args.org_members = dotcom_config.get("dummy_section", "org_members")
         args.default_committer = dotcom_config.get("dummy_section", "default_committer")
-        args.private_pem_file = dotcom_config.get("dummy_section", "private_pem_file")
+        args.app_private_pem = dotcom_config.get("dummy_section", "app_private_pem")
 
     if args.hostname != "":
         logger.info(f"GitHub hostname = {args.hostname}")
@@ -399,19 +399,6 @@ stream2_container="container"
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
-    #print(ghe_config)
-
-    if args.admin_password != "":
-        logger.info(f"Password is set")
-    elif "admin_password" in ghe_config:
-        args.admin_password = ghe_config["admin_password"]
-
-    if args.mgmt_password != "":
-        logger.info(f"MGMT password is set")
-    elif "mgmt_password" in ghe_config:
-        args.mgmt_password = ghe_config["mgmt_password"]
-
-
 
     if args.hostname == "api.github.local":
         args.http_protocol = "http"
@@ -419,12 +406,6 @@ stream2_container="container"
     if args.hostname == "api.github.com" or args.hostname == "api.github.local":
         args.path_prefix = ""
         args.graphql_path_prefix = "/graphql"
-    else:
-        # Set the path up for a GHES server
-        default_app_id = 4
-        default_installation_id = 1
-        client_id = 1
-        args.default_app_name = args.default_app_name
 
 
     if args.token != "":
@@ -531,19 +512,19 @@ if __name__ == "__main__":
         "--installation-id", action="store", dest="installation_id", default=1
     )
     parser.add_argument(
-        "-e", "--client-id", action="store", dest="client_id", default=""
+        "-e", "--client-id", action="store", dest="client_id", default="Iv1.app_client_id"
     )
     parser.add_argument(
-        "--app-client-secret", action="store", dest="app_client_secret", default=""
+        "--app-client-secret", action="store", dest="app_client_secret", default="app_client_secret"
     )
     parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
     )
     parser.add_argument(
-        "--admin-password", action="store", dest="admin_password", default=""
+        "--admin-password", action="store", dest="admin_password", default="admin_password"
     )
     parser.add_argument(
-        "--mgmt-password", action="store", dest="mgmt_password", default=""
+        "--mgmt-password", action="store", dest="mgmt_password", default="management_password"
     )
     parser.add_argument(
         "--mgmt-port", action="store", dest="mgmt_port", default=8443
@@ -615,15 +596,13 @@ if __name__ == "__main__":
         help="Provide a repository name.",
     )
     parser.add_argument(
-        "-n",
         "--hostname",
         action="store",
         dest="hostname",
-        default="",
+        default="api.github.com",
         help="Provide a fully qualified hostname/IP Address for a GHES appliance or use the default api.github.com",
     )
     parser.add_argument(
-        "-t",
         "--token",
         action="store",
         dest="token",
@@ -631,7 +610,6 @@ if __name__ == "__main__":
         help="Provide a personal access token.",
     )
     parser.add_argument(
-        "-l",
         "--loglevel",
         action="store",
         dest="loglevel",
@@ -639,7 +617,6 @@ if __name__ == "__main__":
         help="Set the log level",
     )
     parser.add_argument(
-        "-p",
         "--primer",
         action="store",
         dest="primer",
