@@ -9,34 +9,51 @@
 #
 
 hostname="api.github.com"
-github_token="<your github token>"
+github_token="_a-github-token_"
 
-enterprise_name="<your enterprise name>"
-org="<your org name>"
+enterprise_name="_an-enterprise-name_"
+org="an_org_name"
+
+# Repository
 repo="testrepo"
 repo_webhook="<a webhook url>"
-
-app_id="<an app id>"
-app_installation_id="<an app installation id>"
-app_client_id="<an app client id>"
-app_client_secret="<an app client secret>"
-app_private_pem="Downloads/app_name.YYYY-MM-DD.private-key.pem"
-
-team_members="<space separated list of github usernames>"
-team_admin="<github username of team admin>"
-default_committer="<github username of a default committer>"
 repo_visibility="private"
 
-pr_approver_token="a_fine_grained_PAT"
-pr_approver_name="a_github_username"
 
-ent_github_app_name="<an enterprise app name>"
-ent_app_id="<an app id integer> "
-ent_app_client_id="ent_app_client_id"
+# Team
+team_members="_space separated list of github usernames_"
+team_admin="_github username of team admin_"
+
+
+default_committer="_github username of a default committer_"
+
+# Pull Request
+pr_approver_token="_a_fine_grained_PAT_"
+pr_approver_name="_a_github_username_"
+
+# GitHub App
+app_name"_an app name_"
+app_id="_an app id_"
+app_installation_id="_an app installation id_"
+app_client_id="_an app client id_"
+app_client_secret="_an app client secret_"
+app_private_pem="~/Downloads/app_name.YYYY-MM-DD.private-key.pem"
+
+# Enterprise GitHub App
+ent_github_app_name="_an enterprise app name_"
+ent_app_id="_an app id integer_"
+ent_app_client_id="_ent_app_client_id_"
 ent_app_public_link="https://example.com/ent-app01-public-link"
-ent_app_client_secret="an ent_app_client_secret"
+ent_app_client_secret="_an ent_app_client_secret_"
 ent_app_private_pem="~/Downloads/ent-app01.2025-02-12.private-key.pem"
-ent_app_installation_id="an enterprise installation id (integer)"
+ent_app_installation_id="_an enterprise installation id (integer)_"
+
+# Legacy Oauth App
+x_client_id="_an oauth app client id_"
+x_client_secret="_an oauth app client secret_"
+
+chrome_profile="_ a chrome profile number_"
+
 
 # Used on GHES appliances for org creation.
 number_of_orgs=5
