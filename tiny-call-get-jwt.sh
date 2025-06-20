@@ -5,7 +5,7 @@ JWT=$(ruby tiny-get-jwt.rb ${app_private_pem} ${app_id})
 echo ""  >&2
 echo ""  >&2
 echo "================= Private Pem File ===================="  >&2
-echo " pem file: (private key): ($private_pem_file)" >&2
+echo " pem file: (private key): ($app_private_pem)" >&2
 echo ""  >&2
 echo "======================================================="  >&2
 echo ""  >&2

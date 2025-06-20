@@ -8,9 +8,9 @@
 # write on issues. The token created will have read only privileges on contents and issues.
 
 
-installation_id=${default_installation_id}
+installation_id=${app_installation_id}
 
-JWT=$(./tiny-call-get-jwt.sh ${default_app_id})
+JWT=$(./tiny-call-get-jwt.sh ${app_id})
 
 json_file=tmp/create-an-installation-access-token-for-an-app.json
 
