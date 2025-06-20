@@ -22,15 +22,15 @@ python3 configure.py --hostname "${hostname}" \
                      --default-repo-visibility ${default_repo_visibility:-private} \
                      --token "${github_token}" \
                      --webhook-url "${webhook}" \
-                     --configure-app yes \
+                     --app-configure ${app_configure} \
                      --app-id "${app_id}" \
                      --app-client-secret "${app_client_secret:-an_app_client_secret}" \
-                     --installation-id "${installation_id:-an_app_installation_id}" \
-                     --client-id "${client_id:-an_app_client_id}" \
+                     --app-installation-id "${app_installation_id:-an_app_installation_id}" \
+                     --app-client-id "${app_client_id:-an_app_client_id}" \
+                     --app-private-pem "${app_private_pem:-a_private_pem_file}" \
                      --team-members "${team_members:-team_members_space_separated}" \
                      --team-admin "${team_admin:-a_team_admin}" \
                      --default-committer "${default_committer:-a_default_committer}" \
-                     --private-pem-file "${private_pem_file:-a_private_pem_file}" \
                      --pr-approver-name "${pr_approver_name:-a_username}" \
                      --pr-approver-token "${pr_approver_token:-a_fine_grained_pat}" \
                      --chrome-profile "${chrome_profile:-a_chrome_profile_number}" \

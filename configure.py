@@ -91,7 +91,7 @@ github_api_version=${github_api_version}
 # https://docs.github.com/en/organizations
 org="${org}"
 owner="${org}"
-org_secret_name="ORGANIZATION_SECRET_001"
+org_secret_name="PWR_ORG_SECRET_001"
 org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
@@ -255,16 +255,14 @@ ent_app_installation_id=${ent_app_installation_id}
 #   private_pem_file=/opt/the-power/testapp.YYYY-MM-DD.private-key.pem
 #   #=> The absolute path of the pem file is /opt/the-power/Downloads/testapp.YYYY-MM-DD.private-key.pem
 #
-private_pem_file=${private_key_pem_file}
+app_private_pem=${app_private_pem}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
-# The App ID: value at https://github.com/organizations/<org>/settings/apps/<appname>
-default_app_name=${default_app_name}
-default_app_id=${default_app_id}
-# https://github.com/organizations/<org>/settings/installations/<installation_id>
-default_installation_id=${default_installation_id}
+app_name=${app_name}
+app_id=${app_id}
+app_installation_id=${app_installation_id}
 # The Client ID is used when using the device authentication flow
-client_id=${client_id}
+app_client_id=${app_client_id}
 app_client_secret=${app_client_secret}
 app_cert_secret_name=app_cert_secret
 
@@ -378,19 +376,19 @@ stream2_container="container"
         ghe_config["hostname"] = dotcom_config.get("dummy_section", "hostname")
         ghe_config["token"] = dotcom_config.get("dummy_section", "token")
         args.org = dotcom_config.get("dummy_section", "org")
-        args.default_app_id = dotcom_config.get("dummy_section", "default_app_id")
-        args.default_app_name = dotcom_config.get("dummy_section", "default_app_name")
-        args.default_installation_id = dotcom_config.get(
-            "dummy_section", "default_installation_id"
+        args.app_id = dotcom_config.get("dummy_section", "app_id")
+        args.app_name = dotcom_config.get("dummy_section", "app_name")
+        args.installation_id = dotcom_config.get(
+            "dummy_section", "installation_id"
         )
-        args.client_id = dotcom_config.get("dummy_section", "client_id")
+        args.app_client_id = dotcom_config.get("dummy_section", "app_client_id")
         args.app_client_secret = dotcom_config.get("dummy_section", "app_client_secret")
         args.team_members = dotcom_config.get("dummy_section", "team_members")
         args.team_admin = dotcom_config.get("dummy_section", "team_admin")
         args.org_owner = dotcom_config.get("dummy_section", "org_owner")
         args.org_members = dotcom_config.get("dummy_section", "org_members")
         args.default_committer = dotcom_config.get("dummy_section", "default_committer")
-        args.private_pem_file = dotcom_config.get("dummy_section", "private_pem_file")
+        args.app_private_pem = dotcom_config.get("dummy_section", "app_private_pem")
 
     if args.hostname != "":
         logger.info(f"GitHub hostname = {args.hostname}")
@@ -399,19 +397,6 @@ stream2_container="container"
     else:
         args.hostname = input(f"Enter GitHub hostname: ")
 
-    #print(ghe_config)
-
-    if args.admin_password != "":
-        logger.info(f"Password is set")
-    elif "admin_password" in ghe_config:
-        args.admin_password = ghe_config["admin_password"]
-
-    if args.mgmt_password != "":
-        logger.info(f"MGMT password is set")
-    elif "mgmt_password" in ghe_config:
-        args.mgmt_password = ghe_config["mgmt_password"]
-
-
 
     if args.hostname == "api.github.local":
         args.http_protocol = "http"
@@ -419,12 +404,6 @@ stream2_container="container"
     if args.hostname == "api.github.com" or args.hostname == "api.github.local":
         args.path_prefix = ""
         args.graphql_path_prefix = "/graphql"
-    else:
-        # Set the path up for a GHES server
-        default_app_id = 4
-        default_installation_id = 1
-        client_id = 1
-        args.default_app_name = args.default_app_name
 
 
     if args.token != "":
@@ -452,22 +431,22 @@ stream2_container="container"
         else:
             args.app_id = input(f"Enter App Id ({args.app_id}): ") or args.app_id
 
-        if args.installation_id != "":
-            logger.info(f"default_installation_id = {args.installation_id}")
+        if args.app_installation_id != "":
+            logger.info(f"app_installation_id = {args.app_installation_id}")
         else:
             args.installation_id = (
-                input(f"Enter Installation Id ({args.installation_id}): ")
+                input(f"Enter Installation Id ({args.app_installation_id}): ")
                 or args.installation_id
             )
 
-        if args.client_id != "":
-            logger.info(f"client_id = {args.client_id}")
+        if args.app_client_id != "":
+            logger.info(f"app_client_id = {args.app_client_id}")
         else:
-            args.client_id = input(f"Enter Client Id: ")
+            args.app_client_id = input(f"Enter App Client Id: ")
 
         # Private key
-        if args.private_pem_file != "":
-            logger.info(f"private_key_pem_file = {args.private_pem_file}")
+        if args.app_private_pem != "":
+            logger.info(f"app_private_pem = {args.app_private_pem}")
         else:
             args.private_key_pem_file = input(
                 f"Enter path relative from home to app private key: "
@@ -496,10 +475,11 @@ stream2_container="container"
         with open(out_filename, "w") as out_file:
             out_file.write(t.substitute(vars(args)))
             logger.info(
-                f"\n{bcolors.OKGREEN}Configuration run is complete. Created {out_filename}"
+                f"\n{bcolors.OKGREEN}Configuration is complete. Created {out_filename}"
             )
     except Exception as e:
-        logger.warn(f"\n{bcolors.WARNING}Configuration run failed. {e}")
+        logger.error(f"\n{bcolors.WARNING}Configuration run failed. {e}")
+        sys.exit(1)
 
     cmd = f"""./{args.primer}"""
     logger.info(f"\n{bcolors.OKGREEN}Launching primer command: {args.primer}")
@@ -514,36 +494,68 @@ stream2_container="container"
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--org", action="store", dest="org", default="acme")
+    parser.add_argument("--org", action="store", dest="org", default="acme")
     parser.add_argument(
         "-b", "--base_branch", action="store", dest="base_branch", default="main"
     )
+    # GitHub App
     parser.add_argument(
-        "-d",
-        "--configure-app",
+        "--app-configure",
         action="store",
         dest="configure_github_app",
         default="no",
     )
-    parser.add_argument("-a", "--app-id", action="store", dest="app_id", default=4)
-    parser.add_argument("--app-name", action="store", dest="default_app_name", default="the-power-app01")
     parser.add_argument(
-        "-i", "--installation-id", action="store", dest="installation_id", default=1
+        "--app-name",
+        action="store",
+        dest="app_name",
+        default="the-power-app01"
     )
     parser.add_argument(
-        "-e", "--client-id", action="store", dest="client_id", default=""
+        "--app-id",
+        action="store",
+        dest="app_id",
+        default="1",
+        help="an app id (integer)",
     )
     parser.add_argument(
-        "--app-client-secret", action="store", dest="app_client_secret", default=""
+        "--app-installation-id",
+        action="store",
+        dest="app_installation_id",
+        default="1",
+        help="an app installation id (integer)",
     )
+    parser.add_argument(
+        "--app-client-id",
+        action="store",
+         dest="app_client_id",
+         default="Iv1.app_client_id",
+        help="an app client_id (string)",
+    )
+    parser.add_argument(
+        "--app-client-secret",
+        action="store", 
+        dest="app_client_secret",
+        default="app_client_secret",
+        help="an app secret (string)",
+    )
+    parser.add_argument(
+        "--app-private-pem",
+        action="store",
+        dest="app_private_pem",
+        default="~/Downloads/app_name.YYYY-MM-DD.private-key.pem",
+        help="The location of a private key (pem) file for the app.",
+    )
+
+    # GHES management
     parser.add_argument(
         "-u", "--admin-user", action="store", dest="admin_user", default="ghe-admin"
     )
     parser.add_argument(
-        "--admin-password", action="store", dest="admin_password", default=""
+        "--admin-password", action="store", dest="admin_password", default="admin_password"
     )
     parser.add_argument(
-        "--mgmt-password", action="store", dest="mgmt_password", default=""
+        "--mgmt-password", action="store", dest="mgmt_password", default="management_password"
     )
     parser.add_argument(
         "--mgmt-port", action="store", dest="mgmt_port", default=8443
@@ -615,7 +627,6 @@ if __name__ == "__main__":
         help="Provide a repository name.",
     )
     parser.add_argument(
-        "-n",
         "--hostname",
         action="store",
         dest="hostname",
@@ -623,7 +634,6 @@ if __name__ == "__main__":
         help="Provide a fully qualified hostname/IP Address for a GHES appliance or use the default api.github.com",
     )
     parser.add_argument(
-        "-t",
         "--token",
         action="store",
         dest="token",
@@ -631,7 +641,6 @@ if __name__ == "__main__":
         help="Provide a personal access token.",
     )
     parser.add_argument(
-        "-l",
         "--loglevel",
         action="store",
         dest="loglevel",
@@ -639,7 +648,6 @@ if __name__ == "__main__":
         help="Set the log level",
     )
     parser.add_argument(
-        "-p",
         "--primer",
         action="store",
         dest="primer",
@@ -653,26 +661,35 @@ if __name__ == "__main__":
         default="Justice League",
         help="The name of a team to create.",
     )
-    parser.add_argument(
-        "--private-pem-file",
-        action="store",
-        dest="private_pem_file",
-        default="",
-        help="The location of the apps private key (pem) file.",
-    )
-    parser.add_argument(
-        "--enterprise-app-pem",
-        action="store",
-        dest="ent_app_private_pem",
-        default="~/Downloads/ent-app-private-key.pem",
-        help="The location of an enterprise app private key pem file.",
-    )
+
+    # GitHub Enterprise App
     parser.add_argument(
         "--enterprise-app-name",
         action="store",
         dest="ent_app_name",
         default="enterprise-app-name",
         help="The name of an enterprise app.",
+    )
+    parser.add_argument(
+        "--enterprise-app-installation-id",
+        action="store",
+        dest="ent_app_installation_id",
+        default="0",
+        help="",
+    )
+    parser.add_argument(
+        "--enterprise-app-id",
+        action="store",
+        dest="ent_app_id",
+        default="0",
+        help="",
+    )
+    parser.add_argument(
+        "--enterprise-app-pem",
+        action="store",
+        dest="ent_app_private_pem",
+        default="~/Downloads/ent_app_name.YYYY-MM-DD.private-key.pem",
+        help="The location of an enterprise app private key pem file.",
     )
     parser.add_argument(
         "--enterprise-app-client-id",
@@ -688,20 +705,7 @@ if __name__ == "__main__":
         default="ent_app_client_secret",
         help="An enterprise app client secret.",
     )
-    parser.add_argument(
-        "--enterprise-app-installation-id",
-        action="store",
-        dest="ent_installation_id",
-        default="0",
-        help="",
-    )
-    parser.add_argument(
-        "--enterprise-app-id",
-        action="store",
-        dest="ent_app_id",
-        default="0",
-        help="",
-    )
+
     parser.add_argument(
         "--number-of-orgs",
         action="store",
@@ -735,14 +739,14 @@ if __name__ == "__main__":
         action="store",
         dest="team_members",
         default="mona hubot mario luigi",
-        help="The members of your team.",
+        help="Members embers of the team. Space separated list",
     )
     parser.add_argument(
         "--team-admin",
         action="store",
         dest="team_admin",
         default="mona",
-        help="The admin of your team.",
+        help="The team admin.",
     )
     parser.add_argument(
         "--default-committer",
@@ -770,14 +774,7 @@ if __name__ == "__main__":
         action="store",
         dest="enterprise_name",
         default="",
-        help="The name of your enterprise.",
-    )
-    parser.add_argument(
-        "--ent-app-id",
-        action="store",
-        dest="ent_app_installation_id",
-        default="1",
-        help="The id of your enterprise app installation.",
+        help="The name of the enterprise.",
     )
     parser.add_argument(
         "--pr-approver-token",
@@ -848,27 +845,6 @@ if __name__ == "__main__":
         dest="http_protocol",
         default="https",
         help="Mostly always https",
-    )
-    parser.add_argument(
-        "--private-key-pem-file",
-        action="store",
-        dest="private_key_pem_file",
-        default="bob.pem",
-        help="Path to an app pem file",
-    )
-    parser.add_argument(
-        "--default-app-id",
-        action="store",
-        dest="default_app_id",
-        default="1",
-        help="an app id",
-    )
-    parser.add_argument(
-        "--default-installation-id",
-        action="store",
-        dest="default_installation_id",
-        default="1",
-        help="an app installation id",
     )
 
     args = parser.parse_args()
