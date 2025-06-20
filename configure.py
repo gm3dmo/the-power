@@ -630,7 +630,7 @@ if __name__ == "__main__":
         "--hostname",
         action="store",
         dest="hostname",
-        default="api.github.com",
+        default="",
         help="Provide a fully qualified hostname/IP Address for a GHES appliance or use the default api.github.com",
     )
     parser.add_argument(
