@@ -31,7 +31,7 @@ jobs:
                      --repo testrepo \
                      --token ghp_mrsMigginsRfGYNzymAWV6tyRZxwbwk0JAI94 \
                      --webhook-url https://example.com/webhook \
-                     --configure-app yes \
+                     --app-configure yes \
                      --app-id 1 \
                      --app-installation-id 1 \
                      --app-client-id client_id \
