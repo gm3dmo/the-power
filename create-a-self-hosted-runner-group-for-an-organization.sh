@@ -4,7 +4,13 @@
 # POST /orgs/{org}/actions/runner-groups
 
 
-name=${org_self_hosted_runner_group_name:-org_runner_group}
+if [ -z "$1" ]
+  then
+    name=${org_shr_group_name}
+  else
+    name=$1
+fi
+
 
 json_file=tmp/create-a-self-hosted-runner-group-for-an-organization.json
 jq -n \
@@ -19,3 +25,4 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/orgs/${org}/actions/runner-groups"  --data @${json_file}
+
