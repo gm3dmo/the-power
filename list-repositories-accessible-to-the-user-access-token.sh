@@ -6,6 +6,8 @@
 
 installation_id=${default_installation_id}
 
+# GitHub App user access tokens
+
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \

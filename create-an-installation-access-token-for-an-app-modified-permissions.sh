@@ -1,6 +1,6 @@
 .  ./.gh-api-examples.conf
 
-# https://docs.github.com/en/rest/reference/apps#create-an-installation-access-token-for-an-app
+# https://docs.github.com/en/enterprise-cloud@latest/rest/apps/apps?apiVersion=2022-11-28#create-an-installation-access-token-for-an-app
 # POST /app/installations/{installation_id}/access_tokens
 
 # This script gets an access token which has less privilege than the GitHub App
@@ -8,9 +8,9 @@
 # write on issues. The token created will have read only privileges on contents and issues.
 
 
-installation_id=${default_installation_id}
+installation_id=${app_installation_id}
 
-JWT=$(./tiny-call-get-jwt.sh ${default_app_id})
+JWT=$(./tiny-call-get-jwt.sh ${app_id})
 
 json_file=tmp/create-an-installation-access-token-for-an-app.json
 

@@ -143,8 +143,17 @@ def get_shell_scripts():
     return [os.path.basename(script) for script in shell_scripts]
 
 def get_script_content(filename):
+    from werkzeug.utils import secure_filename
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    file_path = os.path.join(parent_dir, filename)
+    
+    # Sanitize the filename
+    safe_filename = secure_filename(filename)
+    file_path = os.path.normpath(os.path.join(parent_dir, safe_filename))
+    
+    # Ensure the file path is within the parent directory
+    if not file_path.startswith(parent_dir):
+        return "Error: Access to the requested file is not allowed.", '', ''
+    
     try:
         with open(file_path, 'r') as file:
             content = file.read()

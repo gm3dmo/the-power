@@ -31,14 +31,14 @@ jobs:
                      --repo testrepo \
                      --token ghp_mrsMigginsRfGYNzymAWV6tyRZxwbwk0JAI94 \
                      --webhook-url https://example.com/webhook \
-                     --configure-app yes \
+                     --app-configure yes \
                      --app-id 1 \
-                     --installation-id 1 \
-                     --client-id client_id \
+                     --app-installation-id 1 \
+                     --app-client-id client_id \
+                     --app-private-pem test.pem \
                      --team-members "a b c d" \
                      --team-admin "a" \
                      --default-committer "b" \
-                     --private-pem-file test.pem \
                      --primer "list-config"
     
 

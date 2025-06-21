@@ -6,7 +6,7 @@
 
 repository_name=${1:-testrepo}
 repository_id=$(./list-repo.sh  ${repository_name}  | jq '.id')
-installation_id=${2:-1}
+installation_id=${app_installation_id}
 
 curl ${curl_custom_flags} \
      -X DELETE \

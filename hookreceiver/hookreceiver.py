@@ -182,7 +182,7 @@ def truncate_events():
         return redirect('/hookdb')
     except Exception as e:
         app.logger.error(f"Failed to truncate events: {str(e)}")
-        return f'Error: {str(e)}', 500
+        return "An internal error occurred", 500
 
 
 @app.route('/hookdb')
@@ -282,7 +282,8 @@ def hookdb():
             formatted_payload=formatted_payload
         )
     except Exception as e:
-        return f"Error loading events: {e}", 500
+        app.logger.error(f"Error loading events: {str(e)}")
+        return "An internal error occurred", 500
 
 
 @app.route('/clear', methods=['POST'])

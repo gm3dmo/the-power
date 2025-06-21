@@ -24,14 +24,14 @@ jobs:
                      --default-repo-visibility public \
                      --token ${{ secrets.FORESTPAT }} \
                      --webhook-url ${{ vars.WEBHOOK }} \
-                     --configure-app yes \
+                     --app-configure yes \
                      --app-id 1 \
-                     --installation-id 1 \
-                     --client-id client_id \
+                     --app-installation-id 1 \
+                     --app-private-pem test.pem \
+                     --app-client-id client_id \
                      --team-members "pipcrispy robin-of-loxley roger-de-courcey" \
                      --team-admin "roger-de-courcey" \
                      --default-committer "pipcrispy" \
-                     --private-pem-file test.pem \
                      --primer "list-config" \
                      --curl_custom_flags '--fail-with-body --no-progress-meter'
       - name: Delete repo-release1

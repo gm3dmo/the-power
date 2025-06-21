@@ -18,6 +18,10 @@ jobs:
         run: |
           curl --verbose -H 'Accept: application/vnd.github+json' -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN}}" https://api.github.com/octocat
 
+      - name: openssl-show-certs
+        run: |
+          openssl s_client -showcerts -connect github.com:443
+
       # See this for some comon scenarios https://github.com/actions/checkout?tab=readme-ov-file#scenarios
       - name: checkout-repo-using-actions-checkout
         uses: actions/checkout@v4

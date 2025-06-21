@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Search Events{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-end mb-2">
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Logout</a>
+    </div>
+    
+    <form method="GET" action="{{ url_for('search_page') }}" class="mb-2">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Enter search terms..." value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if results %}
+    <div class="results">
+        <h5>Results ({{ results|length }})</h5>
+        {% for result in results %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>ID:</strong> {{ result.id }} |
+                    {% if result.event_data.event %}
+                    <strong>Action:</strong> {{ result.event_data.event.action }} |
+                    <strong>Actor:</strong> {{ result.event_data.event.actor }} |
+                    {% endif %}
+                    <strong>Token:</strong> {{ result.token }} |
+                    <strong>Received:</strong> {{ result.received_at }} |
+                    <strong>Source:</strong> {{ result.source_ip }}
+                </div>
+                <button class="btn btn-sm btn-outline-secondary toggle-event" data-bs-toggle="collapse" data-bs-target="#event-{{ result.id }}" aria-expanded="false">
+                    Show/Hide
+                </button>
+            </div>
+            <div class="collapse" id="event-{{ result.id }}">
+                <div class="card-body">
+                    <div class="event-data" style="position: relative;">
+                        <pre><code class="json">{{ format_json(result.event_data) | safe }}</code></pre>
+                        <button class="copy-button" style="position: absolute; top: 10px; right: 10px; padding: 5px 10px; font-size: 12px;">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% elif query %}
+    <div class="alert alert-info">
+        No results found for "{{ query }}"
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pygments.css') }}">
+<style>
+    .event-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    
+    .event-header {
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+    
+    .event-id {
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+    
+    .event-time {
+        margin-right: 1rem;
+    }
+    
+    .event-data {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+    }
+    
+    .event-data pre {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+    
+    .search-highlight {
+        background-color: #ffeb3b !important;
+        color: #000 !important;
+        padding: 2px 0;
+        border-radius: 2px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Copy button functionality
+    document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const codeBlock = this.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 
