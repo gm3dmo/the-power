@@ -96,8 +96,7 @@ org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
 # Org self hosted runners
-org_self_hosted_runner_group_name="org self hosted runners"
-
+org_shr_group_name="pwr_org_shr_group"
 
 
 ### [Repository](https://docs.github.com/en/rest/repos/repos#create-an-organization-repository)
@@ -830,7 +829,14 @@ if __name__ == "__main__":
         action="store",
         dest="default_repo_visibility",
         default="private",
-        help="Set the default visibility for repositories",
+        help="Set the default visibility for repositories.",
+    )
+    parser.add_argument(
+        "--org-shr-group-name",
+        action="store",
+        dest="org_shr_group_name",
+        default="",
+        help="Organization self hosted runner group name.",
     )
     parser.add_argument(
         "--github-api-version",
