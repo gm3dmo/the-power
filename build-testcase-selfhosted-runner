@@ -2,12 +2,20 @@
 
 set -x
 
+if [ $runner_version == 'latest' ];
+then
+ runner_version=$(./list-runner-latest-release.sh)
+fi
+
 # Get the registration token for the runner before we cd into the runner download
 # directory.
 registration_token=$(./create-a-registration-token-for-a-repository.sh | jq -r '.token')
 
 rm -rf actions-runner
 mkdir actions-runner && cd actions-runner
+
+
+
 
 curl -O -L https://github.com/actions/runner/releases/download/${runner_version}/actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
 

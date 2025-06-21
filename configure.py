@@ -593,8 +593,8 @@ if __name__ == "__main__":
         "--runner-version",
         action="store",
         dest="runner_version",
-        default="v2.312.0",
-        help="Version of self hosted runner. Be sure to use the tag like this: `v2.294.0`",
+        default="latest",
+        help="Version of self hosted runner. Defaults to latest.  If using anything else be sure to use the tag like this: `v2.294.0`",
     )
     parser.add_argument(
         "--runner-os",
