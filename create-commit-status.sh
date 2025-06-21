@@ -21,14 +21,12 @@ if [ -z "$2" ]
     status_context=$2
 fi
 
-
 target_branch=${branch_name}
 timestamp=$(date +%s)
 
 sha=$(curl --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${target_branch}| jq -r '.object.sha')
 
 json_file=tmp/create-commit-status.json
-
 jq -n \
         --arg state "${state}" \
         --arg target_url "https://example.com/build/status" \
@@ -36,9 +34,9 @@ jq -n \
         --arg context "${status_context}" \
 	'{ state : $state , target_url : $target_url, description: $description, context: $context }' > ${json_file}
 
-json_string=$(cat $json_file | jq )
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha} --data "${json_string}"
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha}" --data $@{json_file}
+

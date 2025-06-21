@@ -6,12 +6,7 @@
 # The state of the status.
 # Can be one of: error, failure, pending, success
 # If there is no first argument use a default value of "pending"
-
 state="pending"
-
-
-
-
 target_branch=${branch_name}
 timestamp=$(date +%s)
 
@@ -24,7 +19,6 @@ turns=${1:-30}
 
 for item in $(seq $turns)
 do
-
   echo $item >&2
   item_l=$(printf "%05d" $item)
   status_context="ci/pwr-commit-status-required-${item_l}"
@@ -36,11 +30,8 @@ do
         --arg context "${status_context}" \
 	'{ state : $state , target_url : $target_url, description: $description, context: $context }' > ${json_file}
 
-  json_string=$(cat $json_file | jq )
-
-
   curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha} --data "${json_string}"
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha}" --data "${json_file}"
 done
