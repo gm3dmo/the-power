@@ -304,7 +304,7 @@ runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
 runner_name="the-power-example-runner"
-runner_labels="the-power,self-hosted"
+runner_labels="the-power,self-hosted,pwr_org_shr_group"
 
 
 ### [gh cli](https://cli.github.com/manual/gh_api)
