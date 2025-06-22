@@ -96,8 +96,7 @@ org_owner="${org_owner}"
 org_members="${org_members}"
 default_org_webhook_id=1
 # Org self hosted runners
-org_self_hosted_runner_group_name="org self hosted runners"
-
+org_shr_group_name="pwr_org_shr_group"
 
 
 ### [Repository](https://docs.github.com/en/rest/repos/repos#create-an-organization-repository)
@@ -304,7 +303,9 @@ required_commit_prefix="PWR-"
 runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
-runner_name="the-power-example-runner"
+repo_runner_name="pwr-repo-runner"
+org_runner_name="pwr-org-runner"
+ent_runner_name="pwr-ent-runner"
 runner_labels="the-power,self-hosted"
 
 
@@ -593,8 +594,8 @@ if __name__ == "__main__":
         "--runner-version",
         action="store",
         dest="runner_version",
-        default="v2.312.0",
-        help="Version of self hosted runner. Be sure to use the tag like this: `v2.294.0`",
+        default="latest",
+        help="Version of self hosted runner. Defaults to latest.  If using anything else be sure to use the tag like this: `v2.294.0`",
     )
     parser.add_argument(
         "--runner-os",
@@ -830,7 +831,14 @@ if __name__ == "__main__":
         action="store",
         dest="default_repo_visibility",
         default="private",
-        help="Set the default visibility for repositories",
+        help="Set the default visibility for repositories.",
+    )
+    parser.add_argument(
+        "--org-shr-group-name",
+        action="store",
+        dest="org_shr_group_name",
+        default="",
+        help="Organization self hosted runner group name.",
     )
     parser.add_argument(
         "--github-api-version",
