@@ -303,8 +303,10 @@ required_commit_prefix="PWR-"
 runner_version=${runner_version}
 runner_os=${runner_os}
 runner_platform=${runner_platform}
-runner_name="the-power-example-runner"
-runner_labels="the-power,self-hosted,pwr_org_shr_group"
+repo_runner_name="pwr-repo-runner"
+org_runner_name="pwr-org-runner"
+ent_runner_name="pwr-ent-runner"
+runner_labels="the-power,self-hosted"
 
 
 ### [gh cli](https://cli.github.com/manual/gh_api)

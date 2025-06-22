@@ -9,13 +9,10 @@ fi
 
 # Get the registration token for the runner before we cd into the runner download
 # directory.
-registration_token=$(./create-a-registration-token-for-a-repository.sh | jq -r '.token')
+registration_token=$(./create-a-registration-token-for-an-enterprise.sh | jq -r '.token')
 
 rm -rf actions-runner
 mkdir actions-runner && cd actions-runner
-
-
-
 
 curl -O -L https://github.com/actions/runner/releases/download/${runner_version}/actions-runner-${runner_os}-${runner_platform}-${runner_version##v}.tar.gz
 
@@ -28,4 +25,4 @@ then
   hostname="github.com"
 fi
 
-./config.sh --url https://${hostname}/${org}/${repo} --token ${registration_token} --unattended --name ${repo_runner_name} --labels ${runner_labels} --replace 
+./config.sh --url https://${hostname}/enterprises/${enterprise} --token ${registration_token} --unattended --name ${ent_runner_name} 

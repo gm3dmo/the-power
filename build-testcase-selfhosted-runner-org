@@ -26,4 +26,4 @@ then
   hostname="github.com"
 fi
 
-./config.sh --url https://${hostname}/${org} --token ${registration_token} --unattended --name ${runner_name} 
+./config.sh --url https://${hostname}/${org} --token ${registration_token} --unattended --name ${org_runner_name} 
