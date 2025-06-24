@@ -71,6 +71,7 @@ mail_domain="example.com"
 
 ### GitHub Enterprise
 enterprise="${enterprise_name}"
+ent_repo_ruleset_name="pwr_ent_repo_ruleset"
 
 
 ### GitHub API Version
