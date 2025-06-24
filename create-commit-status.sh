@@ -1,5 +1,6 @@
 .  ./.gh-api-examples.conf
 
+set -x
 # https://docs.github.com/en/enterprise-cloud@latest/rest/commits/statuses?apiVersion=2022-11-28#create-a-commit-status
 # POST /repos/{owner}/{repo}/statuses/{sha}
 
@@ -13,6 +14,7 @@ if [ -z "$1" ]
   else
      state=$1
 fi
+
 
 if [ -z "$2" ]
   then
@@ -30,13 +32,20 @@ json_file=tmp/create-commit-status.json
 jq -n \
         --arg state "${state}" \
         --arg target_url "https://example.com/build/status" \
-        --arg description "The build status was: $status This is completely fake. The status ran at: ${timestamp}" \
+        --arg description "The build status was: $state This is completely fake. The status ran at: ${timestamp}" \
         --arg context "${status_context}" \
 	'{ state : $state , target_url : $target_url, description: $description, context: $context }' > ${json_file}
 
+cat $json_file | jq -r
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha}" --data $@{json_file}
+        "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/statuses/${sha}" --data @${json_file}
 
+#  {
+#    "state": "success",
+#    "target_url": "https://example.com/build/status",
+#    "description": "The build succeeded!",
+#    "context": "continuous-integration/jenkins"
+#  }
