@@ -91,6 +91,7 @@ github_api_version=${github_api_version}
 # https://docs.github.com/en/organizations
 org="${org}"
 owner="${org}"
+org_webhook_url=${org_webhook_url}
 org_secret_name="PWR_ORG_SECRET_001"
 org_owner="${org_owner}"
 org_members="${org_members}"
@@ -107,7 +108,7 @@ allow_auto_merge="${allow_auto_merge}"
 repo_secret_name="REPOSITORY_SECRET_001"
 repo_secret_value="repository_secret_string"
 # webhook url is also used by the organization
-webhook_url=${webhook_url}
+repo_webhook_url=${repo_webhook_url}
 repo_webhook_secret="pwr-repo-webhook-secret"
 has_issues=true
 has_wiki=true
@@ -254,6 +255,7 @@ ent_app_installation_id=${ent_app_installation_id}
 #   private_pem_file=/opt/the-power/testapp.YYYY-MM-DD.private-key.pem
 #   #=> The absolute path of the pem file is /opt/the-power/Downloads/testapp.YYYY-MM-DD.private-key.pem
 #
+app_configure=${app_configure}
 app_private_pem=${app_private_pem}
 # When working with the power in a codespace you may need a path like:
 #private_pem_file=../../workspaces/the-power/ft-testapp.2022-03-23.private-key.pem
@@ -426,7 +428,7 @@ stream2_container="container"
         args.org = input(f"Enter Org name: ")
 
     # If configuring a GitHub App:
-    if args.configure_github_app != "no":
+    if args.app_configure != "no":
         if args.app_id != "":
             logger.info(f"default_app_id = {args.app_id}")
         else:
@@ -453,22 +455,22 @@ stream2_container="container"
                 f"Enter path relative from home to app private key: "
             )
 
-    if args.webhook_url == "smee":
-        webhook_url = thepower.get_webhook_url()
-        if webhook_url is None:
-            webhook_url = input(f"Enter webhook URL: ")
+    if args.repo_webhook_url == "smee":
+        repo_webhook_url = thepower.get_webhook_url()
+        if repo_webhook_url is None:
+            repo_webhook_url = input(f"Enter webhook URL: ")
 
-        args.webhook_url = webhook_url
-        if re.match(r"^https?://", args.webhook_url):
-            thepower.open_webhook_url_in_browser(args.webhook_url)
+        args.repo_webhook_url = repo_webhook_url
+        if re.match(r"^https?://", args.repo_webhook_url):
+            thepower.open_webhook_url_in_browser(args.repo_webhook_url)
         else:
             logger.info(
                 "No webhook URL supplied. You can still set a webhook URL in .gh-api-examples.conf file."
             )
-    elif args.webhook_url:
-        logger.info(f"Webhook URL = {args.webhook_url}")
+    elif args.repo_webhook_url:
+        logger.info(f"Webhook URL = {args.repo_webhook_url}")
     else:
-        args.webhook_url = input(f"Enter webhook url: ")
+        args.repo_webhook_url = input(f"Enter webhook url: ")
 
     out_filename = ".gh-api-examples.conf"
 
@@ -503,7 +505,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--app-configure",
         action="store",
-        dest="configure_github_app",
+        dest="app_configure",
         default="no",
     )
     parser.add_argument(
@@ -517,7 +519,7 @@ if __name__ == "__main__":
         action="store",
         dest="app_id",
         default="1",
-        help="an app id (integer)",
+        help="an app id" ,
     )
     parser.add_argument(
         "--app-installation-id",
@@ -562,12 +564,18 @@ if __name__ == "__main__":
         "--mgmt-port", action="store", dest="mgmt_port", default=8443
     )
     parser.add_argument(
-        "-w",
-        "--webhook-url",
+        "--repo-webhook-url",
         action="store",
-        dest="webhook_url",
+        dest="repo_webhook_url",
         default="smee",
-        help="Set this if you want to provide your own webhook url.",
+        help="Set this if you want to provide your own webhook url for a repository.",
+    )
+    parser.add_argument(
+        "--org_webhook-url",
+        action="store",
+        dest="org_webhook_url",
+        default="https://example.com/webhook",
+        help="Set this if you want to provide your own webhook url for a repository.",
     )
     parser.add_argument(
         "--x-client-id",
@@ -620,7 +628,6 @@ if __name__ == "__main__":
         help="Set this for github.com config",
     )
     parser.add_argument(
-        "-r",
         "--repo-name",
         action="store",
         dest="repo_name",

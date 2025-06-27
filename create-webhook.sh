@@ -14,10 +14,11 @@ if [ -z "$1" ]
     repo=$1
 fi
 
+
 json_file=tmp/create-a-repository-webhook.json
 jq -n \
         --arg name "web" \
-        --arg webhook_url "${webhook_url}" \
+        --arg webhook_url "${repo_webhook_url}" \
         --arg ct "json" \
         '{
            name: $name,
