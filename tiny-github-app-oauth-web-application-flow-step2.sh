@@ -21,4 +21,4 @@ code=$1
 curl ${curl_custom_flags} -L \
      -H "Accept: application/vnd.github.v3+json" \
      -X POST \
-        "http://${hostname}/login/oauth/access_token?client_id=${client_id}&client_secret=${app_client_secret}&code=${code}" | jq -r
+        "http://${hostname}/login/oauth/access_token?client_id=${app_client_id}&client_secret=${app_client_secret}&code=${code}" | jq -r

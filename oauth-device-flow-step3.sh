@@ -23,10 +23,10 @@ echo ========== Step 3: Create step 3 device flow file =======================
 echo
 echo
 jq -n \
-                --arg client_id "${client_id}" \
+                --arg app_client_id "${app_client_id}" \
                 --arg device_code "${device_code}" \
                 --arg grant_type "${grant_type}" \
-                '{ client_id: $client_id, device_code: $device_code, grant_type: $grant_type }'  > ${json_file}
+                '{ client_id: $app_client_id, device_code: $device_code, grant_type: $grant_type }'  > ${json_file}
 cat ${json_file} | jq -r
 echo
 echo ========================================================================
