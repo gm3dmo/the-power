@@ -15,7 +15,7 @@ jq -n \
 
 curl \
      -X POST \
-     --user "${client_id}:${app_client_secret}" \
+     --user "${app_client_id}:${app_client_secret}" \
      --header "X-GitHub-Api-Version: ${github_api_version}" \
-     --url "${GITHUB_API_BASE_URL}/applications/${client_id}/token" --data @${json_file}
+     --url "${GITHUB_API_BASE_URL}/applications/${app_client_id}/token" --data @${json_file}
 

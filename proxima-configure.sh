@@ -25,7 +25,7 @@ python3 configure.py --hostname "${hostname}" \
                      --app-id "${app_id}" \
                      --app-client-secret "${app_client_secret}" \
                      --installation-id "${installation_id}" \
-                     --client-id "${client_id}" \
+                     --client-id "${app_client_id}" \
                      --team-members "${team_members}" \
                      --team-admin "${team_admin}" \
                      --default-committer "${default_committer}" \

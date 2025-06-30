@@ -16,9 +16,9 @@ echo "grant_type: ${grant_type}"
 jq -n \
                 --arg refresh_token "${refresh_token}" \
                 --arg grant_type "${grant_type}" \
-                --arg client_id "${client_id}" \
+                --arg app_client_id "${app_client_id}" \
                 --arg client_secret "${app_client_secret}" \
-                '{ refresh_token: $refresh_token, grant_type: $grant_type, client_id: $client_id, client_secret: $client_secret }'  > ${json_file}
+                '{ refresh_token: $refresh_token, grant_type: $grant_type, client_id: $app_client_id, client_secret: $client_secret }'  > ${json_file}
 
 cat ${json_file} | jq -r
 

@@ -9,9 +9,9 @@ step1_response_file=tmp/step1-response.json
 scope="read:enterprise"
 
 jq -n \
-                --arg client_id "${client_id}" \
+                --arg app_client_id "${app_client_id}" \
                 --arg scope  "${scope}" \
-                '{ client_id: $client_id, scope: $scope  }'  > ${json_file}
+                '{ client_id: $app_client_id, scope: $scope  }'  > ${json_file}
 
 echo ========== Step 1: json file for client and scope ======================
 echo 
