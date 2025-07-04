@@ -239,6 +239,7 @@ ent_app_public_link=${ent_app_public_link}
 ent_app_client_secret=${ent_app_client_secret}
 ent_app_private_pem=${ent_app_private_pem}
 ent_app_installation_id=${ent_app_installation_id}
+ent_app_org_installation_id=${ent_app_org_installation_id}
 
 
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
@@ -686,6 +687,13 @@ if __name__ == "__main__":
         help="",
     )
     parser.add_argument(
+        "--enterprise-app-org-installation-id",
+        action="store",
+        dest="ent_app_org_installation_id",
+        default="0",
+        help="enterprise app org installation id",
+    )
+    parser.add_argument(
         "--enterprise-app-id",
         action="store",
         dest="ent_app_id",
@@ -713,7 +721,6 @@ if __name__ == "__main__":
         default="ent_app_client_secret",
         help="An enterprise app client secret.",
     )
-
     parser.add_argument(
         "--number-of-orgs",
         action="store",
