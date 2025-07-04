@@ -23,13 +23,13 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: run configure script
+    - name: run the power configure.py script
       run: |
         python3 configure.py --hostname api.github.com \
                      --enterprise-name enterprise-example \
                      --token ghp_mrsMigginsPIEShopmAWV6tyRZxwbwk0JAI94 \
                      --org org-example \
-                     --repo testrepo \  
+                     --repo testrepo \
                      --repo-webhook-url https://example.com/webhook \
                      --app-configure yes \
                      --app-id 1 \
