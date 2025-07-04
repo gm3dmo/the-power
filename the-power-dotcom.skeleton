@@ -51,6 +51,7 @@ ent_app_public_link="https://example.com/ent-app01-public-link"
 ent_app_client_secret="_an_ent_app_client_secret_"
 ent_app_private_pem="~/Downloads/ent-app01.2025-02-12.private-key.pem"
 ent_app_installation_id="_an_enterprise_app_installation_id"
+ent_app_org_installation_id="_an_enterprise_app_org_installation_id"
 
 # Legacy Oauth App
 x_client_id="_an_oauth_app_client_id_"
