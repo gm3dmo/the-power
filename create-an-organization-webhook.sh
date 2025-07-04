@@ -13,7 +13,7 @@ fi
 json_file=tmp/create-an-organization-webhook.json
 jq -n \
         --arg name "web" \
-        --arg webhook_url "${webhook_url}" \
+        --arg webhook_url "${org_webhook_url}" \
         --arg ct "json" \
         '{
            name: $name,

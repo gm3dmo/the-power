@@ -19,10 +19,10 @@ python3 configure.py --hostname "${hostname}" \
                      --enterprise-name "${enterprise_name}" \
                      --org "${org}" \
                      --repo "${repo}" \
+                     --repo-webhook-url "${repo_webhook_url}" \
                      --default-repo-visibility ${default_repo_visibility:-private} \
                      --token "${github_token}" \
-                     --webhook-url "${webhook}" \
-                     --app-configure ${app_configure} \
+                     --app-configure ${app_configure:-no} \
                      --app-id "${app_id}" \
                      --app-client-secret "${app_client_secret:-an_app_client_secret}" \
                      --app-installation-id "${app_installation_id:-an_app_installation_id}" \
