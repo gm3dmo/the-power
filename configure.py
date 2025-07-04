@@ -628,7 +628,7 @@ if __name__ == "__main__":
         help="Set this for github.com config",
     )
     parser.add_argument(
-        "--repo-name",
+        "--repo",
         action="store",
         dest="repo_name",
         default="testrepo",
