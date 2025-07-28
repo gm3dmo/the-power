@@ -4,7 +4,7 @@
 
 # Use a bash "here" document and shell variables will be available:
 
-$repo_id="R_kgDOGGLGSQ"
+repo_id=./list-repo.sh | jq -r '.node_id'
 
 read -r -d '' graphql_script <<- EOF
 UnArchiveRepository {
