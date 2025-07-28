@@ -5,6 +5,7 @@
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
+     -H "X-Github-Next-Global-ID: 1" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/orgs/${org}"
 
