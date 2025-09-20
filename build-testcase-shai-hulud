@@ -1,0 +1,68 @@
+normal=$(tput sgr0)
+highlight=$(tput setaf 2)
+
+printf "$highlight"
+
+cat << EOF
+
+  ________            ____                         
+ /_  __/ /_  ___     / __ \____ _      _____  _____
+  / / / __ \/ _ \   / /_/ / __ \ | /| / / _ \/ ___/
+ / / / / / /  __/  / ____/ /_/ / |/ |/ /  __/ /    
+/_/ /_/ /_/\___/  /_/    \____/|__/|__/\___/_/     
+
+EOF
+
+printf "${normal}"
+                                                   
+     printf "${highlight} - Creating repo: ${normal}"
+    ./create-repo-testrepo.sh | jq -r '.name'
+
+     printf "${highlight} - Adding team to repo (team_slug must be set in your .gh-api-examples.conf file)${normal}\n"
+    ./add-team-to-repo.sh
+
+     printf "${highlight} - Creating webhook: ${normal}"
+    ./create-webhook.sh  | jq -r '.id'
+
+     printf "${highlight} - Creating docs/README.md: ${normal}"
+    ./create-commit-readme.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating simple workflow file: ${normal}"
+    ./create-commit-workflow-simple.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating CODEOWNERS: ${normal}"
+    ./create-commit-codeowners.sh| jq -r ".content.html_url"
+
+     printf "${highlight} - Creating shai-hulud vulnerable package.json: ${normal}"
+    ./create-commit-security-shai-hulud-package-json.sh | jq -r ".content.html_url"
+    sleep 2
+
+     printf "${highlight} - Creating new branch: ${normal}"
+    ./create-branch-newbranch.sh | jq -r '.url'
+
+     printf "${highlight} - Creating a commit on the new branch: ${normal}"
+    ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating an issue: ${normal}"
+    ./create-repo-issue.sh | jq -r '.html_url'
+
+     printf "${highlight} - Creating a pull request: ${normal}"
+    ./create-pull-request.sh | jq -r '.html_url'
+
+     printf "${highlight} - Setting branch protection rules on default branch: ${normal}"
+    ./set-branch-protection.sh | jq -r '.url'
+
+     printf "${highlight} - Creating a release: ${normal}"
+    ./create-release.sh  | jq -r '.html_url'
+
+     printf "${highlight} - Adding a .gitattributes file to new branch: ${normal}"
+    ./create-commit-gitattributes.sh | jq -r ".content.html_url"
+     echo 
+
+
+    # If you have the appropriate token set in `pr_approver_token`
+    # then you can provide an approving review:
+    # ./create-approving-review-for-a-pull-request.sh
