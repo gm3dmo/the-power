@@ -463,7 +463,7 @@ stream2_container="container"
 
         args.repo_webhook_url = repo_webhook_url
         if re.match(r"^https?://", args.repo_webhook_url):
-            thepower.open_webhook_url_in_browser(args.repo_webhook_url)
+            thepower.open_webhook_url_in_browser(args.repo_webhook_url, anon=True)
         else:
             logger.info(
                 "No webhook URL supplied. You can still set a webhook URL in .gh-api-examples.conf file."

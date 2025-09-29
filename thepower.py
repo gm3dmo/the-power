@@ -245,9 +245,15 @@ def process_ghe_boot_file(filename):
     return ghe_data
 
 
-def open_webhook_url_in_browser(hook_url, browser="chrome"):
-    hook_location = f"""open -a "Google Chrome"  "{hook_url}" """
-    logging.warning(f"Opening {hook_url} in {browser}.")
+def open_webhook_url_in_browser(hook_url, browser="chrome", anon=False):
+    if anon == False:
+        hook_location = f"""open -a "Google Chrome"  "{hook_url}" """
+        logging.warning(f"Opening {hook_url} in anonymous {browser}.")
+        print(f"Opening {hook_url} in anonymous {browser}.")
+    if anon == True:
+       hook_location = f"""open -na "Google Chrome" --args --incognito  "{hook_url}" """
+       logging.warning(f"Opening {hook_url} in anonymous {browser}.")
+       print(f"Opening {hook_url} in anonymous {browser}.")
     try:
         subprocess.call(shlex.split(hook_location))
     except:
