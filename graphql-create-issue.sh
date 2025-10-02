@@ -8,13 +8,14 @@ if [ -z "$1" ]
     repo_node_id=$1
 fi
 
-# This will get you the node id
+ts=$(date +%s)
 
+# This will get you the node id
 graphql_query=tmp/graphql_query.txt
 
 cat <<EOF >$graphql_query
 mutation CreateIssue {
-  createIssue(input: {repositoryId: "$repo_node_id", title: "TestIssue", body: "TEST issue"}) {
+  createIssue(input: {repositoryId: "$repo_node_id", title: "The Power Test Issue (${ts})", body: "The Power test issue (${ts}) created by [graphql-create-issue.sh](https://github.com/gm3dmo/the-power/blob/main/graphql-create-issue.sh)"}) {
     issue {
       number
       body
@@ -32,5 +33,5 @@ jq -n \
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        "${GITHUB_APIV4_BASE_URL} -d @${json_file} | jq
+        "${GITHUB_APIV4_BASE_URL}" -d @${json_file} | jq
 
