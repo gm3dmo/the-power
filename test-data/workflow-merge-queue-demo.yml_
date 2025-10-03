@@ -1,0 +1,14 @@
+
+name: the-power-workflow-simple
+on:
+    pull_request:
+    merge_group:
+jobs:
+  pwr-merge-queue-demo:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: check-curl-version
+        run: |
+          curl --version
+

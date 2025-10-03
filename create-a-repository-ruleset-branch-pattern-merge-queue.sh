@@ -27,6 +27,13 @@ jq -n \
            --arg operator $operator \
            --arg bypass_mode "${bypass_mode}" \
            --arg enforcement "${enforcement}" \
+           --argjson check_response_timeout_minutes ${check_response_timeout_minutes:-360} \
+           --arg grouping_strategy "${grouping_strategy:-HEADGREEN}" \
+           --argjson max_entries_to_build ${max_entries_to_build:-5} \
+           --argjson max_entries_to_merge ${max_entries_to_merge:-5} \
+           --arg merge_method "${merge_method:-SQUASH}" \
+           --argjson min_entries_to_merge ${min_entries_to_merge:-0} \
+           --argjson min_entries_to_merge_wait_minutes ${min_entries_to_merge_wait_minutes:-0} \
            '{
              name : $name,
              target : $target,
@@ -58,15 +65,25 @@ jq -n \
               {
                 "type": "commit_message_pattern",
                 "parameters": {
-                  "name": "",
                   "negate": false,
                   "pattern": $commit_message_pattern,
                   "operator": $operator 
                 }
+              },
+              {
+                "type": "merge_queue",
+                "parameters": {
+                  "check_response_timeout_minutes": $check_response_timeout_minutes,
+                  "grouping_strategy": $grouping_strategy,
+                  "max_entries_to_build": $max_entries_to_build,
+                  "max_entries_to_merge": $max_entries_to_merge,
+                  "merge_method": ($merge_method | ascii_upcase),
+                  "min_entries_to_merge": $min_entries_to_merge,
+                  "min_entries_to_merge_wait_minutes": $min_entries_to_merge_wait_minutes
+                }
               }
-            ],
+            ]
            }' > ${json_file}
-
 
 curl ${curl_custom_flags} \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
