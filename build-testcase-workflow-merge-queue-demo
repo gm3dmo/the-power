@@ -27,9 +27,35 @@ EOF
 
 printf "${normal}"
 
-printf "${highlight} - Creating repo: ${normal}"
- ./create-repo.sh | jq -r '.name'
-./create-a-repository-ruleset-branch-pattern-merge-queue.sh | jq -r '.name'
-printf "${highlight} - Committing workflow file: ${normal}"
- ./create-commit-workflow-merge-queue-demo.sh | jq -r '.content.path'
+    printf "${highlight} - Creating repo: ${normal}"
+     ./create-repo.sh | jq -r '.name'
+    
+    printf "${highlight} - Creating webhook: ${normal}"
+    ./create-webhook.sh  | jq -r '.id'
+    
+    printf "${highlight} - Creating docs/README.md: ${normal}"
+    ./create-commit-readme.sh | jq -r ".content.html_url"
+    
+    printf "${highlight} - Creating new_branch: ${normal}"
+    ./create-branch-newbranch.sh | jq -r '.url'
+
+    # order is important here the workflow file must be created
+    printf "${highlight} - Committing workflow file: ${normal}"
+     ./create-commit-workflow-merge-queue-demo.sh | jq -r '.content.path'
+    
+    printf "${highlight} - Creating repository branch ruleset: ${normal}"
+    ./create-a-repository-ruleset-branch-pattern-merge-queue.sh | jq -r '.name'
+    
+
+     printf "${highlight} - Creating a commit on the new branch: ${normal}"
+    ./create-commit-on-new-branch.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating an update commit to docs/README.md: ${normal}"
+    ./create-commit-update-readme.sh | jq -r ".content.html_url"
+
+     printf "${highlight} - Creating an issue: ${normal}"
+    ./create-repo-issue.sh | jq -r '.html_url'
+
+     printf "${highlight} - Creating a pull request: ${normal}"
+    ./create-pull-request.sh | jq -r '.html_url'
 
