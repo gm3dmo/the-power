@@ -14,6 +14,8 @@ fi
 
 team_id=$(curl ${curl_custom_flags} --silent -H "Authorization: Bearer ${GITHUB_TOKEN}" ${GITHUB_API_BASE_URL}/orgs/${org}/teams/$team_slug | jq '.id')
 
+default_app_id=${app_id}
+
 json_file=tmp/create-a-repository-ruleset.json
 
 jq -n \
