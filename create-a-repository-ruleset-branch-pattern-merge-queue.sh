@@ -16,6 +16,10 @@ team_id=$(curl ${curl_custom_flags} --silent -H "Authorization: Bearer ${GITHUB_
 
 default_app_id=${app_id}
 
+ruleset_name='pwr-repo-ruleset-branch-001'
+
+enforcement=active
+
 json_file=tmp/create-a-repository-ruleset.json
 
 jq -n \
@@ -40,11 +44,6 @@ jq -n \
              enforcement: $enforcement,
                "bypass_actors": [
                 {
-                  "actor_id": $team_id | tonumber,
-                  "actor_type": "Team",
-		  "bypass_mode": $bypass_mode
-                },
-                {
                   "actor_id": $default_app_id | tonumber,
                   "actor_type": "Integration",
                   "bypass_mode": $bypass_mode
@@ -53,23 +52,13 @@ jq -n \
              "conditions": {
               "ref_name": {
                 "include": [
-                  "refs/heads/main",
-                  "refs/heads/master"
+                  "refs/heads/main"
                 ],
                 "exclude": [
-                  "refs/heads/dev*"
                 ]
               }
             },
             "rules": [
-              {
-                "type": "commit_message_pattern",
-                "parameters": {
-                  "negate": false,
-                  "pattern": $commit_message_pattern,
-                  "operator": $operator 
-                }
-              },
               {
                 "type": "merge_queue",
                 "parameters": {
@@ -81,7 +70,20 @@ jq -n \
                   "min_entries_to_merge": $min_entries_to_merge,
                   "min_entries_to_merge_wait_minutes": $min_entries_to_merge_wait_minutes
                 }
-              }
+              },
+              {
+                   "type": "required_status_checks",
+                   "parameters": {
+                     "strict_required_status_checks_policy": false,
+                     "do_not_enforce_on_create": true,
+                     "required_status_checks": [
+                       {
+                         "context": "pwr-merge-queue-demo",
+                         "integration_id": 15368
+                       }
+                     ]
+                   }
+               }
             ]
            }' > ${json_file}
 
