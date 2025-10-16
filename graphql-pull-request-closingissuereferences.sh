@@ -1,47 +1,37 @@
 .  ./.gh-api-examples.conf
 
+#
 
+# Credit: https://stackoverflow.com/questions/69916356/how-do-i-enable-auto-merge-on-a-github-pull-request-via-the-rest-api
 
-# If the script is passed an argument $1 use that as the name of the user to query
 if [ -z "$1" ]
   then
-    user=${default_committer}
+    pull_request_id=${default_pull_request_id}
   else
-    user=$1
+    pull_request_id=$1
 fi
 
-merged_start_date=2021-06-05
-merged_end_date=2021-06-05
 
 read -r -d '' graphql_script <<- EOF
 {
-  search(last: 1, query: "is:pr org:$org", type:ISSUE) {
-    pageInfo {
-      startCursor
-      hasNextPage
-      endCursor
-    }
-    nodes {
-      ... on PullRequest {
-        title
-        author {
-            login
+    repository(name: "$repo", owner: "$org") {
+        pullRequest(number: $pull_request_id) {
+                  id
+                  closingIssuesReferences(first: 50) {
+                      totalCount
+                      nodes {
+                        title
+                        number
+                        url
+                      }
+                  }
+              }
         }
-        mergedAt
-        createdAt
-        comments {
-            totalCount
-        }
-        closingIssuesReferences(first: 50) { totalCount }
-      }
-    }
-  }
 }
 EOF
 
 # Escape quotes and reformat script to a single line
 graphql_script="$(echo ${graphql_script//\"/\\\"})"
-
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
