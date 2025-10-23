@@ -35,9 +35,6 @@ jq -n \
         --arg body "A release created by The Power." \
               '{tag_name : $tag, target_commitish: $commitish, name: $name, generate_release_notes: $generate_release_notes | test("true"), body: $body, draft: $draft | test("true"), prerelease: $prerelease | test("true"), discussion_category_name: $discussion_category_name, make_latest: $make_latest }'  > ${json_file}
 
-cat $json_file | jq -r
-exit
-
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
