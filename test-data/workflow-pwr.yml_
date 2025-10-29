@@ -1,0 +1,18 @@
+name: workflow-pwr
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  workflow_call:
+  repository_dispatch:
+    types: [custom_event_type]
+jobs:
+  pwr-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check-curl-version
+        run: |
+          curl --version
+      - name: sleep60
+        run: |
+          sleep 60
