@@ -27,8 +27,8 @@ printf "${normal}"
      printf "${highlight} - Creating docs/README.md: ${normal}"
     ./create-commit-readme.sh | jq -r ".content.html_url"
 
-     printf "${highlight} - Creating simple workflow file: ${normal}"
-    ./create-commit-workflow-simple.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating workflow file: ${normal}"
+    ./create-commit-workflow-pwr.sh | jq -r ".content.html_url"
 
      printf "${highlight} - Creating CODEOWNERS: ${normal}"
     ./create-commit-codeowners.sh| jq -r ".content.html_url"

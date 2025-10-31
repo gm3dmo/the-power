@@ -28,6 +28,10 @@ printf "${normal}"
 ./add-team-to-repo.sh
  printf "${highlight} - Creating docs/README: ${normal}"
 ./create-commit-readme.sh | jq -r ".content.html_url"
+
+printf "${highlight} - Creating workflow file: ${normal}"
+./create-commit-workflow-pwr.sh | jq -r ".content.html_url"
+
  printf "${highlight} - Creating CODEOWNERS: ${normal}"
 ./create-commit-codeowners.sh| jq -r ".content.html_url"
 sleep 2
