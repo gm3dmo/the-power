@@ -83,6 +83,9 @@ splunk_token='mytoken'
 ssl_verify=true
 
 
+### GitHub Enterprise Teams
+enterprise_team_name="enterprise-team1"
+
 ### GitHub API Version
 # https://docs.github.com/en/rest/overview/api-versions
 github_api_version=${github_api_version}
