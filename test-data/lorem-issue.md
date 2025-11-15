@@ -25,8 +25,8 @@ We recommend immediately fixing this security vulnerability by implementing prop
 ### Proposed Fix Checklist
 
 - [x] Implement proper authentication and authorization controls to prevent unauthorized access to the system.
-- [ ] Review the access control software for other security vulnerabilities and take appropriate steps to mitigate them.
-- [ ] Test the fixes thoroughly to ensure they effectively address the security vulnerability.
+- [x] Review the access control software for other security vulnerabilities and take appropriate steps to mitigate them.
+- [x] Test the fixes thoroughly to ensure they effectively address the security vulnerability.
 - [ ] Deploy the fixes to the production environment.
 - [ ] Monitor the system for any signs of unauthorized access or other security incidents following the fix deployment.
 - [ ] Consider conducting a security audit to identify and address any other security vulnerabilities in the system.
