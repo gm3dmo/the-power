@@ -19,10 +19,10 @@ python3 configure.py --hostname "${hostname}" \
                      --enterprise-name "${enterprise_name}" \
                      --org "${org}" \
                      --repo "${repo}" \
+                     --repo-webhook-url "${repo_webhook_url}" \
                      --default-repo-visibility ${default_repo_visibility:-private} \
                      --token "${github_token}" \
-                     --webhook-url "${webhook}" \
-                     --app-configure ${app_configure} \
+                     --app-configure ${app_configure:-no} \
                      --app-id "${app_id}" \
                      --app-client-secret "${app_client_secret:-an_app_client_secret}" \
                      --app-installation-id "${app_installation_id:-an_app_installation_id}" \
@@ -40,6 +40,7 @@ python3 configure.py --hostname "${hostname}" \
                      --enterprise-app-id "${ent_app_id:-an_enterprise_app_id}" \
                      --enterprise-app-pem "${ent_app_private_pem=:-an_enterprise_app_pem}" \
                      --enterprise-app-installation-id "${ent_app_installation_id:-an_enterprise_app_installation_id}" \
+                     --enterprise-app-org-installation-id "${ent_app_org_installation_id:-an_enterprise_app_org_installation_id}" \
                      --enterprise-app-client-id "${ent_app_client_id:-an_enterprise_app_client_id}" \
                      --enterprise-app-client-secret "${ent_app_client_secret:-an_enterprise_app_client_secret}" \
                      --curl_custom_flags "--fail-with-body --no-progress-meter" 

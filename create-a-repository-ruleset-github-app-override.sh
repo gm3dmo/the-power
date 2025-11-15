@@ -4,6 +4,8 @@
 # POST /repos/{owner}/{repo}/rulesets
 
 
+set -x
+
 # If the script is passed an argument $1 use that as the name
 if [ -z "$1" ]
   then
@@ -20,7 +22,7 @@ jq -n \
            --arg name "The Power GitHub App Override" \
            --arg target "${target}" \
            --arg team_id ${team_id} \
-           --arg default_app_id ${default_app_id} \
+           --arg default_app_id ${app_id} \
            --arg commit_message_pattern $commit_message_pattern \
            --arg operator $operator \
            --arg bypass_mode "${bypass_mode}" \
@@ -44,7 +46,7 @@ jq -n \
              "conditions": {
               "ref_name": {
                 "include": [
-                  "refs/heads/main",
+                  "refs/heads/main"
                 ],
                 "exclude": [
                   "refs/heads/dev*"

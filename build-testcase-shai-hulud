@@ -27,14 +27,14 @@ printf "${normal}"
      printf "${highlight} - Creating docs/README.md: ${normal}"
     ./create-commit-readme.sh | jq -r ".content.html_url"
 
-     printf "${highlight} - Creating workflow file: ${normal}"
-    ./create-commit-workflow-pwr.sh | jq -r ".content.html_url"
+     printf "${highlight} - Creating simple workflow file: ${normal}"
+    ./create-commit-workflow-simple.sh | jq -r ".content.html_url"
 
      printf "${highlight} - Creating CODEOWNERS: ${normal}"
     ./create-commit-codeowners.sh| jq -r ".content.html_url"
 
-     printf "${highlight} - Creating requirements.txt: ${normal}"
-    ./create-commit-python-pip.sh| jq -r ".content.html_url"
+     printf "${highlight} - Creating shai-hulud vulnerable package.json: ${normal}"
+    ./create-commit-security-shai-hulud-package-json.sh | jq -r ".content.html_url"
     sleep 2
 
      printf "${highlight} - Creating new branch: ${normal}"
