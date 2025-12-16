@@ -229,6 +229,7 @@ environment_secret_name="ENVIRONMENT_SECRET_001"
 default_package_type="container"
 
 
+
 ### [Deployments](https://docs.github.com/en/rest/deployments/deployments)
 # https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-deployment-activity-for-your-repository
 default_deployment_id=1
@@ -243,6 +244,8 @@ ent_app_client_secret=${ent_app_client_secret}
 ent_app_private_pem=${ent_app_private_pem}
 ent_app_installation_id=${ent_app_installation_id}
 ent_app_org_installation_id=${ent_app_org_installation_id}
+
+
 
 
 ### [GitHub Apps](https://docs.github.com/en/rest/apps)
@@ -297,6 +300,16 @@ enterprise_shr_group_name="my-enterprise-self-hosted-runners"
 ### [Codespaces](https://docs.github.com/en/rest/codespaces/codespaces?apiVersion=2022-11-28)
 ### [Managing secrets for your codespaces](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
 codespaces_secret_001="the-power-codespaces-secret"
+
+
+### [Private Registries](https://docs.github.com/en/enterprise-cloud@latest/rest/private-registries/organization-configurations?apiVersion=2022-11-28)
+registry_type=${registry_type}
+username=${registryusername}
+replaces_base=${registry_replaces_base}
+encrypted_value=${registry_encrypted_value}
+key_id=${registry_key_id}
+visibility=${registry_visibility}
+registry_url=${registry_url}
 
 
 ### [Rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
@@ -870,6 +883,55 @@ if __name__ == "__main__":
         dest="http_protocol",
         default="https",
         help="Mostly always https",
+    )
+    parser.add_argument(
+        "--registry-type",
+        action="store",
+        dest="registry_type",
+        default="maven_repository",
+        help="Type of private registry",
+    )
+    parser.add_argument(
+        "--registry-username",
+        action="store",
+        dest="registryusername",
+        default="a_registry_user",
+        help="Username for private registry",
+    )
+    parser.add_argument(
+        "--registry-replaces-base",
+        action="store",
+        dest="registry_replaces_base",
+        default="false",
+        help="Replaces base for private registry",
+    )
+    parser.add_argument(
+        "--registry-encrypted-value",
+        action="store",
+        dest="registry_encrypted_value",
+        default="SGVsbG9Xb3JsZA==",
+        help="Encrypted value for private registry (must be base64 encoded)",
+    )
+    parser.add_argument(
+        "--registry-key-id",
+        action="store",
+        dest="registry_key_id",
+        default="key_id_string",
+        help="Key ID for private registry",
+    )
+    parser.add_argument(
+        "--registry-visibility",
+        action="store",
+        dest="registry_visibility",
+        default="private",
+        help="Visibility for private registry",
+    )
+    parser.add_argument(
+        "--registry-url",
+        action="store",
+        dest="registry_url",
+        default="https://example.com/registry",
+        help="URL for private registry",
     )
 
     args = parser.parse_args()
