@@ -13,13 +13,23 @@ fi
 
 json_file=tmp/create-a-private-registry-for-an-organization.json
 
+
 jq -n \
            --arg registry_type "${registry_type}" \
-           --arg registry_url "${registry_url}" \
+           --arg username "${username}" \
+           --argjson replaces_base "${replaces_base}" \
+           --arg encrypted_value "${encrypted_value}" \
+           --arg key_id "${key_id}" \
+           --arg visibility "${visibility}" \
+           --arg url "${registry_url}" \
            '{
              registry_type: $registry_type,
-             registry_url: $registry_url,
-             registry_username: $registry_username,
+             url: $url,
+             username: $username,
+             replaces_base: $replaces_base,
+             encrypted_value: $encrypted_value,
+             key_id: $key_id,
+             visibility: $visibility
            }' > ${json_file}
 
 
