@@ -8,6 +8,7 @@ role_id=$1
 
 
 curl ${curl_custom_flags} \
+     -X DELETE \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
