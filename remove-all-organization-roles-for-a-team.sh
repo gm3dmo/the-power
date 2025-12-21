@@ -3,6 +3,14 @@
 # https://docs.github.com/en/enterprise-cloud@latest/rest/orgs/organization-roles?apiVersion=2022-11-28#remove-all-organization-roles-for-a-team
 # DELETE /orgs/{org}/organization-roles/teams/{team_slug}
 
+
+if [ -z "$1" ]
+  then
+    team_slug=${team_slug}
+  else
+    team_slug=$1
+fi
+
 curl ${curl_custom_flags} \
      -X DELETE \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
