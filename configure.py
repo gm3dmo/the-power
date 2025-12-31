@@ -71,6 +71,7 @@ mail_domain="example.com"
 
 ### GitHub Enterprise
 enterprise="${enterprise_name}"
+ent_repo_ruleset_name="pwr_ent_repo_ruleset"
 
 # [Enterprise Audit Log Stream](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin/audit-log?apiVersion=2022-11-28#create-an-audit-log-streaming-configuration-for-an-enterprise)
 ## Splunk Audit Log Stream
