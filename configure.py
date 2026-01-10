@@ -138,7 +138,7 @@ team_id=
 team_members="${team_members}"
 team_admin="${team_admin}"
 team_privacy="closed"
-team_permission="admin"
+team_permission="${team_permission}"
 available_team_permissions="pull triage push maintain admin"
 team_permission_prefix="pwr"
 
@@ -778,6 +778,13 @@ if __name__ == "__main__":
         dest="team_admin",
         default="mona",
         help="The team admin.",
+    )
+    parser.add_argument(
+        "--team-permission",
+        action="store",
+        dest="team_permission",
+        default="push",
+        help="The permission the team are granted.",
     )
     parser.add_argument(
         "--default-committer",
