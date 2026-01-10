@@ -234,7 +234,7 @@ def get_webhook_url():
         logging.error('smee.io is currently unavailable.')
     finally:
         logging.info(f"webhook url is: {webhook_url}")
-        return webhook_url
+    return webhook_url
 
 
 def process_ghe_boot_file(filename):
