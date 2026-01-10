@@ -20,6 +20,7 @@ python3 configure.py --hostname "${hostname}" \
                      --org "${org}" \
                      --repo "${repo}" \
                      --repo-webhook-url "${repo_webhook_url}" \
+                     --repo-collaborator "${repo_collaborator:-hubot}" \
                      --default-repo-visibility ${default_repo_visibility:-private} \
                      --token "${github_token}" \
                      --app-configure ${app_configure:-no} \
