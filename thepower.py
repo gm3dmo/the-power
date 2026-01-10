@@ -223,7 +223,7 @@ def get_webhook_url():
     < Location: https://smee.io/i9T6BorvnhBALFD
     """
     url = "https://smee.io/new"
-    logging.warning(f"Requesting webhook from: {url}")
+    logging.info(f"Requesting webhook from: {url}")
     webhook_url = None
     try:
        req = urllib.request.Request(url, data=None, headers={ 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
@@ -248,11 +248,11 @@ def process_ghe_boot_file(filename):
 def open_webhook_url_in_browser(hook_url, browser="chrome", anon=False):
     if anon == False:
         hook_location = f"""open -a "Google Chrome"  "{hook_url}" """
-        logging.warning(f"Opening {hook_url} in anonymous {browser}.")
+        logging.info(f"Opening {hook_url} in anonymous {browser}.")
         print(f"Opening {hook_url} in anonymous {browser}.")
     if anon == True:
        hook_location = f"""open -na "Google Chrome" --args --incognito  "{hook_url}" """
-       logging.warning(f"Opening {hook_url} in anonymous {browser}.")
+       logging.info(f"Opening {hook_url} in anonymous {browser}.")
        print(f"Opening {hook_url} in anonymous {browser}.")
     try:
         subprocess.call(shlex.split(hook_location))
@@ -291,7 +291,7 @@ def read_dotcom_config(dotcom_config_file):
         dotcom_config = fake_ini_file(dotcom_config_file)
         logging.debug(f"""Reading config file: {dotcom_config_file}""")
     else: 
-        logging.warning(f"""No config file: {dotcom_config_file}""")
+        logging.info(f"""No config file: {dotcom_config_file}""")
     return dotcom_config
 
 
