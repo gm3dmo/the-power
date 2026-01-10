@@ -126,7 +126,7 @@ commit_message_pattern="MAGIC-MIKE"
 operator="starts_with" 
 enforcement="evaluate"
 bypass_mode="always"
-repo_collaborator="mona"
+repo_collaborator="${repo_collaborator}"
 issue_assignee="hubot"
 
 
@@ -939,6 +939,13 @@ if __name__ == "__main__":
         dest="registry_url",
         default="https://example.com/registry",
         help="URL for private registry",
+    )
+    parser.add_argument(
+        "--repo-collaborator",
+        action="store",
+        dest="repo_collaborator",
+        default="mona",
+        help="The name of the repository collaborator.",
     )
 
     args = parser.parse_args()
