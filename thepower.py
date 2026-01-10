@@ -36,6 +36,13 @@ def hash_and_encode(token):
     return base64_encoded
 
 
+def obscure_token(token):
+    """Obscure a token showing only first 4 and last 8 characters."""
+    if len(token) <= 12:
+        return "****"
+    return f"{token[:4]}...{token[-8:]}"
+
+
 def run_password_recovery(password_recovery_command):
     if password_recovery_command:
         # Inject the StrictHostKeyChecking option
@@ -248,12 +255,12 @@ def process_ghe_boot_file(filename):
 def open_webhook_url_in_browser(hook_url, browser="chrome", anon=False):
     if anon == False:
         hook_location = f"""open -a "Google Chrome"  "{hook_url}" """
-        logging.info(f"Opening {hook_url} in anonymous {browser}.")
-        print(f"Opening {hook_url} in anonymous {browser}.")
+        logging.info(f"Opening webhook endpoint {hook_url} in anonymous {browser}.")
+        print(f"Opening webhook endpoint {hook_url} in anonymous {browser}.")
     if anon == True:
        hook_location = f"""open -na "Google Chrome" --args --incognito  "{hook_url}" """
-       logging.info(f"Opening {hook_url} in anonymous {browser}.")
-       print(f"Opening {hook_url} in anonymous {browser}.")
+       logging.info(f"Opening webhook endpoint {hook_url} in anonymous {browser}.")
+       print(f"Opening webhook endpoint {hook_url} in anonymous {browser}.")
     try:
         subprocess.call(shlex.split(hook_location))
     except:

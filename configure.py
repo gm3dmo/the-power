@@ -410,8 +410,15 @@ stream2_container="container"
         args.default_committer = dotcom_config.get("dummy_section", "default_committer")
         args.app_private_pem = dotcom_config.get("dummy_section", "app_private_pem")
 
+    logger.info("")
+    logger.info("                  ___     ___")
+    logger.info("                 (o o)   (o o)")
+    logger.info("                (  V  ) (  V  )")
+    logger.info("               /--m-m- /--m-m-")
+    logger.info("")
+
     if args.hostname != "":
-        logger.info(f"GitHub hostname = {args.hostname}")
+        logger.info(f"{'GitHub hostname':<20}: {args.hostname}")
     elif "hostname" in ghe_config:
         args.hostname = ghe_config["hostname"]
     else:
@@ -427,7 +434,8 @@ stream2_container="container"
 
 
     if args.token != "":
-        logger.info(f"Token = args.token") 
+        logger.info(f"{'Token':<20}: {thepower.obscure_token(args.token)}") 
+        logger.info(f"{'Hashed token':<20}: {thepower.hash_and_encode(args.token)}")
     elif "token" in ghe_config and ghe_config["token"] not in [None, ""]:
         args.token = ghe_config["token"]
     else:
@@ -440,7 +448,7 @@ stream2_container="container"
         args.team_slug = thepower.slugify(args.team_name)
 
     if args.org != "":
-        logger.info(f"Org = {args.org}")
+        logger.info(f"{'Org':<20}: {args.org}\n")
     else:
         args.org = input(f"Enter Org name: ")
 
