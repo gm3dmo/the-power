@@ -25,6 +25,6 @@ git clone https://github.com/gm3dmo/the-power ${ticket_number}
 cd ${ticket_number}
 
 echo ./dotcom-configure.sh ${power_config} repo-${ticket_number}
-./dotcom-configure.sh ${power_config} repo-${ticket_number}
+./dotcom-configure.sh --config ${power_config} --repo repo-${ticket_number}
 
 exec zsh
