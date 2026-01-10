@@ -1,18 +1,33 @@
-# Read in a config file where reused variables can be stored:
-if [ -z "$1" ]
-  then
-    . ~/.the-power-dotcom.conf
-  else
-    . $1
-fi
+# Parse command line arguments
+config_file=~/.the-power-dotcom.conf
+repo_override=""
 
-# When building testcases it can be nice for them to have their own
-# repository to live in. If passed an optional argument
-if [ ! -z "$2" ]
-  then
-    repo=$2
-  else
-    repo=testrepo
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --config)
+      config_file="$2"
+      shift 2
+      ;;
+    --repo)
+      repo_override="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Usage: $0 [--config CONFIG_FILE] [--repo REPO_NAME]"
+      exit 1
+      ;;
+  esac
+done
+
+# Read in a config file where reused variables can be stored:
+. "$config_file"
+
+# Use command line repo if provided, otherwise use config file value, fallback to testrepo
+if [ ! -z "$repo_override" ]; then
+  repo="$repo_override"
+elif [ -z "$repo" ]; then
+  repo=testrepo
 fi
 
 python3 configure.py --hostname "${hostname}" \
