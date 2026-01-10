@@ -950,12 +950,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO)
-    logging.getLogger().handlers.clear()
+    logging.root.handlers = []
     logger = logging.getLogger(__name__)
+    logger.setLevel(args.loglevel.upper())
+    logger.propagate = False
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(args.loglevel.upper())
-    logger = logging.getLogger(__name__)
+    console_handler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(console_handler)
 
     main(args)
