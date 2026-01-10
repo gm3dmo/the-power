@@ -126,7 +126,7 @@ commit_message_pattern="MAGIC-MIKE"
 operator="starts_with" 
 enforcement="evaluate"
 bypass_mode="always"
-repo_collaborator="mona"
+repo_collaborator="${repo_collaborator}"
 issue_assignee="hubot"
 
 
@@ -138,7 +138,7 @@ team_id=
 team_members="${team_members}"
 team_admin="${team_admin}"
 team_privacy="closed"
-team_permission="admin"
+team_permission="${team_permission}"
 available_team_permissions="pull triage push maintain admin"
 team_permission_prefix="pwr"
 
@@ -410,8 +410,15 @@ stream2_container="container"
         args.default_committer = dotcom_config.get("dummy_section", "default_committer")
         args.app_private_pem = dotcom_config.get("dummy_section", "app_private_pem")
 
+    logger.info("")
+    logger.info("                  ___     ___")
+    logger.info("                 (o o)   (o o)")
+    logger.info("                (  V  ) (  V  )")
+    logger.info("               /--m-m- /--m-m-")
+    logger.info("")
+
     if args.hostname != "":
-        logger.info(f"GitHub hostname = {args.hostname}")
+        logger.info(f"{'GitHub hostname':<20}: {args.hostname}")
     elif "hostname" in ghe_config:
         args.hostname = ghe_config["hostname"]
     else:
@@ -427,7 +434,8 @@ stream2_container="container"
 
 
     if args.token != "":
-        logger.info(f"Token = args.token") 
+        logger.info(f"{'Token':<20}: {thepower.obscure_token(args.token)}") 
+        logger.info(f"{'Hashed token':<20}: {thepower.hash_and_encode(args.token)}")
     elif "token" in ghe_config and ghe_config["token"] not in [None, ""]:
         args.token = ghe_config["token"]
     else:
@@ -440,7 +448,7 @@ stream2_container="container"
         args.team_slug = thepower.slugify(args.team_name)
 
     if args.org != "":
-        logger.info(f"Org = {args.org}")
+        logger.info(f"{'Org':<20}: {args.org}\n")
     else:
         args.org = input(f"Enter Org name: ")
 
@@ -780,6 +788,13 @@ if __name__ == "__main__":
         help="The team admin.",
     )
     parser.add_argument(
+        "--team-permission",
+        action="store",
+        dest="team_permission",
+        default="push",
+        help="The permission the team are granted.",
+    )
+    parser.add_argument(
         "--default-committer",
         action="store",
         dest="default_committer",
@@ -933,15 +948,22 @@ if __name__ == "__main__":
         default="https://example.com/registry",
         help="URL for private registry",
     )
+    parser.add_argument(
+        "--repo-collaborator",
+        action="store",
+        dest="repo_collaborator",
+        default="mona",
+        help="The name of the repository collaborator.",
+    )
 
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO)
-    logging.getLogger().handlers.clear()
+    logging.root.handlers = []
     logger = logging.getLogger(__name__)
+    logger.setLevel(args.loglevel.upper())
+    logger.propagate = False
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(args.loglevel.upper())
-    logger = logging.getLogger(__name__)
+    console_handler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(console_handler)
 
     main(args)
