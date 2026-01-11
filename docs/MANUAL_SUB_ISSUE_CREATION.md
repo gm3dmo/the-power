@@ -62,7 +62,7 @@ Follow the rules in `docs/script-generation-rules.md`:
 
 1. Source the configuration file: `. ./.gh-api-examples.conf`
 2. Include documentation header with URL and endpoint path
-3. Implement proper parameter validation (issue_number and sub_issue_id)
+3. Implement proper parameter validation (issue_number as path parameter, sub_issue_id in request body)
 4. Use standard configuration variables
 5. Follow the curl command structure with proper headers
 6. Make script executable (`chmod +x`)
@@ -151,7 +151,7 @@ Follow the rules in `docs/script-generation-rules.md`:
 
 1. Source the configuration file: `. ./.gh-api-examples.conf`
 2. Include documentation header with URL and endpoint path
-3. Implement proper parameter validation (issue_number, sub_issue_id, after_id or before_id)
+3. Implement proper parameter validation (issue_number as path parameter, sub_issue_id in request body, either after_id OR before_id in request body - not both)
 4. Use standard configuration variables
 5. Follow the curl command structure with proper headers
 6. Make script executable (`chmod +x`)
