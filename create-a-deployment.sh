@@ -18,9 +18,11 @@ jq -n \
            --arg environment "${default_environment_name}" \
           '{
              ref: $ref,
-             environment: $environment
+             environment: $environment,
+             required_contexts: []
            }' > ${json_file}
 
+cat $json_file | jq -r
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
