@@ -195,7 +195,9 @@ def store_event(token, event_data, source_ip):
         conn.commit()
         return True, c.lastrowid
     except Exception as e:
-        return False, str(e)
+        # Log the detailed error on the server, but do not expose it to the client
+        print(f"Error storing event in database: {e}")
+        return False, "Database error"
     finally:
         conn.close()
 
@@ -417,8 +419,10 @@ def receive_hec_event():
                 for event_data in json_objects:
                     success, result = store_event(token, event_data, source_ip)
                     if not success:
+                        # Log the detailed error internally
                         print(f"Error storing event: {result}")
-                        return {"text": f"Failed to store event: {result}", "code": 8}, 500
+                        # Return a generic error message to the client
+                        return {"text": "Failed to store event", "code": 8}, 500
                 
                 print(f"\nStored {len(json_objects)} events with token: {token}")
                 print(f"\nReceived at: {datetime.now().isoformat()}")
