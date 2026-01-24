@@ -295,7 +295,8 @@ def clear_events():
         db.commit()
         return {'status': 'success'}, 200
     except Exception as e:
-        return {'status': 'error', 'message': str(e)}, 500
+        app.logger.exception(f"Error clearing events: {e}")
+        return {'status': 'error', 'message': 'An internal error occurred'}, 500
 
 
 @app.route('/stream')
