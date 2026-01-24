@@ -271,7 +271,9 @@ def execute_script():
             'is_json': True if 'highlighted_stdout' in locals() else False
         })
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        # Log the full exception and stack trace on the server, but do not expose it to the client
+        app.logger.exception("Error while executing script")
+        return jsonify({'error': 'An internal error has occurred.'}), 500
 
 @app.template_filter('highlight_search')
 def highlight_search(text, search):
