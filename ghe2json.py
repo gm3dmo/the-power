@@ -103,7 +103,7 @@ with all scopes set). When that's done press the return key twice to proceed:\n"
         print(f"\033[93m\n\n{message}\033[0m\n")  
         lines = []
         while True:
-            line = input()
+            line = input().strip()
             if line:
                 lines.append(line)
             else:
