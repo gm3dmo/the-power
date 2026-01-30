@@ -117,14 +117,18 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     version = tokens[ghe_index + 1]
     
     # Find the index of the last occurrence of "ssh" in the token list
-    ssh_index = len(tokens) - 1 - tokens[::-1].index("ssh")
-    
-    # If the next token after "ssh" is "-p122", extract the next six tokens
-    if tokens[ssh_index+1] == "-p122":
-        extracted_tokens = tokens[ssh_index+2:ssh_index+6]
-        extracted_tokens.insert(0, tokens[ssh_index])
-        extracted_tokens.insert(1, tokens[ssh_index+1])
-        et = " ".join(extracted_tokens)
+    et = ""
+    try:
+        ssh_index = len(tokens) - 1 - tokens[::-1].index("ssh")
+        # If the next token after "ssh" is "-p122", extract the next six tokens
+        if tokens[ssh_index+1] == "-p122":
+            extracted_tokens = tokens[ssh_index+2:ssh_index+6]
+            extracted_tokens.insert(0, tokens[ssh_index])
+            extracted_tokens.insert(1, tokens[ssh_index+1])
+            et = " ".join(extracted_tokens)
+    except ValueError:
+        # "ssh" not found in tokens
+        pass
     
     # hostname
     http_token = next((token for token in tokens if token.startswith(("http://", "https://"))), None)
