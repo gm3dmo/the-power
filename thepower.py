@@ -85,6 +85,7 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     lexer = shlex.shlex(text)
     lexer.whitespace_split = True
     lexer.whitespace = ' \t\n\r\f\v'
+    lexer.quotes = '"'  # Only treat double quotes as quotes, not single quotes
     tokens = list(lexer) 
 
     # Find the index of "terminated" in the token list
