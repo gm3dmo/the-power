@@ -14,7 +14,7 @@ jobs:
       id: create_token
       uses: actions/create-github-app-token@v1
       with:
-          app-id: $default_app_id
+          app-id: $app_id
           private-key: ${{ secrets.app_cert_secret }}
           # https://github.com/actions/create-github-app-token?tab=readme-ov-file#owner
           owner: $org
