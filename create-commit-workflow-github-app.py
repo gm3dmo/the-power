@@ -26,7 +26,7 @@ def main(args):
     args.org = power_config.get('dummy_section','org',).strip('"')
     args.team_slug = power_config.get('dummy_section','team_slug',).strip('"')
     args.pr_approver_name = power_config.get('dummy_section','pr_approver_name',).strip('"')
-    args.default_app_id = power_config.get('dummy_section','default_app_id',).strip('"')
+    args.default_app_id = power_config.get('dummy_section','app_id',).strip('"')
     args.repo = power_config.get('dummy_section','repo',).strip('"')
 
     p = Path('test-data/workflow-github-app.template')
