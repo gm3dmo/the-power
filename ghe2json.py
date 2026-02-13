@@ -102,12 +102,19 @@ with all scopes set). When that's done press the return key twice to proceed:\n"
         thepower.clear_screen()
         print(f"\033[93m\n\n{message}\033[0m\n")  
         lines = []
+        empty_line_count = 0
         while True:
             line = input()
             if line:
+                # Reset empty line counter and add any skipped blank lines back
+                for _ in range(empty_line_count):
+                    lines.append('')
+                empty_line_count = 0
                 lines.append(line)
             else:
-                break
+                empty_line_count += 1
+                if empty_line_count >= 2:
+                    break
         text = '\n'.join(lines)
     else:
         # assume the file exists
