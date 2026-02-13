@@ -84,8 +84,10 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
 
     lexer = shlex.shlex(text)
     lexer.whitespace_split = True
-    lexer.whitespace = ' \t\n\r\f\v'
-    tokens = list(lexer) 
+    lexer.whitespace = ' \t\n\r\f\v\xa0'
+    lexer.quotes = ''
+    lexer.commenters = ''
+    tokens = list(lexer)
 
     # Find the index of "terminated" in the token list
     termination_date = []
@@ -111,23 +113,35 @@ This Server will automatically be terminated on 2024-05-22T06:38:39Z
     try:
         ghe_index = tokens.index("GHE")
     except ValueError:
-        ghe_index = tokens.index("GHES")
+        try:
+            ghe_index = tokens.index("GHES")
+        except ValueError:
+            raise ValueError("Input does not contain 'GHE' or 'GHES'. Please paste valid GHE appliance boot output.")
     
     # The version number should be the next token
+    if ghe_index + 1 >= len(tokens):
+        raise ValueError("Found 'GHE'/'GHES' but no version number follows it. Please paste the complete GHE appliance boot output.")
     version = tokens[ghe_index + 1]
     
     # Find the index of the last occurrence of "ssh" in the token list
-    ssh_index = len(tokens) - 1 - tokens[::-1].index("ssh")
-    
-    # If the next token after "ssh" is "-p122", extract the next six tokens
-    if tokens[ssh_index+1] == "-p122":
-        extracted_tokens = tokens[ssh_index+2:ssh_index+6]
-        extracted_tokens.insert(0, tokens[ssh_index])
-        extracted_tokens.insert(1, tokens[ssh_index+1])
-        et = " ".join(extracted_tokens)
+    ssh = False
+    et = "unknown"
+    try:
+        ssh_index = len(tokens) - 1 - tokens[::-1].index("ssh")
+        ssh = True
+        # If the next token after "ssh" is "-p122", extract the next six tokens
+        if ssh_index + 1 < len(tokens) and tokens[ssh_index+1] == "-p122":
+            extracted_tokens = tokens[ssh_index+2:ssh_index+6]
+            extracted_tokens.insert(0, tokens[ssh_index])
+            extracted_tokens.insert(1, tokens[ssh_index+1])
+            et = " ".join(extracted_tokens)
+    except ValueError:
+        ssh = False
     
     # hostname
     http_token = next((token for token in tokens if token.startswith(("http://", "https://"))), None)
+    if http_token is None:
+        raise ValueError("Input does not contain an HTTP/HTTPS URL. Please paste the complete GHE appliance boot output.")
     parsed_url = urlparse(http_token)
     hostname = (parsed_url.hostname)
 
