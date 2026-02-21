@@ -343,7 +343,15 @@ gh_custom_headers=""
 # curl_custom_flags="--fail-with-body --no-progress-meter --write-out %output{a.txt}%{json}%output{b.txt}%{header_json}"
 #
 # use a custom value for user-agent make things traceable
+# curl_custom_flags="--user-agent 12345"
 
+# Lots of curl troubleshooting tricks:
+# curl https://everything.curl.dev/usingcurl/connections/name.html
+
+# Use the resolve flag to control the IP address curl resolves to:
+# curl_custom_flags="--resolve api.github.com:443:140.82.112.6"
+
+# Whatever you set for curl_custom_flags will be placed here for use in the scripts:
 curl_custom_flags="${curl_custom_flags}"
 
 
