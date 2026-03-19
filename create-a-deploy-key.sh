@@ -4,9 +4,15 @@
 # POST /repos/{owner}/{repo}/keys
 #
 
-public_key_file=${1:-${my_ssh_pub_key}}
-public_key=$(cat ${public_key_file})
 ts=$(date +%s)
+ssh_key_file=tmp/key_${ts}
+ssh_public_key_file=tmp/key_${ts}.pub
+rm -f ${ssh_key_file} ${ssh_public_key_file}
+key_type=rsa
+
+ssh-keygen -t ${key_type}  -f ${ssh_key_file} -q -N '' -C "pwr-admin-ssh-${ts}"
+ssh-keygen -l -v -f ${ssh_public_key_file}
+public_key=$(cat ${ssh_public_key_file})
 
 json_file=tmp/create-a-deploy-key.json
 
