@@ -191,6 +191,12 @@ default_committer="${default_committer}"
 default_check_run_id=1
 
 
+### [Cost Centers](https://docs.github.com/en/enterprise-cloud@latest/rest/billing/cost-centers)
+
+#[create a new cost center](https://docs.github.com/en/enterprise-cloud@latest/rest/billing/cost-centers?apiVersion=2026-03-10#create-a-new-cost-center)
+cost_center_name="power_cost_centre"
+cost_center_id="abcd-efgh-ijklm"
+
 ### [Pagination](https://docs.github.com/en/rest/guides/traversing-with-pagination)
 per_page=30
 
