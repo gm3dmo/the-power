@@ -184,6 +184,7 @@ delete_branch_on_merge=${delete_branch_on_merge}
 
 ### [Commits](https://docs.github.com/en/rest/commits/commits)
 default_committer="${default_committer}"
+force_update_reference=false
 
 
 ### [Checks](https://docs.github.com/en/rest/guides/getting-started-with-the-checks-api)
