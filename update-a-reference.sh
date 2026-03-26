@@ -12,9 +12,13 @@ fi
 
 
 json_file=tmp/update-a-reference.json
+
 jq -n \
        --arg sha "${sha}" \
-              '{ sha: $sha }' > ${json_file}
+       --arg force "$force_update_reference" \
+              '{ sha: $sha,
+                 force: $force  |  test ("true")
+                }' > ${json_file}
 
 
 curl ${curl_custom_flags} \
@@ -22,4 +26,5 @@ curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
         "${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs/heads/${base_branch}" --data @${json_file}
+
 
