@@ -165,7 +165,7 @@ pr_approver_name=${pr_approver_name}
 default_pr_event="COMMENT"
 # https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#merge-a-pull-request
 # valid for merge_method are merge, squash, rebase
-merge_method=merge
+merge_method=${merge_method}
 # draft pull request can be true or false
 draft_pull_request="false"
 
@@ -836,6 +836,13 @@ if __name__ == "__main__":
         dest="enterprise_name",
         default="",
         help="The name of the enterprise.",
+    )
+    parser.add_argument(
+        "--merge-method",
+        action="store",
+        dest="merge_method",
+        default="merge",
+        help="The merge method to use for pull requests. Valid values are merge, squash, rebase.",
     )
     parser.add_argument(
         "--pr-approver-token",
