@@ -10,12 +10,18 @@ if [ -z "$1" ]
     pull_request_node_id=$1
 fi
 
+case "${merge_method:-merge}" in
+  merge)  graphql_merge_method="MERGE" ;;
+  squash) graphql_merge_method="SQUASH" ;;
+  rebase) graphql_merge_method="REBASE" ;;
+  *)      graphql_merge_method="MERGE" ;;
+esac
 
 graphql_query=tmp/graphql-enable-pull-request-auto-merge.txt
 
 cat <<EOF >$graphql_query
 mutation automerge {
-    enablePullRequestAutoMerge(input: {pullRequestId: "$pull_request_node_id", mergeMethod: SQUASH}) {
+    enablePullRequestAutoMerge(input: {pullRequestId: "$pull_request_node_id", mergeMethod: $graphql_merge_method}) {
         clientMutationId
          }
 }
