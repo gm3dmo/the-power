@@ -1,0 +1,22 @@
+{
+  "name": "the-power",
+  "description": "Skills and safety hooks for the-power, a GitHub API test environment framework. Helps agents configure instances, find and run scripts, create test orgs and repos, clean up resources, and troubleshoot issues.",
+  "version": "0.1.0",
+  "author": {
+    "name": "gm3dmo"
+  },
+  "license": "MIT",
+  "homepage": "https://gm3dmo.github.io/the-power/",
+  "repository": "https://github.com/gm3dmo/the-power",
+  "keywords": [
+    "github",
+    "api",
+    "testing",
+    "ghes",
+    "enterprise",
+    "testcase",
+    "environment"
+  ],
+  "skills": "skills/",
+  "hooks": "hooks.json"
+}
