@@ -20,6 +20,10 @@ if [ -z "$COMMAND" ]; then
   exit 0
 fi
 
+# Parse cwd from payload — hooks may run from the plugin install directory,
+# not from where the command will execute.
+CWD=$(echo "$_INPUT" | jq -r '.cwd // empty' 2>/dev/null || true)
+
 # Helper: emit a deny decision and exit
 deny() {
   jq -n --arg reason "$1" \
@@ -27,9 +31,10 @@ deny() {
   exit 0
 }
 
-# Helper: find .gh-api-examples.conf by walking up from cwd
+# Helper: find .gh-api-examples.conf by walking up from the command's
+# working directory (cwd from payload), falling back to PWD.
 find_config() {
-  local dir="$PWD"
+  local dir="${CWD:-$PWD}"
   while [ "$dir" != "/" ]; do
     if [ -f "$dir/.gh-api-examples.conf" ]; then
       echo "$dir/.gh-api-examples.conf"

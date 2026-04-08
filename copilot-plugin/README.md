@@ -35,6 +35,8 @@ copilot plugin install /path/to/the-power/copilot-plugin
 | `create-test-repo` | Create a test repository with PRs, issues, branch protection, and more |
 | `discover-scripts` | Find scripts by category, keyword, or goal |
 | `run-script` | Execute any the-power script with guided parameter input |
+| `setup-github-app` | Register, configure, and install a GitHub App for App-based authentication |
+| `scale-environment` | Bulk-create repos, users, orgs, and teams with three performance tiers |
 | `cleanup-test-data` | Remove test organisations, repos, and other resources |
 | `troubleshoot` | Diagnose SSL, token, HTTP, and configuration issues |
 

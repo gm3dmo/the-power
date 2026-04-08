@@ -6,8 +6,9 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/_common.sh"
 
-# Only check commands that look like they run a the-power script
-if ! echo "$COMMAND" | grep -qE '\.(sh|py)\b'; then
+# Only check commands that look like they run a the-power script.
+# Matches .sh/.py files AND extensionless build-* scripts.
+if ! echo "$COMMAND" | grep -qE '(\.(sh|py)\b|/build-|^\.?/?\bbuild-)'; then
   exit 0
 fi
 
