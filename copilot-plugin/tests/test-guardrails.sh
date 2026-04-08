@@ -147,6 +147,21 @@ run_test "python-create-many-repos with low count allowed" "$HOOK" \
 # Note: scaling tests that check config values need a .gh-api-examples.conf
 # with number_of_repos>100. We test that the hook doesn't crash without one.
 
+run_test "inline --repos 500 denied" "$HOOK" \
+  "$(make_input bash 'python3 python-create-many-repos-connection-reuse.py --repos 500')" "deny" "high count"
+
+run_test "inline --repos 50 allowed" "$HOOK" \
+  "$(make_input bash 'python3 python-create-many-repos-connection-reuse.py --repos 50')" "allow"
+
+run_test "inline number_of_repos=200 denied" "$HOOK" \
+  "$(make_input bash 'number_of_repos=200 ./create-many-repos.sh')" "deny" "high count"
+
+run_test "inline number_of_repos=10 allowed" "$HOOK" \
+  "$(make_input bash 'number_of_repos=10 ./create-many-repos.sh')" "allow"
+
+run_test "inline number_of_issues=500 denied" "$HOOK" \
+  "$(make_input bash 'number_of_issues=500 ./create-many-issues.sh')" "deny" "high count"
+
 # -----------------------------------------------------------------------
 echo ""
 echo "=== guard-token-scope ==="
@@ -165,6 +180,15 @@ run_test "malformed JSON allowed (no crash)" "$HOOK" \
 
 run_test "script command without config allowed" "$HOOK" \
   "$(make_input bash './create-repo.sh')" "allow"
+
+run_test "build-testcase (extensionless) without config allowed" "$HOOK" \
+  "$(make_input bash './build-testcase')" "allow"
+
+run_test "build-testcase-workflow-simple without config allowed" "$HOOK" \
+  "$(make_input bash './build-testcase-workflow-simple')" "allow"
+
+run_test "plain ls still allowed" "$HOOK" \
+  "$(make_input bash 'ls -la')" "allow"
 
 # -----------------------------------------------------------------------
 echo ""
