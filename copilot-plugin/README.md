@@ -12,15 +12,13 @@ Skills and safety hooks for [the-power](https://github.com/gm3dmo/the-power), a 
 
 ## Install
 
-Clone the repo and install from the `copilot-plugin/` directory:
+Install directly from gm3dmo/the-power:
 
 ```bash
-git clone https://github.com/gm3dmo/the-power.git
-cd the-power
-copilot plugin install "$(pwd -L)/copilot-plugin"
+copilot plugin install gm3dmo/the-power:copilot-plugin
 ```
 
-Or install directly from a local checkout:
+Or install from a local checkout:
 
 ```bash
 copilot plugin install /path/to/the-power/copilot-plugin
