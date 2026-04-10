@@ -6,9 +6,9 @@
 # This endpoint has to be presented with a jwt 
 JWT=$(./tiny-call-get-jwt.sh)
 
-status="success"
-#status="success"
+hook_delivery_status="failure"
+#hook_delivery_status="success"
 
 curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${JWT}" \
-        "${GITHUB_API_BASE_URL}/app/hook/deliveries?status=${status}"
+        "${GITHUB_API_BASE_URL}/app/hook/deliveries?status=${hook_delivery_status}&per_page=1"
