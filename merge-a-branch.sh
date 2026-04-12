@@ -12,7 +12,7 @@ fi
 
 if [ -z "$2" ]
   then
-    head="feature-branch"
+    head="${branch_name}"
   else
     head=$2
 fi
