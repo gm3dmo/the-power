@@ -32,6 +32,59 @@ class bcolors:
     UNDERLINE = "\033[4m"
 
 
+# GitHub's token formats and their prefixes:
+# https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#githubs-token-formats
+GITHUB_TOKEN_PREFIXES = (
+    "ghp_",        # Personal access token (classic)
+    "github_pat_", # Fine-grained personal access token
+    "gho_",        # OAuth access token
+    "ghu_",        # User access token for a GitHub App
+    "ghs_",        # Installation access token for a GitHub App
+    "ghr_",        # Refresh token for a GitHub App
+)
+
+
+def validate_token_prefix(token):
+    """Validate that the token starts with a known GitHub token prefix."""
+    if not token.startswith(GITHUB_TOKEN_PREFIXES):
+        prefix_list = ", ".join(GITHUB_TOKEN_PREFIXES)
+        raise SystemExit(
+            f"{bcolors.FAIL}Error: token must start with a known GitHub prefix ({prefix_list}).{bcolors.ENDC}\n"
+            f"See: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#githubs-token-formats"
+        )
+
+
+def replace_token(conf_file, new_token, logger):
+    """Read an existing .gh-api-examples.conf as key-value pairs using
+    configparser and replace the token in token, GITHUB_TOKEN and auth_header."""
+    validate_token_prefix(new_token)
+    config = thepower.fake_ini_file(conf_file)
+    section = "dummy_section"
+
+    old_token = config.get(section, "token")
+    config.set(section, "token", new_token)
+    config.set(section, "github_token", new_token)
+    config.set(section, "auth_header", f'"Authorization: token {new_token}"')
+
+    lines = []
+    with open(conf_file, "r") as f:
+        for line in f:
+            stripped = line.strip()
+            if stripped.startswith("token="):
+                lines.append(f"token={new_token}\n")
+            elif stripped.startswith("GITHUB_TOKEN="):
+                lines.append(f"GITHUB_TOKEN={new_token}\n")
+            elif stripped.startswith("auth_header="):
+                lines.append(f'auth_header="Authorization: token {new_token}"\n')
+            else:
+                lines.append(line)
+
+    with open(conf_file, "w") as f:
+        f.writelines(lines)
+
+    logger.info(f"{bcolors.OKGREEN}Replaced token in {conf_file} with {thepower.obscure_token(new_token)}")
+
+
 def main(args):
 
     t = string.Template(
@@ -977,6 +1030,13 @@ if __name__ == "__main__":
         default="mona",
         help="The name of the repository collaborator.",
     )
+    parser.add_argument(
+        "--replace-token",
+        action="store",
+        dest="replacement_token",
+        default="ghp_token",
+        help="a new token to replace existing token",
+    )
 
     args = parser.parse_args()
 
@@ -987,5 +1047,10 @@ if __name__ == "__main__":
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(logging.Formatter('%(message)s'))
     logger.addHandler(console_handler)
+
+    if args.replacement_token != "ghp_token":
+        conf_file = ".gh-api-examples.conf"
+        replace_token(conf_file, args.replacement_token, logger)
+        sys.exit(0)
 
     main(args)
