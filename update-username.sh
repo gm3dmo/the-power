@@ -8,10 +8,10 @@ old_username=${1}
 username=${2}
 
 
-json=tmp/update-the-username-for-a-user.json
+Json_file=tmp/update-the-username-for-a-user.json
 jq -n \
   --arg new_username "${new_username}" \
-  '{ "login" : $new_username }'  > ${json}
+  '{ "login" : $new_username }'  > ${Json_file}
 
 
 curl ${curl_custom_flags} \
@@ -19,5 +19,5 @@ curl ${curl_custom_flags} \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
      -H "Accept: application/vnd.github.v3+json" \
      -H "X-GitHub-Api-Version: ${github_api_version}" \
-        "${GITHUB_API_BASE_URL}/admin/users/${username} --data @$json"
+        "${GITHUB_API_BASE_URL}/admin/users/${username} --data @$Json_file"
 

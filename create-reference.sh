@@ -12,19 +12,19 @@ if [ -z "$1" ]
     ref=$1
 fi
 
-json=tmp/create-reference.json
+Json_file=tmp/create-reference.json
 
-rm -f ${json}
+rm -f ${Json_file}
 
 jq -n \
         --arg ref "${ref}" \
         --arg sha "${sha}" \
           '{ ref: $ref,
-             sha: $sha }' > ${json}
+             sha: $sha }' > ${Json_file}
 
 curl ${curl_custom_flags} \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data @${json}
+        ${GITHUB_API_BASE_URL}/repos/${org}/${repo}/git/refs --data @${Json_file}
 
-rm -f ${json}
+rm -f ${Json_file}

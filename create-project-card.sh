@@ -5,10 +5,10 @@
 
 column_id=$(./list-project-columns.sh | jq '[.[].id] | max')
 #column_id=1
-json=project-card-note.json
+Json_file=project-card-note.json
 
 curl ${curl_custom_flags} \
      -X POST \
      -H "Accept: application/vnd.github.v3+json" \
      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        ${GITHUB_API_BASE_URL}/projects/columns/${column_id}/cards --data @${json}
+        ${GITHUB_API_BASE_URL}/projects/columns/${column_id}/cards --data @${Json_file}
