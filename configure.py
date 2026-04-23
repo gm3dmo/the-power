@@ -400,7 +400,7 @@ gh_custom_headers=""
 # using https://daniel.haxx.se/blog/2020/03/17/curl-write-out-json/
 # example:
 # curl_custom_flags="-kso /dev/null --write-out '%{json}'"
-# curl_custom_flags="--fail-with-body --no-progress-meter --write-out %output{a.txt}%{json}%output{b.txt}%{header_json}"
+# curl_custom_flags="--fail-with-body --no-progress-meter --write-out %output{${json_output_file}}%{json}%output{${header_output_file}}%{header_json}"
 #
 # use a custom value for user-agent make things traceable
 # curl_custom_flags="--user-agent 12345"
@@ -412,6 +412,8 @@ gh_custom_headers=""
 # curl_custom_flags="--resolve api.github.com:443:140.82.112.6"
 
 # Whatever you set for curl_custom_flags will be placed here for use in the scripts:
+json_output_file="${json_output_file}"
+header_output_file="${header_output_file}"
 curl_custom_flags="${curl_custom_flags}"
 
 
@@ -924,6 +926,20 @@ if __name__ == "__main__":
         dest="curl_custom_flags",
         default="--no-progress-meter --fail-with-body",
         help="curl custom flags.",
+    )
+    parser.add_argument(
+        "--json_output_file",
+        action="store",
+        dest="json_output_file",
+        default="a.txt",
+        help="File to write curl JSON output to.",
+    )
+    parser.add_argument(
+        "--header_output_file",
+        action="store",
+        dest="header_output_file",
+        default="b.txt",
+        help="File to write curl header JSON output to.",
     )
     parser.add_argument(
         "--preferred_browser",
