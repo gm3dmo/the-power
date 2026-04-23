@@ -37,7 +37,7 @@ export GIT_CURL_VERBOSE
 # See this url:
 # https://github.blog/2012-09-21-easier-builds-and-deployments-using-git-over-https-and-oauth/
 #
-# https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installathon
+# https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation
 # You can also use an installation access token to authenticate for
 # HTTP-based Git access. You app must have the "Contents" repository
 # permission. You can then use the installation access token as the HTTP
