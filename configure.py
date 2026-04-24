@@ -244,6 +244,11 @@ force_update_reference=false
 # https://docs.github.com/en/developers/apps/guides/creating-ci-tests-with-the-checks-api
 default_check_run_id=1
 
+### [Organization Roles](https://docs.github.com/en/enterprise-cloud@latest/rest/orgs/organization-roles?apiVersion=2022-11-28)
+cr_name="pwr-custom-role"
+cr_description="A custom role created by the power"
+cr_permissions='["write_organization_custom_repo_role","write_organization_custom_org_role","read_organization_custom_repo_role","read_organization_custom_org_role"]'
+
 
 ### [Cost Centers](https://docs.github.com/en/enterprise-cloud@latest/rest/billing/cost-centers)
 
