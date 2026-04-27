@@ -964,8 +964,8 @@ if __name__ == "__main__":
         "--github-api-version",
         action="store",
         dest="github_api_version",
-        default="2022-11-28",
-        help="see GitHub API version docs",
+        default="2026-03-10"
+        help="see GitHub API version docs Previous version: 2022-11-28",
     )
     parser.add_argument(
         "--http-protocol",
