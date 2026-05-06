@@ -142,6 +142,7 @@ enterprise_team_name="enterprise-team1"
 ### GitHub API Version
 # https://docs.github.com/en/rest/overview/api-versions
 github_api_version=${github_api_version}
+#github_api_version="2022-11-28"
 
 ### [Organization](https://docs.github.com/en/rest/orgs)
 # https://docs.github.com/en/organizations
@@ -964,7 +965,7 @@ if __name__ == "__main__":
         "--github-api-version",
         action="store",
         dest="github_api_version",
-        default="2022-11-28",
+        default="2026-03-10",
         help="see GitHub API version docs",
     )
     parser.add_argument(
