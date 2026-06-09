@@ -4,10 +4,20 @@
 #
 # Exports: TOOL_NAME, COMMAND
 # Exits 0 (allow) immediately if the tool is not bash or if there is no command.
+#
+# IMPORTANT: Do NOT use `set -e` here. These hooks must fail-open — if anything
+# goes wrong (bad input, missing jq, unexpected payload shape), we exit 0 (allow)
+# rather than erroring out and blocking all tool calls.
 
-set -e
+# Trap: any unexpected error → allow (fail-open, not fail-closed)
+trap 'exit 0' ERR
 
 _INPUT=$(cat 2>/dev/null || true)
+
+# If input is empty or not valid JSON, allow
+if [ -z "$_INPUT" ] || ! echo "$_INPUT" | jq empty 2>/dev/null; then
+  exit 0
+fi
 
 # Defensive: handle missing or malformed JSON gracefully
 TOOL_NAME=$(echo "$_INPUT" | jq -r '.toolName // empty' 2>/dev/null || true)
