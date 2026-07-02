@@ -12,13 +12,23 @@ Skills and safety hooks for [the-power](https://github.com/gm3dmo/the-power), a 
 
 ## Install
 
-Install directly from gm3dmo/the-power:
+Install from the the-power marketplace:
 
 ```bash
-copilot plugin install gm3dmo/the-power:copilot-plugin
+# 1. Register this repo as a marketplace (one-time)
+copilot plugin marketplace add gm3dmo/the-power
+
+# 2. Install the plugin
+copilot plugin install the-power@the-power
+
+# 3. Verify
+copilot plugin list
+
+# 4. Update later
+copilot plugin update the-power
 ```
 
-Or install from a local checkout:
+For plugin development, install from a local checkout:
 
 ```bash
 copilot plugin install /path/to/the-power/copilot-plugin
