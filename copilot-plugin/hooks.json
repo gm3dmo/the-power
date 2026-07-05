@@ -4,20 +4,17 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "./hooks/guard-destructive-ops.sh",
-        "cwd": "${PLUGIN_ROOT}",
+        "bash": "${COPILOT_PLUGIN_ROOT}/hooks/guard-destructive-ops.sh",
         "timeoutSec": 10
       },
       {
         "type": "command",
-        "bash": "./hooks/guard-scaling-ops.sh",
-        "cwd": "${PLUGIN_ROOT}",
+        "bash": "${COPILOT_PLUGIN_ROOT}/hooks/guard-scaling-ops.sh",
         "timeoutSec": 10
       },
       {
         "type": "command",
-        "bash": "./hooks/guard-token-scope.sh",
-        "cwd": "${PLUGIN_ROOT}",
+        "bash": "${COPILOT_PLUGIN_ROOT}/hooks/guard-token-scope.sh",
         "timeoutSec": 10
       }
     ]
