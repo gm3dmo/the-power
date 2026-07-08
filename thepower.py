@@ -238,6 +238,24 @@ def token_validator(token: string):
     return token_format_is_valid
 
 
+def is_fine_grained_token(token: string):
+    """Return True if the token is a fine-grained personal access token."""
+    return token.startswith('github_pat_')
+
+
+def is_classic_pat(token: string):
+    """Return True if the token is a classic personal access token (PAT).
+
+    Classic PATs use the 'ghp_' prefix, or are legacy 40-character hex tokens
+    with no known prefix.
+    """
+    if token.startswith('ghp_'):
+        return True
+    if len(token) == 40 and not token.startswith('gh'):
+        return True
+    return False
+
+
 def get_webhook_url():
     webhook = False
     """ A visit to https://smee.io/new generates you a unique smee link

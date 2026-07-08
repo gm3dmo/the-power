@@ -111,6 +111,8 @@ ldap_dn="cn=Enterprise Ops,ou=teams,dc=github,dc=com"
 token=${token}
 GITHUB_TOKEN=${token}
 auth_header="Authorization: token ${token}"
+# Prefer fine-grained personal access tokens over classic PATs (true/false)
+PREFER_FINE_GRAINED_TOKEN=${prefer_fine_grained_token}
 # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
 
@@ -513,6 +515,15 @@ stream2_container="container"
 
     assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 
+    # Detect the token type and warn if a classic Personal Access Token is used.
+    classic_pat_warning = False
+    if thepower.is_fine_grained_token(args.token):
+        logger.info(f"{'Token type':<20}: fine-grained personal access token")
+    elif thepower.is_classic_pat(args.token):
+        logger.info(f"{'Token type':<20}: classic personal access token (PAT)")
+        if args.prefer_fine_grained_token:
+            classic_pat_warning = True
+
     if args.team_name != "":
         args.team_slug = thepower.slugify(args.team_name)
 
@@ -520,6 +531,12 @@ stream2_container="container"
         logger.info(f"{'Org':<20}: {args.org}\n")
     else:
         args.org = input(f"Enter Org name: ")
+
+    if classic_pat_warning:
+        logger.warning(
+            f"{bcolors.WARNING}Warning: the supplied token is a classic personal access token (PAT). "
+            f"PREFER_FINE_GRAINED_TOKEN is true, so a fine-grained token (github_pat_...) is recommended.{bcolors.ENDC}\n"
+        )
 
     # If configuring a GitHub App:
     if args.app_configure != "no":
@@ -567,6 +584,9 @@ stream2_container="container"
         args.repo_webhook_url = input(f"Enter webhook url: ")
 
     out_filename = ".gh-api-examples.conf"
+
+    # Render the boolean as lowercase true/false for the bash-style config file.
+    args.prefer_fine_grained_token = "true" if args.prefer_fine_grained_token else "false"
 
     try:
         with open(out_filename, "w") as out_file:
@@ -1037,6 +1057,14 @@ if __name__ == "__main__":
         dest="replacement_token",
         default="ghp_token",
         help="a new token to replace existing token",
+    )
+    parser.add_argument(
+        "--prefer-fine-grained-token",
+        action="store",
+        dest="prefer_fine_grained_token",
+        type=lambda x: str(x).lower() in ("true", "1", "yes"),
+        default=True,
+        help="Whether to prefer fine-grained tokens over classic PATs (true/false).",
     )
 
     args = parser.parse_args()
