@@ -515,14 +515,29 @@ stream2_container="container"
 
     assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 
-    # Detect the token type and warn if a classic Personal Access Token is used.
+    # Detect the token type and act on the fine-grained token preference.
+    # prefer_fine_grained_token modes:
+    #   "enforced"     -> exit 1 when a classic PAT is supplied
+    #   "true"/"warn"  -> warn only when a classic PAT is supplied
+    #   "false"        -> no check
     classic_pat_warning = False
+    classic_pat_enforced = False
     if thepower.is_fine_grained_token(args.token):
         logger.info(f"{'Token type':<20}: fine-grained personal access token")
     elif thepower.is_classic_pat(args.token):
         logger.info(f"{'Token type':<20}: classic personal access token (PAT)")
-        if args.prefer_fine_grained_token:
+        if args.prefer_fine_grained_token == "enforced":
+            classic_pat_enforced = True
+        elif args.prefer_fine_grained_token in ("true", "warn"):
             classic_pat_warning = True
+
+    if classic_pat_enforced:
+        logger.error(
+            f"{bcolors.FAIL}Error: the supplied token is a classic personal access token (PAT). "
+            f"PREFER_FINE_GRAINED_TOKEN is 'enforced', so a fine-grained token "
+            f"(github_pat_...) is required.{bcolors.ENDC}\n"
+        )
+        sys.exit(1)
 
     if args.team_name != "":
         args.team_slug = thepower.slugify(args.team_name)
@@ -535,7 +550,7 @@ stream2_container="container"
     if classic_pat_warning:
         logger.warning(
             f"{bcolors.WARNING}Warning: the supplied token is a classic personal access token (PAT). "
-            f"PREFER_FINE_GRAINED_TOKEN is true, so a fine-grained token (github_pat_...) is recommended.{bcolors.ENDC}\n"
+            f"PREFER_FINE_GRAINED_TOKEN is '{args.prefer_fine_grained_token}', so a fine-grained token (github_pat_...) is recommended.{bcolors.ENDC}\n"
         )
 
     # If configuring a GitHub App:
@@ -584,9 +599,6 @@ stream2_container="container"
         args.repo_webhook_url = input(f"Enter webhook url: ")
 
     out_filename = ".gh-api-examples.conf"
-
-    # Render the boolean as lowercase true/false for the bash-style config file.
-    args.prefer_fine_grained_token = "true" if args.prefer_fine_grained_token else "false"
 
     try:
         with open(out_filename, "w") as out_file:
@@ -1062,9 +1074,10 @@ if __name__ == "__main__":
         "--prefer-fine-grained-token",
         action="store",
         dest="prefer_fine_grained_token",
-        type=lambda x: str(x).lower() in ("true", "1", "yes"),
-        default=True,
-        help="Whether to prefer fine-grained tokens over classic PATs (true/false).",
+        type=lambda x: str(x).lower(),
+        choices=["enforced", "true", "warn", "false"],
+        default="warn",
+        help="How to handle classic PATs: 'enforced' (exit 1), 'true'/'warn' (warn), or 'false' (no check).",
     )
 
     args = parser.parse_args()
