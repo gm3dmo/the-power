@@ -11,6 +11,13 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 HOOKS_DIR="$SCRIPT_DIR/hooks"
 
+# Run tests from a temp dir to verify hooks work regardless of cwd (regression
+# for the cwd:"." bug where hooks crashed when session cwd != plugin dir).
+ORIGINAL_DIR="$PWD"
+TMP_CWD="$(mktemp -d)"
+trap 'rm -rf "$TMP_CWD"; cd "$ORIGINAL_DIR"' EXIT
+cd "$TMP_CWD"
+
 PASS=0
 FAIL=0
 TOTAL=0
@@ -189,6 +196,25 @@ run_test "build-testcase-workflow-simple without config allowed" "$HOOK" \
 
 run_test "plain ls still allowed" "$HOOK" \
   "$(make_input bash 'ls -la')" "allow"
+
+# -----------------------------------------------------------------------
+echo ""
+echo "=== cwd independence (regression: hooks must work from any directory) ==="
+# -----------------------------------------------------------------------
+# All three hooks should pass allow/deny correctly even from an unrelated cwd.
+# (This is run throughout the test since we cd'd to $TMP_CWD at startup.)
+
+run_test "guard-destructive from foreign cwd (allow)" "$HOOKS_DIR/guard-destructive-ops.sh" \
+  "$(make_input bash './create-repo.sh')" "allow"
+
+run_test "guard-destructive from foreign cwd (deny)" "$HOOKS_DIR/guard-destructive-ops.sh" \
+  "$(make_input bash './delete-repo.sh my-repo')" "deny" "destructive"
+
+run_test "guard-scaling from foreign cwd (allow)" "$HOOKS_DIR/guard-scaling-ops.sh" \
+  "$(make_input bash './create-repo.sh')" "allow"
+
+run_test "guard-token-scope from foreign cwd (allow)" "$HOOKS_DIR/guard-token-scope.sh" \
+  "$(make_input bash './create-repo.sh')" "allow"
 
 # -----------------------------------------------------------------------
 echo ""
