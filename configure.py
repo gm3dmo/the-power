@@ -111,6 +111,8 @@ ldap_dn="cn=Enterprise Ops,ou=teams,dc=github,dc=com"
 token=${token}
 GITHUB_TOKEN=${token}
 auth_header="Authorization: token ${token}"
+# Prefer fine-grained personal access tokens over classic PATs (true/false)
+PREFER_FINE_GRAINED_TOKEN=${prefer_fine_grained_token}
 # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
 
@@ -513,6 +515,30 @@ stream2_container="container"
 
     assert thepower.token_validator(args.token), "Invalid format: token should have a valid prefix, or should be 40 characters string."
 
+    # Detect the token type and act on the fine-grained token preference.
+    # prefer_fine_grained_token modes:
+    #   "enforced"     -> exit 1 when a classic PAT is supplied
+    #   "true"/"warn"  -> warn only when a classic PAT is supplied
+    #   "false"        -> no check
+    classic_pat_warning = False
+    classic_pat_enforced = False
+    if thepower.is_fine_grained_token(args.token):
+        logger.info(f"{'Token type':<20}: fine-grained personal access token")
+    elif thepower.is_classic_pat(args.token):
+        logger.info(f"{'Token type':<20}: classic personal access token (PAT)")
+        if args.prefer_fine_grained_token == "enforced":
+            classic_pat_enforced = True
+        elif args.prefer_fine_grained_token in ("true", "warn"):
+            classic_pat_warning = True
+
+    if classic_pat_enforced:
+        logger.error(
+            f"{bcolors.FAIL}Error: the supplied token is a classic personal access token (PAT). "
+            f"PREFER_FINE_GRAINED_TOKEN is 'enforced', so a fine-grained token "
+            f"(github_pat_...) is required.{bcolors.ENDC}\n"
+        )
+        sys.exit(1)
+
     if args.team_name != "":
         args.team_slug = thepower.slugify(args.team_name)
 
@@ -520,6 +546,12 @@ stream2_container="container"
         logger.info(f"{'Org':<20}: {args.org}\n")
     else:
         args.org = input(f"Enter Org name: ")
+
+    if classic_pat_warning:
+        logger.warning(
+            f"{bcolors.WARNING}Warning: the supplied token is a classic personal access token (PAT). "
+            f"PREFER_FINE_GRAINED_TOKEN is '{args.prefer_fine_grained_token}', so a fine-grained token (github_pat_...) is recommended.{bcolors.ENDC}\n"
+        )
 
     # If configuring a GitHub App:
     if args.app_configure != "no":
@@ -1037,6 +1069,15 @@ if __name__ == "__main__":
         dest="replacement_token",
         default="ghp_token",
         help="a new token to replace existing token",
+    )
+    parser.add_argument(
+        "--prefer-fine-grained-token",
+        action="store",
+        dest="prefer_fine_grained_token",
+        type=lambda x: str(x).lower(),
+        choices=["enforced", "true", "warn", "false"],
+        default="warn",
+        help="How to handle classic PATs: 'enforced' (exit 1), 'true'/'warn' (warn), or 'false' (no check).",
     )
 
     args = parser.parse_args()
