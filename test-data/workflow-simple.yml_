@@ -24,7 +24,7 @@ jobs:
 
       # See this for some comon scenarios https://github.com/actions/checkout?tab=readme-ov-file#scenarios
       - name: checkout-repo-using-actions-checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
       - name: push-a-commit-to-checked-out-repo-using-built-in-token
@@ -44,7 +44,7 @@ jobs:
 
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       - name: upload-workflow-artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pwr-workflow-simple-artifact-upload-example
           path: |
@@ -66,4 +66,3 @@ jobs:
               export GH_DEBUG="api gh pr list"
               gh auth status 
               gh repo list
-
