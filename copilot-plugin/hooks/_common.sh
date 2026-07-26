@@ -41,6 +41,12 @@ deny() {
   exit 0
 }
 
+# Helper: print a red warning to stderr but allow the command to proceed
+warn() {
+  printf '\033[31m⚠ %s\033[0m\n' "$1" >&2
+  exit 0
+}
+
 # Helper: find .gh-api-examples.conf by walking up from the command's
 # working directory (cwd from payload), falling back to PWD.
 find_config() {
