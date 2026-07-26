@@ -33,6 +33,8 @@ default_committer="_github_username_of_a_default_committer_"
 # Pull Request
 pr_approver_token="_a_fine_grained_PAT_"
 pr_approver_name="_a_github_username_"
+secondary_token="_secondary_token_"
+secondary_email="_secondary_email@example.com_"
 
 # GitHub App
 app_configure="no"
