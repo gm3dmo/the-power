@@ -3,12 +3,16 @@
 # https://docs.github.com/en/enterprise-cloud@latest/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation
 #
 
-
-# rate_limits: https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps
+# If the script is passed an argument $1 use that as the name
+if [ -z "$1" ]
+  then
+    installation_id=${ent_app_installation_id}
+  else
+    installation_id=$1
+fi
 
 JWT=$(./ent-call-get-jwt.sh ${ent_app_id} 2>/dev/null)
 
-installation_id=${ent_app_installation_id}
 
 curl --silent ${curl_custom_flags} \
      -X POST \
