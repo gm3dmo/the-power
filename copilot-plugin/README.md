@@ -56,6 +56,16 @@ copilot plugin install /path/to/the-power/copilot-plugin
 | `guard-scaling-ops` | Warns when bulk-creation scripts use counts over 100 |
 | `guard-token-scope` | Warns when a classic PAT (`ghp_`) is used against github.com |
 
+Hooks use `${COPILOT_PLUGIN_ROOT}` to resolve paths, so they work correctly regardless of the session's working directory. Earlier versions used `cwd: "."` which broke when the session cwd wasn't the plugin directory.
+
+### Testing hooks locally
+
+```bash
+bash copilot-plugin/tests/test-guardrails.sh
+```
+
+The test suite runs from a temporary directory to verify cwd-independence.
+
 ## Prerequisites
 
 the-power itself requires:
