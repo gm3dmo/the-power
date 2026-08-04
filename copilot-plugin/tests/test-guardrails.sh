@@ -119,6 +119,9 @@ run_test "dismiss-a-review denied" "$HOOK" \
 run_test "revoke-a-list-of-credentials denied" "$HOOK" \
   "$(make_input bash './revoke-a-list-of-credentials.sh')" "deny" "destructive"
 
+run_test "cleanup-populated-instance denied" "$HOOK" \
+  "$(make_input bash './cleanup-populated-instance.sh --prefix demo')" "deny" "destructive"
+
 run_test "delete in pipe allowed (not a script name)" "$HOOK" \
   "$(make_input bash 'echo hello | grep delete')" "allow"
 
@@ -158,6 +161,12 @@ run_test "inline number_of_repos=200 denied" "$HOOK" \
 
 run_test "inline number_of_repos=10 allowed" "$HOOK" \
   "$(make_input bash 'number_of_repos=10 ./create-many-repos.sh')" "allow"
+
+run_test "populate-instance --orgs 500 denied" "$HOOK" \
+  "$(make_input bash './populate-instance.sh --orgs 500')" "deny" "high count"
+
+run_test "populate-instance --users 5 allowed" "$HOOK" \
+  "$(make_input bash './populate-instance.sh --users 5')" "allow"
 
 run_test "inline number_of_issues=500 denied" "$HOOK" \
   "$(make_input bash 'number_of_issues=500 ./create-many-issues.sh')" "deny" "high count"
