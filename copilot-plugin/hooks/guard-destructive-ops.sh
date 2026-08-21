@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 DESTRUCTIVE_PATTERNS=(
   "delete-"
+  "cleanup-populated-instance"
   "suspend-a-user"
   "cancel-an-organization-invitation"
   "remove-"

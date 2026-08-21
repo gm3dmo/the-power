@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$SCRIPT_DIR/_common.sh"
 
 # Only check bulk creation scripts
-if ! echo "$COMMAND" | grep -qE "(create-many-|python-create-many-)"; then
+if ! echo "$COMMAND" | grep -qE "(create-many-|python-create-many-|populate-instance)"; then
   exit 0
 fi
 

@@ -4,6 +4,8 @@ description: >
   Scale up a test environment by bulk-creating repos, users, orgs, teams,
   issues, branches, PRs, and commits using the-power's create-many scripts.
   Three performance tiers: shell, Python connection reuse, and Python pooling.
+  Also seeds realistic activity and verifies or cleans it up by prefix, on both
+  GHES and github.com.
 keywords:
   - scale
   - bulk
@@ -16,6 +18,11 @@ keywords:
   - teams
   - load
   - populate
+  - seed
+  - verify
+  - cleanup
+  - traffic
+  - audit-log
 ---
 
 # Scale Environment
@@ -164,6 +171,78 @@ pip install urllib3
 python3 python-create-many-repos-connection-reuse-pool.py \
   --repos 1000 --prefix load --org acme
 ```
+
+## Seed realistic activity, then verify and clean up
+
+`create-many-*` and the goodies inflate script are the right tools for raw
+volume. When you instead want an instance that *looks used* — varied commit
+authors, a merged pull request, issues that are labelled, assigned, commented on
+and half of them closed, stars, topics, and some read traffic — use the
+`populate-instance.sh` helper. It is tuned for audit-log and monitoring traffic
+rather than sheer counts, so it pairs well with the bulk scripts above.
+
+These helpers are dual-purpose. They read connection settings from
+`.gh-api-examples.conf`, so `GITHUB_API_BASE_URL` is already correct for GHES
+(`/api/v3`) or github.com. Run `configure.py` first (see the `configure` skill),
+which prompts for the hostname and token. If there is no config yet, ask the
+user for the **hostname** and a **personal access token**, then:
+
+```bash
+python3 configure.py --hostname <HOST> --token <PAT>
+```
+
+### Seed
+
+```bash
+# GHES: creates orgs + users + teams + inflated repos
+./populate-instance.sh --scale light --prefix demo
+
+# github.com / GHEC: user and org admin APIs do not exist, so pass --no-users
+# and seed into an existing org. Cloud targets need --yes to acknowledge that
+# real resources are being created.
+./populate-instance.sh --scale light --prefix demo --no-users --org my-existing-org --yes
+```
+
+Preview first with `--dry-run` (offline, no changes). Scale presets are
+`light` (2 orgs / 5 users / 3 repos-per-org), `medium`, and `heavy`; override any
+count with `--orgs`, `--users`, or `--repos-per-org`. For lab instances with a
+self-signed certificate, set `curl_custom_flags="--insecure"` in the config.
+
+### Verify
+
+There is no built-in way to confirm what a seed produced, so tally it by prefix:
+
+```bash
+./verify-populated-instance.sh --prefix demo
+```
+
+This prints per-repo branch, PR, issue, and commit counts for everything matching
+the prefix.
+
+### Clean up
+
+`cleanup-populated-instance.sh` removes only the prefixed repos and orgs (and,
+with `--suspend-users`, the prefixed users on GHES), so it is safe on a shared
+instance where deleting the whole org is not an option:
+
+```bash
+./cleanup-populated-instance.sh --prefix demo            # prompts to confirm the hostname
+./cleanup-populated-instance.sh --prefix demo --yes      # non-interactive
+```
+
+### GHES vs github.com
+
+| Behaviour | GHES | github.com / GHEC |
+|-----------|------|-------------------|
+| API base URL | `https://HOST/api/v3` | `https://api.github.com` |
+| Create users | `/admin/users` | not available — use `--no-users` |
+| Create orgs | `/admin/organizations` | not available — seed into an existing `--org` |
+| Cloud confirm-gate | not triggered | requires `--yes` |
+
+The helpers never hard-refuse a cloud host, because the-power supports both
+cloud and self-hosted. A production-looking host triggers a warning and requires
+`--yes` instead. Always confirm the target instance and counts with the user
+before seeding.
 
 ## Error handling
 
