@@ -23,5 +23,5 @@ fi
 # Check if using a classic PAT
 TOKEN=$(grep -E "^GITHUB_TOKEN=" "$CONFIG" 2>/dev/null | head -1 | cut -d'=' -f2 | tr -d '"' | tr -d "'" | xargs)
 if echo "$TOKEN" | grep -q "^ghp_"; then
-  deny "You appear to be using a classic PAT (ghp_) on github.com. Consider using a fine-grained personal access token for better security. Confirm with the user before proceeding."
+  warn "You appear to be using a classic PAT (ghp_) on github.com. Consider using a fine-grained personal access token for better security."
 fi
