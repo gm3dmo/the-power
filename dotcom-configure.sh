@@ -59,5 +59,7 @@ python3 configure.py --hostname "${hostname}" \
                      --enterprise-app-org-installation-id "${ent_app_org_installation_id:-an_enterprise_app_org_installation_id}" \
                      --enterprise-app-client-id "${ent_app_client_id:-an_enterprise_app_client_id}" \
                      --enterprise-app-client-secret "${ent_app_client_secret:-an_enterprise_app_client_secret}" \
+                     --secondary-token "${secondary_token:-secondary_token}" \
+                     --secondary-email "${secondary_email:-secondary_email@example.com}" \
                      --curl_custom_flags "--fail-with-body --no-progress-meter" 
 
